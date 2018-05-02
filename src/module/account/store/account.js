@@ -1,5 +1,5 @@
-import stroage from '@/common/account/store/stroage.js'
-import userApi from '@/common/account/axios/user.js'
+import stroage from '@/module/account/store/stroage.js'
+import userApi from '@/module/account/axios/user.js'
 
 export default {
   namespaced: true,
