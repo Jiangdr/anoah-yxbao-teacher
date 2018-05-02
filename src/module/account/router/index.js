@@ -1,4 +1,4 @@
-import Login from '@/common/account/components/login.vue'
+import Login from '@/module/account/components/login.vue'
 
 export default [{
   path: '/login',

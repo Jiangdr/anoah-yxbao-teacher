@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import accountStore from '@/common/account/store/account.js'
+import accountStore from '@/module/account/store/account.js'
 
 Vue.use(Vuex)
 

@@ -1,6 +1,5 @@
 <template>
   <div class="spa home">
-      <div class="ss"></div>
       <div class="top-bar"><div class="message"><van-icon name="chat" /></div><div class="scan"></div></div>
   </div>
 </template>
