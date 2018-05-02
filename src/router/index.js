@@ -1,19 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import account from '@/common/account/router'
+import userCenter from '@/common/user-center/router'
 import home from '@/components/home/index'
 
 Vue.use(Router)
 let routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: home,
-    meta: { requiresAuth: true, keepAlive: true }
+    meta: { requiresAuth: true, keepAlive: false }
   }
 ]
 
-routes = routes.concat(account)
+routes = routes.concat(account).concat(userCenter)
 
 let router = new Router({
   routes: routes
