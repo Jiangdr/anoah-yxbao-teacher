@@ -6,7 +6,8 @@ export default {
   state: {
     isLogin: false,
     username: '',
-    password: ''
+    password: '',
+    userInfo: ''
   },
   getters: {
   },
@@ -21,20 +22,23 @@ export default {
     },
     setPassword (state, val) {
       state.password = val
+    },
+    setUserInfo (state, val) {
+      state.userInfo = val
     }
   },
   actions: {
-    doLogin (context) {
-      return userApi.doLogin(context.state.username, context.state.password).then(r => {
+    doLogin ({state, commit, rootState}) {
+      return userApi.doLogin(state.username, state.password).then(r => {
         // 登录成功后持久用户名和密码
-        stroage['persistent'].set('user.username', context.state.username)
-        stroage['persistent'].set('user.password', context.state.password)
-        context.commit('setIsLogin', true)
+        stroage['persistent'].set('user.username', state.username)
+        stroage['persistent'].set('user.password', state.password)
+        commit('setIsLogin', true)
+        commit('setUserInfo', r)
       })
     },
-    refreshLocalIsLogin (context) {
-      context.state.isLogin = stroage['session'].get('user.isLogin')
+    refreshLocalIsLogin ({state}) {
+      state.isLogin = stroage['session'].get('user.isLogin')
     }
   }
-
 }

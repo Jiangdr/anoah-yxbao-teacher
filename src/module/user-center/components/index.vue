@@ -1,5 +1,6 @@
 <template>
   <div id="user-center">
+    <nav-bar title="我的" :hasBack="hasBack"></nav-bar>
     <router-link class="item-choice van-hairline--bottom" tag="div" :to="{name:'personal'}">个人资料</router-link>
     <router-link class="item-choice van-hairline--bottom" tag="div" :to="{name:'myClass'}">我的班级</router-link>
     <router-link class="item-choice van-hairline--bottom" tag="div" :to="{name:'feedback'}">意见反馈</router-link>
@@ -13,12 +14,13 @@
 </template>
 
 <script>
-
+import NavBar from '@/module/user-center/components/common/navbar'
 export default {
   name: 'UserCenter',
   data () {
     return {
-      active: 1
+      active: 1,
+      hasBack: false
     }
   },
   created () {},
@@ -27,6 +29,9 @@ export default {
     change (active) {
       this.$router.back(-1)
     }
+  },
+  components: {
+    NavBar
   }
 }
 </script>
@@ -38,5 +43,6 @@ export default {
   #user-center .item-choice{
     line-height: 50px;
     height: 50px;
+    padding: 0 15px;
   }
 </style>
