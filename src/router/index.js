@@ -11,7 +11,7 @@ let routes = [{
   component: Home,
   meta: { requiresAuth: true, keepAlive: true }
 }]
-routes.concat(account)
+routes = routes.concat(account)
 
 let router = new Router({
   routes: routes
@@ -38,10 +38,10 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     // 如果to登录页
-    if (to.name === 'login') {
+    if (to.path === '/login') {
       // 帐号已经登录过了，就直接转到首页
       router.app.$options.store.dispatch('account/refreshLocalIsLogin')
-      console.log('router.app.$options.store.state.account.isLogin', router.app.$options.store.state.account.isLogin)
+      // console.log('router.app.$options.store.state.account.isLogin', router.app.$options.store.state.account.isLogin)
       if (router.app.$options.store.state.account.isLogin) {
         next({
           path: '/'

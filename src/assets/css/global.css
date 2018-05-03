@@ -1,3 +1,4 @@
 #app,.sp{
     height: 100%;
+    overflow: hidden;
 }
