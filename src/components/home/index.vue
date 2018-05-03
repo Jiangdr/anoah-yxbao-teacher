@@ -39,6 +39,7 @@
 <script>
 import topbar from '@/components/common/topbar'
 export default {
+  name: 'Home',
   data () {
     return {
       list: [],
@@ -73,11 +74,16 @@ export default {
           this.finished = true
         }
       }, 500)
+    },
+    change (active) {
+      this.active = active
+      this.$router.push({name: 'userCenter'})
     }
 
   },
   components: {
     topbar
+
   }
 
 }
