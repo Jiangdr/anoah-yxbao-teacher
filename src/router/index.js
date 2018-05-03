@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import account from '@/common/account/router'
-import userCenter from '@/common/user-center/router'
+import account from '@/module/account/router'
+import userCenter from '@/module/user-center/router'
 import home from '@/components/home/index'
 
 Vue.use(Router)
