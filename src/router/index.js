@@ -3,9 +3,24 @@ import Router from 'vue-router'
 import account from '@/common/account/router'
 import correction from '@/common/correction/router'
 import notice from '@/common/notice/router'
+<<<<<<< HEAD
 import Home from '@/components/home'
 
 Vue.use(Router)
+=======
+import userCenter from '@/common/user-center/router'
+import home from '@/components/home/index'
+
+Vue.use(Router)
+
+let routes = [{
+  path: '/',
+  name: 'home',
+  component: home,
+  meta: { requiresAuth: true, keepAlive: true }
+}]
+routes = routes.concat(account).concat(userCenter).concat(account, correction, notice)
+>>>>>>> common
 
 let routes = [{
   path: '/',
