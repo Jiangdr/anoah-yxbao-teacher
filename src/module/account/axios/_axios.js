@@ -1,6 +1,6 @@
 'use strict'
 
-import config from '@/common/account/config/index'
+import config from '@/module/account/config/index'
 import axios from 'axios'
 import qs from 'qs'
 
