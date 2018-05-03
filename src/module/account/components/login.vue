@@ -1,22 +1,18 @@
 <template>
-  <div class="sp login">
-    <div class="ss"></div>
-    <div class="banner">欢迎登录</div>
-
+  <div id="login">
     <van-cell-group class="login-box">
       <van-field v-model="username" label="用户名" icon="clear" placeholder="请输入用户名" required @click-icon="username = ''" validate="username" />
-
       <van-field v-model="password" type="password" label="密码" placeholder="请输入密码" required icon="clear" @click-icon="password = ''" validate="password" />
     </van-cell-group>
-    <div class="btn-box">
-      <van-button type="primary" size="large" @click="doLogin" class="tt" :loading="loading" >登录</van-button>
-    </div>
+    <van-button type="primary" size="large" @click="doLogin" class="tt" :loading="loading" >登录</van-button>
+    <router-link :to="{path:'/forgetPassword'}">忘记密码?</router-link>
   </div>
 </template>
 
 <script>
 
 export default {
+  name: 'Login',
   data () {
     return {
       loading: false,
@@ -77,31 +73,4 @@ export default {
 }
 </script>
 <style scoped>
-
-.ss{
-  width: 375px;
-  height: 667px;
-  position: absolute;
-  top:0;
-  left:0;
-  background: cadetblue;
-  opacity: 0.5;
-}
-
-.login{
-  padding:0 5vw;
-}
-.banner {
-  height: 50%;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 40px;
-  padding-top: 25%;
-  box-sizing: border-box;
-}
-.btn-box {
-  text-align: center;
-  margin-top: 40px;
-  padding: 0 20px;
-}
 </style>
