@@ -18,8 +18,16 @@ let routes = [{
     requiresAuth: true,
     keepAlive: true
   }
+}, {
+  path: '/',
+  name: 'list',
+  component: list,
+  meta: {
+    requiresAuth: true,
+    keepAlive: true
+  }
 }]
-routes = routes.concat(account).concat(userCenter, list).concat(account, correction, notice)
+routes = routes.concat(account).concat(userCenter).concat(account, correction, notice)
 let router = new Router({
   routes: routes
 })
