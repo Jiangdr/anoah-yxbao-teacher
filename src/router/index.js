@@ -1,19 +1,27 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import account from '@/common/account/router'
-import correction from '@/common/correction/router'
-import notice from '@/common/notice/router'
-import userCenter from '@/common/user-center/router'
+import account from '@/module/account/router'
+import userCenter from '@/module/user-center/router'
+import notice from '@/module/notice/router'
+import correction from '@/module/correction/router'
 import home from '@/components/home/index'
+import list from '@/components/home/list'
 
 Vue.use(Router)
-
-let routes = [{
-  path: '/',
-  name: 'home',
-  component: home,
-  meta: { requiresAuth: true, keepAlive: true }
-}]
+let routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: home,
+    meta: { requiresAuth: true, keepAlive: false }
+  },
+  {
+    path: '/list',
+    name: 'List',
+    component: list,
+    meta: { requiresAuth: true, keepAlive: false }
+  }
+]
 routes = routes.concat(account).concat(userCenter).concat(account, correction, notice)
 let router = new Router({
   routes: routes
@@ -21,6 +29,7 @@ let router = new Router({
 
 // 全局跳转
 router.beforeEach((to, from, next) => {
+  // console.log('to=>', to, 'from=>', from)
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // 检查state的isLogin
     if (!router.app.$options.store.state.account.isLogin) {

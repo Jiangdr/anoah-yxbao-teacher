@@ -1,4 +1,4 @@
-import http from './_axios'
+import http from '@/module/account/axios/_axios'
 
 let apis = {
   'jwt': ' https://jwt.anoah.com/get/'
