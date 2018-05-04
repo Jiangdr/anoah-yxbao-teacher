@@ -12,6 +12,9 @@
       <van-col span="12">
         <van-button type="primary" block>作业</van-button>
       </van-col>
+      <van-col span="12">
+        <van-button type="primary" block @click="change">我的</van-button>
+      </van-col>
     </van-row>
     <div class="space"></div>
     <van-row>
@@ -75,8 +78,7 @@ export default {
         }
       }, 500)
     },
-    change (active) {
-      this.active = active
+    change () {
       this.$router.push({name: 'userCenter'})
     }
 
