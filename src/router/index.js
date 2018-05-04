@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import account from '@/module/account/router'
 import userCenter from '@/module/user-center/router'
 import home from '@/components/home/index'
+import list from '@/components/home/list'
 
 Vue.use(Router)
 let routes = [
@@ -10,6 +11,12 @@ let routes = [
     path: '/',
     name: 'Home',
     component: home,
+    meta: { requiresAuth: true, keepAlive: false }
+  },
+  {
+    path: '/list',
+    name: 'List',
+    component: list,
     meta: { requiresAuth: true, keepAlive: false }
   }
 ]
