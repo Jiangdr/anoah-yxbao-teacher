@@ -1,16 +1,19 @@
 <template>
   <div class="spa">
     <topbar title="首页" text="">
-      <van-icon name="sign"  @click="aa"/>
-       <van-icon name="search"  @click="bb"/>
+      <van-icon name="sign" @click="aa" />
+      <van-icon name="search" @click="bb" />
     </topbar>
 
     <van-row>
       <van-col span="12">
-        <van-button type="primary" block >互动课堂</van-button>
+        <van-button type="primary" block>互动课堂</van-button>
       </van-col>
       <van-col span="12">
-        <van-button type="primary" block>作业</van-button>
+        <van-button type="primary" block @click="tt">作业</van-button>
+      </van-col>
+      <van-col span="12">
+        <van-button type="primary" block @click="change">我的</van-button>
       </van-col>
     </van-row>
     <div class="space"></div>
@@ -28,9 +31,11 @@
 
     <div>
       <div>待处理</div>
-      <van-list v-model="loading" :finished="finished" @load="onLoad">
-        <van-cell v-for="item in list" :key="item" :title="item + ''" />
-      </van-list>
+      <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
+        <van-list v-model="loading" :finished="finished" @load="onLoad">
+          <van-cell v-for="item in list" :key="item" :title="item + ''" />
+        </van-list>
+      </van-pull-refresh>
     </div>
 
   </div>
@@ -44,6 +49,7 @@ export default {
     return {
       list: [],
       loading: false,
+      refreshLoading: false,
       finished: false
     }
   },
@@ -56,6 +62,12 @@ export default {
     },
     bb () {
       alert(2)
+    },
+
+    tt () {
+      this.$router.push({
+        path: '/list'
+      })
     },
     onClickLeft () {
 
@@ -75,9 +87,19 @@ export default {
         }
       }, 500)
     },
-    change (active) {
-      this.active = active
-      this.$router.push({name: 'userCenter'})
+    onRefresh () {
+      setTimeout(() => {
+        this.list = []
+        this.finished = false
+        for (let i = 0; i < 10; i++) {
+          this.list.push(this.list.length + 1)
+        }
+        this.$toast('刷新成功')
+        this.refreshLoading = false
+      }, 500)
+    },
+    change () {
+      this.$router.push({ name: 'userCenter' })
     }
 
   },
