@@ -4,29 +4,8 @@ import account from '@/module/account/router'
 import correction from '@/module/correction/router'
 import notice from '@/module/notice/router'
 import userCenter from '@/module/user-center/router'
-<<<<<<< HEAD
-import notice from '@/module/notice/router'
-import correction from '@/module/correction/router'
-=======
->>>>>>> common
 import home from '@/components/home/index'
 Vue.use(Router)
-<<<<<<< HEAD
-let routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: home,
-    meta: { requiresAuth: true, keepAlive: false }
-  },
-  {
-    path: '/list',
-    name: 'List',
-    component: list,
-    meta: { requiresAuth: true, keepAlive: false }
-  }
-]
-=======
 let routes = [{
   path: '/',
   name: 'home',
@@ -36,7 +15,6 @@ let routes = [{
     keepAlive: true
   }
 }]
->>>>>>> common
 routes = routes.concat(account).concat(userCenter).concat(account, correction, notice)
 let router = new Router({
   routes: routes
