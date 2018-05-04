@@ -15,3 +15,7 @@ selenium-debug.log
 *.ntvs*
 *.njsproj
 *.sln
+<<<<<<< .merge_file_a22032
+=======
+config/index.js
+>>>>>>> .merge_file_a24368
