@@ -22,6 +22,7 @@
 
 <script>
 export default {
+  name: 'noticeList',
   data () {
     return {
       isNewWorkMsg: true,
