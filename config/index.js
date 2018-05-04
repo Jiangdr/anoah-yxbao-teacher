@@ -11,6 +11,9 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      '/': {
+        target: 'http://e.dev.anoah.com'
+      },
       '/api': {
         target: 'http://e.dev.anoah.com',
         pathRewrite: {

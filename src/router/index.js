@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import account from '@/common/account/router'
-import userCenter from '@/common/user-center/router'
+import account from '@/module/account/router'
+import userCenter from '@/module/user-center/router'
 import home from '@/components/home/index'
 
 Vue.use(Router)
@@ -22,6 +22,7 @@ let router = new Router({
 
 // 全局跳转
 router.beforeEach((to, from, next) => {
+  // console.log('to=>', to, 'from=>', from)
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // 检查state的isLogin
     if (!router.app.$options.store.state.account.isLogin) {
