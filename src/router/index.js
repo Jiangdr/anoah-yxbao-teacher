@@ -1,17 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+// 私有组件
+import home from '@/components/home/index'
+import list from '@/components/home/list'
+
+// module下的路由
 import account from '@/module/account/router'
 import correction from '@/module/correction/router'
 import notice from '@/module/notice/router'
 import userCenter from '@/module/user-center/router'
-<<<<<<< HEAD
-import notice from '@/module/notice/router'
-import correction from '@/module/correction/router'
-=======
->>>>>>> common
-import home from '@/components/home/index'
+
 Vue.use(Router)
-<<<<<<< HEAD
+
+// 私有路由
 let routes = [
   {
     path: '/',
@@ -26,17 +27,7 @@ let routes = [
     meta: { requiresAuth: true, keepAlive: false }
   }
 ]
-=======
-let routes = [{
-  path: '/',
-  name: 'home',
-  component: home,
-  meta: {
-    requiresAuth: true,
-    keepAlive: true
-  }
-}]
->>>>>>> common
+// 合并module下的路由
 routes = routes.concat(account).concat(userCenter).concat(account, correction, notice)
 let router = new Router({
   routes: routes
