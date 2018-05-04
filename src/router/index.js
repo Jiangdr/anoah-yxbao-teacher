@@ -1,13 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import account from '@/module/account/router'
+import correction from '@/module/correction/router'
+import notice from '@/module/notice/router'
 import userCenter from '@/module/user-center/router'
+<<<<<<< HEAD
 import notice from '@/module/notice/router'
 import correction from '@/module/correction/router'
+=======
+>>>>>>> common
 import home from '@/components/home/index'
-import list from '@/components/home/list'
-
 Vue.use(Router)
+<<<<<<< HEAD
 let routes = [
   {
     path: '/',
@@ -22,6 +26,17 @@ let routes = [
     meta: { requiresAuth: true, keepAlive: false }
   }
 ]
+=======
+let routes = [{
+  path: '/',
+  name: 'home',
+  component: home,
+  meta: {
+    requiresAuth: true,
+    keepAlive: true
+  }
+}]
+>>>>>>> common
 routes = routes.concat(account).concat(userCenter).concat(account, correction, notice)
 let router = new Router({
   routes: routes
@@ -39,7 +54,9 @@ router.beforeEach((to, from, next) => {
       if (!router.app.$options.store.state.account.isLogin) {
         next({
           path: '/login',
-          query: { redirect: to.fullPath }// 把要跳转的地址作为参数传到下一步
+          query: {
+            redirect: to.fullPath
+          } // 把要跳转的地址作为参数传到下一步
         })
       } else {
         next()
