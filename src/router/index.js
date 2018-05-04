@@ -5,7 +5,6 @@ import correction from '@/module/correction/router'
 import notice from '@/module/notice/router'
 import userCenter from '@/module/user-center/router'
 import home from '@/components/home/index'
-<<<<<<< HEAD
 Vue.use(Router)
 let routes = [{
   path: '/',
@@ -14,23 +13,6 @@ let routes = [{
   meta: {
     requiresAuth: true,
     keepAlive: true
-=======
-import list from '@/components/home/list'
-
-Vue.use(Router)
-let routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: home,
-    meta: { requiresAuth: true, keepAlive: false }
-  },
-  {
-    path: '/list',
-    name: 'List',
-    component: list,
-    meta: { requiresAuth: true, keepAlive: false }
->>>>>>> e1fac7ffff70bcbefed46a5d7bd6111faf14a0d6
   }
 }]
 routes = routes.concat(account).concat(userCenter).concat(account, correction, notice)
