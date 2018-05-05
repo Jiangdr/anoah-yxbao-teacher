@@ -10,6 +10,7 @@ import classInfo from '@/module/user-center/components/classInfo'
 import otherProblem from '@/module/user-center/components/otherProblem'
 import modifyPassword from '@/module/user-center/components/modifyPassword'
 import msgSetting from '@/module/user-center/components/msgSetting'
+import TeacherStudentList from '@/module/user-center/components/teacher&studentList'
 export default [
   {
     path: '/user-center',
@@ -27,6 +28,12 @@ export default [
     path: '/myClass',
     name: 'myClass',
     component: myClass,
+    meta: { requiresAuth: true, keepAlive: false }
+  },
+  {
+    path: '/teacher&studentList',
+    name: 'teacher&studentList',
+    components: TeacherStudentList,
     meta: { requiresAuth: true, keepAlive: false }
   },
   {

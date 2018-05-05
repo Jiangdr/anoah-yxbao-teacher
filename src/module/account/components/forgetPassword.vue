@@ -12,7 +12,7 @@
     </van-cell-group>
     <div style="text-align:right;line-height:50px;padding-right:20px">
       <span>找回密码遇到问题,请</span>
-      <router-link :to="{path:'/contactUs'}">联系我们</router-link>
+      <router-link :to="{name:'formList'}">联系我们</router-link>
     </div>
     <div class="footer-btn van-hairline--top">
       <van-button size="large" type="primary" class="btn-next" :disabled="btnUseable" :loading="btnLoading" @click="nextStep">
