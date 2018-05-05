@@ -1,12 +1,17 @@
 <template>
   <div id="my-class">
-    <router-link tag="div" :to="{name:'classInfo'}">四年级一班</router-link>
+    <van-cell-group>
+      <van-cell title="单元格" label="描述信息" center is-link />
+      <van-cell title="单元格" label="描述信息" center is-link />
+    </van-cell-group>
   </div>
 </template>
-
 <script>
 export default {
-  name: 'MyClass'
+  name: 'MyClass',
+  data () {
+    return {}
+  }
 }
 </script>
 
