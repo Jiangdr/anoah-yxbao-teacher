@@ -58,7 +58,7 @@ export default {
       }, 100)
     },
     goValidate () {
-      alert(111)
+      this.$router.push({name: 'setNewPassword'})
     },
     error () {
       this.errorMsg = Math.random() > 0.5 ? '账号不存在' : '该用户还未绑定手机号'

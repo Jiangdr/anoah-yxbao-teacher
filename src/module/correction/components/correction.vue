@@ -13,37 +13,15 @@
   </div>
   <div class="classify">
     <van-row>
-      <van-col span="6" class="van-hairline--surround" offset="1">
-        <div @click="checkItem($event)">内容超纲</div>
-      </van-col>
-      <van-col span="6" class="van-hairline--surround" offset="2">
-        <div @click="checkItem($event)">答案错误</div>
-      </van-col>
-      <van-col span="6" class="van-hairline--surround" offset="2">
-        <div @click="checkItem($event)">题干错误</div>
-      </van-col>
-    </van-row>
-    <van-row>
-      <van-col span="6" class="van-hairline--surround" offset="1">
-        <div @click="checkItem($event)">题目过时</div>
-      </van-col>
-      <van-col span="6" class="van-hairline--surround" offset="2">
-        <div @click="checkItem($event)">解析错误</div>
-      </van-col>
-      <van-col span="6" class="van-hairline--surround" offset="2">
-        <div @click="checkItem($event)">知识点不符</div>
-      </van-col>
-    </van-row>
-    <van-row>
-      <van-col span="6" class="van-hairline--surround" offset="1">
-        <div @click="checkItem($event)">其他</div>
+      <van-col span="6" class="van-hairline--surround" :offset="index==0||index%3==0?1:2" v-for="(item,index) in classify" :key="index" :class="{'checked':isChecked(item)}">
+        <div @click="checkItem(item)">{{item}}</div>
       </van-col>
     </van-row>
   </div>
   <div class="describe">
     <van-row>
       <van-col span="22" offset="1">
-        <textarea name="describe" v-model="msg" placeholder="请描述错误内容，我们会尽快处理"></textarea>
+        <textarea name="describe" v-model="msg" placeholder="请描述错误内容，我们会尽快处理" maxlength="50"></textarea>
       </van-col>
     </van-row>
   </div>
@@ -64,6 +42,9 @@
     <div class="van-hairline--bottom popupItem">从相册获取</div>
     <div class="van-hairline--bottom popupItem" @click="togglePopup">取消</div>
   </van-popup>
+  <div class="submitBtn">
+    <van-button type="primary" bottom-action>提交</van-button>
+  </div>
 </div>
 </template>
 
@@ -74,11 +55,14 @@ export default {
     return {
       msg: '',
       imgs: [],
+      classify: ['内容超纲', '答案错误', '题干错误', '题目过时', '解析错误', '知识点不符', '其他'],
+      checked: [],
       showPopup: false
     }
   },
   created () {},
-  computed: {},
+  computed: {
+  },
   methods: {
     goBack () {
       this.$router.go(-1)
@@ -86,14 +70,25 @@ export default {
     togglePopup () {
       this.showPopup = !this.showPopup
     },
-    checkItem ($event) {
-      console.log($event.target.parentNode)
+    isChecked (item) {
+      return this.checked.indexOf(item) >= 0
+    },
+    checkItem (item) {
+      if (this.checked.indexOf(item) < 0) {
+        this.checked.push(item)
+      } else {
+        this.checked.splice(this.checked.indexOf(item), 1)
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+.correction {
+  height: 100vh;
+}
+
 .correction>.title {
   text-align: center;
   line-height: 50px;
@@ -124,12 +119,13 @@ export default {
   padding: 20px 0 10px;
 }
 
-.correction>.classify .van-row {
+.correction>.classify .van-col {
+  line-height: 35px;
   margin-bottom: 10px;
 }
 
-.correction>.classify .van-col {
-  line-height: 35px;
+.correction>.classify .van-col.checked[class*=van-hairline]::after {
+  border-color: #06bb9c;
 }
 
 .correction>.classify [class*="van-hairline"]::after {
@@ -142,6 +138,7 @@ export default {
   resize: none;
   border-radius: 5px;
   box-sizing: border-box;
+  padding:10px;
 }
 
 .correction>.describe ::placeholder {
@@ -159,5 +156,11 @@ export default {
 .correction>.van-popup .popupItem {
   line-height: 50px;
   text-align: center;
+}
+
+.correction>.submitBtn {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 </style>

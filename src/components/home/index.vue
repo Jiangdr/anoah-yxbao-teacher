@@ -1,8 +1,8 @@
 <template>
   <div class="spa">
-    <topbar title="" text="">
-      <van-icon name="sign" @click="message" />
-      <van-icon name="search" @click="scan" />
+    <topbar title="首页" text="">
+      <van-icon name="sign" @click="aa" />
+      <van-icon name="search" @click="bb" />
     </topbar>
 
     <cube-button>Button</cube-button>
@@ -14,6 +14,9 @@
       </van-col>
       <van-col span="12">
         <van-button type="primary" block @click="tt">作业</van-button>
+      </van-col>
+      <van-col span="12">
+        <van-button type="primary" block @click="change">我的</van-button>
       </van-col>
     </van-row>
     <div class="space"></div>
@@ -38,10 +41,6 @@
       </van-pull-refresh>
     </div>
 
-    <van-tabbar v-model="active" @change="change" class="bar">
-      <van-tabbar-item icon="shop">首页</van-tabbar-item>
-      <van-tabbar-item icon="chat">我的</van-tabbar-item>
-    </van-tabbar>
   </div>
 </template>
 
@@ -54,19 +53,18 @@ export default {
       list: [],
       loading: false,
       refreshLoading: false,
-      finished: false,
-      active: 0
+      finished: false
     }
   },
   computed: {
 
   },
   methods: {
-    message () {
-      alert('消息')
+    aa () {
+      alert(1)
     },
-    scan () {
-      alert('扫描')
+    bb () {
+      alert(2)
     },
 
     tt () {
@@ -95,13 +93,12 @@ export default {
     onRefresh () {
       setTimeout(() => {
         this.list = []
-
+        this.finished = false
         for (let i = 0; i < 10; i++) {
           this.list.push(this.list.length + 1)
         }
         this.$toast('刷新成功')
         this.refreshLoading = false
-        this.finished = false
       }, 500)
     },
     change () {
@@ -122,10 +119,9 @@ export default {
 }
 .van-pull-refresh {
   height: calc(100vh - 62vw);
-  overflow-y: scroll;
 }
-.van-icon {
-  font-size: 18px;
-  padding: 0 5px;
+.van-list {
+  height: calc(100vh - 180px);
+  overflow-y: scroll;
 }
 </style>
