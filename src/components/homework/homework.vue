@@ -2,7 +2,7 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>作业</h1>
-      <i class="cubeic-back" @click="goHome"></i>
+      <i class="cubeic-back" @click="goHome">返回</i>
     </header>
     <div class="select-container">
       <span class="select-span">
@@ -17,10 +17,12 @@
     </div>
 
     <div class="homework_list">
-      <div class="homework_list_inline_list">今天 周三</div>
-      <div class="homework_list_inline_list">暑假作业 22份</div>
-      <div class="homework_list_inline_list">数学 三年级1班</div>
-      <div class="homework_list_inline_list">截止：2018-08-30 20:00</div>
+      <div>
+        <div class="homework_list_inline_list">今天 周三<i class="fa fa-amazon"></i></div>
+        <div class="homework_list_inline_list">暑假作业 22份</div>
+        <div class="homework_list_inline_list">数学 三年级1班</div>
+        <div class="homework_list_inline_list">截止：2018-08-30 20:00</div>
+      </div>
     </div>
   </div>
 </template>
@@ -65,44 +67,4 @@ export default {
 .homework_list_inline_list{
   line-height:25px;
 }
-.cube-page {
-  position: absolute;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #efeff4;
-}
-.cube-view {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-}
-.cube-page .header {
-  position: relative;
-  height: 44px;
-  line-height: 44px;
-  text-align: center;
-  background-color: #edf0f4;
-  box-shadow: 0 1px 6px #ccc;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  z-index: 5;
-  margin-bottom: 4px;
-}
-.cube-page .header h1 {
-  font-size: 16px;
-  font-weight: 700;
-}
-.cube-page .header .cubeic-back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 0 15px;
-  color: #fc9153;
-}
-.cubeic-back:before {
-  content: "\E608";
-}
-
 </style>
