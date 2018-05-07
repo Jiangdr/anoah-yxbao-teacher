@@ -5,6 +5,9 @@
       <van-icon name="search" @click="scan" />
     </topbar>
 
+    <cube-button>Button</cube-button>
+<cube-button type="submit">Submit Button</cube-button>
+
     <van-row>
       <van-col span="12">
         <van-button type="primary" block>互动课堂</van-button>
@@ -117,7 +120,7 @@ export default {
 .space {
   height: 20px;
 }
-.van-list {
+.van-pull-refresh {
   height: calc(100vh - 62vw);
   overflow-y: scroll;
 }
