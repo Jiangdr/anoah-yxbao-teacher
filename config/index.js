@@ -18,15 +18,16 @@ module.exports = {
           '^/user': '/user'
         }
       },
-      // '/jwt': {
-      //   target: 'http://api2.dev.anoah.com',
-      //   pathRewrite: {
-      //     '^/jwt': '/jwt'
-      //   }
-      // },
-      // '/': {
-      //   target: 'http://api2.dev.anoah.com'
-      // },
+      '/jwt': {
+        target: 'http://api2.dev.anoah.com',
+        changeOrigin: true,  // 解决跨域问题
+        pathRewrite: {
+          '^/jwt': '/jwt'
+        }
+      },
+      '/': {
+        target: 'http://e.dev.anoah.com'
+      },
       // '/api': {
       //   target: 'http://e.dev.anoah.com',
       //   pathRewrite: {

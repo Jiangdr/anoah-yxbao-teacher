@@ -5,8 +5,8 @@ export default {
   namespaced: true,
   state: {},
   getters: {
-    userInfo (state, getters, rootState) {
-      return rootState.account.userInfo
+    userId (state, getters, rootState) {
+      return rootState.account.userInfo.userid
     }
   },
   mutations: {},

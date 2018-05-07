@@ -24,6 +24,7 @@
 
 <script>
 import NavBar from '@/module/user-center/components/common/navbar'
+import api from '@/module/account/axios/user'
 export default {
   name: 'ForgetPassword',
   data () {
@@ -52,16 +53,19 @@ export default {
     },
     nextStep () {
       this.btnLoading = true
-      setTimeout(() => {
+      api.exists({
+        account: this.account
+      }).then(success => {
         this.btnLoading = false
-        Math.random() > 0.5 ? this.error() : this.goValidate()
-      }, 100)
-    },
-    goValidate () {
-      this.$router.push({name: 'setNewPassword'})
-    },
-    error () {
-      this.errorMsg = Math.random() > 0.5 ? '账号不存在' : '该用户还未绑定手机号'
+        if (!success.phone) {
+          this.errorMsg = '该用户还未绑定手机'
+          return false
+        }
+        this.$router.push({path: `/newPassword/${success.phone}`})
+      }, error => {
+        this.btnLoading = false
+        this.errorMsg = error.msg
+      })
     }
   },
   components: {

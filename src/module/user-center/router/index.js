@@ -67,7 +67,7 @@ export default [
     meta: { requiresAuth: true, keepAlive: false }
   },
   {
-    path: '/classInfo',
+    path: '/classInfo/:class_id',
     name: 'classInfo',
     component: classInfo,
     meta: { requiresAuth: true, keepAlive: false }
