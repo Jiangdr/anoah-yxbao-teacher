@@ -1,13 +1,13 @@
 import API from '@/module/account/axios/_api'
 
 let apis = {
-  'login': '/api_dist/?q=json/user/Login/login'
+  'login': '/user/logon/login'
 }
 
 let user = new API(apis)
 
-user.doLogin = (username, password, token) => {
-  return user.fetch(user.apis.login, {username, password, token}, 'get')
+user.doLogin = (params) => {
+  return user.fetch(user.apis.login, params, 'post')
 }
 
 export default user
