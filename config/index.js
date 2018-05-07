@@ -11,21 +11,34 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/': {
-        target: 'http://e.dev.anoah.com'
-      },
-      '/api': {
-        target: 'http://e.dev.anoah.com',
+      '/user': {
+        target: 'http://api2.dev.anoah.com',
+        changeOrigin: true,  // 解决跨域问题
         pathRewrite: {
-          '^/api': '/api'
+          '^/user': '/user'
         }
       },
-      '/api_dist': {
-        target: 'http://e.dev.anoah.com',
-        pathRewrite: {
-          '^/api_dist': '/api_dist'
-        }
-      }
+      // '/jwt': {
+      //   target: 'http://api2.dev.anoah.com',
+      //   pathRewrite: {
+      //     '^/jwt': '/jwt'
+      //   }
+      // },
+      // '/': {
+      //   target: 'http://api2.dev.anoah.com'
+      // },
+      // '/api': {
+      //   target: 'http://e.dev.anoah.com',
+      //   pathRewrite: {
+      //     '^/api': '/api'
+      //   }
+      // },
+      // '/api_dist': {
+      //   target: 'http://e.dev.anoah.com',
+      //   pathRewrite: {
+      //     '^/api_dist': '/api_dist'
+      //   }
+      // },
     },
 
     // Various Dev Server settings

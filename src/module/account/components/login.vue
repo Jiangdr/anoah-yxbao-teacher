@@ -10,7 +10,7 @@
 </template>
 
 <script>
-
+// import {mapState} from 'vuex'
 export default {
   name: 'Login',
   data () {
@@ -21,8 +21,6 @@ export default {
         password: [{ 'required': '请输入密码' }]
       }
     }
-  },
-  created () {
   },
   computed: {
     username: {
