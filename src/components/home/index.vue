@@ -13,7 +13,7 @@
         <van-button type="primary" block>互动课堂</van-button>
       </van-col>
       <van-col span="12">
-        <van-button type="primary" block @click="tt">作业</van-button>
+        <van-button type="primary" block @click="goHomework">作业</van-button>
       </van-col>
       <van-col span="12">
         <van-button type="primary" block @click="change">我的</van-button>
@@ -67,9 +67,9 @@ export default {
       alert(2)
     },
 
-    tt () {
+    goHomework () {
       this.$router.push({
-        path: '/list'
+        path: '/homework'
       })
     },
     onClickLeft () {
