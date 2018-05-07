@@ -13,6 +13,9 @@ import '@/assets/css/global.css'
 
 import '../lib/cube.min.css'
 import Cube from '../lib/cube.min.js'
+
+import 'font-awesome/css/font-awesome.css'
+
 Vue.use(Cube)
 
 Vue.config.productionTip = false
