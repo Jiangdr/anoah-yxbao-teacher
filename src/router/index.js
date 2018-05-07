@@ -6,6 +6,7 @@ import notice from '@/module/notice/router'
 import userCenter from '@/module/user-center/router'
 import home from '@/components/home/index'
 import list from '@/components/home/list'
+import homework from '@/components/homework/homework'
 Vue.use(Router)
 let routes = [
   {
@@ -18,6 +19,12 @@ let routes = [
     path: '/list',
     name: 'List',
     component: list,
+    meta: { requiresAuth: true, keepAlive: false }
+  },
+  {
+    path: '/homework',
+    name: 'Homework',
+    component: homework,
     meta: { requiresAuth: true, keepAlive: false }
   }
 ]

@@ -11,11 +11,9 @@ import 'es6-promise/auto'
 import '@/assets/css/base.css'
 import '@/assets/css/global.css'
 
-import Vant from 'vant'
-import 'vant/lib/vant-css/index.css'
-import 'vant/lib/vant-css/icon-local.css'
-
-Vue.use(Vant)
+import '../lib/cube.min.css'
+import Cube from '../lib/cube.min.js'
+Vue.use(Cube)
 
 Vue.config.productionTip = false
 
