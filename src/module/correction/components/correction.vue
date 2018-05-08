@@ -1,15 +1,11 @@
 <template>
 <div class="correction">
-  <div class="title van-hairline--bottom">
-    <van-row>
-      <van-col span="24">
+  <div class="title border-bottom-1px">
         <span class="back" @click="goBack">
-                  <van-icon name="arrow-left"></van-icon>
-                  <span>返回</span>
+          <i class="cubeic-back"></i>
+          <span>返回</span>
         </span>
         <span class="text">纠错</span>
-      </van-col>
-    </van-row>
   </div>
   <div class="classify">
     <van-row>
@@ -21,7 +17,8 @@
   <div class="describe">
     <van-row>
       <van-col span="22" offset="1">
-        <textarea name="describe" v-model="msg" placeholder="请描述错误内容，我们会尽快处理" maxlength="50"></textarea>
+        <!-- <textarea ></textarea> -->
+        <cube-textarea name="describe" v-model="msg" placeholder="请描述错误内容，我们会尽快处理" :maxlength=maxLength ></cube-textarea>
       </van-col>
     </van-row>
   </div>
@@ -33,17 +30,21 @@
     </van-row>
     <van-row>
       <van-col offset="1" span="2">
-        <van-icon name="photograph" @click="togglePopup" />
+        <i class="cubeic-alert" @click="togglePopup"></i>
       </van-col>
     </van-row>
   </div>
-  <van-popup v-model="showPopup" position="bottom">
-    <div class="van-hairline--bottom popupItem">拍照</div>
-    <div class="van-hairline--bottom popupItem">从相册获取</div>
-    <div class="van-hairline--bottom popupItem" @click="togglePopup">取消</div>
-  </van-popup>
+  <cube-popup type="my-popup" :center="false" ref="myPopup4" v-show="this.showPopup" @mask-click="togglePopup">
+    <div class="popupWrapper">
+      <div class="border-bottom-1px popupItem">拍照</div>
+      <div class="border-bottom-1px popupItem">从相册获取</div>
+      <div class="border-bottom-1px popupItem" @click="togglePopup">取消</div>
+    </div>
+
+</cube-popup>
   <div class="submitBtn">
-    <van-button type="primary" bottom-action>提交</van-button>
+    <!-- <van-button type="primary" bottom-action>提交</van-button> -->
+<cube-button :primary="true">提交</cube-button>
   </div>
 </div>
 </template>
@@ -55,14 +56,22 @@ export default {
     return {
       msg: '',
       imgs: [],
-      classify: ['内容超纲', '答案错误', '题干错误', '题目过时', '解析错误', '知识点不符', '其他'],
+      classify: [
+        '内容超纲',
+        '答案错误',
+        '题干错误',
+        '题目过时',
+        '解析错误',
+        '知识点不符',
+        '其他'
+      ],
       checked: [],
-      showPopup: false
+      showPopup: false,
+      maxLength: 100
     }
   },
   created () {},
-  computed: {
-  },
+  computed: {},
   methods: {
     goBack () {
       this.$router.go(-1)
@@ -89,76 +98,85 @@ export default {
   height: 100vh;
 }
 
-.correction>.title {
+.correction > .title {
   text-align: center;
   line-height: 50px;
+  height: 50px;
 }
 
-.correction>.title .back {
+.correction > .title .back {
+  display: inline-block;
   float: left;
 }
 
-.correction>.title .text {
+.correction > .title .text {
+  display: inline-block;
+  width:calc(100% - 100px);
   font-weight: 600;
 }
 
-.correction>.title p {
+.correction > .title p {
   font-weight: bold;
 }
 
-.correction>.title>span {
+.correction > .title > span {
   float: left;
 }
 
-.correction>.title span i {
+.correction > .title span i {
   top: 2px;
 }
 
-.correction>.classify {
+.correction > .classify {
   text-align: center;
   padding: 20px 0 10px;
 }
 
-.correction>.classify .van-col {
+.correction > .classify .van-col {
   line-height: 35px;
   margin-bottom: 10px;
 }
 
-.correction>.classify .van-col.checked[class*=van-hairline]::after {
+.correction > .classify .van-col.checked[class*="van-hairline"]::after {
   border-color: #06bb9c;
 }
 
-.correction>.classify [class*="van-hairline"]::after {
+.correction > .classify [class*="van-hairline"]::after {
   border-radius: 10px;
 }
 
-.correction>.describe textarea {
+.correction > .describe textarea {
   width: 100%;
   height: 100px;
   resize: none;
   border-radius: 5px;
   box-sizing: border-box;
-  padding:10px;
+  padding: 10px;
 }
 
-.correction>.describe ::placeholder {
+.correction > .describe ::placeholder {
   color: #ccc;
 }
 
-.correction>.upload>.total {
+.correction > .upload > .total {
   margin: 8px 0;
 }
 
-.correction>.upload>.total b {
+.correction > .upload > .total b {
   font-weight: normal;
 }
 
-.correction>.van-popup .popupItem {
+.correction .popupItem {
   line-height: 50px;
   text-align: center;
 }
-
-.correction>.submitBtn {
+.correction  .popupWrapper{
+  background: #fff;
+}
+.correction .cube-popup-content{
+  background: #fff;
+}
+.correction > .submitBtn {
   position: fixed;
   bottom: 0;
   width: 100%;

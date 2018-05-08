@@ -1,18 +1,18 @@
 <template>
-<div class="schoolList">
+<div class="homeworkList">
   <div class="title van-hairline--bottom">
     <van-row>
-      <van-col span="4">
+      <van-col span="6">
         <span class="back" @click="goBack">
           <van-icon name="arrow-left" class="top2px"></van-icon>
           <span>返回</span>
         </span>
       </van-col>
-      <van-col span="16">
-        <p>学校通知</p>
+      <van-col span="12">
+        <p>作业通知</p>
       </van-col>
-      <van-col span="4">
-        <span></span>
+      <van-col span="6">
+        <span class="clear">清空</span>
       </van-col>
     </van-row>
 
@@ -29,16 +29,16 @@
            <van-col span="2">
              <van-icon name="warn"></van-icon>
            </van-col>
-           <van-col span="19">
-             <span class="text">这里是通知标题这里是通知标题这里是通知标题这里是通知标题这里是通知标题这里是通知标题这里是通知标题这里是通知标题这里是通知标题</span>
+           <van-col span="18">
+             <span>老师提醒错题订正</span>
            </van-col>
-           <van-col span="3">
+           <van-col span="4">
              <span class="godetail">查看  <van-icon name="arrow" class="top2px"></van-icon></span>
            </van-col>
          </van-row>
         </p>
         <div class="content">
-          <p>这里是通知正文这里是通知正文这里是通知正文这里是通知正文这里是通知正文这里是通知正文这里是通知正文这里是通知正文这里是通知正文这里是通知正文这里是通知正文</p>
+          <p>陈乐乐老师：请抓紧时间完成暑假作业哦！</p>
         </div>
       </div>
       <!-- 及时交作业提醒 v-if="type==2"-->
@@ -86,7 +86,7 @@
 
 <script>
 export default {
-  name: 'schoolList',
+  name: 'homeworkListStu',
   data() {
     return {
       isLoading: false
@@ -112,77 +112,68 @@ export default {
 </script>
 
 <style scoped>
-.schoolList>.title {
+.homeworkList>.title {
   text-align: center;
   padding-bottom: 5px;
   height: 50px;
   line-height: 50px;
 }
 
-.schoolList>.title p {
+.homeworkList>.title p {
   font-weight: bold;
 }
 
-.schoolList>.title .back{
+.homeworkList>.title .back, .homeworkList>.title .clear {
   display: inline-block;
   width:100%;
   text-align: left;
 }
+.homeworkList>.title .clear{
+   text-align: right;
+    width:calc(100% - 10px);
+   margin-right: 10px;
+}
 
-.schoolList .container>.wrapper {
+.homeworkList .container>.wrapper {
   overflow: scroll;
   height: calc(100vh - 60px);
   padding-top:16px;
   box-sizing: border-box;
 }
 
-.schoolList .container>.wrapper>.date {
+.homeworkList .container>.wrapper>.date {
   text-align: center;
 }
 
-.schoolList .container>.wrapper>.item {
+.homeworkList .container>.wrapper>.item {
   margin: 10px;
 }
-.schoolList .container>.wrapper>.item .godetail{
+.homeworkList .container>.wrapper>.item .godetail{
   display: inline-block;
   width:100%;
   font-size: 12px;
   color:#999;
   text-align: right;
 }
-.schoolList .container>.wrapper>.item>.title{
+.homeworkList .container>.wrapper>.item>.title{
   padding:10px 10px 0px;
 
 }
-.schoolList .container>.wrapper>.item>.title .text{
-  display: inline-block;
-  width:100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.schoolList .container>.wrapper>.item>.content {
+.homeworkList .container>.wrapper>.item>.content {
   padding: 10px;
 }
 
-.schoolList .container>.wrapper>.item>.content {
+.homeworkList .container>.wrapper>.item>.content {
   text-align: center;
 }
 
-.schoolList .container>.wrapper>.item>.content>p {
+.homeworkList .container>.wrapper>.item>.content>p {
   text-align: left;
-  height: 40px;
-  line-height: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp:2;
 }
-.schoolList .top2px{
+.homeworkList .top2px{
   top:2px;
 }
-.schoolList .container>.wrapper>.item.van-hairline--surround::after{
+.homeworkList .container>.wrapper>.item.van-hairline--surround::after{
   border-radius: 10px;
 }
 </style>
