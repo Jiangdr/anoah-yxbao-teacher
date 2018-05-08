@@ -1,14 +1,22 @@
-// import stroage from '@/module/account/store/stroage.js'
-// import userApi from '@/module/account/axios/user.js'
-
+let notice = JSON.parse(localStorage.getItem('notice'))
 export default {
   namespaced: true,
-  state: {},
+  state: {
+    hwMsg: notice ? notice.hwMsg : true,
+    schMsg: notice ? notice.schMsg : true
+  },
   getters: {
     userId (state, getters, rootState) {
       return rootState.account.userInfo.userid
     }
   },
-  mutations: {},
+  mutations: {
+    sethwMsg (state, payload) {
+      state.hwMsg = payload.val
+    },
+    setschMsg (state, payload) {
+      state.schMsg = payload.val
+    }
+  },
   actions: {}
 }
