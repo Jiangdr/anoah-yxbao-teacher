@@ -18,10 +18,18 @@
 
     <div class="homework_list">
       <div>
-        <div class="homework_list_inline_list">今天 周三<i class="fa fa-amazon"></i></div>
+        <div class="homework_list_inline_list">今天 周三</div>
         <div class="homework_list_inline_list">暑假作业 22份</div>
         <div class="homework_list_inline_list">数学 三年级1班</div>
         <div class="homework_list_inline_list">截止：2018-08-30 20:00</div>
+      </div>
+    </div>
+    <div style="width: 50px;height: 50px;background-color: #fc9153;border-radius: 25px;position:absolute;bottom:20px;right:20px;" @click="goAssignHomework">
+      <div style="height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;">
+        <div>布置<br/>作业</div>
       </div>
     </div>
   </div>
@@ -42,6 +50,11 @@ export default {
     goHome() {
       this.$router.push({
         path: "/"
+      });
+    },
+    goAssignHomework() {
+      this.$router.push({
+        path: "/assignHomework"
       });
     }
   }
