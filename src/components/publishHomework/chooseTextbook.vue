@@ -5,8 +5,7 @@
       <i class="cubeic-back" @click="goHomework">返回</i>
     </header>
 
-    <div style="width: 25%;
-    display: inline-block;">
+    <div style="width: 25%;display: inline-block;">
         <div class="leftTab" @click="clickGrade('一年级')" v-bind:class="{activeTabClass : activeTabName == '一年级'}">一年级</div>
         <div class="leftTab" @click="clickGrade('二年级')" v-bind:class="{activeTabClass : activeTabName == '二年级'}">二年级</div>
         <div class="leftTab" @click="clickGrade('三年级')" v-bind:class="{activeTabClass : activeTabName == '三年级'}">三年级</div>
@@ -14,15 +13,16 @@
         <div class="leftTab" @click="clickGrade('五年级')" v-bind:class="{activeTabClass : activeTabName == '五年级'}">五年级</div>
         <div class="leftTab" @click="clickGrade('六年级')" v-bind:class="{activeTabClass : activeTabName == '六年级'}">六年级</div>
     </div>
+    <cube-button style="position:absolute;bottom:0px;" :outline="true" @click="goPublishHomework">确认</cube-button>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Homework",
+  name: "chooseTextbook",
   data() {
     return {
-      activeTabName: '一年级'
+      activeTabName: "一年级"
     };
   },
   computed: {},
@@ -32,18 +32,23 @@ export default {
         path: "/homework"
       });
     },
-    clickGrade(name){
-        this.activeTabName = name;
+    clickGrade(name) {
+      this.activeTabName = name;
+    },
+    goPublishHomework() {
+      this.$router.push({
+        path: "/publishHomework"
+      });
     }
   }
 };
 </script>
 
 <style scoped>
-.leftTab{
-    line-height: 35px;
+.leftTab {
+  line-height: 35px;
 }
-.activeTabClass{
-    color: #fc9153;
+.activeTabClass {
+  color: #fc9153;
 }
 </style>
