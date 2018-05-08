@@ -61,7 +61,7 @@ export default {
           this.errorMsg = '该用户还未绑定手机'
           return false
         }
-        this.$router.push({path: `/newPassword/${success.phone}`})
+        this.$router.push({path: `/newPassword/${success.phone}/${success.userid}`})
       }, error => {
         this.btnLoading = false
         this.errorMsg = error.msg

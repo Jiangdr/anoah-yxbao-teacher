@@ -1,32 +1,30 @@
 <template>
-  <div id="modify-phone">
-    <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
-    <div>手机号:{{$route.params.phone}}</div>
-    <van-field center v-model="sms" label="短信验证码" placeholder="请输入短信验证码" icon="clear" @click-icon="sms = ''" :error-message="validsms">
+  <div id="bing-phone">
+    <van-field center v-model.trim="phone" label="手机号" placeholder="请输入手机号" icon="clear" @click-icon="phone = ''" :error-message="validPhone">
       <van-button slot="button" size="small" type="primary" :disabled="smsUseable" @click="sendsms">{{content}}</van-button>
     </van-field>
-    <van-button type="primary" size="large" :disabled="isNext" @click="next">下一步</van-button>
+    <van-field center v-model.trim="sms" :disabled="isInput" label="手机验证码" placeholder="请输入验证码" icon="clear" @click-icon="sms = ''" :error-message="validsms"></van-field>
+    <van-button type="primary" size="large" :disabled="isDisabled" @click="bind">绑定手机</van-button>
   </div>
 </template>
-
 <script>
-import NavBar from '@/module/user-center/components/common/navbar'
-import api from '@/module/user-center/axios/usercenter'
 import {mapGetters} from 'vuex'
+import api from '@/module/user-center/axios/usercenter'
 import {Toast} from 'vant'
 export default {
-  name: 'ModifyPhone',
+  name: 'BindPhone',
   data () {
     return {
-      title: '修改手机',
-      hasBack: true,
+      phone: '',
       sms: '',
-      validsms: '',
+      validPhone: '',
+      smsUseable: true,
       content: '获取验证码',
-      smsUseable: false,
+      validsms: '',
+      timer: null,
       timeLen: 60,
-      isNext: true,
-      timer: null
+      isInput: true,
+      isDisabled: true
     }
   },
   computed: {
@@ -35,20 +33,22 @@ export default {
     })
   },
   watch: {
-    sms (value) {
-      if (value) {
-        this.isNext = false
-        this.validsms = ''
+    phone (value) {
+      if (value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/)) {
+        this.smsUseable = false
       } else {
-        this.isNext = true
-        this.validsms = '验证码不能为空'
+        this.smsUseable = true
+      }
+    },
+    sms (value) {
+      if (value && this.phone && !this.isInput) {
+        this.isDisabled = false
+      } else {
+        this.isDisabled = true
       }
     }
   },
   methods: {
-    back () {
-      this.$router.back(-1)
-    },
     sendsms () {
       this.smsUseable = true
       this.captcha()
@@ -67,34 +67,27 @@ export default {
     captcha () {
       api.captcha({
         user_id: this.userId,
-        phone: this.$route.params.phone
+        phone: this.phone
       }).then(succ => {
         if (succ.id) {
+          this.isInput = false
           Toast({position: 'bottom', message: '验证码发送成功'})
         }
       })
     },
-    next () {
-      api.valid({
+    bind () {
+      api.bind({
         user_id: this.userId,
-        phone: this.$route.params.phone,
+        phone: this.phone,
         captcha: this.sms
       }).then(succ => {
-        this.$router.push({path: '/bindPhone'})
+        console.log(succ)
       }, err => {
         console.log(err)
-        this.validsms = '手机校验码输入有误'
       })
     }
-  },
-  beforeDestroy () {
-    clearInterval(this.timer)
-  },
-  components: {
-    NavBar
   }
 }
 </script>
-
 <style scoped>
 </style>

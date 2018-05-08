@@ -11,6 +11,7 @@ import otherProblem from '@/module/user-center/components/otherProblem'
 import modifyPassword from '@/module/user-center/components/modifyPassword'
 import msgSetting from '@/module/user-center/components/msgSetting'
 import TeacherStudentList from '@/module/user-center/components/teacher&studentList'
+import BindPhone from '@/module/user-center/components/bindPhone'
 export default [
   {
     path: '/user-center',
@@ -55,15 +56,21 @@ export default [
     meta: { requiresAuth: true, keepAlive: false }
   },
   {
-    path: '/modifyName',
+    path: '/modifyName/:name',
     name: 'modifyName',
     component: modifyName,
     meta: { requiresAuth: true, keepAlive: false }
   },
   {
-    path: '/modifyPhone',
+    path: '/modifyPhone/:phone',
     name: 'modifyPhone',
     component: modifyPhone,
+    meta: { requiresAuth: true, keepAlive: false }
+  },
+  {
+    path: '/bindPhone',
+    name: 'bindPhone',
+    component: BindPhone,
     meta: { requiresAuth: true, keepAlive: false }
   },
   {

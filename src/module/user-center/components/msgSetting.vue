@@ -1,8 +1,8 @@
 <template>
   <div id="msg-setting">
     <van-cell-group>
-      <van-switch-cell border v-model="checked" title="接收作业消息" />
-      <van-switch-cell border v-model="checked" title="接收学校通知" />
+      <van-switch-cell border v-model="hwMsg" title="接收作业消息"/>
+      <van-switch-cell border v-model="schMsg" title="接收学校通知"/>
     </van-cell-group>
   </div>
 </template>
@@ -11,8 +11,41 @@
 export default {
   name: 'MsgSetting',
   data () {
-    return {
-      checked: true
+    return {}
+  },
+  created () {
+    let notice = JSON.parse(localStorage.getItem('notice'))
+    if (!notice) {
+      localStorage.setItem('notice', JSON.stringify({hwMsg: true, schMsg: true}))
+    }
+  },
+  computed: {
+    hwMsg: {
+      get () {
+        return this.$store.state.userCenter.hwMsg
+      },
+      set (value) {
+        this.setInfo('hwMsg', value)
+      }
+    },
+    schMsg: {
+      get () {
+        return this.$store.state.userCenter.schMsg
+      },
+      set (value) {
+        this.setInfo('schMsg', value)
+      }
+    }
+  },
+  methods: {
+    setInfo (key, val) {
+      let notice = JSON.parse(localStorage.getItem('notice'))
+      notice[key] = val
+      localStorage.setItem('notice', JSON.stringify(notice))
+      this.$store.commit({
+        type: `userCenter/set${key}`,
+        val: val
+      })
     }
   }
 }
