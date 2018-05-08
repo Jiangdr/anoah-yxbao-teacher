@@ -18,11 +18,9 @@ import 'vant/lib/vant-css/icon-local.css'
 import '../lib/cube.min.css'
 import Cube from '../lib/cube.min.js'
 
-<<<<<<< HEAD
-Vue.use(Vant)
-=======
 import 'font-awesome/css/font-awesome.css'
->>>>>>> 59a3664dd4f6c702c2f0e5c7a1ffd301552d7564
+
+Vue.use(Vant)
 
 Vue.use(Cube)
 
