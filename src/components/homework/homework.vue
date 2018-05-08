@@ -24,7 +24,7 @@
         <div class="homework_list_inline_list">截止：2018-08-30 20:00</div>
       </div>
     </div>
-    <div style="width: 50px;height: 50px;background-color: #fc9153;border-radius: 25px;position:absolute;bottom:20px;right:20px;" @click="goAssignHomework">
+    <div style="width: 50px;height: 50px;background-color: #fc9153;border-radius: 25px;position:absolute;bottom:20px;right:20px;" @click="goChooseTextbook">
       <div style="height: 50px;
     display: flex;
     align-items: center;
@@ -52,9 +52,9 @@ export default {
         path: "/"
       });
     },
-    goAssignHomework() {
+    goChooseTextbook() {
       this.$router.push({
-        path: "/assignHomework"
+        path: "/chooseTextbook"
       });
     }
   }
