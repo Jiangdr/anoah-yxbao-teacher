@@ -7,6 +7,8 @@ import userCenter from '@/module/user-center/router'
 import home from '@/components/home/index'
 import list from '@/components/home/list'
 import homework from '@/components/homework/homework'
+import publishHomework from '@/components/publishHomework/publishHomework'
+import chooseTextbook from '@/components/publishHomework/chooseTextbook'
 Vue.use(Router)
 let routes = [
   {
@@ -25,6 +27,18 @@ let routes = [
     path: '/homework',
     name: 'Homework',
     component: homework,
+    meta: { requiresAuth: true, keepAlive: false }
+  },
+  {
+    path: '/publishHomework',
+    name: 'PublishHomework',
+    component: publishHomework,
+    meta: { requiresAuth: true, keepAlive: false }
+  },
+  {
+    path: '/chooseTextbook',
+    name: 'ChooseTextbook',
+    component: chooseTextbook,
     meta: { requiresAuth: true, keepAlive: false }
   }
 ]

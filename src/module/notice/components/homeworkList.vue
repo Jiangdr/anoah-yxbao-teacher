@@ -7,7 +7,6 @@
     </span>
     <p>作业通知</p>
   </div>
-  <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <div class="container">
       <div class="wrapper">
         <div class="date">
@@ -45,7 +44,6 @@
         </div>
       </div>
     </div>
-  </van-pull-refresh>
 </div>
 </template>
 
@@ -81,6 +79,7 @@ export default {
   text-align: center;
   padding-bottom: 5px;
   height: 50px;
+  line-height: 50px;
 }
 
 .homeworkList>.title p {
@@ -98,6 +97,8 @@ export default {
 .homeworkList .container>.wrapper {
   overflow: scroll;
   height: calc(100vh - 60px);
+  padding-top:16px;
+  box-sizing: border-box;
 }
 
 .homeworkList .container>.wrapper>.date {

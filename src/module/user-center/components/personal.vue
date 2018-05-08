@@ -10,18 +10,18 @@
         <span>账号</span>
         <span>{{userInfo.loginnm}}</span>
       </div>
-      <router-link class="item-choice van-hairline--bottom" tag="div" :to="{name:'modifyName'}">
+      <router-link class="item-choice van-hairline--bottom" tag="div" :to="{path:'/modifyName/' + userInfo.nicknm}">
         <span>姓名</span>
-        <span><span>{{userInfo.loginnm}}</span><van-icon name="arrow" style="vertical-align:middle;top:-2px"></van-icon></span>
+        <span><span>{{userInfo.nicknm}}</span><van-icon name="arrow" style="vertical-align:middle;top:-2px"></van-icon></span>
       </router-link>
       <div class="item-choice van-hairline--bottom">
         <span>学校</span>
         <span>{{userInfo.school_name}}</span>
       </div>
-      <router-link class="item-choice van-hairline--bottom" tag="div" :to="{name:'modifyPhone'}">
+      <div class="item-choice van-hairline--bottom" @click="link(userInfo.phone)">
         <span>手机号</span>
         <span><span>{{userInfo.phone || '未绑定'}}</span><van-icon name="arrow" style="vertical-align:middle;top:-2px"></van-icon></span>
-      </router-link>
+      </div>
     </div>
     <van-actionsheet v-model="showActionSheet" :actions="actions" cancel-text="取消" />
   </div>
@@ -72,6 +72,13 @@ export default {
     },
     back () {
       this.$router.back(-1)
+    },
+    link (phone) {
+      if (phone) {
+        this.$router.push({path: `/modifyPhone/${phone}`})
+      } else {
+        this.$router.push({path: `/bindPhone`})
+      }
     }
   },
   beforeRouteLeave (to, from, next) {
