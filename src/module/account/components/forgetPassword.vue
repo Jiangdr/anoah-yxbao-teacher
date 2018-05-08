@@ -12,7 +12,7 @@
     </van-cell-group>
     <div style="text-align:right;line-height:50px;padding-right:20px">
       <span>找回密码遇到问题,请</span>
-      <router-link :to="{path:'/contactUs'}">联系我们</router-link>
+      <router-link :to="{name:'formList'}">联系我们</router-link>
     </div>
     <div class="footer-btn van-hairline--top">
       <van-button size="large" type="primary" class="btn-next" :disabled="btnUseable" :loading="btnLoading" @click="nextStep">
@@ -24,6 +24,7 @@
 
 <script>
 import NavBar from '@/module/user-center/components/common/navbar'
+import api from '@/module/account/axios/user'
 export default {
   name: 'ForgetPassword',
   data () {
@@ -52,16 +53,19 @@ export default {
     },
     nextStep () {
       this.btnLoading = true
-      setTimeout(() => {
+      api.exists({
+        account: this.account
+      }).then(success => {
         this.btnLoading = false
-        Math.random() > 0.5 ? this.error() : this.goValidate()
-      }, 100)
-    },
-    goValidate () {
-      this.$router.push({name: 'setNewPassword'})
-    },
-    error () {
-      this.errorMsg = Math.random() > 0.5 ? '账号不存在' : '该用户还未绑定手机号'
+        if (!success.phone) {
+          this.errorMsg = '该用户还未绑定手机'
+          return false
+        }
+        this.$router.push({path: `/newPassword/${success.phone}`})
+      }, error => {
+        this.btnLoading = false
+        this.errorMsg = error.msg
+      })
     }
   },
   components: {

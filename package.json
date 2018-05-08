@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "es6-promise": "^4.2.4",
+    "font-awesome": "^4.7.0",
     "postcss-px-to-viewports": "^0.0.3",
     "vant": "^1.0.4",
     "vue": "^2.5.2",

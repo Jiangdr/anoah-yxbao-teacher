@@ -6,7 +6,9 @@ export default {
   state: {
     isLogin: false,
     username: '',
-    password: ''
+    password: '',
+    userInfo: stroage['session'].get('userinfo'),
+    jwt: stroage['session'].get('jwt')
   },
   getters: {
   },
@@ -21,20 +23,34 @@ export default {
     },
     setPassword (state, val) {
       state.password = val
+    },
+    setUserInfo (state, val) {
+      state.userInfo = val.userinfo
+      state.jwt = val.jwt
     }
   },
   actions: {
-    doLogin (context) {
-      return userApi.doLogin(context.state.username, context.state.password).then(r => {
+    doLogin ({state, commit}) {
+      return userApi.doLogin({
+        'device': 'PC_BROWSER',
+        'module': 'YOUXUE-BAN',
+        'version': 'v1.0',
+        'timestamp': new Date().getTime() / 1000,
+        'account': state.username,
+        'password': state.password,
+        'jwtusertoken': true
+      }).then(r => {
         // 登录成功后持久用户名和密码
-        stroage['persistent'].set('user.username', context.state.username)
-        stroage['persistent'].set('user.password', context.state.password)
-        context.commit('setIsLogin', true)
+        stroage['persistent'].set('user.username', state.username)
+        stroage['persistent'].set('user.password', state.password)
+        stroage['session'].set('jwt', r.jwt)
+        stroage['session'].set('userinfo', r.userinfo)
+        commit('setIsLogin', true)
+        commit('setUserInfo', r)
       })
     },
-    refreshLocalIsLogin (context) {
-      context.state.isLogin = stroage['session'].get('user.isLogin')
+    refreshLocalIsLogin ({state}) {
+      state.isLogin = stroage['session'].get('user.isLogin')
     }
   }
-
 }

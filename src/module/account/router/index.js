@@ -18,7 +18,7 @@ export default [
     meta: { requiresAuth: false, keepAlive: false }
   },
   {
-    path: '/newPassword',
+    path: '/newPassword/:phone',
     name: 'setNewPassword',
     component: SetNewPassword,
     meta: { requiresAuth: false, keepAlive: false }

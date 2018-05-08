@@ -1,28 +1,32 @@
 <template>
   <div id="login">
-    <van-cell-group class="login-box">
+    <!-- <van-cell-group class="login-box">
       <van-field v-model="username" label="用户名" icon="clear" placeholder="请输入用户名" required @click-icon="username = ''" validate="username" />
       <van-field v-model="password" type="password" label="密码" placeholder="请输入密码" required icon="clear" @click-icon="password = ''" validate="password" />
     </van-cell-group>
     <van-button type="primary" size="large" @click="doLogin" class="tt" :loading="loading" >登录</van-button>
+    <router-link :to="{path:'/forgetPassword'}">忘记密码?</router-link> -->
+    <cube-input v-model="username" placeholder="请输入用户名" type="text"  :clearable="clearable"></cube-input>
+    <cube-input v-model="password" placeholder="请输入密码" type="password" :clearable="clearable"></cube-input>
     <router-link :to="{path:'/forgetPassword'}">忘记密码?</router-link>
+    <cube-button :disabled="isDisabled" @click="doLogin">登录</cube-button>
   </div>
 </template>
 
 <script>
-
+// import {mapState} from 'vuex'
 export default {
   name: 'Login',
   data () {
     return {
-      loading: false,
+      clearable: true,
+      eye: true,
+      isDisabled: true,
       validate: {
         username: [{ 'required': '请输入用户名' }],
         password: [{ 'required': '请输入密码' }]
       }
     }
-  },
-  created () {
   },
   computed: {
     username: {
@@ -42,15 +46,20 @@ export default {
       }
     }
   },
+  watch: {
+    username (newVal) {
+      newVal.length && this.password.length ? this.isDisabled = false : this.isDisabled = true
+    },
+    password (newVal) {
+      newVal.length && this.username.length ? this.isDisabled = false : this.isDisabled = true
+    }
+  },
   methods: {
     doLogin () {
-      this.loading = true
       this.doValidate()
       this.$store.dispatch('account/doLogin').then(r => {
-        this.loading = false
         this.afterLogin()
       }, j => {
-        this.loading = false
       })
     },
     afterLogin () {
@@ -60,14 +69,6 @@ export default {
       )
     },
     doValidate () {
-      for (let i in this.validate) {
-        this.validate[i].forEach((m, n) => {
-          // console.log(m, n, this[i])
-          if (m.required && !this[i]) {
-            console.log(this)
-          }
-        })
-      }
     }
   }
 }

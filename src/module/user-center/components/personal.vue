@@ -1,32 +1,35 @@
 <template>
   <div id="user-info">
     <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
-    <div class="item-choice van-hairline--bottom" @click="modifyIcon">
-      <span>头像</span>
-      <img :src="userInfo.avatar" class="avatar van-hairline--bottom-top-left-right" alt="">
+    <div v-if="userInfo">
+      <div class="item-choice van-hairline--bottom" @click="modifyIcon">
+        <span>头像</span>
+        <img :src="userInfo.avatar" class="avatar van-hairline--bottom-top-left-right" alt="">
+      </div>
+      <div class="item-choice van-hairline--bottom">
+        <span>账号</span>
+        <span>{{userInfo.loginnm}}</span>
+      </div>
+      <router-link class="item-choice van-hairline--bottom" tag="div" :to="{name:'modifyName'}">
+        <span>姓名</span>
+        <span><span>{{userInfo.loginnm}}</span><van-icon name="arrow" style="vertical-align:middle;top:-2px"></van-icon></span>
+      </router-link>
+      <div class="item-choice van-hairline--bottom">
+        <span>学校</span>
+        <span>{{userInfo.school_name}}</span>
+      </div>
+      <router-link class="item-choice van-hairline--bottom" tag="div" :to="{name:'modifyPhone'}">
+        <span>手机号</span>
+        <span><span>{{userInfo.phone || '未绑定'}}</span><van-icon name="arrow" style="vertical-align:middle;top:-2px"></van-icon></span>
+      </router-link>
     </div>
-    <div class="item-choice van-hairline--bottom">
-      <span>账号</span>
-      <span>{{userInfo.username}}</span>
-    </div>
-    <router-link class="item-choice van-hairline--bottom" tag="div" :to="{name:'modifyName'}">
-      <span>姓名</span>
-      <span><span>{{userInfo.real_name}}</span><van-icon name="arrow" style="vertical-align:middle;top:-2px"></van-icon></span>
-    </router-link>
-    <div class="item-choice van-hairline--bottom">
-      <span>学校</span>
-      <span>{{userInfo.school_name}}</span>
-    </div>
-    <router-link class="item-choice van-hairline--bottom" tag="div" :to="{name:'modifyPhone'}">
-      <span>手机号</span>
-      <span><span>{{userInfo.phone || '请绑定'}}</span><van-icon name="arrow" style="vertical-align:middle;top:-2px"></van-icon></span>
-    </router-link>
     <van-actionsheet v-model="showActionSheet" :actions="actions" cancel-text="取消" />
   </div>
 </template>
 
 <script>
 import NavBar from '@/module/user-center/components/common/navbar'
+import api from '@/module/user-center/axios/usercenter'
 import {mapGetters} from 'vuex'
 export default {
   name: 'Personal',
@@ -35,6 +38,7 @@ export default {
       showActionSheet: false,
       title: '个人中心',
       hasBack: true,
+      userInfo: null,
       actions: [
         {
           name: '拍照'
@@ -45,10 +49,22 @@ export default {
       ]
     }
   },
+  mounted () {
+    api.obtainInfo({
+      user_id: this.userId
+    }).then(succ => {
+      this.userInfo = succ
+    })
+  },
   computed: {
     ...mapGetters({
-      userInfo: 'userCenter/userInfo'
+      userId: 'userCenter/userId'
     })
+  },
+  watch: {
+    userInfo (val, o) {
+      console.log(val, o)
+    }
   },
   methods: {
     modifyIcon () {

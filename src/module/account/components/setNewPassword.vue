@@ -20,7 +20,7 @@ export default {
     return {
       title: '找回密码',
       hasBack: true,
-      phoneNum: '18681254569',
+      phoneNum: this.$route.params.phone,
       sms: '',
       password: '',
       password2: '',
