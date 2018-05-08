@@ -13,6 +13,12 @@ import '@/assets/css/global.css'
 
 import '../lib/cube.min.css'
 import Cube from '../lib/cube.min.js'
+
+import Vant from 'vant'
+import 'vant/lib/vant-css/index.css'
+import 'vant/lib/vant-css/icon-local.css'
+
+Vue.use(Vant)
 Vue.use(Cube)
 
 Vue.config.productionTip = false
