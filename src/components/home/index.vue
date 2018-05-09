@@ -1,22 +1,15 @@
 <template>
   <div class="spa">
     <topbar title="首页" text="">
-      <van-icon name="sign" @click="aa" />
-      <van-icon name="search" @click="bb" />
+      <van-icon class="icon" name="sign" @click="message" />
+      <van-icon class="icon" name="search" @click="scan" />
     </topbar>
-
-    <cube-button>Button</cube-button>
-<cube-button type="submit">Submit Button</cube-button>
-
     <van-row>
       <van-col span="12">
-        <van-button type="primary" block>互动课堂</van-button>
+        <van-button type="primary" block @click="go('iclass')">互动课堂</van-button>
       </van-col>
       <van-col span="12">
-        <van-button type="primary" block @click="goHomework">作业</van-button>
-      </van-col>
-      <van-col span="12">
-        <van-button type="primary" block @click="change">我的</van-button>
+        <van-button type="primary" block @click="go('homework')">作业</van-button>
       </van-col>
     </van-row>
     <div class="space"></div>
@@ -28,7 +21,7 @@
         <van-button type="primary" block>课堂记录</van-button>
       </van-col>
       <van-col span="8">
-        <van-button type="primary" block>问答</van-button>
+        <van-button type="primary" block @click="go('qa')">问答</van-button>
       </van-col>
     </van-row>
 
@@ -40,6 +33,11 @@
         </van-list>
       </van-pull-refresh>
     </div>
+
+    <van-tabbar v-model="active" @change="change" class="bar">
+      <van-tabbar-item icon="shop">首页</van-tabbar-item>
+      <van-tabbar-item icon="chat">我的</van-tabbar-item>
+    </van-tabbar>
 
   </div>
 </template>
@@ -53,24 +51,55 @@ export default {
       list: [],
       loading: false,
       refreshLoading: false,
-      finished: false
+      finished: false,
+      active: 0
     }
   },
   computed: {
 
   },
   methods: {
-    aa () {
-      alert(1)
+    message () {
+      alert('消息')
     },
-    bb () {
-      alert(2)
+    scan () {
+      alert('扫码')
     },
 
-    goHomework () {
-      this.$router.push({
-        path: '/homework'
-      })
+    go (type) {
+      // 代码走本地
+      let localCode = window.location.protocol === 'file:';
+      let localUrl = 'file:///android_asset/www/';
+      let href = '';
+      if (type === 'iclass') {
+        let param = JSON.stringify({
+          userid: parseInt(this.$store.state.account.userInfo.userid),
+          lasthref: window.location.href
+        });
+        let baseUrl = localCode ? localUrl + "TP/index.html" : this.config.env + '/ebag/iclass/teacher/index.html'
+
+        href = baseUrl + "?param=" + encodeURIComponent(param);
+      } else if (type === 'homework') {
+        this.$router.push({
+          path: '/homework'
+        })
+      } else if (type === 'qa') {
+        let param = JSON.stringify({
+          userid: parseInt(this.$store.state.account.userInfo.userid),
+          domain: 'http://e.dev.anoah.com',
+          status: 1,
+          lasthref: window.location.href
+        });
+        let baseUrl = localCode ? localUrl + "QA/index.html" : this.config.env + '/qa/www/index.html'
+
+        href = baseUrl + "?param=" + encodeURIComponent(param);
+      }
+
+      if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
+        window.TeacherUtil.loadUrl(href);
+        return;
+      }
+      window.location.href = href;
     },
     onClickLeft () {
 
@@ -114,6 +143,10 @@ export default {
 }
 </script>
 <style scoped>
+.icon{
+  font-size:18px;
+  padding:10px;
+}
 .space {
   height: 20px;
 }
