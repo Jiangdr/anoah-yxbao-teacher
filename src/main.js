@@ -20,10 +20,13 @@ import Cube from '../lib/cube.min.js'
 
 // import 'font-awesome/css/font-awesome.css'
 
+import config from '@/config/index.js'
+
 Vue.use(Vant)
 
 Vue.use(Cube)
 
+Vue.prototype.config = config
 Vue.config.productionTip = false
 
 window.bus = new Vue()

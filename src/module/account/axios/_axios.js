@@ -44,7 +44,7 @@ function responseFormat (response) {
 
 export default {
   post (url, data) {
-    url = !~url.indexOf('http') ? config.origin + url : url
+    url = !~url.indexOf('http') ? (config.origin + url) : url
     return axios({
       method: 'post',
       url,

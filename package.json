@@ -18,7 +18,7 @@
     "es6-promise": "^4.2.4",
     "font-awesome": "^4.7.0",
     "postcss-px-to-viewports": "^0.0.3",
-    "vant": "^1.0.4",
+    "vant": "^1.1.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
