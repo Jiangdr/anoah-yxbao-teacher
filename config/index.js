@@ -28,12 +28,13 @@ module.exports = {
       '/': {
         target: 'http://e.dev.anoah.com'
       },
-      // '/api': {
-      //   target: 'http://e.dev.anoah.com',
-      //   pathRewrite: {
-      //     '^/api': '/api'
-      //   }
-      // },
+      '/homeworkDetail': {
+        target: 'http://api2.dev.anoah.com',
+        changeOrigin: true,  // 解决跨域问题
+        pathRewrite: {
+          '^/homeworkDetail': '/homeworkDetail'
+        }
+      },
       // '/api_dist': {
       //   target: 'http://e.dev.anoah.com',
       //   pathRewrite: {
