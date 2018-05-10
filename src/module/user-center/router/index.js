@@ -2,6 +2,7 @@ import userCenter from '@/module/user-center/components/index'
 import userInfo from '@/module/user-center/components/personal'
 import myClass from '@/module/user-center/components/myClass'
 import feedback from '@/module/user-center/components/feedback'
+import OtherQuestion from '@/module/user-center/components/otherQuestion'
 import setting from '@/module/user-center/components/setting'
 import aboutUs from '@/module/user-center/components/aboutUs'
 import modifyName from '@/module/user-center/components/modifyName'
@@ -41,7 +42,13 @@ export default [
     path: '/feedback',
     name: 'feedback',
     component: feedback,
-    meta: { requiresAuth: true, keepAlive: false }
+    meta: { requiresAuth: true, keepAlive: true }
+  },
+  {
+    path: '/otherQuestion',
+    name: 'otherQuestion',
+    component: OtherQuestion,
+    meta: { requiresAuth: true, keepAlive: true }
   },
   {
     path: '/setting',

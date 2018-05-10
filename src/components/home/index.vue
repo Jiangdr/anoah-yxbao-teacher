@@ -28,7 +28,7 @@
         <van-button type="primary" block>课堂记录</van-button>
       </van-col>
       <van-col span="8">
-        <van-button type="primary" block>问答</van-button>
+        <van-button type="primary" block @click="linkQaAnswer">问答</van-button>
       </van-col>
     </van-row>
 
@@ -46,6 +46,7 @@
 
 <script>
 import topbar from '@/components/common/topbar'
+import {mapGetters} from 'vuex'
 export default {
   name: 'Home',
   data () {
@@ -57,9 +58,35 @@ export default {
     }
   },
   computed: {
-
+    ...mapGetters({
+      userId: 'userCenter/userId'
+    })
   },
   methods: {
+    linkQaAnswer () {
+      let href
+      if (window.navigator.userAgent.indexOf('iPhone') > -1) {
+        href = "/qa/www/index_ios.html?param=" + encodeURIComponent(JSON.stringify({
+          userid: parseInt(this.userId),
+          domain: window.location.host.replace('http:\\', ''),
+          status: 1,
+          lasthref: window.location.href
+        }))
+      } else {
+        href = "/qa/www/index.html?param=" + encodeURIComponent(JSON.stringify({
+          userid: parseInt(this.userId),
+          domain: 'http://e.dev.anoah.com',
+          status: 1,
+          lasthref: window.location.href
+        }))
+      }
+      if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
+        window.TeacherUtil.loadUrl(href)
+        return false
+      }
+      window.location.href = href
+      return false
+    },
     aa () {
       alert(1)
     },

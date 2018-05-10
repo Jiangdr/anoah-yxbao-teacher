@@ -18,7 +18,7 @@ import 'vant/lib/vant-css/icon-local.css'
 import '../lib/cube.min.css'
 import Cube from '../lib/cube.min.js'
 
-import 'font-awesome/css/font-awesome.css'
+// import 'font-awesome/css/font-awesome.css'
 
 Vue.use(Vant)
 
@@ -26,6 +26,7 @@ Vue.use(Cube)
 
 Vue.config.productionTip = false
 
+window.bus = new Vue()
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

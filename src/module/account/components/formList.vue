@@ -12,15 +12,12 @@
       <div class="model" v-show="chooseArea" @click="closeChooseArea"></div>
     </transition>
     <transition name="van-slide-bottom">
-      <van-picker v-show="chooseArea" :columns="columns" @change="onChange" class="choose-area"/>
+      <van-picker show-toolbar :loading="areaLoading" @cancel="chooseArea=false" @confirm="confirm" v-show="chooseArea" :columns="columns" @change="onChange" class="choose-area"/>
     </transition>
   </div>
 </template>
 <script>
-const citys = {
-  '浙江': ['杭州', '宁波', '温州', '嘉兴', '湖州'],
-  '福建': ['福州', '厦门', '莆田', '三明', '泉州']
-}
+import api from '@/module/account/axios/user'
 export default {
   name: 'FormList',
   data () {
@@ -28,36 +25,72 @@ export default {
       userAccount: '',
       userName: '',
       schoolArea: '',
-      schoolName: 'baisha',
+      areaId: '',
+      schoolName: '',
       className: '',
       phoneNum: '',
       chooseArea: false,
-      columns: [
-        {
-          values: Object.keys(citys),
-          className: 'column1'
-        },
-        {
-          values: citys['浙江'],
-          className: 'column2',
-          defaultIndex: 2
-        }
-      ]
+      areaLoading: true,
+      citys: null,
+      area: null,
+      columns: []
     }
   },
   methods: {
     areaChange (e) {
       e.target.blur()
       this.chooseArea = true
+      api.area()
+        .then((succ) => {
+          this.area = succ
+          this.productArea()
+          this.areaLoading = false
+        })
+    },
+    productArea () {
+      let citys = this.area
+      let result = {}
+      citys.forEach(el => {
+        if (result[el.province]) {
+          result[el.province].push(el.nm)
+        } else {
+          result[el.province] = []
+          result[el.province].push(el.nm)
+        }
+      })
+      this.citys = result
+      this.columns = [
+        {
+          values: Object.keys(this.citys),
+          className: 'column1'
+        },
+        {
+          values: this.citys['北京'],
+          className: 'column2',
+          defaultIndex: 0
+        }
+      ]
     },
     fillSchoolName (e) {
       e.target.blur()
-      this.$router.push({path: '/contactUs/schoolSearch'})
+      if (this.schoolArea) {
+        this.$router.push({path: '/contactUs/schoolSearch/' + this.areaId})
+      }
     },
     onChange (picker, values) {
-      picker.setColumnValues(1, citys[values[0]])
+      picker.setColumnValues(1, this.citys[values[0]])
     },
     closeChooseArea () {
+      this.chooseArea = false
+    },
+    confirm (value, index) {
+      console.log(value, index)
+      this.schoolArea = value[1]
+      this.area.filter(el => {
+        if (el.nm === value[1]) {
+          this.areaId = el.cityid
+        }
+      })
       this.chooseArea = false
     }
   },
