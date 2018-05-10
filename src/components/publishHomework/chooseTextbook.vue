@@ -13,7 +13,7 @@
         <div class="leftTab" @click="clickGrade('五年级')" v-bind:class="{activeTabClass : activeTabName == '五年级'}">五年级</div>
         <div class="leftTab" @click="clickGrade('六年级')" v-bind:class="{activeTabClass : activeTabName == '六年级'}">六年级</div>
     </div>
-    <cube-button style="position:absolute;bottom:0px;" :outline="true" @click="goPublishHomework">确认</cube-button>
+    <cube-button style="position:absolute;bottom:0px;" :outline="true" @click="goSummerHomework">确认</cube-button>
   </div>
 </template>
 
@@ -35,9 +35,9 @@ export default {
     clickGrade(name) {
       this.activeTabName = name;
     },
-    goPublishHomework() {
+    goSummerHomework() {
       this.$router.push({
-        path: "/publishHomework"
+        path: "/summerHomework"
       });
     }
   }
