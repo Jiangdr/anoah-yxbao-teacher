@@ -16,7 +16,18 @@
       </span>
     </div>
 
+
     <div class="listContainer" v-bind:style="listContainerStyle">
+
+    <!-- <van-list
+  v-model="loading"
+  :finished="finished"
+   @load="onLoad"
+>
+  <van-cell v-for="item in list" :key="item" :title="item + ''" />
+</van-list> -->
+
+<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <div class="homework_list" v-for="(item, index) in homeworkListArray" :key="index">
         <div>
           <div class="homework_list_inline_list">{{item.start_time}}</div>
@@ -25,6 +36,8 @@
           <div class="homework_list_inline_list">截止：{{item.deadline}}</div>
         </div>
       </div>
+</van-pull-refresh>
+
     </div>
 
     <div style="width: 50px;height: 50px;background-color: #fc9153;border-radius: 25px;position:absolute;bottom:20px;right:20px;" @click="goChooseTextbook">
@@ -49,7 +62,11 @@ export default {
       homeworkListArray: [],
       listContainerStyle: {
         height: window.innerHeight - 90 + 'px'
-      }
+      },
+      list: [],
+      loading: false,
+      finished: false,
+      isLoading: false
     };
   },
   mounted: function() {
@@ -57,6 +74,25 @@ export default {
     this.getHomeworkList();
   },
   methods: {
+    onRefresh() {
+        setTimeout(() => {
+          this.$toast('刷新成功');
+          this.isLoading = false;
+        }, 500);
+        this.getHomeworkList();
+    },
+    onLoad() {
+      setTimeout(() => {
+        for (let i = 0; i < 10; i++) {
+          this.list.push(this.list.length + 1);
+        }
+        this.loading = false;
+
+        if (this.list.length >= 40) {
+          this.finished = true;
+        }
+      }, 500);
+    },
     goHome() {
       this.$router.push({
         path: "/"
@@ -70,6 +106,7 @@ export default {
     getHomeworkList() {
       var self = this;
 
+
       var url = "/jwt/zuoye/homework/homeworkLists?";
       var data = {
         user_id: this.userInfo.userid
@@ -78,6 +115,9 @@ export default {
       self.$http
         .get(url, { params: data })
         .then(function(response) {
+
+          
+
           if (response.data.msg == "ok") {
             self.homeworkListArray = response.data.recordset.lists;
           } else {
