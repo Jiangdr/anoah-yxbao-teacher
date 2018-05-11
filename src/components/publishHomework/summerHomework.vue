@@ -18,7 +18,7 @@
     <div style="line-height:24px;background-color:#fff;padding:10px 15px;font-size:14px;" v-for="(item, index) in lists" :key="index">
       <div style="float:left;" @click="clickCell">{{item.name}}-共{{item.qti_num}}题</div>
       <div style="float:right;">
-        <input type="checkbox" style="zomm:1.3" :name="item.name" :id="item.resource_id" :value="item.qti_num" @click="checkboxChange">
+        <input type="checkbox" style="width:18px;height:18px;" :name="item.name" :id="item.resource_id" :value="item.qti_num" @click="checkboxChange">
       </div>
       <div style="clear:both;"></div>
     </div>
@@ -41,8 +41,7 @@ export default {
       hasChoosePagesNum: 0,
       hasChooseProblemsNum: 0,
       checked: true,
-       list: ['a', 'b', 'c'],
-       hasChoosePagesNumArray: []
+      hasChoosePagesNumArray: []
     };
   },
   computed: {},
@@ -56,12 +55,12 @@ export default {
       });
     },
     clickPublish() {
-      if(this.hasChoosePagesNum == 0) {
+      if (this.hasChoosePagesNum == 0) {
         this.$toast({
-          message: '请选择试卷！',
+          message: "请选择试卷！",
           duration: 1000
         });
-        return
+        return;
       }
       var result = [];
       for (var i = 0; i < this.hasChoosePagesNumArray.length; i++) {
@@ -71,7 +70,6 @@ export default {
         });
       }
       this.result = result;
-      
       this.$store.dispatch("setChooseSummerHomework", this.result);
       this.$router.push({
         path: "/homeworkPublishSetting"
@@ -86,10 +84,11 @@ export default {
           this.hasChoosePagesNumArray.push(inputArray[i]);
         }
       }
-      
       this.hasChoosePagesNum = this.hasChoosePagesNumArray.length;
       for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
-        this.hasChooseProblemsNum += Number(this.hasChoosePagesNumArray[i].value);
+        this.hasChooseProblemsNum += Number(
+          this.hasChoosePagesNumArray[i].value
+        );
       }
       // var array = this.result;
       // this.hasChoosePagesNum = array.length;
@@ -110,17 +109,16 @@ export default {
     },
     getList: function(value) {
       var self = this;
-      var url =
-        "jwt/resource/package/getResourceLists?";
+      var url = "jwt/resource/package/getResourceLists?";
       var data = {
-        'user_id': '33737',
-        'pack_id': '9002511525420500001'
+        user_id: "33737",
+        pack_id: "9002511525420500001"
       };
       self.$http
         .get(url, { params: data })
         .then(function(response) {
           if (response.data.msg === "ok") {
-            self.lists = response.data.recordset.lists
+            self.lists = response.data.recordset.lists;
           } else {
             console.log(response);
           }

@@ -5,7 +5,7 @@ export default {
         chooseSummerHomeworkArray: []
     },
     actions: {
-        setChooseSummerHomework: function({commit}, result){
+        setChooseSummerHomework: function ({ commit }, result) {
             commit(setChooseSummerHomework, result);
         },
     },
