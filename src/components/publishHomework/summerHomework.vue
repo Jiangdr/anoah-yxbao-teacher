@@ -16,7 +16,7 @@
     </van-checkbox-group> -->
 
     <div style="line-height:24px;background-color:#fff;padding:10px 15px;font-size:14px;" v-for="(item, index) in lists" :key="index">
-      <div style="float:left;" @click="clickCell">{{item.name}}-共{{item.qti_num}}题</div>
+      <div style="float:left;" @click="clickTiltleName(item)">{{item.name}}-共{{item.qti_num}}题</div>
       <div style="float:right;">
         <input type="checkbox" style="width:18px;height:18px;" :name="item.name" :id="item.resource_id" :value="item.qti_num" @click="checkboxChange">
       </div>
@@ -130,9 +130,8 @@ export default {
           console.log(response);
         });
     },
-    clickCell() {
-      // debugger
-      // event.stopPropagation();
+    clickTiltleName(item) {
+      this.$store.dispatch("setChooseExamExercise", item.qti_ids);
       this.$router.push({
         path: "/examExercise"
       });

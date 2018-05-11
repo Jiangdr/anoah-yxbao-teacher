@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 import accountStore from '@/module/account/store/account.js'
 import userCenterStore from '@/module/user-center/store/userCenter.js'
-import homeworkStore from '@/module/homework/store/homework.js'
+import homeworkStore from './homework/store/homework.js'
 
 Vue.use(Vuex)
 

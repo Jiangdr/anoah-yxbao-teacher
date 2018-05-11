@@ -17,26 +17,12 @@ export default {
   name: "examExercise",
   data() {
     return {
-      setting: [],
-      qti_ids: [
-        "2019741",
-        "2012257",
-        "2012190",
-        "9002511513744200134",
-        "9002511513744200132",
-        "9002511501150500055",
-        "9002511525419900001",
-        "9002511525419900002",
-        "9002511525420000001",
-        "9002511525420000002",
-        "9002511525420100001",
-        "9002511525420200001",
-        "9002511525751800001",
-      ]
+      setting: []
     };
   },
   computed: {},
   created: function() {
+    this.qti_ids = this.$store.state.homework.chooseExamExerciseArray;
     this.qtiFun();
   },
   methods: {
