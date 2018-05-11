@@ -4,7 +4,11 @@
       <h1>试卷名称</h1>
       <i class="cubeic-back" @click="goSummerHomework">返回</i>
     </header>
-    <Qti :setting="setting"></Qti>
+    <div style="overflow-y:auto;height:91%;overflow-x:hidden;">
+      <div v-for="(value,key) in setting" :key="key">
+        <Qti :setting="value"></Qti>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -13,19 +17,41 @@ export default {
   name: "examExercise",
   data() {
     return {
-      setting: {
-        domain: "e.dev.anoah.com",
-        qid: "question:9002511525420300001",
-        num: -1,
-        caller: "PREVIEWOR"
-      }
+      setting: [],
+      qti_ids: [
+        "2019741",
+        "2012257",
+        "2012190",
+        "9002511513744200134",
+        "9002511513744200132",
+        "9002511501150500055",
+        "9002511525419900001",
+        "9002511525419900002",
+        "9002511525420000001",
+        "9002511525420000002",
+        "9002511525420100001",
+        "9002511525420200001",
+        "9002511525751800001",
+      ]
     };
   },
   computed: {},
-  mounted: function() {
-    // this.getList();
+  created: function() {
+    this.qtiFun();
   },
   methods: {
+    qtiFun() {
+      for (var i = 0; i < this.qti_ids.length; i++) {
+        this.setting[i] = {
+          domain: "e.dev.anoah.com",
+          qid: this.qti_ids[i],
+          num: i+1,
+          caller: "PREVIEWOR",
+          resource_type: "qti_question"
+        };
+      }
+      console.log(this.setting)
+    },
     goSummerHomework() {
       this.$router.push({
         path: "/summerHomework"

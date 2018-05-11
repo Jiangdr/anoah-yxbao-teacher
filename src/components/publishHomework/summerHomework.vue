@@ -45,6 +45,9 @@ export default {
     };
   },
   computed: {},
+  created: function() {
+    this.userInfo = this.$store.state.account.userInfo;
+  },
   mounted: function() {
     this.getList();
   },
@@ -111,7 +114,7 @@ export default {
       var self = this;
       var url = "jwt/resource/package/getResourceLists?";
       var data = {
-        user_id: "33737",
+        user_id: this.userInfo.userid,
         pack_id: "9002511525420500001"
       };
       self.$http
