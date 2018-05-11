@@ -22,6 +22,20 @@ import 'font-awesome/css/font-awesome.css'
 
 import config from '@/config/index.js'
 
+import dayjs from 'dayjs';
+
+import Axios from 'axios';
+
+Vue.prototype.$dayjs = dayjs;
+
+Vue.prototype.$http = Axios;
+//Axios.defaults.withCredentials = true;
+
+Vue.use(window.qtivue.default)
+Vue.use(window.anoahim.default)
+Vue.use(window.mp3player.default)
+Vue.use(window.tcplayer.default)
+
 Vue.use(Vant)
 
 Vue.use(Cube)

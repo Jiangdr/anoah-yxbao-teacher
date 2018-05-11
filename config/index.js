@@ -35,6 +35,13 @@ module.exports = {
           '^/homeworkDetail': '/homeworkDetail'
         }
       },
+      '/api_cache': {
+        target: 'http://e.dev.anoah.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api_cache': '/api_cache'
+        }
+      }
       // '/api_dist': {
       //   target: 'http://e.dev.anoah.com',
       //   pathRewrite: {
