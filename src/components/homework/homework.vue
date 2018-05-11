@@ -16,7 +16,7 @@
       </span>
     </div>
 
-    <van-list>
+    <div class="listContainer" v-bind:style="listContainerStyle">
       <div class="homework_list" v-for="(item, index) in homeworkListArray" :key="index">
         <div>
           <div class="homework_list_inline_list">{{item.start_time}}</div>
@@ -25,7 +25,7 @@
           <div class="homework_list_inline_list">截止：{{item.deadline}}</div>
         </div>
       </div>
-    </van-list>
+    </div>
 
     <div style="width: 50px;height: 50px;background-color: #fc9153;border-radius: 25px;position:absolute;bottom:20px;right:20px;" @click="goChooseTextbook">
       <div style="height: 50px;
@@ -46,7 +46,10 @@ export default {
       options: [2013, 2014, 2015, 2016, 2017, 2018],
       value: 2016,
       title: '班级',
-      homeworkListArray: []
+      homeworkListArray: [],
+      listContainerStyle: {
+        height: window.innerHeight - 90 + 'px'
+      }
     };
   },
   mounted: function() {
@@ -111,5 +114,8 @@ export default {
 }
 .homework_list_inline_list{
   line-height:25px;
+}
+.listContainer{
+  overflow-y:auto;
 }
 </style>
