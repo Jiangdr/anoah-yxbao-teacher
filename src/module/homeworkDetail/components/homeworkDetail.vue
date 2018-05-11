@@ -61,39 +61,58 @@
                 <div class="left">{{index+1}}、</div>
                 <div class="right">
                   <p>[{{ques.icom_name}}] <span class="resource-name">{{ques.resource_name}}</span><span v-if="ques.pigai_status!=3"> 待批阅</span></p>
-                  <p>已完成：{{ques.finished_counter}}/{{homeworkInfo.student_counter}}人 正确率：{{itemCorrect(ques.average_rate)}}</p>
+                  <p>
+                    已完成：{{ques.finished_counter}}/{{homeworkInfo.student_counter}}人 正确率：{{itemCorrect(ques.average_rate)}}
+                    <van-icon name="arrow" class="showdetail"></van-icon>
+                  </p>
                 </div>
               </div>
-              <div class="itemdetail"></div>
+              <div class="itemdetail hide" v-if="ques.resource_type=='qti_exam'">
+                <p v-for="(mini,key) in miniResource[index]" :key="key">
+                  <span>
+                    <template v-if="mini.status<3">
+                      待批阅
+                    </template>
+                    <template v-else-if="mini.status==3&&mini.marked==1">
+                      阅
+                    </template>
+                    <template v-else>
+                    {{itemCorrect(mini.correct_rate)}}
+                    </template>
+                   </span>
+                  <span>{{(index+1)+'-'+(key+1)}}</span>
+                </p>
+              </div>
             </div>
 
           </div>
         </div>
         <div class="student-content" v-if="activeBtn=='student'">
-          <div class="status">
-            <van-row class="item">
-              <van-col span="8">未完成</van-col>
-              <van-col span="10">14人</van-col>
-              <van-col span="6" class="btn" v-if="!isUrge">
-                <p @click="toggleUrge">催交作业</p>
-              </van-col>
-              <van-col span="6" class="btn" v-if="isUrge">
-                <p class="disable">今日已提醒</p>
-              </van-col>
-            </van-row>
-            <van-row class="item">
-              <van-col span="8">未订正</van-col>
-              <van-col span="10">14人</van-col>
-              <van-col span="6" class="btn" v-if="!isRemind">
-                <p @click="toggleRemind">提醒订正</p>
-              </van-col>
-              <van-col span="6" class="btn" v-if="isRemind">
-                <p class="disable">今日已提醒</p>
-              </van-col>
-            </van-row>
-          </div>
-          <div class="blank"></div>
-          <div class="table">
+          <template v-if="finishCounter>0">
+            <div class="status">
+              <van-row class="item">
+                <van-col span="8">未完成</van-col>
+                <van-col span="10">{{homeworkInfo.unfinished_counter}}人</van-col>
+                <van-col span="6" class="btn" v-if="!isUrge">
+                  <p @click="toggleUrge" :class="{disable:finishCounter==0}">催交作业</p>
+                </van-col>
+                <van-col span="6" class="btn" v-if="isUrge">
+                  <p class="disable">今日已提醒</p>
+                </van-col>
+              </van-row>
+              <van-row class="item">
+                <van-col span="8">未订正</van-col>
+                <van-col span="10">{{homeworkInfo.unretyr_counter}}人</van-col>
+                <van-col span="6" class="btn" v-if="!isRemind">
+                  <p @click="toggleRemind">提醒订正</p>
+                </van-col>
+                <van-col span="6" class="btn" v-if="isRemind">
+                  <p class="disable">今日已提醒</p>
+                </van-col>
+              </van-row>
+            </div>
+            <div class="blank"></div>
+            <div class="table">
             <div class="table-name">学生成绩</div>
             <div class="table-header">
               <van-row>
@@ -107,19 +126,38 @@
               <van-row v-for="(stu, index) in studentList" :key='index' class="stu">
                 <van-col span="5">{{stu.real_name}}</van-col>
                 <van-col span="5">{{stu.completed_num}}</van-col>
-                <van-col span="5">{{itemCorrect(stu.correct_num)}}</van-col>
-                <van-col span="5">错题订正</van-col>
+                <van-col span="5">{{itemCorrect(stu.rate)}}</van-col>
+                <van-col span="5">{{stu.correct_num}}</van-col>
                 <van-col span="4" ><van-icon name="arrow"></van-icon></van-col>
               </van-row>
             </div>
           </div>
+          </template>
+          <template v-else>
+            <div class="unfinish-state">
+              <div>
+                <p>
+                  <span>{{homeworkInfo.unfinished_counter}}人</span><br>
+                  <span>未完成</span>
+              </p>
+              </div>
+              <div>
+                <p>
+                  <span>{{homeworkInfo.unretyr_counter}}人</span><br>
+                  <span>未完成</span>
+                </p>
+              </div>
+            </div>
+            <div class="title">学生成绩</div>
+            <div class="noanswer-tip">还没有学生提交作业哟～</div>
+          </template>
         </div>
       </div>
     </div>
     <!-- 底部按钮 -->
     <div class="bottom-btn van-hairline--top">
       <van-row>
-        <van-col span="6" offset="1" class="btn">一键批阅</van-col>
+        <van-col span="6" offset="1" class="btn" :class="{disable:homeworkStatus==3}">一键批阅</van-col>
         <van-col span="6" offset="2" class="btn">批量评价</van-col>
         <van-col span="6" offset="2" class="btn">公布答案</van-col>
       </van-row>
@@ -151,36 +189,38 @@
 
 <script>
 import homeworkDetil from '../axios/detail.js'
+import Vue from 'vue'
 // import {mapState} from 'vuex'
 export default {
   name: 'detail',
   data() {
     return {
       params: {
-        publish_id: '229002511525863300001f',
-        class_id: '1106785'
+        publish_id: 'f19002511523532300002f',
+        class_id: '1100757'
       },
       homeworkInfo: {}, // 作业信息
       resourceList: [], // 作业列表
       studentList: [], // 班级学生完成情况
-      activeBtn: 'student', // content内容显示
+      activeBtn: 'homework', // content内容显示
       showTips: false, // 提示遮罩层
       urge: false, // 催交作业遮罩层
       remind: false, // 订正题型遮罩层
       notcorrect: false, // 是否只看待批阅
       isUrge: false, // 是否已催交作业
-      isRemind: false // 是否已题型订正
+      isRemind: false, // 是否已题型订正
+      homeworkStatus: '',
+      miniResource: {}
     }
   },
   created() {
-    console.log(this.user)
     homeworkDetil.getinfo(this.params).then((r) => {
       this.homeworkInfo = r;
       this.studentList = r.student_list
     })
     homeworkDetil.getResourceList(this.params).then((d) => {
-      console.log(d)
-      this.resourceList = d;
+      this.resourceList = d.list;
+      this.homeworkStatus = d.status
     })
   },
   computed: {
@@ -193,6 +233,10 @@ export default {
       } else {
         return this.homeworkInfo.class_average_correct_rate === 0 ? 0 : Math.round(this.homeworkInfo.class_average_correct_rate * 100) + '%'
       }
+    },
+    finishCounter() {
+      return this.homeworkInfo.student_counter - this.homeworkInfo.unfinished_counter
+      // return 0
     }
 
   },
@@ -221,7 +265,24 @@ export default {
       }, 3000)
     },
     changeCollapse(index) {
-      console.log(index)
+      let detailbox = $('.homework-content .item').eq(index).find('.itemdetail')
+      let curr = this.resourceList[index];
+      detailbox.toggleClass('hide');
+      let param = {
+        'publish_id': curr.course_hour_publish_id,
+        'course_resource_id': curr.course_resource_id,
+        'dcom_entity_id': curr.dcom_entity_id
+      }
+      if (curr.resource_type === 'qti_exam' || (curr.resource_type === 'qti_question')) {
+        if (!detailbox.hasClass('hide')) {
+          if (this.miniResource[index]) {
+            return false
+          }
+          homeworkDetil.getMiniResource(param).then((r) => {
+            Vue.set(this.miniResource, index, r)
+          })
+        }
+      }
     },
     itemCorrect(correct) {
       if (correct === '') {
@@ -282,7 +343,28 @@ export default {
     height: 80px;
     box-sizing: border-box;
   }
-
+.detail>.wrapper .itemdetail{
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #eaeaea;
+}
+.detail>.wrapper .itemdetail p span:first-child{
+  border: 1px solid #333;
+  text-align: center;
+  border-radius: 50%;
+  width:50px;
+  height: 50px;
+  line-height: 50px;
+}
+.detail>.wrapper .itemdetail p{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  padding:10px
+}
+.detail>.wrapper .itemdetail.hide{
+  display: none;
+}
   .detail>.wrapper>.info>.name {
     font-weight: bold;
   }
@@ -379,8 +461,14 @@ export default {
 
   .detail>.wrapper>.content>.homework-content .lists .item .iteminfo>.right p {
     display: flex;
+    position: relative;
   }
-
+.detail>.wrapper>.content>.homework-content .lists .item .iteminfo>.right p .showdetail{
+  position: absolute;
+  right: 0px;
+  top:50%;
+  transform: translateY(-50%);
+}
   .detail>.wrapper>.content>.homework-content .right .resource-name {
     display: inline-block;
     max-width: 180px;
@@ -398,8 +486,30 @@ export default {
   }
   /* 学生列表样式 */
 
-.detail>.wrapper>.content>.student-content .status{
-
+.detail>.wrapper>.content>.student-content .unfinish-state{
+  display: flex;
+  justify-content: center;
+  margin-top:20px;
+}
+.detail>.wrapper>.content>.student-content .unfinish-state>div{
+  width:50%;
+  display: flex;
+  justify-content: center;
+}
+.detail>.wrapper>.content>.student-content .unfinish-state p{
+  width:80px;
+  text-align: center;
+  border:1px solid #eaeaea;
+  padding:10px 20px;
+}
+.detail>.wrapper>.content>.student-content .unfinish-state+.title{
+  margin-top:20px;
+  margin-bottom:20px;
+  padding-left: 10px;
+  font-weight: 500;
+}
+.detail>.wrapper>.content>.student-content .unfinish-state+.title+div.noanswer-tip{
+  text-align: center;
 }
 .detail>.wrapper>.content>.student-content .status>.item{
   padding: 0 10px;
@@ -494,5 +604,9 @@ export default {
     line-height: 40px;
     text-align: center;
     margin-top: 5px;
+  }
+  .detail .bottom-btn .btn.disable{
+    background: #999;
+    border: 1px solid #999;
   }
 </style>

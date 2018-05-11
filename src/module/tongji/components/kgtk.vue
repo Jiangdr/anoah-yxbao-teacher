@@ -4,8 +4,8 @@
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
-            <i class="cubeic-back"></i>
-            </span>
+                <i class="cubeic-back"></i>
+                </span>
         </van-col>
         <van-col span="18">
           <span class="text">查看统计</span>
@@ -19,31 +19,38 @@
           <span>客观填空</span>
         </van-col>
         <van-col span="18" class="info-right">
-          正确率：<span class="correct">100% </span> <span @click="toggleAllCorrec"> 全对：{{allCorrect.count}}人</span>
+          正确率：<span class="correct">100% </span> <span @click="toggleAllCorrec('全对的学生',allCorrect.students)"> 全对：{{allCorrect.count}}人</span>
         </van-col>
       </van-row>
     </div>
     <div class="statlist">
       <van-row class="question-item" :class="index==0?'van-hairline--surround':'van-hairline--bottom van-hairline--left van-hairline--right'" v-for="(item,index) in  record" :key="index">
-        <van-col span="6" class="num van-hairline--right" >{{index+1}}</van-col>
-        <van-col span="6" class="right van-hairline--right"><span>{{item.record.right.count}}</span><span>答对</span></van-col>
-        <van-col span="6" class="wrong van-hairline--right"><span>{{item.record.wrong.count}}</span><span>答错</span></van-col>
-        <van-col span="6" class="unanswered"><span>{{item.record.right.count}}</span><span>未答</span></van-col>
+        <van-col span="6" class="num van-hairline--right">{{index+1}}</van-col>
+        <van-col span="6" class="right van-hairline--right">
+          <p @click="item.record.right.count>0?toggleAllCorrec('答对的学生',item.record.right.students):''">
+            <span>{{item.record.right.count}}</span>
+            <span>答对</span>
+          </p>
+        </van-col>
+        <van-col span="6" class="wrong van-hairline--right">
+          <p @click="item.record.wrong.count>0?toggleAllCorrec('答错的学生',item.record.wrong.students):''">
+            <span>{{item.record.wrong.count}}</span><span>答错</span>
+          </p>
+        </van-col>
+        <van-col span="6" class="unanswered">
+          <p @click="item.record.right.count>0?toggleAllCorrec('未答的学生',item.record.right.students):''">
+            <span>{{item.record.right.count}}</span><span>未答</span>
+          </p>
+        </van-col>
       </van-row>
     </div>
-    <van-popup v-model="showAllCorrec" position="bottom">
-      <div class="popup-container">
-        <div class="bar">全对的学生</div>
-        <div class="container">
-        <span v-for="(stu, index) in allCorrect.students" :key="index" class="van-hairline--surround">{{stu.real_name}}</span>
-        </div>
-      </div>
-    </van-popup>
+    <student-list :title="popupTitle" :list="popupList" @toggleAllCorrec="toggleAllCorrec" v-if="showAllCorrec"></student-list>
   </div>
 </template>
 
 <script>
 import getStatistics from '../axios/getQuestionStatistics.js'
+import studentList from '../components/studentList.vue'
 export default {
   name: 'kgtk',
   data() {
@@ -57,7 +64,9 @@ export default {
       },
       allCorrect: {},
       record: [],
-      showAllCorrec: false
+      showAllCorrec: false,
+      popupTitle: '',
+      popupList: []
     }
   },
   created() {
@@ -71,9 +80,14 @@ export default {
     goBack() {
       this.$router.go(-1)
     },
-    toggleAllCorrec() {
+    toggleAllCorrec(title, list) {
       this.showAllCorrec = !this.showAllCorrec
+      this.popupTitle = title
+      this.popupList = list
     }
+  },
+  components: {
+    studentList
   }
 }
 </script>
@@ -120,35 +134,12 @@ export default {
     line-height: 40px;
     text-align: center;
   }
-  .kgtk>.statlist>.question-item{
+
+  .kgtk>.statlist>.question-item {
     height: 40px;
   }
-  .kgtk>.statlist>.question-item .right{
-    background:#afe9d0;
-  }
-  .kgtk .popup-container{
-    height: 500px;
-  }
-  .kgtk .popup-container>.bar{
-    height: 50px;
-    line-height: 50px;
-    background: #f7f8f8;
-    text-align: center;
-    font-size: 18px;
-  }
-  .kgtk .popup-container>.container{
-    padding:10px 0px 10px 10px;
-    margin-top:15px;
-    box-sizing: border-box;
-    height: calc(100% - 50px);
-  }
-  .kgtk .popup-container>.container>span{
-    display: inline-block;
-    box-sizing: border-box;
-    height: 40px;
-    line-height: 24px;
-    padding:8px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+
+  .kgtk>.statlist>.question-item .right {
+    background: #afe9d0;
   }
 </style>
