@@ -55,7 +55,7 @@ let routes = [
     name: 'SummerHomework',
     component: summerHomework,
     meta: { requiresAuth: true, keepAlive: false }
-  },,
+  },
   {
     path: '/examExercise',
     name: 'ExamExercise',
