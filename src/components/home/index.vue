@@ -44,7 +44,9 @@
 
 <script>
 import topbar from '@/components/common/topbar'
+import api from '@/axios/iclass'
 import {mapGetters} from 'vuex'
+import {Dialog} from 'vant'
 export default {
   name: 'Home',
   data () {
@@ -74,18 +76,41 @@ export default {
       let localCode = window.location.protocol === 'file:';
       let localUrl = 'file:///android_asset/www/';
       let href = '';
+      let userInfo = JSON.parse(localStorage.getItem('user'))
+      // 互动课堂
       if (type === 'iclass') {
-        let param = JSON.stringify({
-          userid: parseInt(this.$store.state.account.userInfo.userid),
-          lasthref: window.location.href
-        });
-        let baseUrl = localCode ? localUrl + "TP/index.html" : this.config.env + '/ebag/iclass/teacher/index.html'
-
-        href = baseUrl + "?param=" + encodeURIComponent(param);
+        api.judgeIclassLive({
+          teacher_id: this.userId
+        }).then(succ => {
+          if (!succ.length) {
+            Dialog.alert({
+              message: '请确认电脑端已“开始上课”'
+            }).then(() => {
+              // on close
+            });
+          } else {
+            let param = JSON.stringify({
+              userid: parseInt(this.$store.state.account.userInfo.userid),
+              domain: 'http://e.dev.anoah.com',
+              userInfo: userInfo,
+              lasthref: window.location.href
+            });
+            let baseUrl = localCode ? localUrl + "TP/index.html" : this.config.origin + '/ebag/iclass/teacher2/index.html'
+            // let baseUrl = 'http://192.168.41.157/company/ebag/iclass/teacher2/index.html'
+            href = baseUrl + "?param=" + encodeURIComponent(param);
+            if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
+              window.TeacherUtil.loadUrl(href);
+              return;
+            }
+            window.location.href = href;
+          }
+        })
+      // 作业
       } else if (type === 'homework') {
         this.$router.push({
           path: '/homework'
         })
+      // 问答
       } else if (type === 'qa') {
         let param = JSON.stringify({
           userid: parseInt(this.$store.state.account.userInfo.userid),
@@ -94,16 +119,14 @@ export default {
           status: 1,
           lasthref: window.location.href
         });
-        let baseUrl = localCode ? localUrl + "QA/index.html" : this.config.env + '/qa/www/index.html'
-
+        let baseUrl = localCode ? localUrl + "QA/index.html" : this.config.origin + '/qa/www/index.html'
         href = baseUrl + "?param=" + encodeURIComponent(param);
+        if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
+          window.TeacherUtil.loadUrl(href);
+          return;
+        }
+        window.location.href = href;
       }
-
-      if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
-        window.TeacherUtil.loadUrl(href);
-        return;
-      }
-      window.location.href = href;
     },
     onClickLeft () {
 

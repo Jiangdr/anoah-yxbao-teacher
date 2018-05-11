@@ -28,12 +28,12 @@ module.exports = {
       '/': {
         target: 'http://e.dev.anoah.com'
       },
-      // '/api': {
-      //   target: 'http://e.dev.anoah.com',
-      //   pathRewrite: {
-      //     '^/api': '/api'
-      //   }
-      // },
+      '/api': {
+        target: 'http://e.dev.anoah.com',
+        pathRewrite: {
+          '^/api': '/api'
+        }
+      },
       // '/api_dist': {
       //   target: 'http://e.dev.anoah.com',
       //   pathRewrite: {
