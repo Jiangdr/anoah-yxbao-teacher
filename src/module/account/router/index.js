@@ -35,12 +35,12 @@ export default [
         meta: { requiresAuth: false, keepAlive: true }
       },
       {
-        path: 'schoolSearch',
+        path: 'schoolSearch/:cityId',
         name: 'schoolSearch',
         component: SchoolSearch,
         meta: { requiresAuth: false, keepAlive: false }
       }
     ],
-    meta: { requiresAuth: false, keepAlive: false }
+    meta: { requiresAuth: false, keepAlive: true }
   }
 ]
