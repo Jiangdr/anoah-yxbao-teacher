@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-
+import $ from 'jquery'
 import store from './store/index.js'
 
 import router from './router'
@@ -22,6 +22,20 @@ import Cube from '../lib/cube.min.js'
 
 import config from '@/config/index.js'
 import util from '@/utils/index.js'
+
+import dayjs from 'dayjs';
+
+import Axios from 'axios';
+
+Vue.prototype.$dayjs = dayjs;
+
+Vue.prototype.$http = Axios;
+//Axios.defaults.withCredentials = true;
+
+Vue.use(window.qtivue.default)
+Vue.use(window.anoahim.default)
+Vue.use(window.mp3player.default)
+Vue.use(window.tcplayer.default)
 
 Vue.use(Vant)
 

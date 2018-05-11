@@ -16,14 +16,17 @@
       </span>
     </div>
 
-    <div class="homework_list">
-      <div>
-        <div class="homework_list_inline_list">今天 周三</div>
-        <div class="homework_list_inline_list">暑假作业 22份</div>
-        <div class="homework_list_inline_list">数学 三年级1班</div>
-        <div class="homework_list_inline_list">截止：2018-08-30 20:00</div>
+    <div class="listContainer" v-bind:style="listContainerStyle">
+      <div class="homework_list" v-for="(item, index) in homeworkListArray" :key="index">
+        <div>
+          <div class="homework_list_inline_list">{{item.start_time}}</div>
+          <div class="homework_list_inline_list">{{item.title}}</div>
+          <div class="homework_list_inline_list">{{item.edu_subject_name}} {{item.class_name}}</div>
+          <div class="homework_list_inline_list">截止：{{item.deadline}}</div>
+        </div>
       </div>
     </div>
+
     <div style="width: 50px;height: 50px;background-color: #fc9153;border-radius: 25px;position:absolute;bottom:20px;right:20px;" @click="goChooseTextbook">
       <div style="height: 50px;
     display: flex;
@@ -42,10 +45,17 @@ export default {
     return {
       options: [2013, 2014, 2015, 2016, 2017, 2018],
       value: 2016,
-      title: '班级'
+      title: '班级',
+      homeworkListArray: [],
+      listContainerStyle: {
+        height: window.innerHeight - 90 + 'px'
+      }
     };
   },
-  computed: {},
+  mounted: function() {
+    this.userInfo = this.$store.state.account.userInfo;
+    this.getHomeworkList();
+  },
   methods: {
     goHome() {
       this.$router.push({
@@ -56,6 +66,31 @@ export default {
       this.$router.push({
         path: "/chooseTextbook"
       });
+    },
+    getHomeworkList() {
+      var self = this;
+
+      var url = "/jwt/zuoye/homework/homeworkLists?";
+      var data = {
+        user_id: this.userInfo.userid
+      };
+
+      self.$http
+        .get(url, { params: data })
+        .then(function(response) {
+          if (response.data.msg == "ok") {
+            self.homeworkListArray = response.data.recordset.lists;
+          } else {
+            self.$toast({
+              message: response.data.msg,
+              duration: 1000
+            });
+            return;
+          }
+        })
+        .catch(function(response) {
+          console.log(response);
+        });
     }
   }
 };
@@ -79,5 +114,8 @@ export default {
 }
 .homework_list_inline_list{
   line-height:25px;
+}
+.listContainer{
+  overflow-y:auto;
 }
 </style>
