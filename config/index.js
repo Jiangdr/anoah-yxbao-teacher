@@ -28,14 +28,12 @@ module.exports = {
       '/': {
         target: 'http://e.dev.anoah.com'
       },
-<<<<<<< HEAD
       '/api': {
         target: 'http://e.dev.anoah.com',
         pathRewrite: {
           '^/api': '/api'
         }
       },
-=======
       '/homeworkDetail': {
         target: 'http://api2.dev.anoah.com',
         changeOrigin: true,  // 解决跨域问题
@@ -50,7 +48,6 @@ module.exports = {
           '^/api_cache': '/api_cache'
         }
       }
->>>>>>> 207a27faaf612a356bb22a131bc1601735235e91
       // '/api_dist': {
       //   target: 'http://e.dev.anoah.com',
       //   pathRewrite: {
