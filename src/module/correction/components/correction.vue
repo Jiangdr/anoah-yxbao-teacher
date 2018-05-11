@@ -34,7 +34,7 @@
       </van-col>
     </van-row>
   </div>
-  <cube-popup type="my-popup" :center="false" ref="myPopup4" v-show="this.showPopup" @mask-click="togglePopup">
+  <cube-popup type="my-popup" :center="false" ref="myPopup" v-show="this.showPopup" @mask-click="togglePopup">
     <div class="popupWrapper">
       <div class="border-bottom-1px popupItem">拍照</div>
       <div class="border-bottom-1px popupItem">从相册获取</div>

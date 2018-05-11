@@ -1,6 +1,6 @@
 'use strict'
 
-import config from '../config/index'
+import config from '@/module/homeworkDetail/config/index'
 import axios from 'axios'
 import qs from 'qs'
 
@@ -44,7 +44,7 @@ function responseFormat (response) {
 
 export default {
   post (url, data) {
-    url = !~url.indexOf('http') ? (config.origin + url) : url
+    url = !~url.indexOf('http') ? config.origin + url : url
     return axios({
       method: 'post',
       url,
@@ -65,7 +65,7 @@ export default {
     return axios({
       method: 'get',
       url,
-      params: { 'info': JSON.stringify(params) },
+      params: params,
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
       }

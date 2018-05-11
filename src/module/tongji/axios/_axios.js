@@ -1,6 +1,6 @@
 'use strict'
 
-import config from '../config/index'
+import config from '@/module/tongji/config/index'
 import axios from 'axios'
 import qs from 'qs'
 
@@ -44,7 +44,7 @@ function responseFormat (response) {
 
 export default {
   post (url, data) {
-    url = !~url.indexOf('http') ? (config.origin + url) : url
+    url = !~url.indexOf('http') ? config.origin + url : url
     return axios({
       method: 'post',
       url,

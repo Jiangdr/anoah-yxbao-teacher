@@ -1,8 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import account from '@/module/account/router'
+// 纠错
 import correction from '@/module/correction/router'
+// 通知/消息
 import notice from '@/module/notice/router'
+// 批改作业统计--按题
+import tongji from '@/module/tongji/router'
+// 批改作业--作业详情
+import homeworkDetail from '@/module/homeworkDetail/router'
 import userCenter from '@/module/user-center/router'
 import home from '@/components/home/index'
 import list from '@/components/home/list'
@@ -10,6 +16,7 @@ import homework from '@/components/homework/homework'
 import publishHomework from '@/components/publishHomework/publishHomework'
 import chooseTextbook from '@/components/publishHomework/chooseTextbook'
 import summerHomework from '@/components/publishHomework/summerHomework'
+import examExercise from '@/components/publishHomework/examExercise'
 import homeworkPublishSetting from '@/components/publishHomework/homeworkPublishSetting'
 Vue.use(Router)
 let routes = [
@@ -50,17 +57,22 @@ let routes = [
     meta: { requiresAuth: true, keepAlive: false }
   },
   {
+    path: '/examExercise',
+    name: 'ExamExercise',
+    component: examExercise,
+    meta: { requiresAuth: true, keepAlive: false }
+  },
+  {
     path: '/homeworkPublishSetting',
     name: 'HomeworkPublishSetting',
     component: homeworkPublishSetting,
     meta: { requiresAuth: true, keepAlive: false }
   }
 ]
-routes = routes.concat(account).concat(userCenter).concat(account, correction, notice)
+routes = routes.concat(account).concat(userCenter).concat(account, correction, notice, tongji, homeworkDetail)
 let router = new Router({
   routes: routes
 })
-
 // 全局跳转
 router.beforeEach((to, from, next) => {
   // console.log('to=>', to, 'from=>', from)

@@ -29,6 +29,8 @@ module.exports = {
     // 'indent': 'off',
     'semi': 'off',
     'quotes': 'off',
-    'space-before-function-paren': 'off'
+    'space-before-function-paren': 'off',
+    'no-unused-vars':'off',
+    'no-undef':'off'
   }
 }
