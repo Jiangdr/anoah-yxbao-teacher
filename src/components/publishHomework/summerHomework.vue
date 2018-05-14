@@ -112,7 +112,7 @@ export default {
     },
     getList: function(value) {
       var self = this;
-      var url = "jwt/resource/package/getResourceLists?";
+      var url = this.config.api2 + "jwt/resource/package/getResourceLists?";
       var data = {
         user_id: this.userInfo.userid,
         pack_id: "9002511525420500001"
