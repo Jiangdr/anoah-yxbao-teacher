@@ -13,14 +13,14 @@ module.exports = {
     proxyTable: {
       '/user': {
         target: 'http://api2.dev.anoah.com',
-        changeOrigin: true,  // 解决跨域问题
+        changeOrigin: true, // 解决跨域问题
         pathRewrite: {
           '^/user': '/user'
         }
       },
       '/jwt': {
         target: 'http://api2.dev.anoah.com',
-        changeOrigin: true,  // 解决跨域问题
+        changeOrigin: true, // 解决跨域问题
         pathRewrite: {
           '^/jwt': '/jwt'
         }
@@ -36,7 +36,7 @@ module.exports = {
       },
       '/homeworkDetail': {
         target: 'http://api2.dev.anoah.com',
-        changeOrigin: true,  // 解决跨域问题
+        changeOrigin: true, // 解决跨域问题
         pathRewrite: {
           '^/homeworkDetail': '/homeworkDetail'
         }

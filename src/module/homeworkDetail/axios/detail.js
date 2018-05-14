@@ -1,4 +1,5 @@
 import API from '@/module/homeworkDetail/axios/_api'
+import config from '@/config/index.js'
 
 let apis = {
   'detail': '/jwt/zuoye/stat/homework/homeworkDetail', // 单题统计
