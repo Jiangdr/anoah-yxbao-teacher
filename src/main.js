@@ -30,7 +30,7 @@ import Axios from 'axios';
 Vue.prototype.$dayjs = dayjs;
 
 Vue.prototype.$http = Axios;
-//Axios.defaults.withCredentials = true;
+// Axios.defaults.withCredentials = true;
 
 Vue.use(window.qtivue.default)
 Vue.use(window.anoahim.default)
