@@ -34,7 +34,7 @@ export default {
         this.setting[i] = {
           domain: "e.dev.anoah.com",
           qid: this.qti_ids[i],
-          num: i+1,
+          num: i + 1,
           caller: "PREVIEWOR",
           resource_type: "qti_question"
         };

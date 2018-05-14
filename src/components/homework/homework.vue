@@ -16,7 +16,6 @@
       </span>
     </div>
 
-
     <div class="listContainer" v-bind:style="listContainerStyle">
 
     <!-- <van-list
@@ -58,10 +57,10 @@ export default {
     return {
       options: [2013, 2014, 2015, 2016, 2017, 2018],
       value: 2016,
-      title: '班级',
+      title: "班级",
       homeworkListArray: [],
       listContainerStyle: {
-        height: window.innerHeight - 90 + 'px'
+        height: window.innerHeight - 90 + "px"
       },
       list: [],
       loading: false,
@@ -75,11 +74,11 @@ export default {
   },
   methods: {
     onRefresh() {
-        setTimeout(() => {
-          this.$toast('刷新成功');
-          this.isLoading = false;
-        }, 500);
-        this.getHomeworkList();
+      setTimeout(() => {
+        this.$toast("刷新成功");
+        this.isLoading = false;
+      }, 500);
+      this.getHomeworkList();
     },
     onLoad() {
       setTimeout(() => {
@@ -106,7 +105,6 @@ export default {
     getHomeworkList() {
       var self = this;
 
-
       var url = "/jwt/zuoye/homework/homeworkLists?";
       var data = {
         user_id: this.userInfo.userid
@@ -115,17 +113,13 @@ export default {
       self.$http
         .get(url, { params: data })
         .then(function(response) {
-
-          
-
-          if (response.data.msg == "ok") {
+          if (response.data.msg === "ok") {
             self.homeworkListArray = response.data.recordset.lists;
           } else {
             self.$toast({
               message: response.data.msg,
               duration: 1000
             });
-            return;
           }
         })
         .catch(function(response) {
@@ -137,25 +131,25 @@ export default {
 </script>
 
 <style scoped>
-.homework_list{
-  margin-top:5px;
+.homework_list {
+  margin-top: 5px;
   padding: 7px;
   background: #fff;
   border-bottom: 1px solid #111;
 }
-.select-span{
-  width:60px;
-  display:inline-block;
+.select-span {
+  width: 60px;
+  display: inline-block;
 }
 
-.select-container{
+.select-container {
   display: flex;
   justify-content: space-between;
 }
-.homework_list_inline_list{
-  line-height:25px;
+.homework_list_inline_list {
+  line-height: 25px;
 }
-.listContainer{
-  overflow-y:auto;
+.listContainer {
+  overflow-y: auto;
 }
 </style>
