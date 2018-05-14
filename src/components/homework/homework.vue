@@ -80,9 +80,9 @@ export default {
       }, 500);
       this.getHomeworkList();
     },
-    goHomeworkDetail(course_hour_publish_id, class_id) {
+    goHomeworkDetail(courseHourPublishId, classId) {
       this.$router.push({
-        path: "/homeworkDetail/" + course_hour_publish_id + '/' + class_id
+        path: "/homeworkDetail/" + courseHourPublishId + '/' + classId
       });
     },
     onLoad() {
