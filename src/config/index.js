@@ -2,15 +2,15 @@
 const ENV = 'dev'
 const PRO = 'http'
 
-let host = 'e.' + ENV + '.anoah.com'
+let host = 'apiv2.' + ENV + '.anoah.com'
 // 如果是本地调试，取本地主机名,否则根据环境改变
 let origin = window.location.hostname.match(/^(localhost|127\.0\.0\.1|\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3})$/) && process.env.NODE_ENV === 'development' ? window.location.origin : PRO + '://' + host
 
 let env = PRO + '://' + host
-let api2 = PRO + '://' + 'api2.' + ENV + '.anoah.com'
+let old = PRO + '://' + 'e.' + ENV + '.anoah.com'
 
 export default{
   origin: origin,
   env: env,
-  api2: api2
+  old: old
 }

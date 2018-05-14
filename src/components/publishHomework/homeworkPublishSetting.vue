@@ -135,7 +135,7 @@ export default {
         });
       }
 
-      var url = this.config.api2 + "/jwt/zuoye/publish/launch?";
+      var url = "/jwt/zuoye/publish/launch?";
       var data = {
         user_id: this.userInfo.userid,
         title: self.homeworkName,

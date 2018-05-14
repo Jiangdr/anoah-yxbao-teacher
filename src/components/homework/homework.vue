@@ -226,7 +226,7 @@ export default {
     },
     getHomeworkList(classId) {
       var self = this;
-      var url = this.config.api2 + "/jwt/zuoye/homework/homeworkLists?";
+      var url = "/jwt/zuoye/homework/homeworkLists?";
       var data = {
         user_id: self.userInfo.userid,
         class_id: self.chooseClass.class_id,
