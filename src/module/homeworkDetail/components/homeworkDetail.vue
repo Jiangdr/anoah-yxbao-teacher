@@ -56,18 +56,18 @@
           </div>
           <!-- 作业资源列表 -->
           <div class="lists">
-            <div class="item" v-for='(ques,index) in resourceList' :key="index">
+            <div class="item" v-for='(ques,index) in resourceList' :key="index" v-show="!(notcorrect&&ques.pigai_status==3)">
               <div class="iteminfo" @click="changeCollapse(index)">
                 <div class="left">{{index+1}}、</div>
                 <div class="right">
-                  <p>[{{ques.icom_name}}] <span class="resource-name">{{ques.resource_name}}</span><span v-if="ques.pigai_status!=3"> 待批阅</span></p>
+                  <p>[{{ques.icom_name}}] <span class="resource-name" v-html="ques.resource_name"></span><span v-if="ques.pigai_status!=3"> 待批阅</span></p>
                   <p>
                     已完成：{{ques.finished_counter}}/{{homeworkInfo.student_counter}}人 正确率：{{itemCorrect(ques.average_rate)}}
                     <van-icon name="arrow" class="showdetail"></van-icon>
                   </p>
                 </div>
               </div>
-              <div class="itemdetail hide" v-if="ques.resource_type=='qti_exam'">
+              <div class="itemdetail hide" v-if="ques.resource_type=='qti_exam'||isCompound(ques.qti_question_type_id,ques.resource_type)">
                 <p v-for="(mini,key) in miniResource[index]" :key="key">
                   <span>
                     <template v-if="mini.status<3">
@@ -196,8 +196,10 @@ export default {
   data() {
     return {
       params: {
-        publish_id: 'f19002511523532300002f',
-        class_id: '1100757'
+        // publish_id: '009002511525867000001f',
+        // class_id: '1106785'
+        publish_id: this.$route.params.publishId,
+        class_id: this.$route.params.classId
       },
       homeworkInfo: {}, // 作业信息
       resourceList: [], // 作业列表
@@ -228,7 +230,7 @@ export default {
     //   'user': (state) => state.account.userInfo
     // }),
     classCorrect() {
-      if (this.homeworkInfo.class_average_correct_rate === '') {
+      if (this.homeworkInfo.class_average_correct_rate === '' || this.homeworkInfo.class_average_correct_rate === -1) {
         return '--'
       } else {
         return this.homeworkInfo.class_average_correct_rate === 0 ? 0 : Math.round(this.homeworkInfo.class_average_correct_rate * 100) + '%'
@@ -273,7 +275,7 @@ export default {
         'course_resource_id': curr.course_resource_id,
         'dcom_entity_id': curr.dcom_entity_id
       }
-      if (curr.resource_type === 'qti_exam' || (curr.resource_type === 'qti_question')) {
+      if (curr.resource_type === 'qti_exam' || this.isCompound(curr.qti_question_type_id, curr.resource_type)) {
         if (!detailbox.hasClass('hide')) {
           if (this.miniResource[index]) {
             return false
@@ -285,11 +287,20 @@ export default {
       }
     },
     itemCorrect(correct) {
-      if (correct === '') {
+      if (correct === '' || correct === -1) {
         return '--'
       } else {
         return correct === 0 ? 0 : Math.round(correct * 100) + '%'
       }
+    },
+    isCompound(typeId, resourceType) {
+      if (resourceType === 'qti_question') {
+        if (typeId === 12 || typeId === 16 || typeId === 17 || typeId === 35 || typeId === 37) {
+          return true
+        }
+        return false
+      }
+      return false
     }
   }
 }
@@ -471,7 +482,7 @@ export default {
 }
   .detail>.wrapper>.content>.homework-content .right .resource-name {
     display: inline-block;
-    max-width: 180px;
+    width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
