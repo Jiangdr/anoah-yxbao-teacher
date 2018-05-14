@@ -202,6 +202,7 @@ export default {
       this.resourceList = d.list;
       this.homeworkStatus = d.status;
     });
+    console.log(this.$store.state.homeworkDetail.params)
   },
   computed: {
     // ...mapState({
@@ -287,15 +288,16 @@ export default {
       if (curr.pigai_status < 3 || curr.status < 3) {
         return false;
       }
-      let param = {
-        publishId: curr.course_hour_publish_id,
-        resourceId: curr.course_resource_id,
-        questionId: curr.source_pk_id,
-        dcom_entity_id: curr.dcom_entity_id ? curr.dcom_entity_id : 0,
-        qti_question_sheet: curr.qti_question_sheet
-          ? curr.qti_question_sheet : 0
-      };
-        // 单选题、判断题统计页面
+      this.$store.commit('homeworkDetail/setParams', curr)
+      // let param = {
+      //   publishId: curr.course_hour_publish_id,
+      //   resourceId: curr.course_resource_id,
+      //   questionId: curr.source_pk_id,
+      //   dcom_entity_id: curr.dcom_entity_id ? curr.dcom_entity_id : 0,
+      //   qti_question_sheet: curr.qti_question_sheet
+      //     ? curr.qti_question_sheet : 0
+      // };
+      // 单选题、判断题统计页面
       let type = parseInt(curr.qti_question_type_id);
       let name = "";
       if (type === 1 || type === 2 || type === 3) {
@@ -312,8 +314,7 @@ export default {
         name = "hanzitingxie";
       }
       this.$router.push({
-        name: name,
-        params: param
+        name: name
       });
     },
     itemCorrect(correct) {

@@ -8,25 +8,25 @@ export default [{
   path: '/kgtk',
   name: 'kgtk',
   component: kgtk,
-  meta: { requiresAuth: false, keepAlive: false }
+  meta: { requiresAuth: false, keepAlive: true }
 }, {
   path: '/danxuan',
   name: 'danxuan',
   component: danxuan,
-  meta: { requiresAuth: false, keepAlive: false }
+  meta: { requiresAuth: false, keepAlive: true }
 }, {
   path: '/tiankong',
   name: 'tiankong',
   component: tiankong,
-  meta: { requiresAuth: false, keepAlive: false }
+  meta: { requiresAuth: false, keepAlive: true }
 }, {
   path: '/wanxingtk',
   name: 'wanxingtk',
   component: wanxingtk,
-  meta: { requiresAuth: false, keepAlive: false }
+  meta: { requiresAuth: false, keepAlive: true }
 }, {
   path: '/hanzitingxie',
   name: 'hanzitingxie',
   component: hanzitingxie,
-  meta: { requiresAuth: false, keepAlive: false }
+  meta: { requiresAuth: false, keepAlive: true }
 }]

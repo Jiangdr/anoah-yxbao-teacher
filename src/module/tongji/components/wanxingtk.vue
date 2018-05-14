@@ -42,17 +42,11 @@
 <script>
 import getStatistics from '../axios/getQuestionStatistics.js'
 import studentList from '../components/studentList.vue'
+import {mapState} from 'vuex'
 export default {
   name: 'wanxing',
   data() {
     return {
-      params: {
-        "course_hour_publish_id": this.$route.params.publishId,
-        "course_resource_id": this.$route.params.resourceId,
-        "qti_question_id": this.$route.params.questionId,
-        "dcom_entity_id": this.$route.params.dcom_entity_id,
-        "qti_question_sheet": this.$route.params.qti_question_sheet
-      },
       allCorrect: {},
       record: [],
       alias: '',
@@ -63,7 +57,16 @@ export default {
     }
   },
   created() {
-    getStatistics.getinfo(this.params).then((r) => {
+  },
+  activated() {
+    let param = {
+      "course_hour_publish_id": this.params.course_hour_publish_id,
+      "course_resource_id": this.params.course_resource_id,
+      "qti_question_id": this.params.source_pk_id,
+      "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
+      "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
+    }
+    getStatistics.getinfo(param).then((r) => {
       this.allCorrect = r.all_correct;
       this.record = r.record;
       this.alias = r.alias;
@@ -77,7 +80,10 @@ export default {
       } else {
         return Math.round(this.correctRate * 100) + '%'
       }
-    }
+    },
+    ...mapState({
+      'params': (state) => state.homeworkDetail.params
+    })
   },
   methods: {
     goBack() {

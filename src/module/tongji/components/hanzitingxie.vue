@@ -132,16 +132,12 @@
 <script>
 import getStatistics from '../axios/getQuestionStatistics.js'
 import column from './column.vue'
+import {mapState} from 'vuex'
+
 export default {
   name: 'hanzitingxie',
   data() {
     return {
-      params: {
-        "course_hour_publish_id": this.$route.params.course_hour_publish_id,
-        "course_resource_id": this.$route.params.course_resource_id,
-        "icom_id": 5009,
-        "dcom_entity_id": this.$route.params.dcom_entity_id
-      },
       allCorrect: {},
       resource: [],
       user: [],
@@ -153,7 +149,15 @@ export default {
     }
   },
   created() {
-    getStatistics.getIcomInfo(this.params).then((r) => {
+  },
+  activated() {
+    let param = {
+      "course_hour_publish_id": this.params.course_hour_publish_id,
+      "course_resource_id": this.params.course_resource_id,
+      "icom_id": 5009,
+      "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0
+    }
+    getStatistics.getIcomInfo(param).then((r) => {
       this.allCorrect = r.all_correct;
       this.resource = r.resource;
       this.user = r.user;
@@ -167,7 +171,10 @@ export default {
       } else {
         return Math.round(this.correctRate * 100) + '%'
       }
-    }
+    },
+    ...mapState({
+      'params': (state) => state.homeworkDetail.params
+    })
   },
   methods: {
     goBack() {
