@@ -81,8 +81,16 @@ export default {
       this.getHomeworkList();
     },
     goHomeworkDetail(courseHourPublishId, classId) {
+      // this.$router.push({
+      //   path: "/homeworkDetail/" + courseHourPublishId + '/' + classId
+      // });
       this.$router.push({
-        path: "/homeworkDetail/" + courseHourPublishId + '/' + classId
+        path: "/homeworkDetail/:publishId/:classId",
+        name: "homeworkDetail",
+        params: {
+          publishId: courseHourPublishId,
+          classId: classId
+        }
       });
     },
     onLoad() {
