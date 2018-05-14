@@ -2,7 +2,7 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>布置作业</h1>
-      <i class="cubeic-back" @click="goHomework">返回</i>
+      <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i> 返回</i>
     </header>
 
     <div style="border-bottom: 1px solid #111;">
