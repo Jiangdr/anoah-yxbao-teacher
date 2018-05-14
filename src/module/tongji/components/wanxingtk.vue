@@ -47,11 +47,11 @@ export default {
   data() {
     return {
       params: {
-        "course_hour_publish_id": "5a9002511522137300001f",
-        "course_resource_id": "9002511522137300002",
-        "qti_question_id": "9002511501148800001",
-        "dcom_entity_id": 0,
-        "qti_question_sheet": 0
+        "course_hour_publish_id": this.$route.params.course_hour_publish_id,
+        "course_resource_id": this.$route.params.course_resource_id,
+        "qti_question_id": this.$route.params.qti_question_id,
+        "dcom_entity_id": this.$route.params.dcom_entity_id,
+        "qti_question_sheet": this.$route.params.qti_question_sheet
       },
       allCorrect: {},
       record: [],

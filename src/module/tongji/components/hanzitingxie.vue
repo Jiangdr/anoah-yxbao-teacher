@@ -131,10 +131,10 @@ export default {
   data() {
     return {
       params: {
-        "course_hour_publish_id": "2d9002511521688800001f",
-        "course_resource_id": "9002511521688600001",
+        "course_hour_publish_id": this.$route.params.course_hour_publish_id,
+        "course_resource_id": this.$route.params.course_resource_id,
         "icom_id": 5009,
-        "dcom_entity_id": 0
+        "dcom_entity_id": this.$route.params.dcom_entity_id
       },
       allCorrect: {},
       resource: [],

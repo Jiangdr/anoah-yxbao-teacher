@@ -19,7 +19,8 @@
           <span>{{alias==="choiceword"?'选择填空':'客观填空'}}</span>
         </van-col>
         <van-col span="18" class="info-right">
-          正确率：<span class="correct">{{correct}}</span> <span @click="allCorrect.coun>0?toggleAllCorrec('全对的学生',allCorrect.students):''"> 全对：{{allCorrect.count}}人</span>
+          正确率：<span class="correct">{{correct}}</span>
+           <span @click="allCorrect.count>0?toggleAllCorrec('全对的学生',allCorrect.students):''"> 全对：{{allCorrect.count}}人</span>
         </van-col>
       </van-row>
     </div>
@@ -56,11 +57,11 @@ export default {
   data() {
     return {
       params: {
-        "course_hour_publish_id": "e09002511525407400001f",
-        "course_resource_id": "9002511525407400001",
-        "qti_question_id": "9002511513758200014",
-        "dcom_entity_id": 0,
-        "qti_question_sheet": 0
+        "course_hour_publish_id": this.$route.params.course_hour_publish_id,
+        "course_resource_id": this.$route.params.course_resource_id,
+        "qti_question_id": this.$route.params.qti_question_id,
+        "dcom_entity_id": this.$route.params.dcom_entity_id,
+        "qti_question_sheet": this.$route.params.qti_question_sheet
       },
       allCorrect: {},
       record: [],
