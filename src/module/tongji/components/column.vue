@@ -18,6 +18,7 @@
 
 <script>
 import studentList from '../components/studentList.vue'
+
 export default {
   name: 'column',
   props: ['record', 'total'],
