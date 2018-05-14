@@ -341,31 +341,26 @@ export default {
         "dcom_entity_id": curr.dcom_entity_id ? curr.dcom_entity_id : 0,
         "qti_question_sheet": curr.qti_question_sheet ? curr.qti_question_sheet : 0
       }
-      console.log(curr.qti_question_type_id)
       // 单选题、判断题统计页面
-      if (curr.qti_question_type_id == 1 || curr.qti_question_type_id == 2 || curr.qti_question_type_id == 3) {
-        this.$router.push({
-          name: 'danxuan',
-          params: param
-        })
+      let type = parseInt(curr.qti_question_type_id);
+      let name = "";
+      if (type === 1 || type === 2 || type === 3) {
+        name = "danxuan";
         // 客观填空、选择填空统计页面
-      } else if (curr.qti_question_type_id == 4 || curr.qti_question_type_id == 20) {
-        this.$router.push({
-          name: 'kgtk',
-          params: param
-        })
+      } else if (type === 4 || type === 20) {
+        name = "kgtk";
         // 主观填空统计页面
-      } else if (curr.qti_question_type_id == 5) {
-        this.$router.push({
-          name: 'tiankong',
-          params: param
-        })
-      } else if (curr.icom_id == 5009) {
-        this.$router.push({
-          name: 'hanzitingxie',
-          params: param
-        })
+      } else if (type === 5) {
+        name = "tiankong";
+      } else if (type === 11) {
+        name = "wanxingtk";
+      } else if (parseInt(curr.icom_id) === 5009) {
+        name = "hanzitingxie";
       }
+      this.$router.push({
+        name: name,
+        params: param
+      })
     },
     itemCorrect(correct) {
       if (correct === '' || correct === -1) {
@@ -418,7 +413,7 @@ export default {
   .detail>.title .text {
     display: inline-block;
     height: 100%;
-    width: 48.5%
+    width: 48%
   }
 
   .detail>.wrapper {
@@ -570,7 +565,7 @@ export default {
 
   .detail>.wrapper>.content>.homework-content .right .resource-name {
     display: inline-block;
-    width: 180px;
+    width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

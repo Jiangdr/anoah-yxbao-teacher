@@ -4,7 +4,7 @@
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
-                  <i class="cubeic-back"></i>
+                  <van-icon name='arrow-left'></van-icon>
                   </span>
         </van-col>
         <van-col span="20">
