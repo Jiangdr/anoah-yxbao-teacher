@@ -31,6 +31,7 @@ module.exports = {
     'quotes': 'off',
     'space-before-function-paren': 'off',
     'no-unused-vars':'off',
-    'no-undef':'off'
+    'no-undef':'off',
+    'eqeqeq': 'off'
   }
 }

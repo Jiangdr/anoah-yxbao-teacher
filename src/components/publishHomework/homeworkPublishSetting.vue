@@ -39,7 +39,7 @@ export default {
       answerDateFormat: "",
       publishDateTimePicker: "",
       endDateTimePicker: "",
-      answerDateTimePicker: "",
+      answerDateTimePicker: ""
     };
   },
   created: function() {
@@ -116,20 +116,20 @@ export default {
     cancelAnswerTime() {},
     surePublish() {
       var self = this;
-      var class_ids = "";
+      var classIds = "";
       var array = self.result;
       for (let i = 0; i < array.length; i++) {
-        if((i + 1) == array.length){
-          class_ids += array[i].class_id;
-        }else{
-          class_ids += array[i].class_id + ",";          
+        if (i + 1 == array.length) {
+          classIds += array[i].class_id;
+        } else {
+          classIds += array[i].class_id + ",";
         }
       }
 
-      var resource_id = [];
+      var resourceId = [];
       var array2 = self.chooseSummerHomeworkArray;
       for (let i = 0; i < array2.length; i++) {
-        resource_id.push({
+        resourceId.push({
           title: array2[i].name,
           rids: [array2[i].resource_id]
         });
@@ -141,41 +141,36 @@ export default {
         title: self.homeworkName,
         publish_time: self.publishDateFormat,
         deal_time: self.endDateFormat,
-        class_ids: class_ids,
-        resource_id: JSON.stringify(resource_id),
+        class_ids: classIds,
+        resource_id: JSON.stringify(resourceId),
         view_answer_time: self.answerDateFormat
       };
 
-      if(data.deal_time && data.title && data.view_answer_time){
-        
+      if (data.deal_time && data.title && data.view_answer_time) {
         self.$http
           .get(url, { params: data })
           .then(function(response) {
             if (response.data.msg == "ok") {
               self.$toast({
-                message: '布置成功！',
+                message: "布置成功！",
                 duration: 1000
               });
-              return;
             } else {
               self.$toast({
                 message: response.data.msg,
                 duration: 1000
               });
-              return;
             }
           })
           .catch(function(response) {
             console.log(response);
           });
-      }else {
+      } else {
         self.$toast({
-            message: '请填写完整条件！',
-            duration: 1000
-          });
-          return;
+          message: "请填写完整条件！",
+          duration: 1000
+        });
       }
-
     }
   }
 };
