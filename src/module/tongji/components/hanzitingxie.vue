@@ -61,71 +61,77 @@
           <div class="type">
             <van-row>
               <van-col span="8" offset="16">
-                <van-icon name="wap-nav"></van-icon>
-                <van-icon name="exchange"></van-icon>
+                    <span @click="toggleOrdertype('list')">
+                      <van-icon name="wap-nav" ></van-icon>
+                    </span>
+                    <span @click="toggleOrdertype('column')">
+                      <van-icon name="exchange" ></van-icon>
+                    </span>
               </van-col>
             </van-row>
           </div>
-          <div class="head">
-            <van-row>
-              <van-col span="8">
-                <p @click=sortBy(0) class="order" :class="{'up':sortNum==0,'down':sortNum==1}">姓名
-                  <span>
-                    <i class="up"></i>
-                    <i class="down"></i>
-                    </span>
-                </p>
-              </van-col>
-              <van-col span="8">
-                <p @click=sortBy(2) class="order" :class="{'up':sortNum==2,'down':sortNum==3}">正确率
-                  <span>
-                    <i class="up"></i>
-                    <i class="down"></i>
-                    </span>
-                </p>
-              </van-col>
-              <van-col span="8">
-                <p @click=sortBy(4) class="order" :class="{'up':sortNum==4,'down':sortNum==5}">用时
-                  <span>
-                    <i class="up"></i>
-                    <i class="down"></i>
-                    </span>
-                </p>
-              </van-col>
-            </van-row>
-          </div>
-          <div class="container">
-            <div class="content" v-for="(k,index) in user" :key="index">
+          <div v-if="ordertype=='list'">
+             <div class="head">
               <van-row>
                 <van-col span="8">
-                  <p class="name">{{k.real_name}}</p>
+                  <p @click=sortBy(0) class="order" :class="{'up':sortNum==0,'down':sortNum==1}">姓名
+                    <span>
+                      <i class="up"></i>
+                      <i class="down"></i>
+                      </span>
+                  </p>
                 </van-col>
                 <van-col span="8">
-                  <p v-if="k.status>=3" class="correct">
-                <span>
-                    {{Math.round(k.correct_rate*100)+'%'}}</span>
-                <span class="collumn">
-                    <span class="progress-bar" :style="{width:Math.round(k.correct_rate*100)+'%'}" :class="{right:k.correct_rate===1}"></span>
-                </span>
-              </p>
-              <p v-else>--</p>
+                  <p @click=sortBy(2) class="order" :class="{'up':sortNum==2,'down':sortNum==3}">正确率
+                    <span>
+                      <i class="up"></i>
+                      <i class="down"></i>
+                      </span>
+                  </p>
                 </van-col>
                 <van-col span="8">
-                  <p>{{k.time_length>0?Math.round(k.time_length)+'秒':''}}</p>
+                  <p @click=sortBy(4) class="order" :class="{'up':sortNum==4,'down':sortNum==5}">用时
+                    <span>
+                      <i class="up"></i>
+                      <i class="down"></i>
+                      </span>
+                  </p>
                 </van-col>
               </van-row>
             </div>
+            <div class="container">
+              <div class="content" v-for="(k,index) in user" :key="index">
+                <van-row>
+                  <van-col span="8">
+                    <p class="name">{{k.real_name}}</p>
+                  </van-col>
+                  <van-col span="8">
+                    <p v-if="k.status>=3" class="correct">
+                  <span>
+                      {{Math.round(k.correct_rate*100)+'%'}}</span>
+                  <span class="collumn">
+                      <span class="progress-bar" :style="{width:Math.round(k.correct_rate*100)+'%'}" :class="{right:k.correct_rate===1}"></span>
+                  </span>
+                </p>
+                <p v-else>--</p>
+                  </van-col>
+                  <van-col span="8">
+                    <p>{{k.time_length>0?Math.round(k.time_length)+'秒':''}}</p>
+                  </van-col>
+                </van-row>
+              </div>
+            </div>
           </div>
+          <column v-if="ordertype=='column'" :record="columnData" :total="user.length"></column>
         </div>
       </div>
     </div>
-    <!-- <student-list :title="popupTitle" :list="popupList" @toggleAllCorrec="toggleAllCorrec" v-if="showAllCorrec"></student-list> -->
   </div>
 </template>
 
 <script>
 import getStatistics from '../axios/getQuestionStatistics.js'
-import studentList from '../components/studentList.vue'
+import column from './column.vue'
 export default {
   name: 'hanzitingxie',
   data() {
@@ -139,12 +145,11 @@ export default {
       allCorrect: {},
       resource: [],
       user: [],
-      orderName: 'question',
+      orderName: 'student',
       sortNum: 0,
       correctRate: 0,
-      showAllCorrec: false,
-      popupTitle: '',
-      popupList: []
+      ordertype: 'column',
+      columnData: []
     }
   },
   created() {
@@ -152,6 +157,7 @@ export default {
       this.allCorrect = r.all_correct;
       this.resource = r.resource;
       this.user = r.user;
+      this.columnData = r.clumn
     })
   },
   computed: {
@@ -167,11 +173,7 @@ export default {
     goBack() {
       this.$router.go(-1)
     },
-    toggleAllCorrec(title, list) {
-      this.showAllCorrec = !this.showAllCorrec
-      this.popupTitle = title
-      this.popupList = list
-    },
+
     changeTab(name) {
       this.orderName = name
     },
@@ -213,11 +215,14 @@ export default {
       } else if (this.sortNum === 4 || this.sortNum === 5) {
         this.user.sort(this.compare('time_length'))
       }
+    },
+    toggleOrdertype(type) {
+      this.ordertype = type
     }
 
   },
   components: {
-    studentList
+    column
   }
 }
 </script>

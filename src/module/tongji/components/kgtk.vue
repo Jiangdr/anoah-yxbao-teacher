@@ -57,9 +57,9 @@ export default {
   data() {
     return {
       params: {
-        "course_hour_publish_id": this.$route.params.course_hour_publish_id,
-        "course_resource_id": this.$route.params.course_resource_id,
-        "qti_question_id": this.$route.params.qti_question_id,
+        "course_hour_publish_id": this.$route.params.publishId,
+        "course_resource_id": this.$route.params.resourceId,
+        "qti_question_id": this.$route.params.questionId,
         "dcom_entity_id": this.$route.params.dcom_entity_id,
         "qti_question_sheet": this.$route.params.qti_question_sheet
       },

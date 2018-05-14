@@ -26,7 +26,7 @@
     <div class="wrapper">
       <div v-for="(item,key) in record" :key="key">
         <van-row class="item">
-          <van-col span="4" class="tc">{{key==='T'?'√':(key==='F'?'×':key)}}</van-col>
+          <van-col span="4" class="tc">{{key==='T'?'√':(key==='F'?'×':(key==='noanswer'?'未答':key))}}</van-col>
           <van-col span="20" class="right">
             <span class="column"  :style="{width:(item.count/count)*100+'%'}" :class="{'right-answer':key==answer}" @click='item.students.length>0?toggleAllCorrec("选"+key+"的学生",item.students):""'></span>
             <span class="column-info">{{item.count}}人</span>
@@ -46,9 +46,9 @@ export default {
   data() {
     return {
       params: {
-        "course_hour_publish_id": this.$route.params.course_hour_publish_id,
-        "course_resource_id": this.$route.params.course_resource_id,
-        "qti_question_id": this.$route.params.qti_question_id,
+        "course_hour_publish_id": this.$route.params.publishId,
+        "course_resource_id": this.$route.params.resourceId,
+        "qti_question_id": this.$route.params.questionId,
         "dcom_entity_id": this.$route.params.dcom_entity_id,
         "qti_question_sheet": this.$route.params.qti_question_sheet
       },
@@ -84,7 +84,6 @@ export default {
       for (let key in this.record) {
         num += this.record[key].count
       }
-      console.log(num)
       return num
     }
   },
