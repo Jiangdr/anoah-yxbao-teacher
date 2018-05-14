@@ -4,8 +4,8 @@
       <van-row>
         <van-col span="3">
           <span class="back" @click="goBack">
-              <van-icon name="arrow-left"></van-icon>
-              </span>
+                <van-icon name="arrow-left"></van-icon>
+                </span>
         </van-col>
         <van-col span="18">
           <van-row>
@@ -68,11 +68,11 @@
                   </p>
                 </div>
               </div>
-              <div class="itemdetail hide" v-if="ques.resource_type=='qti_exam'||isCompound(ques.qti_question_type_id,ques.resource_type)">
+              <div class="itemdetail" :class="{hide:!ques.isShow}" v-if="ques.resource_type=='qti_exam'||isCompound(ques.qti_question_type_id,ques.resource_type)">
                 <p v-for="(mini,key) in miniResource[index]" :key="key" @click="goTongji(mini)">
                   <span>
-                        <template v-if="mini.status<3">
-                          待批阅
+                          <template v-if="mini.status<3">
+                            待批阅
 </template>
 
 <template v-else-if="mini.status==3&&mini.marked==1">
@@ -306,9 +306,10 @@ export default {
       let curr = {};
       let detailbox = ''
       if (!ismini) {
-        detailbox = $('.homework-content .item').eq(index).find('.itemdetail')
+        // detailbox = $('.homework-content .item').eq(index).find('.itemdetail')
         curr = this.resourceList[index];
-        detailbox.toggleClass('hide');
+        // detailbox.toggleClass('hide');
+        Vue.set(curr, 'isShow', !curr.isShow)
       } else {
         curr = this.miniResource[index];
       }
@@ -318,7 +319,7 @@ export default {
         'dcom_entity_id': curr.dcom_entity_id
       }
       if (curr.resource_type === 'qti_exam' || this.isCompound(curr.qti_question_type_id, curr.resource_type)) {
-        if (!detailbox.hasClass('hide')) {
+        if (curr.isShow) {
           if (this.miniResource[index]) {
             return false
           }
@@ -450,7 +451,8 @@ export default {
     text-align: center;
     display: flex;
     flex-direction: column;
-    padding: 10px
+    padding: 10px;
+    font-size: 14px;
   }
 
   .detail>.wrapper .itemdetail.hide {
