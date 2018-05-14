@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import api from '@/axios/publishHomeWork.js'
 export default {
   name: "publishHomework",
   data() {
@@ -135,7 +136,6 @@ export default {
         });
       }
 
-      var url = "/jwt/zuoye/publish/launch?";
       var data = {
         user_id: this.userInfo.userid,
         title: self.homeworkName,
@@ -147,8 +147,7 @@ export default {
       };
 
       if (data.deal_time && data.title && data.view_answer_time) {
-        self.$http
-          .get(url, { params: data })
+        api.launch(data)
           .then(function(response) {
             if (response.data.msg === "ok") {
               self.$toast({

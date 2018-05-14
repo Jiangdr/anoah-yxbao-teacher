@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import api from '@/axios/publishHomeWork.js'
+
 export default {
   name: "publishHomework",
   data() {
@@ -112,13 +114,12 @@ export default {
     },
     getList: function(value) {
       var self = this;
-      var url = "/jwt/resource/package/getResourceLists?";
+
       var data = {
         user_id: this.userInfo.userid,
         pack_id: "9002511525420500001"
       };
-      self.$http
-        .get(url, { params: data })
+      api.getResourceLists(data)
         .then(function(response) {
           if (response.data.msg === "ok") {
             self.lists = response.data.recordset.lists;

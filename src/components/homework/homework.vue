@@ -61,6 +61,8 @@
 </template>
 
 <script>
+import api from '@/axios/publishHomeWork.js'
+
 export default {
   name: "Homework",
   data() {
@@ -226,7 +228,6 @@ export default {
     },
     getHomeworkList(classId) {
       var self = this;
-      var url = "/jwt/zuoye/homework/homeworkLists?";
       var data = {
         user_id: self.userInfo.userid,
         class_id: self.chooseClass.class_id,
@@ -235,8 +236,7 @@ export default {
         to: self.chooseTime.to
       };
 
-      self.$http
-        .get(url, { params: data })
+      api.homeworkLists(data)
         .then(function(response) {
           if (response.data.msg === "ok") {
             self.homeworkListArray = response.data.recordset.lists;
