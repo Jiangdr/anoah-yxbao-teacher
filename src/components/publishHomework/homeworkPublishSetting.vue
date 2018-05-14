@@ -155,6 +155,11 @@ export default {
                 message: "布置成功！",
                 duration: 1000
               });
+              setTimeout(function () {
+                self.$router.push({
+                  path: "/homework"
+                });
+              }, 500);
             } else {
               self.$toast({
                 message: response.data.msg,
