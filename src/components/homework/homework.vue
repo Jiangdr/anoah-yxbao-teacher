@@ -17,7 +17,17 @@
     </div>
 
     <div class="listContainer" v-bind:style="listContainerStyle">
-      <div class="homework_list" v-for="(item, index) in homeworkListArray" :key="index">
+
+    <!-- <van-list
+  v-model="loading"
+  :finished="finished"
+   @load="onLoad"
+>
+  <van-cell v-for="item in list" :key="item" :title="item + ''" />
+</van-list> -->
+
+<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+      <div @click="goHomeworkDetail(item.course_hour_publish_id, item.class_id)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index">
         <div>
           <div class="homework_list_inline_list">{{item.start_time}}</div>
           <div class="homework_list_inline_list">{{item.title}}</div>
@@ -25,6 +35,8 @@
           <div class="homework_list_inline_list">截止：{{item.deadline}}</div>
         </div>
       </div>
+</van-pull-refresh>
+
     </div>
 
     <div style="width: 50px;height: 50px;background-color: #fc9153;border-radius: 25px;position:absolute;bottom:20px;right:20px;" @click="goChooseTextbook">
@@ -45,11 +57,15 @@ export default {
     return {
       options: [2013, 2014, 2015, 2016, 2017, 2018],
       value: 2016,
-      title: '班级',
+      title: "班级",
       homeworkListArray: [],
       listContainerStyle: {
-        height: window.innerHeight - 90 + 'px'
-      }
+        height: window.innerHeight - 90 + "px"
+      },
+      list: [],
+      loading: false,
+      finished: false,
+      isLoading: false
     };
   },
   mounted: function() {
@@ -57,6 +73,38 @@ export default {
     this.getHomeworkList();
   },
   methods: {
+    onRefresh() {
+      setTimeout(() => {
+        this.$toast("刷新成功");
+        this.isLoading = false;
+      }, 500);
+      this.getHomeworkList();
+    },
+    goHomeworkDetail(courseHourPublishId, classId) {
+      // this.$router.push({
+      //   path: "/homeworkDetail/" + courseHourPublishId + '/' + classId
+      // });
+      this.$router.push({
+        path: "/homeworkDetail/:publishId/:classId",
+        name: "homeworkDetail",
+        params: {
+          publishId: courseHourPublishId,
+          classId: classId
+        }
+      });
+    },
+    onLoad() {
+      setTimeout(() => {
+        for (let i = 0; i < 10; i++) {
+          this.list.push(this.list.length + 1);
+        }
+        this.loading = false;
+
+        if (this.list.length >= 40) {
+          this.finished = true;
+        }
+      }, 500);
+    },
     goHome() {
       this.$router.push({
         path: "/"
@@ -78,14 +126,13 @@ export default {
       self.$http
         .get(url, { params: data })
         .then(function(response) {
-          if (response.data.msg == "ok") {
+          if (response.data.msg === "ok") {
             self.homeworkListArray = response.data.recordset.lists;
           } else {
             self.$toast({
               message: response.data.msg,
               duration: 1000
             });
-            return;
           }
         })
         .catch(function(response) {
@@ -97,25 +144,25 @@ export default {
 </script>
 
 <style scoped>
-.homework_list{
-  margin-top:5px;
+.homework_list {
+  margin-top: 5px;
   padding: 7px;
   background: #fff;
   border-bottom: 1px solid #111;
 }
-.select-span{
-  width:60px;
-  display:inline-block;
+.select-span {
+  width: 60px;
+  display: inline-block;
 }
 
-.select-container{
+.select-container {
   display: flex;
   justify-content: space-between;
 }
-.homework_list_inline_list{
-  line-height:25px;
+.homework_list_inline_list {
+  line-height: 25px;
 }
-.listContainer{
-  overflow-y:auto;
+.listContainer {
+  overflow-y: auto;
 }
 </style>

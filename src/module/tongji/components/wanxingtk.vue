@@ -1,11 +1,11 @@
 <template>
-  <div class="danxuan">
+  <div class="wanxing">
     <div class="title border-bottom-1px">
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
-              <i class="cubeic-back"></i>
-              </span>
+                <i class="cubeic-back"></i>
+                </span>
         </van-col>
         <van-col span="18">
           <span class="text">查看统计</span>
@@ -16,22 +16,23 @@
     <div class="title-bar">
       <van-row>
         <van-col span="6">
-          <span>{{alias==='panduan'?'判断题':'单选题'}}</span>
+          <span>{{alias==="cloze"?'完型填空':'客观填空'}}</span>
         </van-col>
         <van-col span="18" class="info-right">
-          正确率：<span class="correct">{{correct}}</span>
+          正确率：<span class="correct">{{correct}}</span> <span @click="allCorrect.count>0?toggleAllCorrec('全对的学生',allCorrect.students):''"> 全对：{{allCorrect.count}}人</span>
         </van-col>
       </van-row>
     </div>
-    <div class="wrapper">
-      <div v-for="(item,key) in record" :key="key">
-        <van-row class="item">
-          <van-col span="4" class="tc">{{key==='T'?'√':(key==='F'?'×':key)}}</van-col>
-          <van-col span="20" class="right">
-            <span class="column"  :style="{width:item.count*100+'%'}" :class="{'right-answer':key==answer}" @click='item.students.length>0?toggleAllCorrec("选"+key+"的学生",item.students):""'></span>
-            <span class="column-info">{{item.count}}人</span>
-          </van-col>
-        </van-row>
+    <div class="statlist">
+      <div class="quelist" v-for="(que,index) in record" :key="index">
+        <span>({{index+1}})</span>
+        <span v-for="(item,key) in que.record" :key="key" v-if="key!=='noanswer'" :class="{right:key==que.answer}" @click="item.count>0?toggleAllCorrec('选'+key+'的学生',item.students):''">
+          {{item.count}}<br>{{key}}
+        </span>
+        <span @click="que.record.noanswer.count>0?toggleAllCorrec('未答的学生',que.record.noanswer.students):''">
+          {{que.record.noanswer?que.record.noanswer.count:'0'}}
+          <br>未答
+        </span>
       </div>
     </div>
     <student-list :title="popupTitle" :list="popupList" @toggleAllCorrec="toggleAllCorrec" v-if="showAllCorrec"></student-list>
@@ -42,21 +43,20 @@
 import getStatistics from '../axios/getQuestionStatistics.js'
 import studentList from '../components/studentList.vue'
 export default {
-  name: 'danxuan',
+  name: 'wanxing',
   data() {
     return {
       params: {
-        "course_hour_publish_id": "0c9002511525933700001f",
-        "course_resource_id": "9002511525835400002",
-        "qti_question_id": "9002511513743700068",
+        "course_hour_publish_id": "5a9002511522137300001f",
+        "course_resource_id": "9002511522137300002",
+        "qti_question_id": "9002511501148800001",
         "dcom_entity_id": 0,
         "qti_question_sheet": 0
       },
       allCorrect: {},
       record: [],
-      answer: '',
       alias: '',
-      correctRate: 0,
+      correctRate: '',
       showAllCorrec: false,
       popupTitle: '',
       popupList: []
@@ -66,9 +66,8 @@ export default {
     getStatistics.getinfo(this.params).then((r) => {
       this.allCorrect = r.all_correct;
       this.record = r.record;
-      this.answer = r.answer;
-      this.correctRate = r.correct_rate
       this.alias = r.alias;
+      this.correctRate = r.correct_rate;
     })
   },
   computed: {
@@ -97,65 +96,70 @@ export default {
 </script>
 
 <style scoped>
-  .danxuan {
+  .wanxing {
     height: 100vh;
   }
 
-  .danxuan>.title {
+  .wanxing>.title {
     text-align: center;
     line-height: 50px;
     height: 50px;
   }
 
-  .danxuan>.title .back {
+  .wanxing>.title .back {
     display: inline-block;
     float: left;
   }
 
-  .danxuan>.title .text {
+  .wanxing>.title .text {
     display: inline-block;
     width: calc(100% - 100px);
     font-weight: 600;
   }
 
-  .danxuan>.title-bar {
+  .wanxing>.title-bar {
     padding: 0 10px;
     line-height: 50px;
     height: 50px;
     box-sizing: border-box;
   }
 
-  .danxuan>.title-bar .info-right {
+  .wanxing>.title-bar .info-right {
     text-align: right;
   }
 
-  .danxuan>.title-bar .info-right .correct {
+  .wanxing>.title-bar .info-right .correct {
     color: #ff4e00;
   }
-   .danxuan .wrapper{
-     line-height: 30px;
-   }
-  .danxuan .wrapper .tc{
+
+  .wanxing>.statlist {
+    height: calc(100vh - 100px);
+    line-height: 40px;
     text-align: center;
+    overflow: scroll;
   }
-   .danxuan .wrapper .item{
-     height: 40px;
-   }
-   .danxuan .wrapper .right{
-     display: flex;
-   }
-  .danxuan .wrapper .column{
-    display: inline-block;
-    max-width: 80%;
-    min-width: 5px;
-    height: 30px;
-    background: #f56956;
-  }
-  .danxuan .wrapper .column.right-answer{
-    background: #34c988;
-  }
-  .danxuan .wrapper .column-info{
-    vertical-align: middle;
-    margin-left: 5px;
-  }
+.wanxing>.statlist .quelist{
+  display: flex;
+  border:1px solid #eaeaea;
+  border-bottom: none;
+}
+.wanxing>.statlist .quelist:last-child{
+  border-bottom: 1px solid #eaeaea;
+}
+.wanxing>.statlist .quelist span{
+  width:80px;
+  flex: 1 1 auto;
+  border-right: 1px solid #eaeaea;
+  line-height: 20px;
+  padding:5px 0;
+}
+.wanxing>.statlist .quelist span.right{
+  background:#afe9d0
+}
+.wanxing>.statlist .quelist span:first-child{
+  line-height: 40px;
+}
+.wanxing>.statlist .quelist span:last-child{
+  border-right: none;
+}
 </style>

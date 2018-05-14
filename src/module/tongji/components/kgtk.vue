@@ -16,10 +16,10 @@
     <div class="title-bar">
       <van-row>
         <van-col span="6">
-          <span>客观填空</span>
+          <span>{{alias==="choiceword"?'选择填空':'客观填空'}}</span>
         </van-col>
         <van-col span="18" class="info-right">
-          正确率：<span class="correct">100% </span> <span @click="toggleAllCorrec('全对的学生',allCorrect.students)"> 全对：{{allCorrect.count}}人</span>
+          正确率：<span class="correct">{{correct}}</span> <span @click="allCorrect.coun>0?toggleAllCorrec('全对的学生',allCorrect.students):''"> 全对：{{allCorrect.count}}人</span>
         </van-col>
       </van-row>
     </div>
@@ -64,6 +64,8 @@ export default {
       },
       allCorrect: {},
       record: [],
+      alias: '',
+      correctRate: '',
       showAllCorrec: false,
       popupTitle: '',
       popupList: []
@@ -73,9 +75,19 @@ export default {
     getStatistics.getinfo(this.params).then((r) => {
       this.allCorrect = r.all_correct;
       this.record = r.record;
+      this.alias = r.alias;
+      this.correctRate = r.correct_rate;
     })
   },
-  computed: {},
+  computed: {
+    correct() {
+      if (this.correctRate === '') {
+        return '--'
+      } else {
+        return Math.round(this.correctRate * 100) + '%'
+      }
+    }
+  },
   methods: {
     goBack() {
       this.$router.go(-1)
@@ -105,7 +117,6 @@ export default {
 
   .kgtk>.title .back {
     display: inline-block;
-    float: left;
   }
 
   .kgtk>.title .text {
