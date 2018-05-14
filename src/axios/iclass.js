@@ -1,7 +1,7 @@
 import API from '@/axios/_api'
 
 let apis = {
-  iclassLiveTeacher: '/api/?q=json/ebag/mutual/iclassLiveTeacher&'
+  iclassLiveTeacher: 'http://e.dev.anoah.com/api/?q=json/ebag/mutual/iclassLiveTeacher&'
 }
 
 let iclass = new API(apis)
