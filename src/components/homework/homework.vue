@@ -2,7 +2,9 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>作业</h1>
-      <i class="cubeic-back" @click="goHome">返回</i>
+      <i class="cubeic-back" @click="goHome">
+        <i class="fa fa-angle-left"></i> 返回
+      </i>
     </header>
     <div class="select-container">
       <span class="select-span">
@@ -17,33 +19,20 @@
     </div>
 
     <div class="listContainer" v-bind:style="listContainerStyle">
-
-    <!-- <van-list
-  v-model="loading"
-  :finished="finished"
-   @load="onLoad"
->
-  <van-cell v-for="item in list" :key="item" :title="item + ''" />
-</van-list> -->
-
-<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-      <div @click="goHomeworkDetail(item.course_hour_publish_id, item.class_id)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index">
-        <div>
-          <div class="homework_list_inline_list">{{item.start_time}}</div>
-          <div class="homework_list_inline_list">{{item.title}}</div>
-          <div class="homework_list_inline_list">{{item.edu_subject_name}} {{item.class_name}}</div>
-          <div class="homework_list_inline_list">截止：{{item.deadline}}</div>
+      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index">
+          <div>
+            <div class="homework_list_inline_list">{{item.start_time}}</div>
+            <div class="homework_list_inline_list">{{item.title}}</div>
+            <div class="homework_list_inline_list">{{item.edu_subject_name}} {{item.class_name}}</div>
+            <div class="homework_list_inline_list">截止：{{item.deadline}}</div>
+          </div>
         </div>
-      </div>
-</van-pull-refresh>
-
+      </van-pull-refresh>
     </div>
 
-    <div style="width: 50px;height: 50px;background-color: #fc9153;border-radius: 25px;position:absolute;bottom:20px;right:20px;" @click="goChooseTextbook">
-      <div style="height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;">
+    <div class="publishHomeworkBtnDiv" @click="goChooseTextbook">
+      <div class="publishHomeworkBtn">
         <div>布置<br/>作业</div>
       </div>
     </div>
@@ -80,9 +69,17 @@ export default {
       }, 500);
       this.getHomeworkList();
     },
-    goHomeworkDetail(courseHourPublishId, classId) {
+    goHomeworkDetail(item) {
+      // this.$router.push({
+      //   path: "/homeworkDetail/" + courseHourPublishId + '/' + classId
+      // });
       this.$router.push({
-        path: "/homeworkDetail/" + courseHourPublishId + '/' + classId
+        path: "/homeworkDetail/:publishId/:classId",
+        name: "homeworkDetail",
+        params: {
+          publishId: item.course_hour_publish_id,
+          classId: item.class_id
+        }
       });
     },
     onLoad() {
@@ -146,7 +143,21 @@ export default {
   width: 60px;
   display: inline-block;
 }
-
+.publishHomeworkBtn {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.publishHomeworkBtnDiv{
+  width: 50px;
+  height: 50px;
+  background-color: #fc9153;
+  border-radius: 25px;
+  position:absolute;
+  bottom:20px;
+  right:20px;
+}
 .select-container {
   display: flex;
   justify-content: space-between;

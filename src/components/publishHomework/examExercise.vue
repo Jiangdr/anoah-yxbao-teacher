@@ -2,7 +2,7 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>试卷</h1>
-      <i class="cubeic-back" @click="goSummerHomework">返回</i>
+      <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i> 返回</i>
     </header>
     <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
       <div v-for="(value,key) in setting" :key="key">
@@ -47,7 +47,7 @@ export default {
       });
     },
     clickPublish() {
-      if (this.hasChoosePagesNum == 0) {
+      if (this.hasChoosePagesNum === 0) {
         this.$toast({
           message: "请选择试卷！",
           duration: 1000
