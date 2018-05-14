@@ -2,7 +2,9 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>作业</h1>
-      <i class="cubeic-back" @click="goHome">返回</i>
+      <i class="cubeic-back" @click="goHome">
+        <i class="fa fa-angle-left"></i> 返回
+      </i>
     </header>
     <div class="select-container">
       <span class="select-span">

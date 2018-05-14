@@ -2,7 +2,7 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>暑假作业</h1>
-      <i class="cubeic-back" @click="goChooseTextbook">返回</i>
+      <i class="cubeic-back" @click="goChooseTextbook"><i class="fa fa-angle-left"></i> 返回</i>
     </header>
 
     <!-- <van-checkbox v-model="checked">复选框</van-checkbox> -->
