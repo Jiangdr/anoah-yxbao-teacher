@@ -119,7 +119,7 @@ export default {
       var classIds = "";
       var array = self.result;
       for (let i = 0; i < array.length; i++) {
-        if (i + 1 == array.length) {
+        if (i + 1 === array.length) {
           classIds += array[i].class_id;
         } else {
           classIds += array[i].class_id + ",";
@@ -150,7 +150,7 @@ export default {
         self.$http
           .get(url, { params: data })
           .then(function(response) {
-            if (response.data.msg == "ok") {
+            if (response.data.msg === "ok") {
               self.$toast({
                 message: "布置成功！",
                 duration: 1000

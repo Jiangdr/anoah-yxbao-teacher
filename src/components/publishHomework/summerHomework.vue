@@ -58,7 +58,7 @@ export default {
       });
     },
     clickPublish() {
-      if (this.hasChoosePagesNum == 0) {
+      if (this.hasChoosePagesNum === 0) {
         this.$toast({
           message: "请选择试卷！",
           duration: 1000
