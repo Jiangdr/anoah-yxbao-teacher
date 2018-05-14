@@ -7,7 +7,7 @@ import qs from 'qs'
 /**  axios基础配置 */
 axios.defaults.timeout = 15000
 axios.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8'
-axios.defaults.withCredentials = true
+// axios.defaults.withCredentials = true
 
 axios.interceptors.request.use(config => {
   // loading
@@ -44,7 +44,7 @@ function responseFormat (response) {
 
 export default {
   post (url, data) {
-    url = !~url.indexOf('http') ? config.origin + url : url
+    url = !~url.indexOf('http') ? (config.origin + url) : url
     return axios({
       method: 'post',
       url,

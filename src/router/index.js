@@ -16,6 +16,7 @@ import homework from '@/components/homework/homework'
 import publishHomework from '@/components/publishHomework/publishHomework'
 import chooseTextbook from '@/components/publishHomework/chooseTextbook'
 import summerHomework from '@/components/publishHomework/summerHomework'
+import examExercise from '@/components/publishHomework/examExercise'
 import homeworkPublishSetting from '@/components/publishHomework/homeworkPublishSetting'
 Vue.use(Router)
 let routes = [
@@ -53,6 +54,12 @@ let routes = [
     path: '/summerHomework',
     name: 'SummerHomework',
     component: summerHomework,
+    meta: { requiresAuth: true, keepAlive: false }
+  },
+  {
+    path: '/examExercise',
+    name: 'ExamExercise',
+    component: examExercise,
     meta: { requiresAuth: true, keepAlive: false }
   },
   {
