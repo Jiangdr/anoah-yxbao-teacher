@@ -1,5 +1,5 @@
 'use strict'
-import http from '@/module/account/axios/_axios'
+import http from '@/axios/_axios'
 import { Toast } from 'vant'
 
 class API {

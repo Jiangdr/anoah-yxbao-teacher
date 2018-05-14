@@ -1,6 +1,6 @@
 'use strict'
 
-import config from '@/module/homeworkDetail/config/index'
+import config from '@/config/index'
 import axios from 'axios'
 import qs from 'qs'
 

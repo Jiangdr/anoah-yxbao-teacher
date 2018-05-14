@@ -50,7 +50,7 @@ export default {
       url,
       data: qs.stringify(data),
       headers: {
-        'X-Requested-With': 'XMLHttpRequest',
+      //  'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
     }).then(
@@ -65,10 +65,10 @@ export default {
     return axios({
       method: 'get',
       url,
-      params: { 'info': JSON.stringify(params) },
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
+      params: { 'info': JSON.stringify(params) }
+      // headers: {
+      //   'X-Requested-With': 'XMLHttpRequest'
+      // }
     }).then(
       (response) => {
         return responseFormat(response)

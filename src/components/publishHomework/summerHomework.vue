@@ -120,16 +120,9 @@ export default {
         pack_id: "9002511525420500001"
       };
       api.getResourceLists(data)
-        .then(function(response) {
-          if (response.data.msg === "ok") {
-            self.lists = response.data.recordset.lists;
-          } else {
-            console.log(response);
-          }
+        .then(function(r) {
+          self.lists = r.lists;
         })
-        .catch(function(response) {
-          console.log(response);
-        });
     },
     clickTiltleName(item) {
       this.$store.dispatch("setChooseExamExercise", item.qti_ids);

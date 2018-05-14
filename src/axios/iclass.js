@@ -1,7 +1,8 @@
 import API from '@/axios/_api'
+import config from '@/config/index'
 
 let apis = {
-  iclassLiveTeacher: '/api/?q=json/ebag/mutual/iclassLiveTeacher&'
+  iclassLiveTeacher: config.old + '/api/?q=json/ebag/mutual/iclassLiveTeacher&'
 }
 
 let iclass = new API(apis)

@@ -237,19 +237,10 @@ export default {
       };
 
       api.homeworkLists(data)
-        .then(function(response) {
-          if (response.data.msg === "ok") {
-            self.homeworkListArray = response.data.recordset.lists;
-          } else {
-            self.$toast({
-              message: response.data.msg,
-              duration: 1000
-            });
-          }
+        .then(function(r) {
+          console.log('r', r);
+          self.homeworkListArray = r.lists;
         })
-        .catch(function(response) {
-          console.log(response);
-        });
     }
   }
 };

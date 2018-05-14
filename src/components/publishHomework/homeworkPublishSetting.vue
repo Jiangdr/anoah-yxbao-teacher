@@ -148,27 +148,13 @@ export default {
 
       if (data.deal_time && data.title && data.view_answer_time) {
         api.launch(data)
-          .then(function(response) {
-            if (response.data.msg === "ok") {
-              self.$toast({
-                message: "布置成功！",
-                duration: 1000
+          .then(function(r) {
+            setTimeout(function () {
+              self.$router.push({
+                path: "/homework"
               });
-              setTimeout(function () {
-                self.$router.push({
-                  path: "/homework"
-                });
-              }, 500);
-            } else {
-              self.$toast({
-                message: response.data.msg,
-                duration: 1000
-              });
-            }
+            }, 500);
           })
-          .catch(function(response) {
-            console.log(response);
-          });
       } else {
         self.$toast({
           message: "请填写完整条件！",
