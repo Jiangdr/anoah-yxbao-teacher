@@ -27,7 +27,7 @@
 </van-list> -->
 
 <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-      <div class="homework_list" v-for="(item, index) in homeworkListArray" :key="index">
+      <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index">
         <div>
           <div class="homework_list_inline_list">{{item.start_time}}</div>
           <div class="homework_list_inline_list">{{item.title}}</div>
@@ -79,6 +79,11 @@ export default {
         this.isLoading = false;
       }, 500);
       this.getHomeworkList();
+    },
+    goHomeworkDetail(item) {
+      this.$router.push({
+        path: "/homeworkDetail/${item.course_hour_publish_id}/${item.class_id}"
+      });
     },
     onLoad() {
       setTimeout(() => {
