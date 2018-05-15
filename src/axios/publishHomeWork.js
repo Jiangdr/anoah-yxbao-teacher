@@ -3,7 +3,9 @@ import API from '@/axios/_api'
 let apis = {
   homeworkLists: '/jwt/zuoye/homework/homeworkLists',
   launch: "/jwt/zuoye/publish/launch",
-  getResourceLists: "/jwt/resource/package/getResourceLists"
+  getResourceLists: "/jwt/resource/package/getResourceLists",
+  getBookLists: "/jwt/resource/common/getBookLists",
+  getLists: "/jwt/resource/package/getLists"
 }
 
 let publishHomeWork = new API(apis)
@@ -18,6 +20,14 @@ publishHomeWork.launch = (params) => {
 
 publishHomeWork.getResourceLists = (params) => {
   return publishHomeWork.fetch(apis.getResourceLists, params, 'post')
+}
+
+publishHomeWork.getBookLists = (params) => {
+  return publishHomeWork.fetch(apis.getBookLists, params, 'post')
+}
+
+publishHomeWork.getLists = (params) => {
+  return publishHomeWork.fetch(apis.getLists, params, 'post')
 }
 
 export default publishHomeWork

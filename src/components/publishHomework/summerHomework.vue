@@ -2,7 +2,7 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>暑假作业</h1>
-      <i class="cubeic-back" @click="goChooseTextbook"><i class="fa fa-angle-left"></i> 返回</i>
+      <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left"></i> 返回</i>
     </header>
 
     <!-- <van-checkbox v-model="checked">复选框</van-checkbox> -->
@@ -49,14 +49,16 @@ export default {
   computed: {},
   created: function() {
     this.userInfo = this.$store.state.account.userInfo;
+    this.chooseTextBookObj = this.$store.state.homework.chooseTextBookObj;
+    this.summerHomeworkPackId = this.$store.state.homework.summerHomeworkPackId;
   },
   mounted: function() {
     this.getList();
   },
   methods: {
-    goChooseTextbook() {
+    goPublishHomework() {
       this.$router.push({
-        path: "/chooseTextbook"
+        path: "/publishHomework"
       });
     },
     clickPublish() {
@@ -75,7 +77,7 @@ export default {
         });
       }
       this.result = result;
-      this.$store.dispatch("setChooseSummerHomework", this.result);
+      this.$store.dispatch("chooseSummerHomeworkArray", this.result);
       this.$router.push({
         path: "/homeworkPublishSetting"
       });
@@ -95,12 +97,6 @@ export default {
           this.hasChoosePagesNumArray[i].value
         );
       }
-      // var array = this.result;
-      // this.hasChoosePagesNum = array.length;
-      // this.hasChooseProblemsNum = 0;
-      // for (let i = 0; i < array.length; i++) {
-      //   this.hasChooseProblemsNum += Number(array[i].qti_num);
-      // }
     },
     clickTab(name) {
       this.activeTabName = name;
@@ -114,10 +110,9 @@ export default {
     },
     getList: function(value) {
       var self = this;
-
       var data = {
-        user_id: this.userInfo.userid,
-        pack_id: "9002511525420500001"
+        user_id: self.userInfo.userid,
+        pack_id: self.summerHomeworkPackId
       };
       api.getResourceLists(data)
         .then(function(r) {
@@ -125,7 +120,7 @@ export default {
         })
     },
     clickTiltleName(item) {
-      this.$store.dispatch("setChooseExamExercise", item.qti_ids);
+      this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.qti_ids);
       this.$router.push({
         path: "/examExercise"
       });

@@ -238,7 +238,6 @@ export default {
 
       api.homeworkLists(data)
         .then(function(r) {
-          console.log('r', r);
           self.homeworkListArray = r.lists;
         })
     }
