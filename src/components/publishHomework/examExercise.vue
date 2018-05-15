@@ -54,7 +54,7 @@ export default {
         });
         return;
       }
-      this.$store.dispatch("setChooseSummerHomework", this.result);
+      this.$store.dispatch("chooseSummerHomeworkArray", this.result);
       this.$router.push({
         path: "/homeworkPublishSetting"
       });

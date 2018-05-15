@@ -1,25 +1,40 @@
-export const setChooseSummerHomework = 'setChooseSummerHomework';
-export const setChooseExamExercise = 'setChooseExamExercise';
+export const chooseSummerHomeworkArray = 'chooseSummerHomeworkArray';
+export const chooseExamExerciseQtiIdsArray = 'chooseExamExerciseQtiIdsArray';
+export const chooseTextBookObj = 'chooseTextBookObj';
+export const summerHomeworkPackId = 'summerHomeworkPackId';
 
 export default {
   state: {
     chooseSummerHomeworkArray: [],
-    chooseExamExerciseArray: []
+    chooseExamExerciseQtiIdsArray: [],
+    chooseTextBookObj: {}
   },
   actions: {
-    setChooseSummerHomework: function ({ commit }, result) {
-      commit(setChooseSummerHomework, result);
+    chooseSummerHomeworkArray: function ({ commit }, result) {
+      commit(chooseSummerHomeworkArray, result);
     },
-    setChooseExamExercise: function ({ commit }, result) {
-      commit(setChooseExamExercise, result);
+    chooseExamExerciseQtiIdsArray: function ({ commit }, result) {
+      commit(chooseExamExerciseQtiIdsArray, result);
+    },
+    chooseTextBookObj: function ({ commit }, result) {
+      commit(chooseTextBookObj, result);
+    },
+    summerHomeworkPackId: function ({ commit }, result) {
+      commit(summerHomeworkPackId, result);
     }
   },
   mutations: {
-    [setChooseSummerHomework](state, result) {
+    [chooseSummerHomeworkArray](state, result) {
       state.chooseSummerHomeworkArray = result;
     },
-    [setChooseExamExercise](state, result) {
-      state.chooseExamExerciseArray = result;
+    [chooseExamExerciseQtiIdsArray](state, result) {
+      state.chooseExamExerciseQtiIdsArray = result;
+    },
+    [chooseTextBookObj](state, result) {
+      state.chooseTextBookObj = result;
+    },
+    [summerHomeworkPackId](state, result) {
+      state.summerHomeworkPackId = result;
     }
   }
 };

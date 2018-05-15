@@ -9,12 +9,12 @@ let apis = {
 
 let homeworkinfo = new API(apis)
 homeworkinfo.getinfo = (params) => {
-  return homeworkinfo.fetch(homeworkinfo.apis.detail, params, 'get')
+  return homeworkinfo.fetch(homeworkinfo.apis.detail, params, 'post')
 }
 homeworkinfo.getResourceList = (params) => {
-  return homeworkinfo.fetch(homeworkinfo.apis.resource, params, 'get')
+  return homeworkinfo.fetch(homeworkinfo.apis.resource, params, 'post')
 }
 homeworkinfo.getMiniResource = (params) => {
-  return homeworkinfo.fetch(homeworkinfo.apis.getMiniResource, params, 'get')
+  return homeworkinfo.fetch(homeworkinfo.apis.getMiniResource, params, 'post')
 }
 export default homeworkinfo

@@ -7,9 +7,9 @@
 
     <div>
         <van-cell-group>
-          <van-field v-model="homeworkName" placeholder="请输入作业名称" label="作业名称" />
-          <van-cell title="发布时间" is-link :value="publishDateFormat" @click="showPublishDatePicker(selectPublishTime)"/>
-          <van-cell title="截止时间" is-link :value="endDateFormat" @click="showEndDatePicker"/>
+          <van-field v-model="homeworkName" placeholder="请输入作业名称" label="作业名称：" />
+          <van-cell title="发布时间" is-link :value="publishDateFormat" @click="clickShowPupUpDatePickerFun('发布时间')"/>
+          <van-cell title="截止时间" is-link :value="endDateFormat" @click="clickShowPupUpDatePickerFun('截止时间')"/>
         </van-cell-group>
 
         <van-cell value="布置班级" />
@@ -20,13 +20,20 @@
             </van-cell>
           </van-cell-group>
         </van-checkbox-group>
-        <van-cell title="答案公布时间" is-link :value="answerDateFormat" @click="showAnswerDatePicker"/>
+        <van-cell title="答案公布时间" is-link :value="answerDateFormat" @click="clickShowPupUpDatePickerFun('答案公布时间')"/>
     </div>
-    <cube-button style="position:absolute;bottom:0px;" :outline="true" @click="surePublish">确认布置</cube-button>
+
+    <van-popup v-model="publishDatePickerShow" position="bottom">
+      <van-datetime-picker v-model="currentDate" type="datetime" :min-date="minDate" :max-date="maxDate" @cancel="clickCancelTimeFun" @confirm="clickConfirmTimeFun"/>
+    </van-popup>
+
+    <cube-button style="position:absolute;bottom:0px;" :outline="true" @click="surePublishFun">确认布置</cube-button>
   </div>
+
 </template>
 
 <script>
+import api from "@/axios/publishHomeWork.js";
 export default {
   name: "publishHomework",
   data() {
@@ -37,9 +44,11 @@ export default {
       publishDateFormat: "",
       endDateFormat: "",
       answerDateFormat: "",
-      publishDateTimePicker: "",
-      endDateTimePicker: "",
-      answerDateTimePicker: ""
+      minDate: new Date(2016, 1, 1),
+      maxDate: new Date(2019, 12, 30),
+      currentDate: new Date(),
+      publishDatePickerShow: false,
+      popUpType: ""
     };
   },
   created: function() {
@@ -54,67 +63,27 @@ export default {
         path: "/summerHomework"
       });
     },
-    showPublishDatePicker() {
-      if (!this.publishDateTimePicker) {
-        this.publishDateTimePicker = this.$createDatePicker({
-          title: "",
-          min: new Date(2009, 7, 8, 8, 0, 0),
-          max: new Date(2021, 9, 20, 20, 59, 59),
-          value: new Date(),
-          columnCount: 6,
-          onSelect: this.selectPublishTime,
-          onCancel: this.cancelPublishTime
-        });
-      }
-
-      this.publishDateTimePicker.show();
+    clickShowPupUpDatePickerFun(type) {
+      this.publishDatePickerShow = true;
+      this.popUpType = type;
     },
-    selectPublishTime(date, selectedVal, selectedText) {
+    clickConfirmTimeFun(date) {
       var formatTime = this.$dayjs(date).format("YYYY-MM-DD HH:mm:ss");
-      this.publishDateFormat = formatTime;
-    },
-    cancelPublishTime() {},
-    showEndDatePicker() {
-      if (!this.endDateTimePicker) {
-        this.endDateTimePicker = this.$createDatePicker({
-          title: "",
-          min: new Date(2009, 7, 8, 8, 0, 0),
-          max: new Date(2021, 9, 20, 20, 59, 59),
-          value: new Date(),
-          columnCount: 6,
-          onSelect: this.selectEndTime,
-          onCancel: this.cancelEndTime
-        });
+      if (this.popUpType === "发布时间") {
+        this.publishDateFormat = formatTime;
       }
-
-      this.endDateTimePicker.show();
-    },
-    selectEndTime(date, selectedVal, selectedText) {
-      var formatTime = this.$dayjs(date).format("YYYY-MM-DD HH:mm:ss");
-      this.endDateFormat = formatTime;
-    },
-    cancelEndTime() {},
-    showAnswerDatePicker() {
-      if (!this.answerDateTimePicker) {
-        this.answerDateTimePicker = this.$createDatePicker({
-          title: "",
-          min: new Date(2009, 7, 8, 8, 0, 0),
-          max: new Date(2021, 9, 20, 20, 59, 59),
-          value: new Date(),
-          columnCount: 6,
-          onSelect: this.selectAnswerTime,
-          onCancel: this.cancelAnswerTime
-        });
+      if (this.popUpType === "截止时间") {
+        this.endDateFormat = formatTime;
       }
-
-      this.answerDateTimePicker.show();
+      if (this.popUpType === "答案公布时间") {
+        this.answerDateFormat = formatTime;
+      }
+      this.publishDatePickerShow = false;
     },
-    selectAnswerTime(date, selectedVal, selectedText) {
-      var formatTime = this.$dayjs(date).format("YYYY-MM-DD HH:mm:ss");
-      this.answerDateFormat = formatTime;
+    clickCancelTimeFun() {
+      this.publishDatePickerShow = false;
     },
-    cancelAnswerTime() {},
-    surePublish() {
+    surePublishFun() {
       var self = this;
       var classIds = "";
       var array = self.result;
@@ -135,7 +104,6 @@ export default {
         });
       }
 
-      var url = "/jwt/zuoye/publish/launch?";
       var data = {
         user_id: this.userInfo.userid,
         title: self.homeworkName,
@@ -147,29 +115,17 @@ export default {
       };
 
       if (data.deal_time && data.title && data.view_answer_time) {
-        self.$http
-          .get(url, { params: data })
-          .then(function(response) {
-            if (response.data.msg === "ok") {
-              self.$toast({
-                message: "布置成功！",
-                duration: 1000
-              });
-              setTimeout(function () {
-                self.$router.push({
-                  path: "/homework"
-                });
-              }, 500);
-            } else {
-              self.$toast({
-                message: response.data.msg,
-                duration: 1000
-              });
-            }
-          })
-          .catch(function(response) {
-            console.log(response);
+        api.launch(data).then(function(r) {
+          self.$toast({
+            message: "布置成功！",
+            duration: 1000
           });
+          setTimeout(function() {
+            self.$router.push({
+              path: "/homework"
+            });
+          }, 500);
+        });
       } else {
         self.$toast({
           message: "请填写完整条件！",
