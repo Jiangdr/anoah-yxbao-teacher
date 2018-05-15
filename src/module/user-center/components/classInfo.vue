@@ -28,6 +28,7 @@ import api from '@/module/user-center/axios/usercenter'
 export default {
   name: 'classInfo',
   data () {
+    console.log(this.config)
     return {
       classDetail: null
     }
@@ -38,12 +39,12 @@ export default {
     }).then(succ => {
       succ.teachers.forEach(item => {
         if (item.avatar.indexOf('http://') === -1) {
-          item.avatar = this.config.env + item.avatar
+          item.avatar = this.config.old + item.avatar
         }
       })
       succ.students.forEach(item => {
         if (item.avatar.indexOf('http://') === -1) {
-          item.avatar = this.config.env + item.avatar
+          item.avatar = this.config.old + item.avatar
         }
       })
       this.classDetail = succ
