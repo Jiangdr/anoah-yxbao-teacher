@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import studentList from '../components/studentList.vue'
+import studentList from './studentList.vue'
 
 export default {
   name: 'column',

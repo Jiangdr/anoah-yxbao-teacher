@@ -1,11 +1,11 @@
 <template>
-  <div class="wanxing">
+  <div class="danxuan">
     <div class="title border-bottom-1px">
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
-                <van-icon name='arrow-left'></van-icon>
-                </span>
+              <van-icon name='arrow-left'></van-icon>
+              </span>
         </van-col>
         <van-col span="18">
           <span class="text">查看统计</span>
@@ -16,23 +16,24 @@
     <div class="title-bar">
       <van-row>
         <van-col span="6">
-          <span>{{alias==="cloze"?'完型填空':'客观填空'}}</span>
+          <span>{{params.qti_question_type_name}}</span>
         </van-col>
         <van-col span="18" class="info-right">
-          正确率：<span class="correct">{{correct}}</span> <span @click="allCorrect.count>0?toggleAllCorrec('全对的学生',allCorrect.students):''"> 全对：{{allCorrect.count}}人</span>
+          正确率：<span class="correct">{{correct}}</span>
         </van-col>
       </van-row>
     </div>
-    <div class="statlist">
-      <div class="quelist" v-for="(que,index) in record" :key="index">
-        <span>({{index+1}})</span>
-        <span v-for="(item,key) in que.record" :key="key" v-if="key!=='noanswer'" :class="{right:key==que.answer}" @click="item.count>0?toggleAllCorrec('选'+key+'的学生',item.students):''">
-          {{item.count}}<br>{{key}}
-        </span>
-        <span @click="que.record.noanswer.count>0?toggleAllCorrec('未答的学生',que.record.noanswer.students):''">
-          {{que.record.noanswer?que.record.noanswer.count:'0'}}
-          <br>未答
-        </span>
+    <div class="wrapper">
+      <div v-for="(item,key) in record" :key="key">
+        <van-row class="item">
+          <van-col span="4" class="tc">
+            {{key==='T'?'√':(key==='F'?'×':(key==='noanswer'?'未答':(alias==='sort'?item.alias:key)))}}
+          </van-col>
+          <van-col span="20" class="right">
+            <span class="column"  :style="{width:(item.count/count)*100+'%'}" :class="{'right-answer':key==answer}" @click='item.students.length>0?toggleAllCorrec("选"+(item.alias||key)+"的学生",item.students):""'></span>
+            <span class="column-info">{{item.count}}人</span>
+          </van-col>
+        </van-row>
       </div>
     </div>
     <student-list :title="popupTitle" :list="popupList" @toggleAllCorrec="toggleAllCorrec" v-if="showAllCorrec"></student-list>
@@ -40,17 +41,19 @@
 </template>
 
 <script>
-import getStatistics from '../axios/getQuestionStatistics.js'
-import studentList from '../components/studentList.vue'
+import getStatistics from '../../axios/getQuestionStatistics.js'
+import studentList from '../common/studentList.vue'
 import {mapState} from 'vuex'
+
 export default {
-  name: 'wanxing',
+  name: 'danxuan',
   data() {
     return {
       allCorrect: {},
       record: [],
+      answer: '',
       alias: '',
-      correctRate: '',
+      correctRate: 0,
       showAllCorrec: false,
       popupTitle: '',
       popupList: []
@@ -69,8 +72,9 @@ export default {
     getStatistics.getinfo(param).then((r) => {
       this.allCorrect = r.all_correct;
       this.record = r.record;
+      this.answer = r.answer;
+      this.correctRate = r.correct_rate
       this.alias = r.alias;
-      this.correctRate = r.correct_rate;
     })
   },
   computed: {
@@ -80,6 +84,13 @@ export default {
       } else {
         return Math.round(this.correctRate * 100) + '%'
       }
+    },
+    count() {
+      let num = 0;
+      for (let key in this.record) {
+        num += this.record[key].count
+      }
+      return num
     },
     ...mapState({
       'params': (state) => state.homeworkDetail.params
@@ -102,70 +113,65 @@ export default {
 </script>
 
 <style scoped>
-  .wanxing {
+  .danxuan {
     height: 100vh;
   }
 
-  .wanxing>.title {
+  .danxuan>.title {
     text-align: center;
     line-height: 50px;
     height: 50px;
   }
 
-  .wanxing>.title .back {
+  .danxuan>.title .back {
     display: inline-block;
     float: left;
   }
 
-  .wanxing>.title .text {
+  .danxuan>.title .text {
     display: inline-block;
     width: calc(100% - 100px);
     font-weight: 600;
   }
 
-  .wanxing>.title-bar {
+  .danxuan>.title-bar {
     padding: 0 10px;
     line-height: 50px;
     height: 50px;
     box-sizing: border-box;
   }
 
-  .wanxing>.title-bar .info-right {
+  .danxuan>.title-bar .info-right {
     text-align: right;
   }
 
-  .wanxing>.title-bar .info-right .correct {
+  .danxuan>.title-bar .info-right .correct {
     color: #ff4e00;
   }
-
-  .wanxing>.statlist {
-    height: calc(100vh - 100px);
-    line-height: 40px;
+   .danxuan .wrapper{
+     line-height: 30px;
+   }
+  .danxuan .wrapper .tc{
     text-align: center;
-    overflow: scroll;
   }
-.wanxing>.statlist .quelist{
-  display: flex;
-  border:1px solid #eaeaea;
-  border-bottom: none;
-}
-.wanxing>.statlist .quelist:last-child{
-  border-bottom: 1px solid #eaeaea;
-}
-.wanxing>.statlist .quelist span{
-  width:80px;
-  flex: 1 1 auto;
-  border-right: 1px solid #eaeaea;
-  line-height: 20px;
-  padding:5px 0;
-}
-.wanxing>.statlist .quelist span.right{
-  background:#afe9d0
-}
-.wanxing>.statlist .quelist span:first-child{
-  line-height: 40px;
-}
-.wanxing>.statlist .quelist span:last-child{
-  border-right: none;
-}
+   .danxuan .wrapper .item{
+     height: 40px;
+   }
+   .danxuan .wrapper .right{
+     display: flex;
+   }
+  .danxuan .wrapper .column{
+    display: inline-block;
+    max-width: 80%;
+    min-width: 5px;
+    height: 30px;
+    background: #f56956;
+  }
+  .danxuan .wrapper .column.right-answer{
+    background: #34c988;
+  }
+  .danxuan .wrapper .column-info{
+    vertical-align: middle;
+    margin-left: 5px;
+  }
 </style>

@@ -1,11 +1,11 @@
 <template>
-  <div class="danxuan">
+  <div class="kgtk">
     <div class="title border-bottom-1px">
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
-              <van-icon name='arrow-left'></van-icon>
-              </span>
+                <van-icon name='arrow-left'></van-icon>
+                </span>
         </van-col>
         <van-col span="18">
           <span class="text">查看统计</span>
@@ -16,42 +16,52 @@
     <div class="title-bar">
       <van-row>
         <van-col span="6">
-          <span>{{alias==='panduan'?'判断题':'单选题'}}</span>
+          <span>{{params.qti_question_type_name}}</span>
         </van-col>
         <van-col span="18" class="info-right">
           正确率：<span class="correct">{{correct}}</span>
+           <span @click="allCorrect.count>0?toggleAllCorrec('全对的学生',allCorrect.students):''"> 全对：{{allCorrect.count}}人</span>
         </van-col>
       </van-row>
     </div>
-    <div class="wrapper">
-      <div v-for="(item,key) in record" :key="key">
-        <van-row class="item">
-          <van-col span="4" class="tc">{{key==='T'?'√':(key==='F'?'×':(key==='noanswer'?'未答':key))}}</van-col>
-          <van-col span="20" class="right">
-            <span class="column"  :style="{width:(item.count/count)*100+'%'}" :class="{'right-answer':key==answer}" @click='item.students.length>0?toggleAllCorrec("选"+key+"的学生",item.students):""'></span>
-            <span class="column-info">{{item.count}}人</span>
-          </van-col>
-        </van-row>
-      </div>
+    <div class="statlist">
+      <van-row class="question-item" :class="index==0?'van-hairline--surround':'van-hairline--bottom van-hairline--left van-hairline--right'" v-for="(item,index) in  record" :key="index">
+        <van-col span="6" class="num van-hairline--right">{{index+1}}</van-col>
+        <van-col span="6" class="right van-hairline--right">
+          <p @click="item.record.right.count>0?toggleAllCorrec('答对的学生',item.record.right.students):''">
+            <span>{{item.record.right.count}}</span>
+            <span>答对</span>
+          </p>
+        </van-col>
+        <van-col span="6" class="wrong van-hairline--right">
+          <p @click="item.record.wrong.count>0?toggleAllCorrec('答错的学生',item.record.wrong.students):''">
+            <span>{{item.record.wrong.count}}</span><span>答错</span>
+          </p>
+        </van-col>
+        <van-col span="6" class="unanswered">
+          <p @click="item.record.noanswer>0?toggleAllCorrec('未答的学生',item.record.noanswer.students):''">
+            <span>{{item.record.noanswer?item.record.noanswer.count:0}}</span><span>未答</span>
+          </p>
+        </van-col>
+      </van-row>
     </div>
     <student-list :title="popupTitle" :list="popupList" @toggleAllCorrec="toggleAllCorrec" v-if="showAllCorrec"></student-list>
   </div>
 </template>
 
 <script>
-import getStatistics from '../axios/getQuestionStatistics.js'
-import studentList from '../components/studentList.vue'
+import getStatistics from '../../axios/getQuestionStatistics.js'
+import studentList from '../common/studentList.vue'
 import {mapState} from 'vuex'
 
 export default {
-  name: 'danxuan',
+  name: 'kgtk',
   data() {
     return {
       allCorrect: {},
       record: [],
-      answer: '',
       alias: '',
-      correctRate: 0,
+      correctRate: '',
       showAllCorrec: false,
       popupTitle: '',
       popupList: []
@@ -70,9 +80,8 @@ export default {
     getStatistics.getinfo(param).then((r) => {
       this.allCorrect = r.all_correct;
       this.record = r.record;
-      this.answer = r.answer;
-      this.correctRate = r.correct_rate
       this.alias = r.alias;
+      this.correctRate = r.correct_rate;
     })
   },
   computed: {
@@ -82,13 +91,6 @@ export default {
       } else {
         return Math.round(this.correctRate * 100) + '%'
       }
-    },
-    count() {
-      let num = 0;
-      for (let key in this.record) {
-        num += this.record[key].count
-      }
-      return num
     },
     ...mapState({
       'params': (state) => state.homeworkDetail.params
@@ -111,65 +113,52 @@ export default {
 </script>
 
 <style scoped>
-  .danxuan {
+  .kgtk {
     height: 100vh;
   }
 
-  .danxuan>.title {
+  .kgtk>.title {
     text-align: center;
     line-height: 50px;
     height: 50px;
   }
 
-  .danxuan>.title .back {
+  .kgtk>.title .back {
     display: inline-block;
-    float: left;
   }
 
-  .danxuan>.title .text {
+  .kgtk>.title .text {
     display: inline-block;
     width: calc(100% - 100px);
     font-weight: 600;
   }
 
-  .danxuan>.title-bar {
+  .kgtk>.title-bar {
     padding: 0 10px;
     line-height: 50px;
     height: 50px;
     box-sizing: border-box;
   }
 
-  .danxuan>.title-bar .info-right {
+  .kgtk>.title-bar .info-right {
     text-align: right;
   }
 
-  .danxuan>.title-bar .info-right .correct {
+  .kgtk>.title-bar .info-right .correct {
     color: #ff4e00;
   }
-   .danxuan .wrapper{
-     line-height: 30px;
-   }
-  .danxuan .wrapper .tc{
+
+  .kgtk>.statlist {
+    padding: 0 10px;
+    line-height: 40px;
     text-align: center;
   }
-   .danxuan .wrapper .item{
-     height: 40px;
-   }
-   .danxuan .wrapper .right{
-     display: flex;
-   }
-  .danxuan .wrapper .column{
-    display: inline-block;
-    max-width: 80%;
-    min-width: 5px;
-    height: 30px;
-    background: #f56956;
+
+  .kgtk>.statlist>.question-item {
+    height: 40px;
   }
-  .danxuan .wrapper .column.right-answer{
-    background: #34c988;
-  }
-  .danxuan .wrapper .column-info{
-    vertical-align: middle;
-    margin-left: 5px;
+
+  .kgtk>.statlist>.question-item .right {
+    background: #afe9d0;
   }
 </style>
