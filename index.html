@@ -9,10 +9,23 @@
     <script src="http://192.168.41.130/vue/qti/qtivue/mp3player.js"></script>
     <script src="http://192.168.41.130/vue/qti/qtivue/tcplayer.js"></script>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://*  cdvfile://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' 'unsafe-eval'; media-src *; img-src 'self' http://* data: content:;">
+    <script>
+      var url = 'e.dev.anoah.com'
+      window.ICOM_EVN_VAR = {
+        debug: true,
+        lib_address: "http://"+ url +"/icoms/qtidiv/jslibs/",
+        base: "http://"+ url +"/icoms/qtidiv/icoms/",
+        api_address: "http://"+ url +"/api/",
+        api_address_dist: "http://"+ url +"/api_dist/",
+        api_address_router: "http://"+ url +"/api_router/",
+        api_cache: true
+      }
+    </script>
+    <script src="http://e.dev.anoah.com/icoms/qtidiv/jquery.js"></script>
+    <script src="http://e.dev.anoah.com/icoms/qtidiv/icombase.js"></script>
     <title>教师端</title>
   </head>
   <body ontouchstart>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
   </body>
 </html>

@@ -41,7 +41,8 @@ export default {
       userInfo: null,
       actions: [
         {
-          name: '拍照'
+          name: '拍照',
+          callback: this.camera
         },
         {
           name: '从手机相册选择'
@@ -79,6 +80,15 @@ export default {
       } else {
         this.$router.push({path: `/bindPhone`})
       }
+    },
+    camera () {
+      alert(Camera.DestinationType.DATA_URL)
+       navigator.camera.getPicture(function cameraSuccess(imageUri) {
+              alert(imageUri)
+            }, function cameraError(error) {
+                console.debug("Unable to obtain picture: " + error, "app");
+
+            }, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
     }
   },
   beforeRouteLeave (to, from, next) {

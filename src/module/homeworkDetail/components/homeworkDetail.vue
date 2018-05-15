@@ -84,7 +84,6 @@
                 </p>
               </div>
             </div>
-
           </div>
         </div>
         <div class="student-content" v-if="activeBtn=='student'">
