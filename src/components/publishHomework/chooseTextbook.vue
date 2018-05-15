@@ -81,6 +81,13 @@ export default {
       this.$store.dispatch("chooseTextBookObj", book);
     },
     goSummerHomework() {
+      if(!this.chooseTextbookId) {
+        this.$toast({
+          message: "请选择教材！",
+          duration: 500
+        });
+        return
+      }
       this.$router.push({
         path: "/publishHomework"
       });

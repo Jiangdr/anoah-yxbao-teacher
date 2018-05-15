@@ -6,8 +6,8 @@
     </header>
 
     <div style="border-bottom: 1px solid #111;">
-      <span style="width:49%;text-align:center;display:inline-block;border-right: 1px solid #111;" v-bind:class="{activeTabClass : activeTabName == '推荐'}" @click="clickTab('推荐')">推荐</span>
-      <span style="width:49%;text-align:center;display:inline-block;" v-bind:class="{activeTabClass : activeTabName == '校本库'}" @click="clickTab('校本库')">校本库</span>
+      <span style="width:49%;text-align:center;display:inline-block;border-right: 1px solid #111;" v-bind:class="{activeTabClass : activeTabName == 0}" @click="clickTab(0)">推荐</span>
+      <span style="width:49%;text-align:center;display:inline-block;" v-bind:class="{activeTabClass : activeTabName == 1}" @click="clickTab(1)">校本库</span>
     </div>
 
     <div style="background-color:#fff;margin-bottom:20px;line-height: 35px;" @click="goChooseTextbook">
@@ -33,7 +33,7 @@ export default {
   name: "publishHomework",
   data() {
     return {
-      activeTabName: '推荐',
+      activeTabName: 0,
       lists: []
     };
   },
@@ -42,7 +42,7 @@ export default {
     this.chooseTextBookObj = this.$store.state.homework.chooseTextBookObj;
   },
   mounted: function() {
-    this.getList();
+    this.getList(0);
   },
   methods: {
     goChooseTextbook () {
@@ -56,20 +56,21 @@ export default {
         path: "/summerHomework"
       });
     },
-    getList: function() {
+    getList: function(type) {
       var self = this;
       var data = {
-        user_id: 33737,
-        edu_book_id: 33250,
-        type: 1
+        user_id: self.userInfo.userid,
+        edu_book_id: self.chooseTextBookObj.edu_book_id,
+        type: type
       };
       api.getLists(data)
         .then(function(r) {
           self.lists = r.lists;
         })
     },
-    clickTab (name) {
-      this.activeTabName = name;
+    clickTab (type) {
+      this.activeTabName = type;
+      this.getList(type);
     }
   }
 };
