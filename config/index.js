@@ -90,6 +90,7 @@ module.exports = {
   },
 
   build: {
+    version: new Date().toTimeString(),
     // Template for index.html
     index: path.resolve(__dirname, basePath + '/index.html'),
     indexAndroid: path.resolve(__dirname, basePath + '/index-android.html'),
