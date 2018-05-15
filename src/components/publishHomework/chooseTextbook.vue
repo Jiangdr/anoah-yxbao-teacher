@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import api from '@/axios/publishHomeWork.js'
+import api from "@/axios/publishHomeWork.js";
 
 export default {
   name: "chooseTextbook",
@@ -42,7 +42,7 @@ export default {
       activeGradeId: 1,
       activeTermId: 1,
       textBookList: [],
-      chooseTextbookId: ''
+      chooseTextbookId: ""
     };
   },
   mounted: function() {
@@ -81,12 +81,12 @@ export default {
       this.$store.dispatch("chooseTextBookObj", book);
     },
     goSummerHomework() {
-      if(!this.chooseTextbookId) {
+      if (!this.chooseTextbookId) {
         this.$toast({
           message: "请选择教材！",
           duration: 500
         });
-        return
+        return;
       }
       this.$router.push({
         path: "/publishHomework"
