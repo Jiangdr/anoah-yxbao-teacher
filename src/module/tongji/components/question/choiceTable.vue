@@ -1,5 +1,5 @@
 <template>
-  <div class="kgtk">
+  <div class="wanxing">
     <div class="title border-bottom-1px">
       <van-row>
         <van-col span="2">
@@ -16,46 +16,35 @@
     <div class="title-bar">
       <van-row>
         <van-col span="6">
-          <span>{{alias==="choiceword"?'选择填空':'客观填空'}}</span>
+          <span>{{params.qti_question_type_name}}</span>
         </van-col>
         <van-col span="18" class="info-right">
-          正确率：<span class="correct">{{correct}}</span>
-           <span @click="allCorrect.count>0?toggleAllCorrec('全对的学生',allCorrect.students):''"> 全对：{{allCorrect.count}}人</span>
+          正确率：<span class="correct">{{correct}}</span> <span @click="allCorrect.count>0?toggleAllCorrec('全对的学生',allCorrect.students):''"> 全对：{{allCorrect.count}}人</span>
         </van-col>
       </van-row>
     </div>
     <div class="statlist">
-      <van-row class="question-item" :class="index==0?'van-hairline--surround':'van-hairline--bottom van-hairline--left van-hairline--right'" v-for="(item,index) in  record" :key="index">
-        <van-col span="6" class="num van-hairline--right">{{index+1}}</van-col>
-        <van-col span="6" class="right van-hairline--right">
-          <p @click="item.record.right.count>0?toggleAllCorrec('答对的学生',item.record.right.students):''">
-            <span>{{item.record.right.count}}</span>
-            <span>答对</span>
-          </p>
-        </van-col>
-        <van-col span="6" class="wrong van-hairline--right">
-          <p @click="item.record.wrong.count>0?toggleAllCorrec('答错的学生',item.record.wrong.students):''">
-            <span>{{item.record.wrong.count}}</span><span>答错</span>
-          </p>
-        </van-col>
-        <van-col span="6" class="unanswered">
-          <p @click="item.record.right.count>0?toggleAllCorrec('未答的学生',item.record.right.students):''">
-            <span>{{item.record.right.count}}</span><span>未答</span>
-          </p>
-        </van-col>
-      </van-row>
+      <div class="quelist" v-for="(que,index) in record" :key="index">
+        <span>({{index+1}})</span>
+        <span v-for="(item,key) in que.record" :key="key" v-if="key!=='noanswer'" :class="{right:key==que.answer}" @click="item.count>0?toggleAllCorrec('选'+key+'的学生',item.students):''">
+          {{item.count}}<br>{{key}}
+        </span>
+        <span @click="que.record.noanswer.count>0?toggleAllCorrec('未答的学生',que.record.noanswer.students):''">
+          {{que.record.noanswer?que.record.noanswer.count:'0'}}
+          <br>未答
+        </span>
+      </div>
     </div>
     <student-list :title="popupTitle" :list="popupList" @toggleAllCorrec="toggleAllCorrec" v-if="showAllCorrec"></student-list>
   </div>
 </template>
 
 <script>
-import getStatistics from '../axios/getQuestionStatistics.js'
-import studentList from '../components/studentList.vue'
+import getStatistics from '../../axios/getQuestionStatistics.js'
+import studentList from '../common/studentList.vue'
 import {mapState} from 'vuex'
-
 export default {
-  name: 'kgtk',
+  name: 'wanxing',
   data() {
     return {
       allCorrect: {},
@@ -113,52 +102,70 @@ export default {
 </script>
 
 <style scoped>
-  .kgtk {
+  .wanxing {
     height: 100vh;
   }
 
-  .kgtk>.title {
+  .wanxing>.title {
     text-align: center;
     line-height: 50px;
     height: 50px;
   }
 
-  .kgtk>.title .back {
+  .wanxing>.title .back {
     display: inline-block;
+    float: left;
   }
 
-  .kgtk>.title .text {
+  .wanxing>.title .text {
     display: inline-block;
     width: calc(100% - 100px);
     font-weight: 600;
   }
 
-  .kgtk>.title-bar {
+  .wanxing>.title-bar {
     padding: 0 10px;
     line-height: 50px;
     height: 50px;
     box-sizing: border-box;
   }
 
-  .kgtk>.title-bar .info-right {
+  .wanxing>.title-bar .info-right {
     text-align: right;
   }
 
-  .kgtk>.title-bar .info-right .correct {
+  .wanxing>.title-bar .info-right .correct {
     color: #ff4e00;
   }
 
-  .kgtk>.statlist {
-    padding: 0 10px;
+  .wanxing>.statlist {
+    height: calc(100vh - 100px);
     line-height: 40px;
     text-align: center;
+    overflow: scroll;
   }
-
-  .kgtk>.statlist>.question-item {
-    height: 40px;
-  }
-
-  .kgtk>.statlist>.question-item .right {
-    background: #afe9d0;
-  }
+.wanxing>.statlist .quelist{
+  display: flex;
+  border:1px solid #eaeaea;
+  border-bottom: none;
+}
+.wanxing>.statlist .quelist:last-child{
+  border-bottom: 1px solid #eaeaea;
+}
+.wanxing>.statlist .quelist span{
+  width:80px;
+  flex: 1 1 auto;
+  border-right: 1px solid #eaeaea;
+  line-height: 20px;
+  padding:5px 0;
+}
+.wanxing>.statlist .quelist span.right{
+  background:#afe9d0
+}
+.wanxing>.statlist .quelist span:first-child{
+  line-height: 40px;
+}
+.wanxing>.statlist .quelist span:last-child{
+  border-right: none;
+}
 </style>

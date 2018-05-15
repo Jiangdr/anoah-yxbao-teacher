@@ -8,8 +8,9 @@
     <router-link :to="{path:'/forgetPassword'}">忘记密码?</router-link> -->
     <cube-input v-model="username" placeholder="请输入用户名" type="text"  :clearable="clearable"></cube-input>
     <cube-input v-model="password" placeholder="请输入密码" type="password" :clearable="clearable"></cube-input>
-    <router-link :to="{path:'/forgetPassword'}">忘记密码了吗?</router-link>
-    <cube-button :disabled="isDisabled" @click="doLogin">登录</cube-button>
+    <router-link :to="{path:'/forgetPassword'}">忘记密码?</router-link>
+    <cube-button :disabled="isDisabled" @click="doLogin">登录{{version}}</cube-button>
+
   </div>
 </template>
 
@@ -25,7 +26,8 @@ export default {
       validate: {
         username: [{ 'required': '请输入用户名' }],
         password: [{ 'required': '请输入密码' }]
-      }
+      },
+      version: window.version
     }
   },
   computed: {

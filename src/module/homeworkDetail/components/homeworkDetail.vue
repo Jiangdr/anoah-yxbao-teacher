@@ -1,6 +1,6 @@
 <template>
   <div class="detail">
-    <title-bar @back="goBack"></title-bar>
+    <top @back="goBack"></top>
     <div class="wrapper">
       <!-- 作业名称 开始时间 结束时间 -->
       <div class="info">
@@ -164,7 +164,7 @@
 <script>
 import homeworkDetil from "../axios/detail.js";
 import Vue from "vue";
-import titleBar from './title.vue'
+import top from './title.vue'
 import tips from './tips.vue'
 import urge from './urge.vue'
 import remind from './remind.vue'
@@ -256,9 +256,7 @@ export default {
       let curr = {};
       let detailbox = "";
       if (!ismini) {
-        // detailbox = $('.homework-content .item').eq(index).find('.itemdetail')
         curr = this.resourceList[index];
-        // detailbox.toggleClass('hide');
         Vue.set(curr, "isShow", !curr.isShow);
       } else {
         curr = this.miniResource[index];
@@ -289,27 +287,21 @@ export default {
         return false;
       }
       this.$store.commit('homeworkDetail/setParams', curr)
-      // let param = {
-      //   publishId: curr.course_hour_publish_id,
-      //   resourceId: curr.course_resource_id,
-      //   questionId: curr.source_pk_id,
-      //   dcom_entity_id: curr.dcom_entity_id ? curr.dcom_entity_id : 0,
-      //   qti_question_sheet: curr.qti_question_sheet
-      //     ? curr.qti_question_sheet : 0
-      // };
       // 单选题、判断题统计页面
       let type = parseInt(curr.qti_question_type_id);
       let name = "";
-      if (type === 1 || type === 2 || type === 3) {
-        name = "danxuan";
+      if (type === 1 || type === 2 || type === 3 || type === 6 || type === 15) {
+        name = "answerColumn";
         // 客观填空、选择填空统计页面
       } else if (type === 4 || type === 20) {
-        name = "kgtk";
+        name = "correctTable";
         // 主观填空统计页面
       } else if (type === 5) {
-        name = "tiankong";
+        name = "Subjective";
+      } else if (type === 9 || type === 21) {
+        name = "correctColumn";
       } else if (type === 11) {
-        name = "wanxingtk";
+        name = "choiceTable";
       } else if (parseInt(curr.icom_id) === 5009) {
         name = "hanzitingxie";
       }
@@ -341,7 +333,7 @@ export default {
     }
   },
   components: {
-    titleBar,
+    top,
     tips,
     urge,
     remind

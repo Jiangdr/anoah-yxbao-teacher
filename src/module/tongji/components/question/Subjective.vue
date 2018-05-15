@@ -16,7 +16,7 @@
     <div class="title-bar">
       <van-row>
         <van-col span="8">
-          <span>主观填空</span>
+          <span>{{params.qti_question_type_name}}</span>
         </van-col>
         <van-col span="8">
           平均用时：{{time}}秒
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import getStatistics from '../axios/getQuestionStatistics.js'
+import getStatistics from '../../axios/getQuestionStatistics.js'
 import {mapState} from 'vuex'
 export default {
   name: 'tiankong',
@@ -108,6 +108,7 @@ export default {
       this.record = r.user;
       this.correctRate = r.average_correct_rate
       this.time = r.average_time_length
+      this.alias = r.alias
     })
   },
   mounted() {

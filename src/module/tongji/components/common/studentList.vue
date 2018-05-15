@@ -2,7 +2,7 @@
   <div>
     <van-popup v-model="show" position="bottom" @click-overlay='toggle'>
       <div class="popup-container">
-        <div class="bar">{{title}}</div>
+        <div class="bar">{{text}}</div>
         <div class="container">
           <span v-for="(stu, index) in list" :key="index" class="van-hairline--surround">{{stu.real_name}}</span>
         </div>
@@ -18,6 +18,17 @@ export default {
   data() {
     return {
       show: true
+    }
+  },
+  computed: {
+    text() {
+      if (this.title === '选F的学生') {
+        return '选X的学生'
+      } else if (this.title === '选T的学生') {
+        return '选√的学生'
+      } else {
+        return this.title
+      }
     }
   },
   methods: {

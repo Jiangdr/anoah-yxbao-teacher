@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'title',
+  name: 'top',
   methods: {
     back() {
       this.$emit('back')
