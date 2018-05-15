@@ -6,6 +6,7 @@
     </van-cell-group>
     <van-button type="primary" size="large" @click="doLogin" class="tt" :loading="loading" >登录</van-button>
     <router-link :to="{path:'/forgetPassword'}">忘记密码?</router-link> -->
+    <div class="tt"></div>
     <cube-input v-model="username" placeholder="请输入用户名" type="text"  :clearable="clearable"></cube-input>
     <cube-input v-model="password" placeholder="请输入密码" type="password" :clearable="clearable"></cube-input>
     <router-link :to="{path:'/forgetPassword'}">忘记密码?</router-link>
@@ -76,4 +77,10 @@ export default {
 }
 </script>
 <style scoped>
+#login{
+  padding: 0 20px
+}
+.tt{
+  height: 300px;
+}
 </style>
