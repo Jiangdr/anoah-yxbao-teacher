@@ -4,6 +4,8 @@
 
 const path = require('path')
 
+let basePath = '../dist/HW';
+
 module.exports = {
   dev: {
 
@@ -89,10 +91,12 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, basePath + '/index.html'),
+    indexAndroid: path.resolve(__dirname, basePath + '/index-android.html'),
+    indexIos: path.resolve(__dirname, basePath + '/index-ios.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, basePath),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
 
