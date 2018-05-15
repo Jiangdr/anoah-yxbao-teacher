@@ -25,7 +25,7 @@ export default {
   },
   computed: {},
   created: function() {
-    this.qti_ids = this.$store.state.homework.chooseExamExerciseArray;
+    this.qti_ids = this.$store.state.homework.chooseExamExerciseQtiIdsArray;
     this.qtiFun();
   },
   methods: {
