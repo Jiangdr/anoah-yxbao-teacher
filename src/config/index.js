@@ -7,8 +7,10 @@ let host = 'api2.' + ENV + '.anoah.com'
 let origin = window.location.hostname.match(/^(localhost|127\.0\.0\.1|\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3})$/) && process.env.NODE_ENV === 'development' ? window.location.origin : PRO + '://' + host
 
 let env = PRO + '://' + host
+let old = PRO + '://' + 'e.' + ENV + '.anoah.com'
 
 export default{
   origin: origin,
-  env: env
+  env: env,
+  old: old
 }

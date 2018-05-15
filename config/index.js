@@ -4,6 +4,8 @@
 
 const path = require('path')
 
+let basePath = '../dist/HW';
+
 module.exports = {
   dev: {
 
@@ -13,14 +15,14 @@ module.exports = {
     proxyTable: {
       '/user': {
         target: 'http://api2.dev.anoah.com',
-        changeOrigin: true,  // 解决跨域问题
+        changeOrigin: true, // 解决跨域问题
         pathRewrite: {
           '^/user': '/user'
         }
       },
       '/jwt': {
         target: 'http://api2.dev.anoah.com',
-        changeOrigin: true,  // 解决跨域问题
+        changeOrigin: true, // 解决跨域问题
         pathRewrite: {
           '^/jwt': '/jwt'
         }
@@ -36,7 +38,7 @@ module.exports = {
       },
       '/homeworkDetail': {
         target: 'http://api2.dev.anoah.com',
-        changeOrigin: true,  // 解决跨域问题
+        changeOrigin: true, // 解决跨域问题
         pathRewrite: {
           '^/homeworkDetail': '/homeworkDetail'
         }
@@ -89,10 +91,12 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, basePath + '/index.html'),
+    indexAndroid: path.resolve(__dirname, basePath + '/index-android.html'),
+    indexIos: path.resolve(__dirname, basePath + '/index-ios.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, basePath),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
 

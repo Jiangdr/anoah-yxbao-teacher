@@ -4,8 +4,8 @@
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
-            <i class="cubeic-back"></i>
-            </span>
+                <van-icon name='arrow-left'></van-icon>
+                </span>
         </van-col>
         <van-col span="20">
           <span class="text">查看统计</span>
@@ -32,25 +32,25 @@
           <van-col span="8">
             <p @click=sortBy(0) class="order" :class="{'up':sortNum==0,'down':sortNum==1}">姓名
               <span>
-                <i class="up"></i>
-                <i class="down"></i>
-                </span>
+                    <i class="up"></i>
+                    <i class="down"></i>
+                    </span>
             </p>
           </van-col>
           <van-col span="8">
             <p @click=sortBy(2) class="order" :class="{'up':sortNum==2,'down':sortNum==3}">正确率
               <span>
-                <i class="up"></i>
-                <i class="down"></i>
-                </span>
+                    <i class="up"></i>
+                    <i class="down"></i>
+                    </span>
             </p>
           </van-col>
           <van-col span="8">
             <p @click=sortBy(4) class="order" :class="{'up':sortNum==4,'down':sortNum==5}">用时
               <span>
-                <i class="up"></i>
-                <i class="down"></i>
-                </span>
+                    <i class="up"></i>
+                    <i class="down"></i>
+                    </span>
             </p>
           </van-col>
         </van-row>
@@ -64,9 +64,9 @@
             <van-col span="8">
               <p v-if="user.order_field>=3" class="correct">
                 <span>
-                    {{Math.round(user.correct_rate*100)+'%'}}</span>
-                <span class="collumn">
-                    <span class="progress-bar" :style="{width:Math.round(user.correct_rate*100)+'%'}" :class="{right:user.correct_rate===1}"></span>
+                        {{user.correct_rate =='-1' ?'--':Math.round(user.correct_rate*100)+'%'}}</span>
+                <span class="collumn" v-if="user.correct_rate!=-1">
+                        <span class="progress-bar" :style="{width:user.correct_rate>=0?Math.round(user.correct_rate*100)+'%':''}" :class="{right:user.correct_rate===1}"></span>
                 </span>
               </p>
               <p v-else>--</p>
@@ -83,17 +83,11 @@
 
 <script>
 import getStatistics from '../axios/getQuestionStatistics.js'
+import {mapState} from 'vuex'
 export default {
   name: 'tiankong',
   data() {
     return {
-      params: {
-        "course_hour_publish_id": "839002511526022900001f",
-        "course_resource_id": "9002511526022900001",
-        "qti_question_id": "9002511525946400002",
-        "dcom_entity_id": 0,
-        "qti_question_sheet": 0
-      },
       record: [],
       time: 0,
       correctRate: 0,
@@ -101,7 +95,16 @@ export default {
     }
   },
   created() {
-    getStatistics.getinfo(this.params).then((r) => {
+  },
+  activated() {
+    let param = {
+      "course_hour_publish_id": this.params.course_hour_publish_id,
+      "course_resource_id": this.params.course_resource_id,
+      "qti_question_id": this.params.source_pk_id,
+      "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
+      "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
+    }
+    getStatistics.getinfo(param).then((r) => {
       this.record = r.user;
       this.correctRate = r.average_correct_rate
       this.time = r.average_time_length
@@ -109,7 +112,9 @@ export default {
   },
   mounted() {
     // 列表默认按时间降序排列
-    setTimeout(() => { $('p.order').eq(0).trigger('click') })
+    setTimeout(() => {
+      this.sortBy(0);
+    })
   },
   computed: {
     correct() {
@@ -118,7 +123,10 @@ export default {
       } else {
         return Math.round(this.correctRate * 100) + '%'
       }
-    }
+    },
+    ...mapState({
+      'params': (state) => state.homeworkDetail.params
+    })
   },
   methods: {
     goBack() {
@@ -188,6 +196,7 @@ export default {
     height: 50px;
     box-sizing: border-box;
     background: #f7f8f8;
+    font-size: 16px;
   }
 
   .tiankong .wrapper {
@@ -225,19 +234,21 @@ export default {
     border-color: transparent transparent #cccdcd;
     margin-bottom: 5px;
   }
- .tiankong .wrapper .head .order.up i.up{
-    border-color: transparent transparent #34c988;
 
- }
+  .tiankong .wrapper .head .order.up i.up {
+    border-color: transparent transparent #34c988;
+  }
+
   .tiankong .wrapper .head .order i.down {
     border-style: solid;
     border-width: 5px 5px 0px;
     border-color: #cccdcd transparent transparent;
   }
-.tiankong .wrapper .head .order.down i.down{
-    border-color: #34c988 transparent transparent ;
 
- }
+  .tiankong .wrapper .head .order.down i.down {
+    border-color: #34c988 transparent transparent;
+  }
+
   .tiankong .wrapper>.container {
     height: calc(100% - 40px);
     overflow: scroll;
@@ -254,15 +265,22 @@ export default {
     line-height: 30px;
   }
 
+  .tiankong .wrapper>.container .content .correct .collumn {
+    width: 80%;
+  }
+
   .tiankong .wrapper>.container .content .correct .collumn,
   .tiankong .wrapper>.container .content .correct .collumn .progress-bar {
     display: inline-block;
-    width: 80%;
     height: 5px;
     margin-left: 10%;
     background: #efefef;
     border-radius: 10px;
     position: relative;
+  }
+
+  .tiankong .wrapper>.container .content .correct .collumn .progress-bar {
+    max-width: 80%;
   }
 
   .tiankong .wrapper>.container .content .correct .collumn .progress-bar {

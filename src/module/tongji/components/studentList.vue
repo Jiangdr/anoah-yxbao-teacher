@@ -44,6 +44,7 @@ export default {
     margin-top:15px;
     box-sizing: border-box;
     height: calc(100% - 50px);
+    text-align: left;
   }
  .popup-container>.container>span{
     display: inline-block;

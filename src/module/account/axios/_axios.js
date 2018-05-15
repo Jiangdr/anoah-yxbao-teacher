@@ -1,6 +1,6 @@
 'use strict'
 
-import config from '@/module/account/config/index'
+import config from '@/config/index'
 import axios from 'axios'
 import qs from 'qs'
 
@@ -48,11 +48,11 @@ export default {
     return axios({
       method: 'post',
       url,
-      data: qs.stringify(data),
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      }
+      data: qs.stringify(data)
+      // headers: {
+      //   'X-Requested-With': 'XMLHttpRequest',
+      //   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      // }
     }).then(
       (response) => {
         return responseFormat(response)
@@ -65,10 +65,10 @@ export default {
     return axios({
       method: 'get',
       url,
-      params: { 'info': JSON.stringify(params) },
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
+      params: { 'info': JSON.stringify(params) }
+      // headers: {
+      //   'X-Requested-With': 'XMLHttpRequest'
+      // }
     }).then(
       (response) => {
         return responseFormat(response)

@@ -4,7 +4,7 @@
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
-              <i class="cubeic-back"></i>
+              <van-icon name='arrow-left'></van-icon>
               </span>
         </van-col>
         <van-col span="18">
@@ -26,9 +26,9 @@
     <div class="wrapper">
       <div v-for="(item,key) in record" :key="key">
         <van-row class="item">
-          <van-col span="4" class="tc">{{key==='T'?'√':(key==='F'?'×':key)}}</van-col>
+          <van-col span="4" class="tc">{{key==='T'?'√':(key==='F'?'×':(key==='noanswer'?'未答':key))}}</van-col>
           <van-col span="20" class="right">
-            <span class="column"  :style="{width:item.count*100+'%'}" :class="{'right-answer':key==answer}" @click='item.students.length>0?toggleAllCorrec("选"+key+"的学生",item.students):""'></span>
+            <span class="column"  :style="{width:(item.count/count)*100+'%'}" :class="{'right-answer':key==answer}" @click='item.students.length>0?toggleAllCorrec("选"+key+"的学生",item.students):""'></span>
             <span class="column-info">{{item.count}}人</span>
           </van-col>
         </van-row>
@@ -41,17 +41,12 @@
 <script>
 import getStatistics from '../axios/getQuestionStatistics.js'
 import studentList from '../components/studentList.vue'
+import {mapState} from 'vuex'
+
 export default {
   name: 'danxuan',
   data() {
     return {
-      params: {
-        "course_hour_publish_id": "0c9002511525933700001f",
-        "course_resource_id": "9002511525835400002",
-        "qti_question_id": "9002511513743700068",
-        "dcom_entity_id": 0,
-        "qti_question_sheet": 0
-      },
       allCorrect: {},
       record: [],
       answer: '',
@@ -63,7 +58,16 @@ export default {
     }
   },
   created() {
-    getStatistics.getinfo(this.params).then((r) => {
+  },
+  activated() {
+    let param = {
+      "course_hour_publish_id": this.params.course_hour_publish_id,
+      "course_resource_id": this.params.course_resource_id,
+      "qti_question_id": this.params.source_pk_id,
+      "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
+      "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
+    }
+    getStatistics.getinfo(param).then((r) => {
       this.allCorrect = r.all_correct;
       this.record = r.record;
       this.answer = r.answer;
@@ -78,7 +82,17 @@ export default {
       } else {
         return Math.round(this.correctRate * 100) + '%'
       }
-    }
+    },
+    count() {
+      let num = 0;
+      for (let key in this.record) {
+        num += this.record[key].count
+      }
+      return num
+    },
+    ...mapState({
+      'params': (state) => state.homeworkDetail.params
+    })
   },
   methods: {
     goBack() {

@@ -4,7 +4,7 @@
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
-                <i class="cubeic-back"></i>
+                <van-icon name='arrow-left'></van-icon>
                 </span>
         </van-col>
         <van-col span="18">
@@ -42,17 +42,11 @@
 <script>
 import getStatistics from '../axios/getQuestionStatistics.js'
 import studentList from '../components/studentList.vue'
+import {mapState} from 'vuex'
 export default {
   name: 'wanxing',
   data() {
     return {
-      params: {
-        "course_hour_publish_id": "5a9002511522137300001f",
-        "course_resource_id": "9002511522137300002",
-        "qti_question_id": "9002511501148800001",
-        "dcom_entity_id": 0,
-        "qti_question_sheet": 0
-      },
       allCorrect: {},
       record: [],
       alias: '',
@@ -63,7 +57,16 @@ export default {
     }
   },
   created() {
-    getStatistics.getinfo(this.params).then((r) => {
+  },
+  activated() {
+    let param = {
+      "course_hour_publish_id": this.params.course_hour_publish_id,
+      "course_resource_id": this.params.course_resource_id,
+      "qti_question_id": this.params.source_pk_id,
+      "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
+      "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
+    }
+    getStatistics.getinfo(param).then((r) => {
       this.allCorrect = r.all_correct;
       this.record = r.record;
       this.alias = r.alias;
@@ -77,7 +80,10 @@ export default {
       } else {
         return Math.round(this.correctRate * 100) + '%'
       }
-    }
+    },
+    ...mapState({
+      'params': (state) => state.homeworkDetail.params
+    })
   },
   methods: {
     goBack() {
