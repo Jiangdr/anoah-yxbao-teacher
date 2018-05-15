@@ -204,7 +204,7 @@ export default {
         this.$toast("刷新成功");
         this.isLoading = false;
       }, 500);
-      this.getHomeworkList(this.columns[0].class_id, 'all');
+      this.getHomeworkList();
     },
     goHomeworkDetail(item) {
       this.$router.push({
