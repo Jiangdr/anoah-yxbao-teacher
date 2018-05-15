@@ -1,5 +1,6 @@
 <template>
   <div id="setting">
+    <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
     <van-cell-group>
       <van-cell title="缓存" value="20Mb" center />
       <van-cell title="修改密码" is-link @click="linkTo('password')"/>
@@ -10,8 +11,15 @@
 </template>
 
 <script>
+import NavBar from '@/module/user-center/components/common/navbar'
 export default {
   name: 'Setting',
+  data () {
+    return {
+      title: '设置',
+      hasBack: true
+    }
+  },
   methods: {
     linkTo (param) {
       if (param === 'password') {
@@ -19,7 +27,13 @@ export default {
       } else {
         this.$router.push({path: '/msgSetting'})
       }
+    },
+    back () {
+      this.$router.back(-1)
     }
+  },
+  components: {
+    NavBar
   }
 }
 </script>

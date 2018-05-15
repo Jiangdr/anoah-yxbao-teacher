@@ -54,6 +54,9 @@ export default {
     api.obtainInfo({
       user_id: this.userId
     }).then(succ => {
+      if (succ.avatar.indexOf('http://') === -1) {
+        succ.avatar = this.config.old + succ.avatar
+      }
       this.userInfo = succ
     })
   },

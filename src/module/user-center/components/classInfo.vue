@@ -1,5 +1,6 @@
 <template>
   <div id="class-info" style="height:100%;overflow-y:auto">
+    <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
     <div v-if="classDetail">
       <div class="teacher">
         <div class="header van-hairline--bottom">
@@ -25,11 +26,13 @@
 </template>
 <script>
 import api from '@/module/user-center/axios/usercenter'
+import NavBar from '@/module/user-center/components/common/navbar'
 export default {
   name: 'classInfo',
   data () {
-    console.log(this.config)
     return {
+      title: '班级成员',
+      hasBack: true,
       classDetail: null
     }
   },
@@ -49,6 +52,14 @@ export default {
       })
       this.classDetail = succ
     })
+  },
+  methods: {
+    back () {
+      this.$router.back(-1)
+    }
+  },
+  components: {
+    NavBar
   }
 }
 </script>
