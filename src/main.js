@@ -50,12 +50,6 @@ let app = {
   initialize: function () {
     // android壳子里
     if (navigator.userAgent.match(/CrossWalk/i)) {
-      (function () {
-        var script = document.createElement("script")
-        script.type = "text/javascript"
-        script.src = "./static/cordova-8.0.0.js"
-        document.getElementsByTagName("head")[0].appendChild(script)
-      })();
       document.addEventListener('deviceready', this.onDeviceReady.bind(this), false)
     }
     let APP = new Vue({
