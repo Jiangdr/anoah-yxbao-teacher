@@ -39,7 +39,7 @@
           </p>
         </van-col>
         <van-col span="6" class="unanswered">
-          <p @click="item.record.noanswer>0?toggleAllCorrec('未答的学生',item.record.noanswer.students):''">
+          <p @click="item.record.noanswer.count>0?toggleAllCorrec('未答的学生',item.record.noanswer.students):''">
             <span>{{item.record.noanswer?item.record.noanswer.count:0}}</span><span>未答</span>
           </p>
         </van-col>
