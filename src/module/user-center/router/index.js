@@ -8,7 +8,6 @@ import aboutUs from '@/module/user-center/components/aboutUs'
 import modifyName from '@/module/user-center/components/modifyName'
 import modifyPhone from '@/module/user-center/components/modifyPhone'
 import classInfo from '@/module/user-center/components/classInfo'
-import otherProblem from '@/module/user-center/components/otherProblem'
 import modifyPassword from '@/module/user-center/components/modifyPassword'
 import msgSetting from '@/module/user-center/components/msgSetting'
 import TeacherStudentList from '@/module/user-center/components/teacher&studentList'
@@ -84,12 +83,6 @@ export default [
     path: '/classInfo/:class_id',
     name: 'classInfo',
     component: classInfo,
-    meta: { requiresAuth: true, keepAlive: false }
-  },
-  {
-    path: '/otherProblem',
-    name: 'otherProblem',
-    component: otherProblem,
     meta: { requiresAuth: true, keepAlive: false }
   },
   {
