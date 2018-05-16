@@ -16,7 +16,7 @@ export default {
     setIsLogin (state, isLogin) {
       state.isLogin = isLogin
       // 登录成功后会话更新登录状态
-      stroage['session'].set('user.isLogin', isLogin)
+      stroage['persistent'].set('user.isLogin', isLogin)
     },
     setUsername (state, val) {
       state.username = val
@@ -50,7 +50,7 @@ export default {
       })
     },
     refreshLocalIsLogin ({state}) {
-      state.isLogin = stroage['session'].get('user.isLogin')
+      state.isLogin = stroage['persistent'].get('user.isLogin')
     }
   }
 }

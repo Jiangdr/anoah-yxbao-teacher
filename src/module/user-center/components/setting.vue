@@ -7,6 +7,8 @@
       <van-cell title="消息设置" is-link @click="linkTo('setting')"/>
       <van-cell title="检查更新" value="v1.0.0" />
     </van-cell-group>
+    <van-button class="loginout" type="primary" size="large" @click="showActionSheet = true">退出</van-button>
+    <van-actionsheet v-model="showActionSheet" :actions="actions" cancel-text="取消" />
   </div>
 </template>
 
@@ -17,7 +19,15 @@ export default {
   data () {
     return {
       title: '设置',
-      hasBack: true
+      hasBack: true,
+      showActionSheet: false,
+      actions: [
+        {
+          name: '退出登录',
+          callback: this.loginOut,
+          className: 'warning'
+        }
+      ]
     }
   },
   methods: {
@@ -30,6 +40,11 @@ export default {
     },
     back () {
       this.$router.back(-1)
+    },
+    loginOut () {
+      this.showActionSheet = false
+      localStorage.clear()
+      this.$router.push({path: '/login?redirect=/'})
     }
   },
   components: {
@@ -39,4 +54,11 @@ export default {
 </script>
 
 <style scoped>
+.loginout{
+  position: fixed;
+  bottom: 0;
+}
+.warning{
+  color: #e4393c !important;
+}
 </style>
