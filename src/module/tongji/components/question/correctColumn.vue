@@ -70,13 +70,14 @@ export default {
       "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
     }
     getStatistics.getinfo(param).then((r) => {
-      // r.all_correct ===>   连线题
+      // r.all_correct ===>   连线题、竖式题
       // r.record.allcorrect ===>   连词成句
       this.record['right'] = r.all_correct || r.record.allcorrect;
       this.record['half'] = r.all_half || r.record.halfcorrect || {};
       this.record['wrong'] = r.all_wrong || r.record.allfault;
       this.record['no'] = r.all_no_answer || r.record.noanswer;
-      this.correctRate = r.correct_rate || r.class_average_correct_rate
+      this.correctRate = r.correct_rate >= 0 ? r.correct_rate : r.class_average_correct_rate
+      console.log(r.correct_rate)
     })
   },
   computed: {
@@ -90,7 +91,6 @@ export default {
     count() {
       let num = 0;
       for (let key in this.record) {
-        console.log(this.record[key].count);
         this.record[key].count && (num += this.record[key].count)
       }
       return num
