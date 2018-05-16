@@ -86,12 +86,11 @@ export default {
     },
     camera () {
       alert(Camera.DestinationType.DATA_URL)
-       navigator.camera.getPicture(function cameraSuccess(imageUri) {
-              alert(imageUri)
-            }, function cameraError(error) {
-                console.debug("Unable to obtain picture: " + error, "app");
-
-            }, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
+      navigator.camera.getPicture(function cameraSuccess(imageUri) {
+        alert(imageUri)
+      }, function cameraError(error) {
+        console.debug("Unable to obtain picture: " + error, "app");
+      }, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
     }
   },
   beforeRouteLeave (to, from, next) {

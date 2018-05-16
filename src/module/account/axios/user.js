@@ -1,4 +1,4 @@
-import API from '@/module/account/axios/_api'
+import API from '@/axios/_api'
 
 let apis = {
   'login': '/user/logon/login', // 登录
