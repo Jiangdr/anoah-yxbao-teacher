@@ -115,10 +115,15 @@ export default {
       };
 
       if (data.deal_time && data.title && data.view_answer_time) {
+        self.$toast.loading({
+          mask: true,
+          message: '加载中...'
+        });
         api.launch(data).then(function(r) {
+          self.$toast.clear();
           self.$toast({
             message: "布置成功！",
-            duration: 1000
+            duration: 750
           });
           setTimeout(function() {
             self.$router.push({
