@@ -46,7 +46,6 @@ export default {
     };
   },
   mounted: function() {
-    console.log('aaa');
     this.getTextBookLists();
   },
   created: function() {
@@ -69,7 +68,6 @@ export default {
     getTextBookLists() {
       var self = this;
       var data = {
-        user_id: self.userInfo.userid,
         grade_id: self.activeGradeId,
         term_id: self.activeTermId
       };
