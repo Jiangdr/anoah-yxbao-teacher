@@ -1,4 +1,4 @@
-import stroage from '@/module/account/store/stroage.js'
+import stroage from '@/store/stroage.js'
 import userApi from '@/module/account/axios/user.js'
 
 export default {
