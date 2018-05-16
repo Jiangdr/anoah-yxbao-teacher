@@ -7,8 +7,8 @@ export default {
     isLogin: false,
     username: '',
     password: '',
-    userInfo: stroage['session'].get('userinfo'),
-    jwt: stroage['session'].get('jwt')
+    userInfo: stroage['persistent'].get('userinfo'),
+    jwt: stroage['persistent'].get('jwt')
   },
   getters: {
   },
@@ -43,8 +43,8 @@ export default {
         // 登录成功后持久用户名和密码
         stroage['persistent'].set('user.username', state.username)
         stroage['persistent'].set('user.password', state.password)
-        stroage['session'].set('jwt', r.jwt)
-        stroage['session'].set('userinfo', r.userinfo)
+        stroage['persistent'].set('jwt', r.jwt)
+        stroage['persistent'].set('userinfo', r.userinfo)
         commit('setIsLogin', true)
         commit('setUserInfo', r)
       })
