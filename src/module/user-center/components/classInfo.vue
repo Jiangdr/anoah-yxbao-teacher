@@ -42,12 +42,12 @@ export default {
     }).then(succ => {
       succ.teachers.forEach(item => {
         if (item.avatar.indexOf('http://') === -1) {
-          item.avatar = this.config.old + item.avatar
+          item.avatar = this.config.apiDomain.old + item.avatar
         }
       })
       succ.students.forEach(item => {
         if (item.avatar.indexOf('http://') === -1) {
-          item.avatar = this.config.old + item.avatar
+          item.avatar = this.config.apiDomain.old + item.avatar
         }
       })
       this.classDetail = succ
