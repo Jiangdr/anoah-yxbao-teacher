@@ -1,5 +1,6 @@
 <template>
   <div id="feedback">
+    <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
     <van-cell-group border>
       <van-cell @click="check(item)" center border v-for="(item,index) in msgs" :key="index" :label="item.label" :title="item.title">
         <van-icon slot="right-icon" name="checked" class="van-cell__right-icon" :class="{checked: item.isChecked}"/>
@@ -14,10 +15,13 @@
 </template>
 
 <script>
+import NavBar from '@/module/user-center/components/common/navbar'
 export default {
   name: 'Feedback',
   data () {
     return {
+      title: '问题反馈',
+      hasBack: true,
       msgs: [
         {
           title: '软件太难操作',
@@ -76,7 +80,13 @@ export default {
       setTimeout(() => {
         this.$router.back(-1)
       }, 2000)
+    },
+    back () {
+      this.$router.back(-1)
     }
+  },
+  components: {
+    NavBar
   }
 }
 </script>

@@ -1,4 +1,4 @@
-import stroage from '@/module/account/store/stroage.js'
+import stroage from '@/store/stroage.js'
 import userApi from '@/module/account/axios/user.js'
 
 export default {
@@ -7,8 +7,8 @@ export default {
     isLogin: false,
     username: '',
     password: '',
-    userInfo: stroage['session'].get('userinfo'),
-    jwt: stroage['session'].get('jwt')
+    userInfo: stroage['persistent'].get('userinfo'),
+    jwt: stroage['persistent'].get('jwt')
   },
   getters: {
   },
@@ -16,7 +16,7 @@ export default {
     setIsLogin (state, isLogin) {
       state.isLogin = isLogin
       // 登录成功后会话更新登录状态
-      stroage['session'].set('user.isLogin', isLogin)
+      stroage['persistent'].set('user.isLogin', isLogin)
     },
     setUsername (state, val) {
       state.username = val
@@ -43,14 +43,14 @@ export default {
         // 登录成功后持久用户名和密码
         stroage['persistent'].set('user.username', state.username)
         stroage['persistent'].set('user.password', state.password)
-        stroage['session'].set('jwt', r.jwt)
-        stroage['session'].set('userinfo', r.userinfo)
+        stroage['persistent'].set('jwt', r.jwt)
+        stroage['persistent'].set('userinfo', r.userinfo)
         commit('setIsLogin', true)
         commit('setUserInfo', r)
       })
     },
     refreshLocalIsLogin ({state}) {
-      state.isLogin = stroage['session'].get('user.isLogin')
+      state.isLogin = stroage['persistent'].get('user.isLogin')
     }
   }
 }

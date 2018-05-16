@@ -41,7 +41,8 @@ export default {
       userInfo: null,
       actions: [
         {
-          name: '拍照'
+          name: '拍照',
+          callback: this.camera
         },
         {
           name: '从手机相册选择'
@@ -53,6 +54,9 @@ export default {
     api.obtainInfo({
       user_id: this.userId
     }).then(succ => {
+      if (succ.avatar.indexOf('http://') === -1) {
+        succ.avatar = this.config.old + succ.avatar
+      }
       this.userInfo = succ
     })
   },
@@ -79,6 +83,8 @@ export default {
       } else {
         this.$router.push({path: `/bindPhone`})
       }
+    },
+    camera () {
     }
   },
   beforeRouteLeave (to, from, next) {

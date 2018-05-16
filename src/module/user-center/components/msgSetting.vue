@@ -1,5 +1,6 @@
 <template>
   <div id="msg-setting">
+    <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
     <van-cell-group>
       <van-switch-cell border v-model="hwMsg" title="接收作业消息"/>
       <van-switch-cell border v-model="schMsg" title="接收学校通知"/>
@@ -8,10 +9,14 @@
 </template>
 
 <script>
+import NavBar from '@/module/user-center/components/common/navbar'
 export default {
   name: 'MsgSetting',
   data () {
-    return {}
+    return {
+      title: '消息设置',
+      hasBack: true
+    }
   },
   created () {
     let notice = JSON.parse(localStorage.getItem('notice'))
@@ -46,7 +51,13 @@ export default {
         type: `userCenter/set${key}`,
         val: val
       })
+    },
+    back () {
+      this.$router.back(-1)
     }
+  },
+  components: {
+    NavBar
   }
 }
 </script>

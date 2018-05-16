@@ -1,4 +1,4 @@
-import API from '@/module/homeworkDetail/axios/_api'
+import API from '@/axios/_api'
 import config from '@/config/index.js'
 
 let apis = {

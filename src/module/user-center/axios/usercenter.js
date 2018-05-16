@@ -1,4 +1,4 @@
-import API from '@/module/user-center/axios/_api'
+import API from '@/axios/_api'
 
 let apis = {
   'info': '/jwt/users/user/info',

@@ -1,5 +1,6 @@
 <template>
   <div id="modify-password">
+    <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
     <van-field v-model.trim="oldPassword" center label="原密码" placeholder="原密码" icon="clear" @click-icon="oldPassword = ''" :error-message="oldValid"/>
     <van-field v-model.trim="newPassword" center label="新密码" placeholder="新密码" icon="clear" @click-icon="newPassword = ''"  :error-message="newValid"/>
     <van-field v-model.trim="newPassword2" center label="确认密码" placeholder="确认密码" icon="clear" @click-icon="newPassword2 = ''" :error-message="newValid2"/>
@@ -9,12 +10,15 @@
 
 <script>
 import api from '@/module/user-center/axios/usercenter'
+import NavBar from '@/module/user-center/components/common/navbar'
 import {mapGetters} from 'vuex'
 import {Toast} from 'vant'
 export default {
   name: 'ModifyPassword',
   data () {
     return {
+      title: '修改密码',
+      hasBack: true,
       oldPassword: '',
       newPassword: '',
       newPassword2: '',
@@ -63,7 +67,13 @@ export default {
           this.$router.push({path: '/login?redirect=/user-center'})
         }, 2000)
       })
+    },
+    back () {
+      this.$router.back(-1)
     }
+  },
+  components: {
+    NavBar
   }
 }
 </script>

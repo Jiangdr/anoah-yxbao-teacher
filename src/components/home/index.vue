@@ -74,7 +74,7 @@ export default {
     go (type) {
       // 代码走本地
       let localCode = window.location.protocol === 'file:';
-      let localUrl = 'file:///android_asset/www/';
+      let localUrl = 'www/';
       let href = '';
       let userInfo = JSON.parse(localStorage.getItem('user'))
       // 互动课堂
@@ -96,6 +96,7 @@ export default {
               lasthref: window.location.href
             });
             let baseUrl = localCode ? localUrl + "TP/index.html" : this.config.origin + '/ebag/iclass/teacher2/index.html'
+            alert(baseUrl)
             // let baseUrl = 'http://192.168.41.157/company/ebag/iclass/teacher2/index.html'
             href = baseUrl + "?param=" + encodeURIComponent(param);
             if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
@@ -115,11 +116,12 @@ export default {
         let param = JSON.stringify({
           userid: parseInt(this.$store.state.account.userInfo.userid),
           domain: 'http://e.dev.anoah.com',
-          domain_icom: 'file:///android_asset/www/QA',
+          domain_icom: 'www/QA',
           status: 1,
           lasthref: window.location.href
         });
         let baseUrl = localCode ? localUrl + "QA/index.html" : this.config.origin + '/qa/www/index.html'
+        alert(baseUrl)
         href = baseUrl + "?param=" + encodeURIComponent(param);
         if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
           window.TeacherUtil.loadUrl(href);

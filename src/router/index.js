@@ -12,12 +12,7 @@ import homeworkDetail from '@/module/homeworkDetail/router'
 import userCenter from '@/module/user-center/router'
 import home from '@/components/home/index'
 import list from '@/components/home/list'
-import homework from '@/components/homework/homework'
-import publishHomework from '@/components/publishHomework/publishHomework'
-import chooseTextbook from '@/components/publishHomework/chooseTextbook'
-import summerHomework from '@/components/publishHomework/summerHomework'
-import examExercise from '@/components/publishHomework/examExercise'
-import homeworkPublishSetting from '@/components/publishHomework/homeworkPublishSetting'
+import homeworkRoutes from '@/components/homework/homework.route'
 Vue.use(Router)
 let routes = [
   {
@@ -32,42 +27,7 @@ let routes = [
     component: list,
     meta: { requiresAuth: true, keepAlive: false }
   },
-  {
-    path: '/homework',
-    name: 'Homework',
-    component: homework,
-    meta: { requiresAuth: true, keepAlive: false }
-  },
-  {
-    path: '/publishHomework',
-    name: 'PublishHomework',
-    component: publishHomework,
-    meta: { requiresAuth: true, keepAlive: false }
-  },
-  {
-    path: '/chooseTextbook',
-    name: 'ChooseTextbook',
-    component: chooseTextbook,
-    meta: { requiresAuth: true, keepAlive: false }
-  },
-  {
-    path: '/summerHomework',
-    name: 'SummerHomework',
-    component: summerHomework,
-    meta: { requiresAuth: true, keepAlive: false }
-  },
-  {
-    path: '/examExercise',
-    name: 'ExamExercise',
-    component: examExercise,
-    meta: { requiresAuth: true, keepAlive: false }
-  },
-  {
-    path: '/homeworkPublishSetting',
-    name: 'HomeworkPublishSetting',
-    component: homeworkPublishSetting,
-    meta: { requiresAuth: true, keepAlive: false }
-  }
+  ...homeworkRoutes
 ]
 routes = routes.concat(account).concat(userCenter).concat(account, correction, notice, tongji, homeworkDetail)
 let router = new Router({

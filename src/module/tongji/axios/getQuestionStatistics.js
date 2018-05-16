@@ -1,4 +1,4 @@
-import API from '@/module/tongji/axios/_api'
+import API from '@/axios/_api'
 
 let apis = {
   'statistics': '/api/?q=json/ebag/Statistics/QuestionStatistics/getQuestionStatistics&h=1', // 单题统计
