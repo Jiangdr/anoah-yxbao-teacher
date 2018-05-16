@@ -4,10 +4,10 @@
       <div class="type">
         <van-row>
           <van-col span="8" offset="16">
-            <span @click="toggleOrdertype('list')">
+            <span @click="toggleOrdertype('list')" :class='{active:ordertype==="list"}'>
                         <van-icon name="wap-nav" ></van-icon>
                       </span>
-            <span @click="toggleOrdertype('column')">
+            <span @click="toggleOrdertype('column')" :class='{active:ordertype==="column"}'>
                         <van-icon name="exchange" ></van-icon>
                       </span>
           </van-col>
@@ -132,7 +132,9 @@ export default {
   .order-student .type {
     background: #efefef;
   }
-
+.order-student .type span.active{
+  color:#06bb9c;
+}
   .order-student .head {
     border-bottom: 1px solid #eaeaea;
     background: #fff;

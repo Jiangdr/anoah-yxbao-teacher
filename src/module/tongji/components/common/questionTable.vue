@@ -15,7 +15,7 @@
       class="item"
     >
       <van-row>
-        <van-col span="12">{{item.content}}</van-col>
+        <van-col span="12">{{item.content||item.name}}</van-col>
         <van-col span="12">
           <p>
             <span>{{itemCorrect(item.correct_rate)}}</span>

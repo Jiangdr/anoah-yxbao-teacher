@@ -16,7 +16,7 @@
     <div class="title-bar">
       <van-row>
         <van-col span="8">
-          <span>{{params.qti_question_type_name}}</span>
+          <span>{{params.qti_question_type_name||params.name}}</span>
         </van-col>
         <van-col span="8">
           平均用时：{{time}}秒

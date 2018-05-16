@@ -11,6 +11,8 @@ import choiceTable from '@/module/tongji/components/question/choiceTable.vue'
 import hanzitingxie from '@/module/tongji/components/question/hanzitingxie.vue'
 // 主观题  例：主观填空
 import correctColumn from '@/module/tongji/components/question/correctColumn.vue'
+// 组件详情
+import groupDetail from '@/module/tongji/components/question/groupDetail.vue'
 
 export default
 [{ path: '/tongji',
@@ -45,6 +47,11 @@ export default
     path: '/correctColumn',
     name: 'correctColumn',
     component: correctColumn,
+    meta: { requiresAuth: false, keepAlive: true }
+  }, {
+    path: '/groupDetail',
+    name: 'groupDetail',
+    component: groupDetail,
     meta: { requiresAuth: false, keepAlive: true }
   }
   ]

@@ -35,7 +35,8 @@
             </van-col>
           </van-row>
         </div>
-        <question v-if="orderName=='question'" :resource="resource"></question>
+        <group-word v-if="orderName=='question'&&params.icom_id=='5018'" :resource="resource" :user="user"></group-word>
+        <question v-else-if="orderName=='question'" :resource="resource" ></question>
         <student v-if="orderName=='student'" :user="user" :columnData="columnData"></student>
       </div>
     </div>
@@ -45,6 +46,7 @@
 <script>
 import getStatistics from '../../axios/getQuestionStatistics.js'
 import question from '../common/questionTable.vue'
+import groupWord from '../common/groupWord.vue'
 import student from '../common/studentTable.vue'
 
 import {mapState} from 'vuex'
@@ -109,7 +111,7 @@ export default {
 
   },
   components: {
-    student, question
+    student, question, groupWord
   }
 }
 </script>

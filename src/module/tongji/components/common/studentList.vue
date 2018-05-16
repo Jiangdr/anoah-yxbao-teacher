@@ -26,6 +26,8 @@ export default {
         return '选X的学生'
       } else if (this.title === '选T的学生') {
         return '选√的学生'
+      } else if (this.title === '选noanswer的学生') {
+        return '未答的学生'
       } else {
         return this.title
       }
