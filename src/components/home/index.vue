@@ -95,7 +95,7 @@ export default {
               userInfo: userInfo,
               lasthref: window.location.href
             });
-            let baseUrl = localCode ? localUrl + "TP/index.html" : this.config.origin + '/ebag/iclass/teacher2/index.html'
+            let baseUrl = localCode ? localUrl + "TP/index.html" : this.config.apiDomain.old + '/ebag/iclass/teacher2/index.html'
             alert(baseUrl)
             // let baseUrl = 'http://192.168.41.157/company/ebag/iclass/teacher2/index.html'
             href = baseUrl + "?param=" + encodeURIComponent(param);
@@ -120,7 +120,7 @@ export default {
           status: 1,
           lasthref: window.location.href
         });
-        let baseUrl = localCode ? localUrl + "QA/index.html" : this.config.origin + '/qa/www/index.html'
+        let baseUrl = localCode ? localUrl + "QA/index.html" : this.config.apiDomain.old + '/qa/www/index.html'
         alert(baseUrl)
         href = baseUrl + "?param=" + encodeURIComponent(param);
         if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
