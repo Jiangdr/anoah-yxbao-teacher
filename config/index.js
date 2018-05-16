@@ -13,49 +13,49 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/user': {
-        target: 'http://api2.dev.anoah.com',
-        changeOrigin: true, // 解决跨域问题
-        pathRewrite: {
-          '^/user': '/user'
-        }
-      },
-      '/jwt': {
-        target: 'http://api2.dev.anoah.com',
-        changeOrigin: true, // 解决跨域问题
-        pathRewrite: {
-          '^/jwt': '/jwt'
-        }
-      },
-      '/': {
-        target: 'http://e.dev.anoah.com'
-      },
-      '/api': {
-        target: 'http://e.dev.anoah.com',
-        pathRewrite: {
-          '^/api': '/api'
-        }
-      },
-      '/homeworkDetail': {
-        target: 'http://api2.dev.anoah.com',
-        changeOrigin: true, // 解决跨域问题
-        pathRewrite: {
-          '^/homeworkDetail': '/homeworkDetail'
-        }
-      },
-      '/api_cache': {
-        target: 'http://e.dev.anoah.com',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api_cache': '/api_cache'
-        }
-      }
-      // '/api_dist': {
-      //   target: 'http://e.dev.anoah.com',
-      //   pathRewrite: {
-      //     '^/api_dist': '/api_dist'
+      //   '/user': {
+      //     target: 'http://api2.dev.anoah.com',
+      //     changeOrigin: true, // 解决跨域问题
+      //     pathRewrite: {
+      //       '^/user': '/user'
+      //     }
+      //   },
+      //   '/jwt': {
+      //     target: 'http://api2.dev.anoah.com',
+      //     changeOrigin: true, // 解决跨域问题
+      //     pathRewrite: {
+      //       '^/jwt': '/jwt'
+      //     }
+      //   },
+      //   '/': {
+      //     target: 'http://e.dev.anoah.com'
+      //   },
+      //   '/api': {
+      //     target: 'http://e.dev.anoah.com',
+      //     pathRewrite: {
+      //       '^/api': '/api'
+      //     }
+      //   },
+      //   '/homeworkDetail': {
+      //     target: 'http://api2.dev.anoah.com',
+      //     changeOrigin: true, // 解决跨域问题
+      //     pathRewrite: {
+      //       '^/homeworkDetail': '/homeworkDetail'
+      //     }
+      //   },
+      //   '/api_cache': {
+      //     target: 'http://e.dev.anoah.com',
+      //     changeOrigin: true,
+      //     pathRewrite: {
+      //       '^/api_cache': '/api_cache'
+      //     }
       //   }
-      // },
+      //   // '/api_dist': {
+      //   //   target: 'http://e.dev.anoah.com',
+      //   //   pathRewrite: {
+      //   //     '^/api_dist': '/api_dist'
+      //   //   }
+      //   //   },
     },
 
     // Various Dev Server settings
@@ -75,8 +75,8 @@ module.exports = {
     showEslintErrorsInOverlay: false,
 
     /**
-     * Source Maps
-     */
+   * Source Maps
+   */
 
     // https://webpack.js.org/configuration/devtool/#development
     devtool: 'cheap-module-eval-source-map',
@@ -102,8 +102,8 @@ module.exports = {
     assetsPublicPath: './',
 
     /**
-     * Source Maps
-     */
+                 * Source Maps
+                 */
 
     productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production

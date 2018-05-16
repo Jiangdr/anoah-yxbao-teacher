@@ -40,6 +40,12 @@ let router = new Router({
 })
 // 全局跳转
 router.beforeEach((to, from, next) => {
+  // 没定义的路由，跳到/
+  if (to.name === null) {
+    next({
+      path: '/'
+    })
+  }
   // console.log('to=>', to, 'from=>', from)
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // 检查state的isLogin
