@@ -27,9 +27,14 @@ let routes = [
     component: list,
     meta: { requiresAuth: true, keepAlive: false }
   },
-  ...homeworkRoutes
+  ...homeworkRoutes,
+  ...userCenter,
+  ...account,
+  ...correction,
+  ...notice,
+  ...tongji,
+  ...homeworkDetail
 ]
-routes = routes.concat(account).concat(userCenter).concat(account, correction, notice, tongji, homeworkDetail)
 let router = new Router({
   routes: routes
 })

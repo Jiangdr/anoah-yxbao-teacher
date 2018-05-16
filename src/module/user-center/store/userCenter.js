@@ -7,7 +7,7 @@ export default {
   },
   getters: {
     userId (state, getters, rootState) {
-      return rootState.account.userInfo.userid
+      return rootState.account.userInfo && rootState.account.userInfo.userid
     }
   },
   mutations: {

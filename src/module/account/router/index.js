@@ -25,7 +25,6 @@ export default [
   },
   {
     path: '/contactUs',
-    name: 'contactUs',
     component: ContactUs,
     children: [
       {
@@ -38,7 +37,7 @@ export default [
         path: 'schoolSearch/:cityId',
         name: 'schoolSearch',
         component: SchoolSearch,
-        meta: { requiresAuth: false, keepAlive: false }
+        meta: { requiresAuth: false, keepAlive: true }
       }
     ],
     meta: { requiresAuth: false, keepAlive: true }

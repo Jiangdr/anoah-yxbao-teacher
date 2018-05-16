@@ -35,7 +35,7 @@ export default {
       })
     }
   },
-  mounted () {
+  activated () {
     api.schoolList({
       city_id: this.$route.params.cityId
     }).then(succ => {
