@@ -298,11 +298,12 @@ export default {
         // 主观填空统计页面
       } else if (type === 5) {
         name = "Subjective";
-      } else if (type === 9 || type === 21) {
+        // 连线题、连词成句、加法竖式、减法竖式、乘法竖式、除法竖式
+      } else if (type === 9 || type === 21 || type === 23 || type === 24 || type === 25 || type === 26) {
         name = "correctColumn";
       } else if (type === 11) {
         name = "choiceTable";
-      } else if (parseInt(curr.icom_id) === 5009) {
+      } else if (parseInt(curr.icom_id) || type === 17) {
         name = "hanzitingxie";
       }
       this.$router.push({

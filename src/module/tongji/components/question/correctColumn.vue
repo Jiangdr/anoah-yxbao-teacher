@@ -73,7 +73,7 @@ export default {
       // r.all_correct ===>   连线题
       // r.record.allcorrect ===>   连词成句
       this.record['right'] = r.all_correct || r.record.allcorrect;
-      this.record['half'] = r.all_half || {};
+      this.record['half'] = r.all_half || r.record.halfcorrect || {};
       this.record['wrong'] = r.all_wrong || r.record.allfault;
       this.record['no'] = r.all_no_answer || r.record.noanswer;
       this.correctRate = r.correct_rate || r.class_average_correct_rate
