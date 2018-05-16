@@ -2,7 +2,7 @@
 <div class="correction">
   <div class="title border-bottom-1px">
         <span class="back" @click="goBack">
-          <i class="cubeic-back"></i>
+          <van-icon name="arrow-left"></van-icon>
           <span>返回</span>
         </span>
         <span class="text">纠错</span>
@@ -102,6 +102,7 @@ export default {
   text-align: center;
   line-height: 50px;
   height: 50px;
+  padding:0 13px;
 }
 
 .correction > .title .back {
@@ -129,7 +130,7 @@ export default {
 
 .correction > .classify {
   text-align: center;
-  padding: 20px 0 10px;
+  padding: 18px 13px 15px;
 }
 
 .correction > .classify .van-col {

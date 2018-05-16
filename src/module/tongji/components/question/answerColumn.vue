@@ -16,7 +16,7 @@
     <div class="title-bar">
       <van-row>
         <van-col span="6">
-          <span>{{params.qti_question_type_name}}</span>
+          <span>{{params.qti_question_type_name||params.name}}</span>
         </van-col>
         <van-col span="18" class="info-right">
           正确率：<span class="correct">{{correct}}</span>
