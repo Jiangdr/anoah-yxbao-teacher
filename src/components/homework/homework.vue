@@ -102,14 +102,14 @@ export default {
     var mNow = nowdate.getMonth() + 1;
     var dNow = nowdate.getDate();
     var formatnowdate = yNow + '-' + mNow + '-' + dNow;
-    // $("#enddate").datebox("setValue",formatnowdate);
+
     // 获取系统前一周的时间
     var oneweekdate = new Date(nowdate - 7 * 24 * 3600 * 1000);
     var yWeek = oneweekdate.getFullYear();
     var mWeek = oneweekdate.getMonth() + 1;
     var dWeek = oneweekdate.getDate();
     var formatWeekdate = yWeek + '-' + mWeek + '-' + dWeek;
-    // $("#fdate").datebox("setValue",formatwdate);
+
     // 获取系统前一个月的时间
     nowdate.setMonth(nowdate.getMonth() - 1);
     var yOneMonth = nowdate.getFullYear();
@@ -117,12 +117,12 @@ export default {
     var dOneMonth = nowdate.getDate();
     var formatOneMonthdate = yOneMonth + '-' + mOneMonth + '-' + dOneMonth;
 
+    // 获取系统前三个月的时间
     nowdate.setMonth(nowdate.getMonth() - 2);
     var yThreeMonth = nowdate.getFullYear();
     var mThreeMonth = nowdate.getMonth() + 1;
     var dThreeMonth = nowdate.getDate();
     var formatThreeMonthdate = yThreeMonth + '-' + mThreeMonth + '-' + dThreeMonth;
-    // $("#fdate").datebox("setValue",formatwdate);
     this.columnsOfTime = [
       {
         text: '全部',
