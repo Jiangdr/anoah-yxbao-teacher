@@ -15,6 +15,9 @@
   <body ontouchstart>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-    <script><%= htmlWebpackPlugin.options.version %></script>
+    <script>
+       window.shell = 'ios';
+    <%= htmlWebpackPlugin.options.version %>
+    </script>
   </body>
 </html>

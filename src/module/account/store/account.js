@@ -5,8 +5,8 @@ export default {
   namespaced: true,
   state: {
     isLogin: false,
-    username: '',
-    password: '',
+    username: 'zh1234',
+    password: '111111',
     userInfo: stroage['persistent'].get('userinfo'),
     jwt: stroage['persistent'].get('jwt')
   },
