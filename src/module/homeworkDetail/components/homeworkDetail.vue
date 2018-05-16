@@ -181,7 +181,8 @@ export default {
       },
       homeworkInfo: {}, // 作业信息
       resourceList: [], // 作业列表
-      studentList: [], // 班级学生完成情况
+      studentList: [], // 班级学生完成情况，
+      correct: -1,
       activeBtn: "homework", // content内容显示
       showTips: false, // 提示遮罩层
       urge: false, // 催交作业遮罩层
@@ -197,6 +198,7 @@ export default {
     homeworkDetil.getinfo(this.params).then(r => {
       this.homeworkInfo = r;
       this.studentList = r.student_list;
+      this.correct = r.class_average_correct_rate
     });
     homeworkDetil.getResourceList(this.params).then(d => {
       this.resourceList = d.list;
@@ -210,14 +212,14 @@ export default {
     // }),
     classCorrect() {
       if (
-        this.homeworkInfo.class_average_correct_rate === "" ||
-          this.homeworkInfo.class_average_correct_rate === -1
+        this.correct === "" ||
+          this.correct === -1
       ) {
         return "--";
       } else {
-        return this.homeworkInfo.class_average_correct_rate === 0
+        return this.correct === 0
           ? 0
-          : Math.round(this.homeworkInfo.class_average_correct_rate * 100) +
+          : Math.round(this.correct * 100) +
             "%";
       }
     },
