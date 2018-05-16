@@ -8,6 +8,6 @@ let apis = {
 let iclass = new API(apis)
 
 iclass.judgeIclassLive = (params) => {
-  return iclass.fetch(iclass.apis.iclassLiveTeacher, params, 'get', {'api': 'old'})
+  return iclass.fetch(iclass.apis.iclassLiveTeacher, params, 'get', {api: 'old'})
 }
 export default iclass
