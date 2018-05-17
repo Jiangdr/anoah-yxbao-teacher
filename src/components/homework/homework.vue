@@ -5,19 +5,19 @@
     <header class="header">
       <h1>作业</h1>
       <i class="cubeic-back" @click="goHome">
-        <i class="fa fa-angle-left"></i> 返回
+        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
       </i>
     </header>
 
     <div class="select-container">
       <span class="select-span">
-        <div class="select-span-div" @click="clickClass">班级<i class="fa fa-sort-down"></i></div>
+        <div class="select-span-div" @click="clickTime">时间<i class="fa fa-angle-down"></i></div>
       </span>
       <span class="select-span">
-        <div class="select-span-div" @click="clickStatus">状态<i class="fa fa-sort-down"></i></div>
+        <div class="select-span-div" @click="clickStatus">状态<i class="fa fa-angle-down"></i></div>
       </span>
       <span class="select-span">
-        <div class="select-span-div" @click="clickTime">时间<i class="fa fa-sort-down"></i></div>
+        <div class="select-span-div" @click="clickClass">班级<i class="fa fa-angle-down"></i></div>
       </span>
     </div>
 
@@ -257,7 +257,6 @@ export default {
       };
 
       api.homeworkLists(data).then(function(r) {
-        console.log(r);
         self.homeworkListArray = self.homeworkListArray.concat(r.lists);
         self.currentPage = Number(r.page);
         self.totalPage = Number(r.total_count);
@@ -285,11 +284,9 @@ export default {
 .select-span-div {
   padding: 10px;
   border-radius: 2px;
-  border: 1px solid #ccc;
   font-size: 14px;
   line-height: 1.429;
   color: #666;
-  background-color: #fff;
   position: relative;
   box-sizing: border-box;
 }
@@ -312,6 +309,7 @@ export default {
 .select-container {
   display: flex;
   justify-content: space-between;
+  background-color: #fff;
 }
 .homework_list_inline_list {
   line-height: 25px;
