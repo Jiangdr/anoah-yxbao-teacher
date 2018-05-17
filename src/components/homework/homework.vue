@@ -21,16 +21,27 @@
       </span>
     </div>
 
+    <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;">
+      共{{totalCountNum}}个作业&nbsp;&nbsp;<span style="color: red;">{{countNum}}</span>个待批改
+    </div>
+
     <div class="listContainer" v-bind:style="listContainerStyle">
       <van-pull-refresh v-model="pullRefresIsLoading" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" @load="loadMore" :offset="300" :immediate-check="false">
           <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
-            <div>
-              <div class="homework_list_inline_list"><span style="font-size:20px;font-weight:700;">{{item.title}}</span>&nbsp;&nbsp;<span class="font-color">{{item.resource_count}}份</span></div>
+            <div class="listContainerLeft">
+              <div class="homework_list_inline_list"><span style="font-size:18px;font-weight:700;">{{item.title}}</span>&nbsp;&nbsp;<span class="font-color">{{item.resource_count}}份</span></div>
               <div class="homework_list_inline_list font-color">{{item.edu_subject_name}}&nbsp;&nbsp;&nbsp;{{item.class_name}}</div>
               <div class="homework_list_inline_list"><span class="font-color">完成：</span><span style="color:#2ec2a9;font-size:22px;">{{item.finished_counter}}</span><span class="font-color">/{{item.student_counter}}人</span></div>
               <div class="homework_list_inline_list font-color" style="font-size: 14px;"><span class="font-color">截止：</span>{{item.deadline}}</div>
             </div>
+            <div class="listContainerRight">
+              正确率:&nbsp;&nbsp;&nbsp;
+                <span class="font-color" style="font-size:28px;color: #2ec2a9">{{item.right_rate >= 0 ? item.right_rate*100 : '--'}}</span>
+                <span v-if="item.right_rate > 0" style="font-size:16px;color: #2ec2a9">%</span>
+                <i class="fa fa-angle-right arrow-right"></i>
+            </div>
+            <div style="clear:both;"></div>
           </div>
         </van-list>
 
@@ -94,7 +105,9 @@ export default {
           text: "已批改",
           value: "finish"
         }
-      ]
+      ],
+      countNum: 0,
+      totalCountNum: 0
     };
   },
   created: function() {
@@ -261,6 +274,8 @@ export default {
         self.currentPage = Number(r.page);
         self.totalPage = Number(r.total_count);
         self.loading = false;
+        self.countNum = r.count;
+        self.totalCountNum = r.total_count;
         //  self.$nextTick(_ => {
         // self.loading = false
         // })
@@ -277,8 +292,21 @@ export default {
   background: #fff;
   width: 91%;
   margin: 0 auto;
+  margin-top: 10px;
   margin-bottom: 10px;
   border-radius: 4px;
+  position: relative;
+}
+.listContainerLeft {
+  width: 58%;
+  display: inline-block;
+}
+.listContainerRight {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: 40%;
 }
 .select-span {
   width: 60px;
@@ -289,7 +317,6 @@ export default {
   border-radius: 2px;
   font-size: 14px;
   line-height: 1.429;
-  color: #666;
   position: relative;
   box-sizing: border-box;
 }
@@ -313,7 +340,7 @@ export default {
   display: flex;
   justify-content: space-between;
   background-color: #fff;
-  margin-bottom: 8px;
+  border-bottom: 1px solid #ededf0;
 }
 .homework_list_inline_list {
   line-height: 25px;
@@ -322,6 +349,11 @@ export default {
   overflow-y: auto;
 }
 .font-color {
+  color: #989ca0;
+}
+.arrow-right {
+  font-size:36px;
+  float:right;
   color: #989ca0;
 }
 </style>
