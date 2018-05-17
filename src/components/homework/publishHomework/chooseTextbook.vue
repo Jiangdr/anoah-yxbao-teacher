@@ -100,10 +100,10 @@ export default {
   line-height: 35px;
 }
 .activeTabClass {
-  color: #09b783;
+  color: #2ec2a9;
 }
 .activeRightTabClass {
-  background-color: #09b783;
+  background-color: #2ec2a9;
   color: #ffffff;
 }
 </style>

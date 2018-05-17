@@ -26,10 +26,10 @@
         <van-list v-model="loading" :finished="finished" @load="loadMore" :offset="300" :immediate-check="false">
           <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
             <div>
-              <div class="homework_list_inline_list">{{item.start_time}}</div>
-              <div class="homework_list_inline_list">{{item.title}}</div>
-              <div class="homework_list_inline_list">{{item.edu_subject_name}} {{item.class_name}}</div>
-              <div class="homework_list_inline_list">截止：{{item.deadline}}</div>
+              <div class="homework_list_inline_list"><span style="font-size:20px;font-weight:700;">{{item.title}}</span>&nbsp;&nbsp;<span class="font-color">{{item.resource_count}}份</span></div>
+              <div class="homework_list_inline_list font-color">{{item.edu_subject_name}}&nbsp;&nbsp;&nbsp;{{item.class_name}}</div>
+              <div class="homework_list_inline_list"><span class="font-color">完成：</span><span style="color:#2ec2a9;font-size:22px;">{{item.finished_counter}}</span><span class="font-color">/{{item.student_counter}}人</span></div>
+              <div class="homework_list_inline_list font-color" style="font-size: 14px;"><span class="font-color">截止：</span>{{item.deadline}}</div>
             </div>
           </div>
         </van-list>
@@ -253,7 +253,7 @@ export default {
         from: self.chooseTime.from,
         to: self.chooseTime.to,
         page: self.currentPage,
-        per_page: 5
+        per_page: 7
       };
 
       api.homeworkLists(data).then(function(r) {
@@ -272,10 +272,13 @@ export default {
 
 <style scoped>
 .homework_list {
-  margin-top: 5px;
-  padding: 7px;
+  margin-top: 1.33333vw;
+  padding: 1.86667vw;
   background: #fff;
-  border-bottom: 1px solid #111;
+  width: 91%;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  border-radius: 4px;
 }
 .select-span {
   width: 60px;
@@ -299,7 +302,7 @@ export default {
 .publishHomeworkBtnDiv {
   width: 50px;
   height: 50px;
-  background-color: #09b783;
+  background-color: #2ec2a9;
   border-radius: 25px;
   position: absolute;
   bottom: 20px;
@@ -310,11 +313,15 @@ export default {
   display: flex;
   justify-content: space-between;
   background-color: #fff;
+  margin-bottom: 8px;
 }
 .homework_list_inline_list {
   line-height: 25px;
 }
 .listContainer {
   overflow-y: auto;
+}
+.font-color {
+  color: #989ca0;
 }
 </style>
