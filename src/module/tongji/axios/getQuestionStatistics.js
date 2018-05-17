@@ -7,9 +7,9 @@ let apis = {
 
 let questionStatistics = new API(apis)
 questionStatistics.getinfo = (params) => {
-  return questionStatistics.fetch(questionStatistics.apis.statistics, params, 'get')
+  return questionStatistics.fetch(questionStatistics.apis.statistics, params, 'get', {'api': 'old'})
 }
 questionStatistics.getIcomInfo = (params) => {
-  return questionStatistics.fetch(questionStatistics.apis.icomStatistics, params, 'get')
+  return questionStatistics.fetch(questionStatistics.apis.icomStatistics, params, 'get', {'api': 'old'})
 }
 export default questionStatistics
