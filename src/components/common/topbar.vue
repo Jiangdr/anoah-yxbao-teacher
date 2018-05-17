@@ -14,7 +14,10 @@ export default {
   },
   methods: {
     goBack () {
-      this.$router.go(-1)
+      // this.$router.go(-1)
+      if (window.TeacherUtil) {
+        window.TeacherUtil.quitAsk()
+      }
     }
   }
 

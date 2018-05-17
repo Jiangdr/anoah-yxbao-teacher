@@ -1,6 +1,6 @@
 <template>
   <div class="spa">
-    <topbar title="首页" text="">
+    <topbar title="首页" text="" >
       <van-icon class="icon" name="sign" @click="message" />
       <van-icon class="icon" name="search" @click="scan" />
     </topbar>
@@ -119,17 +119,15 @@ export default {
           status: 1,
           lasthref: 'HW/index-ios.html'
         });
-        let a = window.location.href.split('#')[0];
-        let baseUrl = a + "/../../QA/index-" + window.shell + ".html";
+        let href = window.location.href.split('#')[0];
+        let baseUrl = href + "/../../QA/index" + (window.platform ? '-' + window.platform : '') + ".html";
         alert(baseUrl)
         href = baseUrl + "?param=" + encodeURIComponent(param);
-        /*
         if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
           window.TeacherUtil.loadUrl(href);
           return;
         }
         window.location.href = href;
-        */
         // cordova.exec(null, null, "HaleyPlugin", "startNewHtmlWithURL", [href]);
       }
     },
