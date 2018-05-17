@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0">
-    <script src="http://192.168.41.130/vue/qti/qtivue/qtivue.js"></script>
-    <link rel="stylesheet" href="http://192.168.41.130/vue/qti/qtivue/qtivue.css">
-    <script src="http://192.168.41.130/vue/qti/qtivue/anoahim.js"></script>
-    <script src="http://192.168.41.130/vue/qti/qtivue/mp3player.js"></script>
-    <script src="http://192.168.41.130/vue/qti/qtivue/tcplayer.js"></script>
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://*  cdvfile://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' 'unsafe-eval'; media-src *; img-src 'self' http://* data: content:;"> -->
-    <title>教师端</title>
-  </head>
-  <body ontouchstart>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-    <script><%= htmlWebpackPlugin.options.version %></script>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0">
+  <script src="http://192.168.41.130/vue/qti/qtivue/qtivue.js"></script>
+  <link rel="stylesheet" href="http://192.168.41.130/vue/qti/qtivue/qtivue.css">
+  <script src="http://192.168.41.130/vue/qti/qtivue/anoahim.js"></script>
+  <script src="http://192.168.41.130/vue/qti/qtivue/mp3player.js"></script>
+  <script src="http://192.168.41.130/vue/qti/qtivue/tcplayer.js"></script>
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://*  cdvfile://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' 'unsafe-eval'; media-src *; img-src 'self' http://* data: content:;"> -->
+  <title>教师端</title>
+</head>
+
+<body ontouchstart>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+  <script>
+    window.shell = 'pc';
+    <%= htmlWebpackPlugin.options.version %>
+  </script>
+</body>
+
 </html>

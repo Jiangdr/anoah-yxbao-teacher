@@ -73,7 +73,6 @@ export default {
 
     go (type) {
       // 代码走本地
-      let localCode = window.location.protocol === 'file:';
       let localUrl = 'www/';
       let href = '';
       let userInfo = JSON.parse(localStorage.getItem('user'))
@@ -95,7 +94,7 @@ export default {
               userInfo: userInfo,
               lasthref: window.location.href
             });
-            let baseUrl = localCode ? localUrl + "TP/index.html" : this.config.origin + '/ebag/iclass/teacher2/index.html'
+            let baseUrl = localCode ? localUrl + "TP/index.html" : this.config.apiDomain.old + '/ebag/iclass/teacher2/index.html'
             alert(baseUrl)
             // let baseUrl = 'http://192.168.41.157/company/ebag/iclass/teacher2/index.html'
             href = baseUrl + "?param=" + encodeURIComponent(param);
@@ -120,7 +119,8 @@ export default {
           status: 1,
           lasthref: window.location.href
         });
-        let baseUrl = localCode ? localUrl + "QA/index.html" : this.config.origin + '/qa/www/index.html'
+        let a = window.location.href.split('#')[0];
+        let baseUrl = a + "/../../QA/index-" + window.shell + ".html";
         alert(baseUrl)
         href = baseUrl + "?param=" + encodeURIComponent(param);
         if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
