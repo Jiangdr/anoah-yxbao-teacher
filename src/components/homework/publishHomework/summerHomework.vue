@@ -131,6 +131,6 @@ export default {
 
 <style scoped>
 .activeTabClass {
-  color: #fc9153;
+  color: #09b783;
 }
 </style>

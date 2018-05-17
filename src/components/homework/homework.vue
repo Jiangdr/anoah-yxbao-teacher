@@ -302,11 +302,12 @@ export default {
 .publishHomeworkBtnDiv {
   width: 50px;
   height: 50px;
-  background-color: #fc9153;
+  background-color: #09b783;
   border-radius: 25px;
   position: absolute;
   bottom: 20px;
   right: 20px;
+  color: #ffffff;
 }
 .select-container {
   display: flex;
