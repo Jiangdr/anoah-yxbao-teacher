@@ -1,5 +1,6 @@
 <template>
   <div class="cube-page cube-view button-view">
+    <!-- <div> -->
 
     <header class="header">
       <h1>作业</h1>
@@ -10,29 +11,28 @@
 
     <div class="select-container">
       <span class="select-span">
-        <!-- <cube-select :options="options" placeholder="班级" title="班级"></cube-select> -->
         <div class="select-span-div" @click="clickClass">班级<i class="fa fa-sort-down"></i></div>
       </span>
       <span class="select-span">
-        <!-- <cube-select :options="options" placeholder="状态" title="状态"></cube-select> -->
         <div class="select-span-div" @click="clickStatus">状态<i class="fa fa-sort-down"></i></div>
       </span>
       <span class="select-span">
-        <!-- <cube-select :options="options" placeholder="时间" title="时间"></cube-select> -->
         <div class="select-span-div" @click="clickTime">时间<i class="fa fa-sort-down"></i></div>
       </span>
     </div>
 
     <div class="listContainer" v-bind:style="listContainerStyle">
-      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-        <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
-          <div>
-            <div class="homework_list_inline_list">{{item.start_time}}</div>
-            <div class="homework_list_inline_list">{{item.title}}</div>
-            <div class="homework_list_inline_list">{{item.edu_subject_name}} {{item.class_name}}</div>
-            <div class="homework_list_inline_list">截止：{{item.deadline}}</div>
+      <van-pull-refresh v-model="pullRefresIsLoading" @refresh="onRefresh">
+        <van-list v-model="loading" :finished="finished" @load="loadMore" :offset="300" :immediate-check="false">
+          <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
+            <div>
+              <div class="homework_list_inline_list">{{item.start_time}}</div>
+              <div class="homework_list_inline_list">{{item.title}}</div>
+              <div class="homework_list_inline_list">{{item.edu_subject_name}} {{item.class_name}}</div>
+              <div class="homework_list_inline_list">截止：{{item.deadline}}</div>
+            </div>
           </div>
-        </div>
+        </van-list>
 
         <div v-if="homeworkListArray.length === 0" style="height: 200px;line-height: 200px;text-align: center;">
           没有数据
@@ -61,15 +61,12 @@
 </template>
 
 <script>
-import api from '@/axios/publishHomeWork.js'
+import api from "@/axios/publishHomeWork.js";
 
 export default {
   name: "Homework",
   data() {
     return {
-      options: [2013, 2014, 2015, 2016, 2017, 2018],
-      value: 2016,
-      title: "班级",
       homeworkListArray: [],
       listContainerStyle: {
         height: window.innerHeight - 90 + "px"
@@ -77,21 +74,25 @@ export default {
       list: [],
       loading: false,
       finished: false,
-      isLoading: false,
+      pullRefresIsLoading: false,
+      currentPage: 1,
+      totalPage: 1,
       showClassPopup: false,
       showStatusPopup: false,
       showTimePopup: false,
       columnsOfClass: [],
       columnsOfStatus: [
         {
-          text: '全部',
-          value: 'all'
-        }, {
-          text: '待批改',
-          value: 'correct'
-        }, {
-          text: '已批改',
-          value: 'finish'
+          text: "全部",
+          value: "all"
+        },
+        {
+          text: "待批改",
+          value: "correct"
+        },
+        {
+          text: "已批改",
+          value: "finish"
         }
       ]
     };
@@ -101,63 +102,69 @@ export default {
     var yNow = nowdate.getFullYear();
     var mNow = nowdate.getMonth() + 1;
     var dNow = nowdate.getDate();
-    var formatnowdate = yNow + '-' + mNow + '-' + dNow;
+    var formatnowdate = yNow + "-" + mNow + "-" + dNow;
 
     // 获取系统前一周的时间
     var oneweekdate = new Date(nowdate - 7 * 24 * 3600 * 1000);
     var yWeek = oneweekdate.getFullYear();
     var mWeek = oneweekdate.getMonth() + 1;
     var dWeek = oneweekdate.getDate();
-    var formatWeekdate = yWeek + '-' + mWeek + '-' + dWeek;
+    var formatWeekdate = yWeek + "-" + mWeek + "-" + dWeek;
 
     // 获取系统前一个月的时间
     nowdate.setMonth(nowdate.getMonth() - 1);
     var yOneMonth = nowdate.getFullYear();
     var mOneMonth = nowdate.getMonth() + 1;
     var dOneMonth = nowdate.getDate();
-    var formatOneMonthdate = yOneMonth + '-' + mOneMonth + '-' + dOneMonth;
+    var formatOneMonthdate = yOneMonth + "-" + mOneMonth + "-" + dOneMonth;
 
     // 获取系统前三个月的时间
     nowdate.setMonth(nowdate.getMonth() - 2);
     var yThreeMonth = nowdate.getFullYear();
     var mThreeMonth = nowdate.getMonth() + 1;
     var dThreeMonth = nowdate.getDate();
-    var formatThreeMonthdate = yThreeMonth + '-' + mThreeMonth + '-' + dThreeMonth;
+    var formatThreeMonthdate =
+      yThreeMonth + "-" + mThreeMonth + "-" + dThreeMonth;
     this.columnsOfTime = [
       {
-        text: '全部',
-        from: '',
-        to: ''
-      }, {
-        text: '最近一周',
+        text: "全部",
+        from: "",
+        to: ""
+      },
+      {
+        text: "最近一周",
         from: formatWeekdate,
         to: formatnowdate
-      }, {
-        text: '最近一个月',
+      },
+      {
+        text: "最近一个月",
         from: formatOneMonthdate,
         to: formatnowdate
-      }, {
-        text: '最近三个月',
+      },
+      {
+        text: "最近三个月",
         from: formatThreeMonthdate,
         to: formatnowdate
       }
-    ]
+    ];
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
     var array = [
       {
-        text: '全部',
-        class_id: ''
+        text: "全部",
+        class_id: ""
       }
     ];
-    for (let i = 0; i < this.$store.state.account.userInfo.classes.length; i++) {
-      array.push(
-        {
-          text: this.$store.state.account.userInfo.classes[i].class_name,
-          class_id: this.$store.state.account.userInfo.classes[i].class_id
-        }
-      );
+    for (
+      let i = 0;
+      i < this.$store.state.account.userInfo.classes.length;
+      i++
+    ) {
+      array.push({
+        text: this.$store.state.account.userInfo.classes[i].class_name,
+        class_id: this.$store.state.account.userInfo.classes[i].class_id
+      });
     }
     this.columnsOfClass = array;
     this.chooseClass = this.columnsOfClass[0];
@@ -202,7 +209,7 @@ export default {
     onRefresh() {
       setTimeout(() => {
         this.$toast("刷新成功");
-        this.isLoading = false;
+        this.pullRefresIsLoading = false;
       }, 500);
       this.getHomeworkList();
     },
@@ -216,6 +223,17 @@ export default {
         }
       });
     },
+    loadMore() {
+      console.log("loadMore......");
+      if (this.totalPage < this.currentPage) {
+        this.finished = true;
+        this.loading = false;
+      } else {
+        // this.loading = false;
+        this.currentPage += 1;
+        this.getHomeworkList();
+      }
+    },
     goHome() {
       this.$router.push({
         path: "/"
@@ -226,20 +244,28 @@ export default {
         path: "/chooseTextbook"
       });
     },
-    getHomeworkList(classId) {
+    getHomeworkList() {
       var self = this;
       var data = {
         user_id: self.userInfo.userid,
         class_id: self.chooseClass.class_id,
         status: self.chooseStatus.value,
         from: self.chooseTime.from,
-        to: self.chooseTime.to
+        to: self.chooseTime.to,
+        page: self.currentPage,
+        per_page: 5
       };
 
-      api.homeworkLists(data)
-        .then(function(r) {
-          self.homeworkListArray = r.lists;
-        })
+      api.homeworkLists(data).then(function(r) {
+        console.log(r);
+        self.homeworkListArray = self.homeworkListArray.concat(r.lists);
+        self.currentPage = Number(r.page);
+        self.totalPage = Number(r.total_count);
+        self.loading = false;
+        //  self.$nextTick(_ => {
+        // self.loading = false
+        // })
+      });
     }
   }
 };
@@ -264,7 +290,8 @@ export default {
   line-height: 1.429;
   color: #666;
   background-color: #fff;
-  position: relative;box-sizing: border-box;
+  position: relative;
+  box-sizing: border-box;
 }
 .publishHomeworkBtn {
   height: 50px;
