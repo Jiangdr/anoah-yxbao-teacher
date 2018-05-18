@@ -6,7 +6,8 @@
 
 <script>
 export default {
-  props: ['title', 'text'],
+  name: 'home',
+  props: ['title', 'text', 'isHome'],
   data: function () {
     return {
 
@@ -14,9 +15,14 @@ export default {
   },
   methods: {
     goBack () {
-      // this.$router.go(-1)
-      if (window.TeacherUtil) {
-        window.TeacherUtil.quitAsk()
+      if (this.isHome) {
+        if (window.TeacherUtil) {
+          window.TeacherUtil.quitAsk()
+        } else {
+          this.$router.go(-1)
+        }
+      } else {
+        this.$router.go(-1)
       }
     }
   }

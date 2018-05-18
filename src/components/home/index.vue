@@ -1,8 +1,8 @@
 <template>
   <div class="spa">
-    <topbar title="首页" text="" >
+    <topbar title="首页" text="" :isHome="true" >
       <van-icon class="icon" name="sign" @click="message" />
-      <van-icon class="icon" name="search" @click="scan" />
+      <van-icon class="icon" name="search"  @click="showPopup =true"/>
     </topbar>
     <van-row>
       <van-col span="12">
@@ -39,6 +39,14 @@
       <van-tabbar-item icon="chat">我的</van-tabbar-item>
     </van-tabbar>
 
+  <van-popup v-model="showPopup" position="bottom" class="run-env" :overlay="true" :lock-scroll="true">
+    <div @click="getEnv('.dev')">dev</div>
+       <div  @click="getEnv('.dt')">dt</div>
+          <div  @click="getEnv('.test')">test</div>
+             <div @click="getEnv('.t')">t</div>
+              <div  @click="getEnv('')">外网</div>
+</van-popup>
+
   </div>
 </template>
 
@@ -55,7 +63,8 @@ export default {
       loading: false,
       refreshLoading: false,
       finished: false,
-      active: 0
+      active: 0,
+      showPopup: false
     }
   },
   computed: {
@@ -71,13 +80,26 @@ export default {
       alert('扫码')
     },
 
+    getEnv(env) {
+      // window.runEnv = env;
+      this.showPopup = false;
+      this.$store.dispatch('runEnv/changeEnv', env);
+    },
+
     go (type) {
       // 代码走本地
-      let localUrl = 'www/';
-      let href = '';
+      let href = window.location.href.split('#')[0]
       let userInfo = JSON.parse(localStorage.getItem('user'))
-      // 互动课堂
-      if (type === 'iclass') {
+      let baseUrl = ''
+      let param = {}
+      // 作业
+      if (type === 'homework') {
+        this.$router.push({
+          path: '/homework'
+        })
+
+        // 互动课堂
+      } else if (type === 'iclass') {
         api.judgeIclassLive({
           teacher_id: this.userId
         }).then(succ => {
@@ -88,16 +110,15 @@ export default {
               // on close
             });
           } else {
-            let param = JSON.stringify({
-              userid: parseInt(this.$store.state.account.userInfo.userid),
-              domain: this.config.apiDomain.old,
-              userInfo: userInfo,
-              lasthref: window.location.href
+            param = JSON.stringify({
+              apiDomain: window.bus.$store.getters['runEnv/old'], // api地址
+              jsDomain: '', // js地址
+              userInfo: userInfo, // 用户信息
+              referer: window.location.href, // 回跳地址
+              time: new Date().getTime()
             });
-            let baseUrl = localCode ? localUrl + "TP/index.html" : this.config.apiDomain.old + '/ebag/iclass/teacher2/index.html'
-            alert(baseUrl)
-            // let baseUrl = 'http://192.168.41.157/company/ebag/iclass/teacher2/index.html'
-            href = baseUrl + "?param=" + encodeURIComponent(param);
+            baseUrl = href + "/../../TP/index" + (window.platform ? '-' + window.platform : '') + ".html";
+            href = baseUrl + "?param=" + encodeURIComponent(param)
             if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
               window.TeacherUtil.loadUrl(href);
               return;
@@ -105,30 +126,24 @@ export default {
             window.location.href = href;
           }
         })
-      // 作业
-      } else if (type === 'homework') {
-        this.$router.push({
-          path: '/homework'
-        })
       // 问答
       } else if (type === 'qa') {
-        let param = JSON.stringify({
+        param = JSON.stringify({
           userid: parseInt(this.$store.state.account.userInfo.userid),
-          domain: this.config.apiDomain.old,
-          domain_icom: 'www/QA',
+          domain: window.bus.$store.getters['runEnv/old'],
+          domain_icom: href + "/../../QA",
           status: 1,
-          lasthref: 'HW/index-ios.html'
+          lasthref: window.location.href,
+          time: new Date().getTime()
         });
-        let href = window.location.href.split('#')[0];
-        let baseUrl = href + "/../../QA/index" + (window.platform ? '-' + window.platform : '') + ".html";
-        alert(baseUrl)
-        href = baseUrl + "?param=" + encodeURIComponent(param);
+        baseUrl = href + "/../../QA/index" + (window.platform ? '-' + window.platform : '') + ".html";
+        // cordova.exec(null, null, "HaleyPlugin", "startNewHtmlWithURL", [href]);
+        href = baseUrl + "?param=" + encodeURIComponent(param)
         if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
           window.TeacherUtil.loadUrl(href);
           return;
         }
         window.location.href = href;
-        // cordova.exec(null, null, "HaleyPlugin", "startNewHtmlWithURL", [href]);
       }
     },
     onClickLeft () {
@@ -186,5 +201,12 @@ export default {
 .van-list {
   height: calc(100vh - 180px);
   overflow-y: scroll;
+}
+
+.run-env  >div{
+  text-align:center;
+  height:38px;
+  line-height:38px;
+border-bottom:1px solid #ccc;
 }
 </style>
