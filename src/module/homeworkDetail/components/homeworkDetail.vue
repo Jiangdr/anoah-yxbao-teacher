@@ -159,18 +159,20 @@
     <tips v-if="showTips" @toggle="toggleTips"></tips>
     <urge v-if="urge" @toggle="toggleUrge"></urge>
     <remind v-if="remind" @toggle="toggleRemind"></remind>
-    <correct v-if="correctTip" @toggle="toggleCorrectPopup" :resource="resourceList"></correct>
+    <correct v-if="correctTip" @toggle="toggleCorrectPopup" :resource="resourceList" :type="'all'"></correct>
   </div>
 </template>
 
 <script>
 import homeworkDetil from "../axios/detail.js";
 import Vue from "vue";
-import top from './title.vue'
-import tips from './tips.vue'
-import urge from './urge.vue'
-import remind from './remind.vue'
-import correct from './correctPopup.vue'
+import top from './common/title.vue'
+import tips from './common/tips.vue' // 正确率提示
+import urge from './common/urge.vue' // 催交作业
+import remind from './common/remind.vue' // 提醒订正
+import correct from './common/correctPopup.vue'// 一键批阅
+import answer from './common/answer.vue'// 一键批阅
+
 // import {mapState} from 'vuex'
 export default {
   name: "detail",
@@ -200,17 +202,7 @@ export default {
   },
   created() {
     // 获取作业信息
-    homeworkDetil.getinfo(this.params).then(r => {
-      this.homeworkInfo = r;
-      this.studentList = r.student_list;
-      this.correct = r.class_average_correct_rate
-    });
-    // 获取作业资源
-    homeworkDetil.getResourceList(this.params).then(d => {
-      this.resourceList = d.list;
-      this.homeworkStatus = d.status;
-    });
-    console.log(this.$store.state.homeworkDetail.params)
+    this.getResource();
   },
   computed: {
     // ...mapState({
@@ -240,6 +232,18 @@ export default {
     }
   },
   methods: {
+    getResource() {
+      homeworkDetil.getinfo(this.params).then(r => {
+        this.homeworkInfo = r;
+        this.studentList = r.student_list;
+        this.correct = r.class_average_correct_rate
+      });
+      // 获取作业资源
+      homeworkDetil.getResourceList(this.params).then(d => {
+        this.resourceList = d.list;
+        this.homeworkStatus = d.status;
+      });
+    },
     goBack() {
       this.$router.go(-1);
     },
