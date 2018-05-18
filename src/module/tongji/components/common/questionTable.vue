@@ -15,10 +15,10 @@
       class="item"
     >
       <van-row>
-        <van-col span="12">{{item.content||item.name}}</van-col>
+        <van-col span="12">{{item.content||item.name||item[0]}}</van-col>
         <van-col span="12">
           <p>
-            <span>{{itemCorrect(item.correct_rate)}}</span>
+            <span>{{itemCorrect(item.correct_rate||(item[1]>0?item[1]:-2))}}</span>
             <span
               class="progress"
               v-if="item.correct_rate!=''||item.correct_rate!=-1"
@@ -48,8 +48,13 @@ export default {
   },
   methods: {
     itemCorrect(correct) {
+      if (!correct) {
+        return false
+      }
       if (correct === '' || correct === -1) {
         return '--'
+      } else if (correct === -2) {
+        return '0%'
       } else {
         return Math.round(correct * 100) + '%'
       }

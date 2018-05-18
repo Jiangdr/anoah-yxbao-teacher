@@ -11,9 +11,10 @@ import choiceTable from '@/module/tongji/components/question/choiceTable.vue'
 import hanzitingxie from '@/module/tongji/components/question/hanzitingxie.vue'
 // 主观题  例：主观填空
 import correctColumn from '@/module/tongji/components/question/correctColumn.vue'
-// 组件详情
+// 组件详情---选词填空  一般组件
 import groupDetail from '@/module/tongji/components/question/groupDetail.vue'
-
+// 组件详情   口算训练
+import groupDetailColumn from '@/module/tongji/components/question/groupDetailColumn.vue'
 export default
 [{ path: '/tongji',
   meta: { requiresAuth: false, keepAlive: true },
@@ -52,6 +53,11 @@ export default
     path: '/groupDetail',
     name: 'groupDetail',
     component: groupDetail,
+    meta: { requiresAuth: false, keepAlive: true }
+  }, {
+    path: '/groupDetailColumn',
+    name: 'groupDetailColumn',
+    component: groupDetailColumn,
     meta: { requiresAuth: false, keepAlive: true }
   }
   ]

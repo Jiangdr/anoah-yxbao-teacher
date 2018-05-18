@@ -52,7 +52,7 @@
                 </div>
               </div>
               <div class="itemdetail" :class="{hide:!ques.isShow}" v-if="ques.resource_type=='qti_exam'||isCompound(ques.qti_question_type_id,ques.resource_type)">
-                <p v-for="(mini,key) in miniResource[index]" :key="key" @click="goTongji(mini)">
+                <p v-for="(mini,key) in miniResource[index]" :key="key" @click="goTongji(mini,key)">
                   <span>
                     <template v-if="mini.status<3">待批阅</template>
                     <template v-else-if="mini.status==3&&mini.marked==1">阅</template>
@@ -284,11 +284,12 @@ export default {
         this.goTongji(curr);
       }
     },
-    goTongji(curr) {
+    goTongji(curr, index) {
       if (curr.pigai_status < 3 || curr.status < 3) {
         return false;
       }
       this.$store.commit('homeworkDetail/setParams', curr)
+      this.$store.commit('homeworkDetail/setmini', this.miniResource[index])
       // 单选题、判断题统计页面
       let type = parseInt(curr.qti_question_type_id);
       let name = "";
