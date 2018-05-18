@@ -1,6 +1,6 @@
 <template>
   <div class="spa">
-    <topbar title="首页" text="">
+    <topbar title="首页" text="" >
       <van-icon class="icon" name="sign" @click="message" />
       <van-icon class="icon" name="search" @click="scan" />
     </topbar>
@@ -90,7 +90,7 @@ export default {
           } else {
             let param = JSON.stringify({
               userid: parseInt(this.$store.state.account.userInfo.userid),
-              domain: 'http://e.dev.anoah.com',
+              domain: this.config.apiDomain.old,
               userInfo: userInfo,
               lasthref: window.location.href
             });
@@ -114,13 +114,13 @@ export default {
       } else if (type === 'qa') {
         let param = JSON.stringify({
           userid: parseInt(this.$store.state.account.userInfo.userid),
-          domain: 'http://e.dev.anoah.com',
+          domain: this.config.apiDomain.old,
           domain_icom: 'www/QA',
           status: 1,
-          lasthref: window.location.href
+          lasthref: 'HW/index-ios.html'
         });
-        let a = window.location.href.split('#')[0];
-        let baseUrl = a + "/../../QA/index-" + window.shell + ".html";
+        let href = window.location.href.split('#')[0];
+        let baseUrl = href + "/../../QA/index" + (window.platform ? '-' + window.platform : '') + ".html";
         alert(baseUrl)
         href = baseUrl + "?param=" + encodeURIComponent(param);
         if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
@@ -128,6 +128,7 @@ export default {
           return;
         }
         window.location.href = href;
+        // cordova.exec(null, null, "HaleyPlugin", "startNewHtmlWithURL", [href]);
       }
     },
     onClickLeft () {

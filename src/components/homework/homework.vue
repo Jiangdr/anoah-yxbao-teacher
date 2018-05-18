@@ -1,38 +1,49 @@
 <template>
   <div class="cube-page cube-view button-view">
+    <!-- <div> -->
 
     <header class="header">
       <h1>作业</h1>
       <i class="cubeic-back" @click="goHome">
-        <i class="fa fa-angle-left"></i> 返回
+        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
       </i>
     </header>
 
     <div class="select-container">
       <span class="select-span">
-        <!-- <cube-select :options="options" placeholder="班级" title="班级"></cube-select> -->
-        <div class="select-span-div" @click="clickClass">班级<i class="fa fa-sort-down"></i></div>
+        <div class="select-span-div" @click="clickTime">时间<i class="fa fa-angle-down"></i></div>
       </span>
       <span class="select-span">
-        <!-- <cube-select :options="options" placeholder="状态" title="状态"></cube-select> -->
-        <div class="select-span-div" @click="clickStatus">状态<i class="fa fa-sort-down"></i></div>
+        <div class="select-span-div" @click="clickStatus">状态<i class="fa fa-angle-down"></i></div>
       </span>
       <span class="select-span">
-        <!-- <cube-select :options="options" placeholder="时间" title="时间"></cube-select> -->
-        <div class="select-span-div" @click="clickTime">时间<i class="fa fa-sort-down"></i></div>
+        <div class="select-span-div" @click="clickClass">班级<i class="fa fa-angle-down"></i></div>
       </span>
     </div>
 
+    <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;">
+      共{{totalCountNum}}个作业&nbsp;&nbsp;<span style="color: red;">{{countNum}}</span>个待批改
+    </div>
+
     <div class="listContainer" v-bind:style="listContainerStyle">
-      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-        <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
-          <div>
-            <div class="homework_list_inline_list">{{item.start_time}}</div>
-            <div class="homework_list_inline_list">{{item.title}}</div>
-            <div class="homework_list_inline_list">{{item.edu_subject_name}} {{item.class_name}}</div>
-            <div class="homework_list_inline_list">截止：{{item.deadline}}</div>
+      <van-pull-refresh v-model="pullRefresIsLoading" @refresh="onRefresh">
+        <van-list v-model="loading" :finished="finished" @load="loadMore" :offset="300" :immediate-check="false">
+          <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
+            <div class="listContainerLeft">
+              <div class="homework_list_inline_list"><span style="font-size:18px;font-weight:700;">{{item.title}}</span>&nbsp;&nbsp;<span class="font-color">{{item.resource_count}}份</span></div>
+              <div class="homework_list_inline_list font-color">{{item.edu_subject_name}}&nbsp;&nbsp;&nbsp;{{item.class_name}}</div>
+              <div class="homework_list_inline_list"><span class="font-color">完成：</span><span style="color:#2ec2a9;font-size:22px;">{{item.finished_counter}}</span><span class="font-color">/{{item.student_counter}}人</span></div>
+              <div class="homework_list_inline_list font-color" style="font-size: 14px;"><span class="font-color">截止：</span>{{item.deadline}}</div>
+            </div>
+            <div class="listContainerRight">
+              正确率:&nbsp;&nbsp;&nbsp;
+                <span class="font-color" style="font-size:28px;color: #2ec2a9">{{item.right_rate >= 0 ? item.right_rate*100 : '--'}}</span>
+                <span v-if="item.right_rate > 0" style="font-size:16px;color: #2ec2a9">%</span>
+                <i class="fa fa-angle-right arrow-right"></i>
+            </div>
+            <div style="clear:both;"></div>
           </div>
-        </div>
+        </van-list>
 
         <div v-if="homeworkListArray.length === 0" style="height: 200px;line-height: 200px;text-align: center;">
           没有数据
@@ -61,15 +72,12 @@
 </template>
 
 <script>
-import api from '@/axios/publishHomeWork.js'
+import api from "@/axios/publishHomeWork.js";
 
 export default {
   name: "Homework",
   data() {
     return {
-      options: [2013, 2014, 2015, 2016, 2017, 2018],
-      value: 2016,
-      title: "班级",
       homeworkListArray: [],
       listContainerStyle: {
         height: window.innerHeight - 90 + "px"
@@ -77,23 +85,29 @@ export default {
       list: [],
       loading: false,
       finished: false,
-      isLoading: false,
+      pullRefresIsLoading: false,
+      currentPage: 1,
+      totalPage: 1,
       showClassPopup: false,
       showStatusPopup: false,
       showTimePopup: false,
       columnsOfClass: [],
       columnsOfStatus: [
         {
-          text: '全部',
-          value: 'all'
-        }, {
-          text: '待批改',
-          value: 'correct'
-        }, {
-          text: '已批改',
-          value: 'finish'
+          text: "全部",
+          value: "all"
+        },
+        {
+          text: "待批改",
+          value: "correct"
+        },
+        {
+          text: "已批改",
+          value: "finish"
         }
-      ]
+      ],
+      countNum: 0,
+      totalCountNum: 0
     };
   },
   created: function() {
@@ -101,63 +115,69 @@ export default {
     var yNow = nowdate.getFullYear();
     var mNow = nowdate.getMonth() + 1;
     var dNow = nowdate.getDate();
-    var formatnowdate = yNow + '-' + mNow + '-' + dNow;
+    var formatnowdate = yNow + "-" + mNow + "-" + dNow;
 
     // 获取系统前一周的时间
     var oneweekdate = new Date(nowdate - 7 * 24 * 3600 * 1000);
     var yWeek = oneweekdate.getFullYear();
     var mWeek = oneweekdate.getMonth() + 1;
     var dWeek = oneweekdate.getDate();
-    var formatWeekdate = yWeek + '-' + mWeek + '-' + dWeek;
+    var formatWeekdate = yWeek + "-" + mWeek + "-" + dWeek;
 
     // 获取系统前一个月的时间
     nowdate.setMonth(nowdate.getMonth() - 1);
     var yOneMonth = nowdate.getFullYear();
     var mOneMonth = nowdate.getMonth() + 1;
     var dOneMonth = nowdate.getDate();
-    var formatOneMonthdate = yOneMonth + '-' + mOneMonth + '-' + dOneMonth;
+    var formatOneMonthdate = yOneMonth + "-" + mOneMonth + "-" + dOneMonth;
 
     // 获取系统前三个月的时间
     nowdate.setMonth(nowdate.getMonth() - 2);
     var yThreeMonth = nowdate.getFullYear();
     var mThreeMonth = nowdate.getMonth() + 1;
     var dThreeMonth = nowdate.getDate();
-    var formatThreeMonthdate = yThreeMonth + '-' + mThreeMonth + '-' + dThreeMonth;
+    var formatThreeMonthdate =
+      yThreeMonth + "-" + mThreeMonth + "-" + dThreeMonth;
     this.columnsOfTime = [
       {
-        text: '全部',
-        from: '',
-        to: ''
-      }, {
-        text: '最近一周',
+        text: "全部",
+        from: "",
+        to: ""
+      },
+      {
+        text: "最近一周",
         from: formatWeekdate,
         to: formatnowdate
-      }, {
-        text: '最近一个月',
+      },
+      {
+        text: "最近一个月",
         from: formatOneMonthdate,
         to: formatnowdate
-      }, {
-        text: '最近三个月',
+      },
+      {
+        text: "最近三个月",
         from: formatThreeMonthdate,
         to: formatnowdate
       }
-    ]
+    ];
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
     var array = [
       {
-        text: '全部',
-        class_id: ''
+        text: "全部",
+        class_id: ""
       }
     ];
-    for (let i = 0; i < this.$store.state.account.userInfo.classes.length; i++) {
-      array.push(
-        {
-          text: this.$store.state.account.userInfo.classes[i].class_name,
-          class_id: this.$store.state.account.userInfo.classes[i].class_id
-        }
-      );
+    for (
+      let i = 0;
+      i < this.$store.state.account.userInfo.classes.length;
+      i++
+    ) {
+      array.push({
+        text: this.$store.state.account.userInfo.classes[i].class_name,
+        class_id: this.$store.state.account.userInfo.classes[i].class_id
+      });
     }
     this.columnsOfClass = array;
     this.chooseClass = this.columnsOfClass[0];
@@ -202,7 +222,7 @@ export default {
     onRefresh() {
       setTimeout(() => {
         this.$toast("刷新成功");
-        this.isLoading = false;
+        this.pullRefresIsLoading = false;
       }, 500);
       this.getHomeworkList();
     },
@@ -216,6 +236,17 @@ export default {
         }
       });
     },
+    loadMore() {
+      console.log("loadMore......");
+      if (this.totalPage < this.currentPage) {
+        this.finished = true;
+        this.loading = false;
+      } else {
+        // this.loading = false;
+        this.currentPage += 1;
+        this.getHomeworkList();
+      }
+    },
     goHome() {
       this.$router.push({
         path: "/"
@@ -226,20 +257,29 @@ export default {
         path: "/chooseTextbook"
       });
     },
-    getHomeworkList(classId) {
+    getHomeworkList() {
       var self = this;
       var data = {
         user_id: self.userInfo.userid,
         class_id: self.chooseClass.class_id,
         status: self.chooseStatus.value,
         from: self.chooseTime.from,
-        to: self.chooseTime.to
+        to: self.chooseTime.to,
+        page: self.currentPage,
+        per_page: 7
       };
 
-      api.homeworkLists(data)
-        .then(function(r) {
-          self.homeworkListArray = r.lists;
-        })
+      api.homeworkLists(data).then(function(r) {
+        self.homeworkListArray = self.homeworkListArray.concat(r.lists);
+        self.currentPage = Number(r.page);
+        self.totalPage = Number(r.total_count);
+        self.loading = false;
+        self.countNum = r.count;
+        self.totalCountNum = r.total_count;
+        //  self.$nextTick(_ => {
+        // self.loading = false
+        // })
+      });
     }
   }
 };
@@ -247,10 +287,26 @@ export default {
 
 <style scoped>
 .homework_list {
-  margin-top: 5px;
-  padding: 7px;
+  margin-top: 1.33333vw;
+  padding: 1.86667vw;
   background: #fff;
-  border-bottom: 1px solid #111;
+  width: 91%;
+  margin: 0 auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  position: relative;
+}
+.listContainerLeft {
+  width: 58%;
+  display: inline-block;
+}
+.listContainerRight {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: 40%;
 }
 .select-span {
   width: 60px;
@@ -259,12 +315,10 @@ export default {
 .select-span-div {
   padding: 10px;
   border-radius: 2px;
-  border: 1px solid #ccc;
   font-size: 14px;
   line-height: 1.429;
-  color: #666;
-  background-color: #fff;
-  position: relative;box-sizing: border-box;
+  position: relative;
+  box-sizing: border-box;
 }
 .publishHomeworkBtn {
   height: 50px;
@@ -275,20 +329,31 @@ export default {
 .publishHomeworkBtnDiv {
   width: 50px;
   height: 50px;
-  background-color: #fc9153;
+  background-color: #2ec2a9;
   border-radius: 25px;
   position: absolute;
   bottom: 20px;
   right: 20px;
+  color: #ffffff;
 }
 .select-container {
   display: flex;
   justify-content: space-between;
+  background-color: #fff;
+  border-bottom: 1px solid #ededf0;
 }
 .homework_list_inline_list {
   line-height: 25px;
 }
 .listContainer {
   overflow-y: auto;
+}
+.font-color {
+  color: #989ca0;
+}
+.arrow-right {
+  font-size:36px;
+  float:right;
+  color: #989ca0;
 }
 </style>
