@@ -302,6 +302,8 @@ export default {
     },
     // 产看单题统计
     goTongji(curr, index, key) {
+      console.log(curr, index, key);
+      return false
       if (curr.status === 0) {
         return false;
       }

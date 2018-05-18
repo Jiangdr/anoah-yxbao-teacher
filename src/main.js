@@ -48,7 +48,18 @@ Vue.prototype.util = util
 Vue.config.productionTip = false
 
 window.bus = new Vue()
-
+// 初始化老版本qti参数，和动态引入需要icombase
+window.ICOM_EVN_VAR = {
+  debug: true,
+  lib_address: `${config.apiDomain.old}/icoms/qtidiv/jslibs/`,
+  base: `${config.apiDomain.old}/icoms/qtidiv/icoms/`,
+  api_address: `${config.apiDomain.old}/api/`,
+  api_address_dist: `${config.apiDomain.old}/api_dist/`,
+  api_address_router: `${config.apiDomain.old}/api_router/`,
+  api_cache: true
+}
+addQti(`${config.apiDomain.old}/icoms/qtidiv/icombase.js`)
+addQti(`${config.apiDomain.old}/icoms/qtidiv/jquery.js`)
 let app = {
   initialize: function () {
     // android壳子里
@@ -69,5 +80,14 @@ let app = {
   onDeviceReady: function () {
   }
 }
+
+function addQti (src) {
+  let head = document.getElementsByTagName('head')[0]
+  let script = document.createElement('script')
+  script.type = 'text/javascript'
+  script.src = src
+  head.appendChild(script)
+}
+
 app.initialize()
 app.onDeviceReady()
