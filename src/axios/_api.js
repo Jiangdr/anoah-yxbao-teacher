@@ -1,6 +1,5 @@
 'use strict'
 import http from './_axios'
-import config from '@/config/index'
 import qs from 'qs'
 import { Toast } from 'vant'
 import store from '@/store/index'
