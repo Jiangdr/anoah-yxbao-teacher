@@ -18,7 +18,7 @@ import groupDetailColumn from '@/module/tongji/components/question/groupDetailCo
 export default
 [{name: 'tongji',
   path: '/tongji',
-  meta: { requiresAuth: false, keepAlive: false },
+  meta: { requiresAuth: false, keepAlive: true },
   component: tongji,
   children: [{
     path: '/correctTable',

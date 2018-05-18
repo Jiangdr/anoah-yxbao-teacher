@@ -1,6 +1,6 @@
 <template>
   <div class="tiankong">
-    <div class="title border-bottom-1px">
+    <!-- <div class="title border-bottom-1px">
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
@@ -12,7 +12,7 @@
         </van-col>
         <van-col span="2"></van-col>
       </van-row>
-    </div>
+    </div> -->
     <div class="title-bar">
       <van-row>
         <van-col span="8">
@@ -95,21 +95,12 @@ export default {
     }
   },
   created() {
+    this.getinfo();
+  },
+  watch: {
+    params: 'getinfo'
   },
   activated() {
-    let param = {
-      "course_hour_publish_id": this.params.course_hour_publish_id,
-      "course_resource_id": this.params.course_resource_id,
-      "qti_question_id": this.params.source_pk_id,
-      "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
-      "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
-    }
-    getStatistics.getinfo(param).then((r) => {
-      this.record = r.user;
-      this.correctRate = r.average_correct_rate
-      this.time = r.average_time_length
-      this.alias = r.alias
-    })
   },
   mounted() {
     // 列表默认按时间降序排列
@@ -130,9 +121,6 @@ export default {
     })
   },
   methods: {
-    goBack() {
-      this.$router.go(-2)
-    },
     compare(property) {
       return (a, b) => {
         let value1 = a[property];
@@ -164,6 +152,21 @@ export default {
       } else if (this.sortNum === 4 || this.sortNum === 5) {
         this.record.sort(this.compare('time_length'))
       }
+    },
+    getinfo() {
+      let param = {
+        "course_hour_publish_id": this.params.course_hour_publish_id,
+        "course_resource_id": this.params.course_resource_id,
+        "qti_question_id": this.params.source_pk_id,
+        "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
+        "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
+      }
+      getStatistics.getinfo(param).then((r) => {
+        this.record = r.user;
+        this.correctRate = r.average_correct_rate
+        this.time = r.average_time_length
+        this.alias = r.alias
+      })
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="hanzitingxie">
-    <div class="title border-bottom-1px">
+    <!-- <div class="title border-bottom-1px">
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
@@ -12,7 +12,7 @@
         </van-col>
         <van-col span="2"></van-col>
       </van-row>
-    </div>
+    </div>-->
     <div class="title-bar">
       <van-row>
         <van-col span="6">
@@ -68,20 +68,12 @@ export default {
     }
   },
   created() {
+    this.getinfo();
+  },
+  watch: {
+    params: 'getinfo'
   },
   activated() {
-    let param = {
-      "course_hour_publish_id": this.params.course_hour_publish_id,
-      "course_resource_id": this.params.course_resource_id,
-      "icom_id": this.params.icom_id,
-      "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0
-    }
-    getStatistics.getIcomInfo(param).then((r) => {
-      this.allCorrect = r.all_correct;
-      this.resource = r.resource;
-      this.user = r.user;
-      this.columnData = r.clumn
-    })
   },
   computed: {
     correct() {
@@ -96,9 +88,6 @@ export default {
     })
   },
   methods: {
-    goBack() {
-      this.$router.go(-2)
-    },
 
     changeTab(name) {
       this.orderName = name
@@ -109,6 +98,20 @@ export default {
       } else {
         return Math.round(correct * 100) + '%'
       }
+    },
+    getinfo() {
+      let param = {
+        "course_hour_publish_id": this.params.course_hour_publish_id,
+        "course_resource_id": this.params.course_resource_id,
+        "icom_id": this.params.icom_id,
+        "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0
+      }
+      getStatistics.getIcomInfo(param).then((r) => {
+        this.allCorrect = r.all_correct;
+        this.resource = r.resource;
+        this.user = r.user;
+        this.columnData = r.clumn
+      })
     }
 
   },

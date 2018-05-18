@@ -1,18 +1,5 @@
 <template>
   <div class="danxuan">
-    <div class="title border-bottom-1px">
-      <van-row>
-        <van-col span="2">
-          <span class="back" @click="goBack">
-              <van-icon name='arrow-left'></van-icon>
-              </span>
-        </van-col>
-        <van-col span="18">
-          <span class="text">查看统计</span>
-        </van-col>
-        <van-col span="4">原题</van-col>
-      </van-row>
-    </div>
     <div class="title-bar">
       <van-row>
         <van-col span="6">
@@ -86,9 +73,6 @@ export default {
     })
   },
   methods: {
-    goBack() {
-      this.$router.go(-2)
-    },
     toggleAllCorrec(title, list) {
       this.showAllCorrec = !this.showAllCorrec
       this.popupTitle = title

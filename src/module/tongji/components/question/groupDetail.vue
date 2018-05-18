@@ -1,6 +1,6 @@
 <template>
   <div class="groupDetail">
-    <div class="title border-bottom-1px">
+    <!-- <div class="title border-bottom-1px">
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
@@ -12,7 +12,7 @@
         </van-col>
         <van-col span="4"></van-col>
       </van-row>
-    </div>
+    </div>-->
     <div class="title-bar">
       <van-row>
         <van-col span="16">
@@ -54,6 +54,12 @@ export default {
       correctRate: this.$route.params.correct_rate
     }
   },
+  created() {
+    // this.getinfo();
+  },
+  watch: {
+    // params: 'getinfo'
+  },
   computed: {
     correct() {
       if (this.correctRate === '') {
@@ -64,9 +70,6 @@ export default {
     }
   },
   methods: {
-    goBack() {
-      this.$router.go(-1)
-    }
   }
 }
 </script>
