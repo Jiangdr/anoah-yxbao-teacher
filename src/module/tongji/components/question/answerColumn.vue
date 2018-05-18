@@ -30,10 +30,11 @@
 <script>
 import getStatistics from '../../axios/getQuestionStatistics.js'
 import studentList from '../common/studentList.vue'
-import {mapState} from 'vuex'
+// import {mapState} from 'vuex'
 
 export default {
   name: 'danxuan',
+  props: ['params'],
   data() {
     return {
       allCorrect: {},
@@ -67,10 +68,10 @@ export default {
         num += this.record[key].count
       }
       return num
-    },
-    ...mapState({
-      'params': (state) => state.homeworkDetail.params
-    })
+    }
+    // ...mapState({
+    //   'params': (state) => state.homeworkDetail.params
+    // })
   },
   methods: {
     toggleAllCorrec(title, list) {

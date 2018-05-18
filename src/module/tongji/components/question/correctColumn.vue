@@ -45,6 +45,7 @@ import {mapState} from 'vuex'
 
 export default {
   name: 'lianxian',
+  props: ['params'],
   data() {
     return {
       record: {
@@ -81,10 +82,7 @@ export default {
         this.record[key].count && (num += this.record[key].count)
       }
       return num
-    },
-    ...mapState({
-      'params': (state) => state.homeworkDetail.params
-    })
+    }
   },
   methods: {
     toggleAllCorrec(title, list) {

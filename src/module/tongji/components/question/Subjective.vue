@@ -86,6 +86,7 @@ import getStatistics from '../../axios/getQuestionStatistics.js'
 import {mapState} from 'vuex'
 export default {
   name: 'tiankong',
+  props: ['params'],
   data() {
     return {
       record: [],
@@ -115,10 +116,7 @@ export default {
       } else {
         return Math.round(this.correctRate * 100) + '%'
       }
-    },
-    ...mapState({
-      'params': (state) => state.homeworkDetail.params
-    })
+    }
   },
   methods: {
     compare(property) {
