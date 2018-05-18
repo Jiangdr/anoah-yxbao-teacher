@@ -11,48 +11,55 @@ import choiceTable from '@/module/tongji/components/question/choiceTable.vue'
 import hanzitingxie from '@/module/tongji/components/question/hanzitingxie.vue'
 // 主观题  例：主观填空
 import correctColumn from '@/module/tongji/components/question/correctColumn.vue'
-// 组件详情
+// 组件详情---选词填空  一般组件
 import groupDetail from '@/module/tongji/components/question/groupDetail.vue'
-
+// 组件详情   口算训练
+import groupDetailColumn from '@/module/tongji/components/question/groupDetailColumn.vue'
 export default
-[{ path: '/tongji',
+[{name: 'tongji',
+  path: '/tongji',
   meta: { requiresAuth: false, keepAlive: true },
   component: tongji,
   children: [{
     path: '/correctTable',
     name: 'correctTable',
     component: correctTable,
-    meta: { requiresAuth: false, keepAlive: true }
+    meta: { requiresAuth: false, keepAlive: false }
   }, {
     path: '/answerColumn',
     name: 'answerColumn',
     component: answerColumn,
-    meta: { requiresAuth: false, keepAlive: true }
+    meta: { requiresAuth: false, keepAlive: false }
   }, {
     path: '/Subjective',
     name: 'Subjective',
     component: Subjective,
-    meta: { requiresAuth: false, keepAlive: true }
+    meta: { requiresAuth: false, keepAlive: false }
   }, {
     path: '/choiceTable',
     name: 'choiceTable',
     component: choiceTable,
-    meta: { requiresAuth: false, keepAlive: true }
+    meta: { requiresAuth: false, keepAlive: false }
   }, {
     path: '/hanzitingxie',
     name: 'hanzitingxie',
     component: hanzitingxie,
-    meta: { requiresAuth: false, keepAlive: true }
+    meta: { requiresAuth: false, keepAlive: false }
   }, {
     path: '/correctColumn',
     name: 'correctColumn',
     component: correctColumn,
-    meta: { requiresAuth: false, keepAlive: true }
+    meta: { requiresAuth: false, keepAlive: false }
   }, {
     path: '/groupDetail',
     name: 'groupDetail',
     component: groupDetail,
-    meta: { requiresAuth: false, keepAlive: true }
+    meta: { requiresAuth: false, keepAlive: false }
+  }, {
+    path: '/groupDetailColumn',
+    name: 'groupDetailColumn',
+    component: groupDetailColumn,
+    meta: { requiresAuth: false, keepAlive: false }
   }
   ]
 }]

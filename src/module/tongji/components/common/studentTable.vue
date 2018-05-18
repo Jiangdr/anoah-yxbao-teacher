@@ -129,9 +129,18 @@ export default {
 </script>
 
 <style scoped>
-  .order-student .type {
-    background: #efefef;
-  }
+.student-table{
+  height: calc(100% - 50px);
+}
+ .order-student{
+   height: 100%;
+ }
+.order-student .type {
+  background: #efefef;
+}
+.order-student>div:nth-child(2){
+  height: calc(100% - 50px);
+}
 .order-student .type span.active{
   color:#06bb9c;
 }
@@ -178,7 +187,7 @@ export default {
     border-color: #34c988 transparent transparent;
   }
 
-  .order-student>.container {
+  .order-student .container {
     height: calc(100% - 40px);
     overflow: scroll;
     background: #fff;

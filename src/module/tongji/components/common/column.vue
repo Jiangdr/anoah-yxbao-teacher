@@ -32,8 +32,13 @@ export default {
   methods: {
     correct(num) {
       let cor = num || 0;
-      console.log(cor)
-      return (cor / this.total * 100) + '%'
+      let sum = 0;
+      for (let key in this.record) {
+        if (this.record[key].counter) {
+          sum += this.record[key].counter
+        }
+      }
+      return (cor / sum * 100) + '%'
     },
     toggleAllCorrec(title, list) {
       this.showAllCorrec = !this.showAllCorrec
@@ -65,6 +70,7 @@ export default {
     background: #34c988;
     margin-top:7px;
     margin-right: 5px;
+    max-width:90%;
   }
 .box.wrong{
   background: #f56956;

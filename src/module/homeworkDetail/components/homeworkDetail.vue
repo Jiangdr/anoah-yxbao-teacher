@@ -52,9 +52,10 @@
                 </div>
               </div>
               <div class="itemdetail" :class="{hide:!ques.isShow}" v-if="ques.resource_type=='qti_exam'||isCompound(ques.qti_question_type_id,ques.resource_type)">
-                <p v-for="(mini,key) in miniResource[index]" :key="key" @click="goTongji(mini)">
+                <p v-for="(mini,key) in miniResource[index]" :key="key" @click="goTongji(mini,index,key)">
                   <span>
-                    <template v-if="mini.status<3">待批阅</template>
+                    <template v-if="mini.status===1">待批阅</template>
+                    <template v-if="mini.status===0">未提交</template>
                     <template v-else-if="mini.status==3&&mini.marked==1">阅</template>
                     <template v-else>{{itemCorrect(mini.correct_rate)}}</template>
                   </span>
@@ -141,7 +142,7 @@
           offset="1"
           class="btn"
           :class="{disable:homeworkStatus==3}"
-        >一键批阅</van-col>
+        ><p  @click="toggleCorrectPopup">一键批阅</p></van-col>
           <van-col
             span="6"
             offset="2"
@@ -158,6 +159,7 @@
     <tips v-if="showTips" @toggle="toggleTips"></tips>
     <urge v-if="urge" @toggle="toggleUrge"></urge>
     <remind v-if="remind" @toggle="toggleRemind"></remind>
+    <correct v-if="correctTip" @toggle="toggleCorrectPopup" :resource="resourceList"></correct>
   </div>
 </template>
 
@@ -168,6 +170,7 @@ import top from './title.vue'
 import tips from './tips.vue'
 import urge from './urge.vue'
 import remind from './remind.vue'
+import correct from './correctPopup.vue'
 // import {mapState} from 'vuex'
 export default {
   name: "detail",
@@ -190,16 +193,19 @@ export default {
       notcorrect: false, // 是否只看待批阅
       isUrge: false, // 是否已催交作业
       isRemind: false, // 是否已题型订正
+      correctTip: false,
       homeworkStatus: "",
       miniResource: {}
     };
   },
   created() {
+    // 获取作业信息
     homeworkDetil.getinfo(this.params).then(r => {
       this.homeworkInfo = r;
       this.studentList = r.student_list;
       this.correct = r.class_average_correct_rate
     });
+    // 获取作业资源
     homeworkDetil.getResourceList(this.params).then(d => {
       this.resourceList = d.list;
       this.homeworkStatus = d.status;
@@ -210,6 +216,7 @@ export default {
     // ...mapState({
     //   'user': (state) => state.account.userInfo
     // }),
+    // 班级正确率
     classCorrect() {
       if (
         this.correct === "" ||
@@ -223,8 +230,10 @@ export default {
             "%";
       }
     },
+    // 作业完成人数
     finishCounter() {
       return (
+        // 学生总人数-未完成人数
         this.homeworkInfo.student_counter - this.homeworkInfo.unfinished_counter
       );
       // return 0
@@ -234,12 +243,15 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
+    // 作业作答情况、学生详情切换tab
     toggleContent(items) {
       this.activeBtn = items;
     },
+    // 正确率计算规则提示
     toggleTips() {
       this.showTips = !this.showTips;
     },
+    // 催交作业弹出框
     toggleUrge() {
       this.urge = !this.urge;
       this.isUrge = true;
@@ -247,6 +259,7 @@ export default {
         this.urge = false;
       }, 3000);
     },
+    // 提醒订正弹出框
     toggleRemind() {
       this.remind = !this.remind;
       this.isRemind = true;
@@ -254,15 +267,16 @@ export default {
         this.remind = false;
       }, 3000);
     },
+    toggleCorrectPopup() {
+      this.correctTip = !this.correctTip
+    },
+    // 查看小题
     changeCollapse(index, ismini) {
       let curr = {};
       let detailbox = "";
-      if (!ismini) {
-        curr = this.resourceList[index];
-        Vue.set(curr, "isShow", !curr.isShow);
-      } else {
-        curr = this.miniResource[index];
-      }
+      // 套题或试卷  获取当前点击资源
+      curr = this.resourceList[index];
+      Vue.set(curr, "isShow", !curr.isShow);
       let param = {
         publish_id: curr.course_hour_publish_id,
         course_resource_id: curr.course_resource_id,
@@ -273,9 +287,11 @@ export default {
           this.isCompound(curr.qti_question_type_id, curr.resource_type)
       ) {
         if (curr.isShow) {
+          // 小资源加载过则不在走接口
           if (this.miniResource[index]) {
             return false;
           }
+          // 位加载则走接口加载资源
           homeworkDetil.getMiniResource(param).then(r => {
             Vue.set(this.miniResource, index, r);
           });
@@ -284,34 +300,22 @@ export default {
         this.goTongji(curr);
       }
     },
-    goTongji(curr) {
-      if (curr.pigai_status < 3 || curr.status < 3) {
+    // 产看单题统计
+    goTongji(curr, index, key) {
+      console.log(curr, index, key);
+      return false
+      if (curr.status === 0) {
         return false;
       }
       this.$store.commit('homeworkDetail/setParams', curr)
+      this.$store.commit('homeworkDetail/setmini', this.miniResource[index])
+      this.$store.commit('homeworkDetail/setIndex', key)
       // 单选题、判断题统计页面
-      let type = parseInt(curr.qti_question_type_id);
-      let name = "";
-      if (type === 1 || type === 2 || type === 3 || type === 6 || type === 15) {
-        name = "answerColumn";
-        // 客观填空、选择填空统计页面
-      } else if (type === 4 || type === 20) {
-        name = "correctTable";
-        // 主观填空统计页面
-      } else if (type === 5) {
-        name = "Subjective";
-        // 连线题、连词成句、加法竖式、减法竖式、乘法竖式、除法竖式
-      } else if (type === 9 || type === 21 || type === 23 || type === 24 || type === 25 || type === 26) {
-        name = "correctColumn";
-      } else if (type === 11) {
-        name = "choiceTable";
-      } else if (parseInt(curr.icom_id) || type === 17) {
-        name = "hanzitingxie";
-      }
       this.$router.push({
-        name: name
+        name: 'tongji'
       });
     },
+    // 资源正确率计算方法
     itemCorrect(correct) {
       if (correct === "" || correct === -1) {
         return "--";
@@ -319,6 +323,7 @@ export default {
         return correct === 0 ? 0 : Math.round(correct * 100) + "%";
       }
     },
+    // 是否为复合题
     isCompound(typeId, resourceType) {
       if (resourceType === "qti_question") {
         if (
@@ -339,7 +344,8 @@ export default {
     top,
     tips,
     urge,
-    remind
+    remind,
+    correct
   }
 };
 </script>

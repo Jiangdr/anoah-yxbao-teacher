@@ -1,18 +1,5 @@
 <template>
   <div class="danxuan">
-    <div class="title border-bottom-1px">
-      <van-row>
-        <van-col span="2">
-          <span class="back" @click="goBack">
-              <van-icon name='arrow-left'></van-icon>
-              </span>
-        </van-col>
-        <van-col span="18">
-          <span class="text">查看统计</span>
-        </van-col>
-        <van-col span="4">原题</van-col>
-      </van-row>
-    </div>
     <div class="title-bar">
       <van-row>
         <van-col span="6">
@@ -53,6 +40,7 @@ export default {
       record: [],
       answer: '',
       alias: '',
+      loading: true,
       correctRate: 0,
       showAllCorrec: false,
       popupTitle: '',
@@ -60,22 +48,10 @@ export default {
     }
   },
   created() {
+    this.getinfo();
   },
-  activated() {
-    let param = {
-      "course_hour_publish_id": this.params.course_hour_publish_id,
-      "course_resource_id": this.params.course_resource_id,
-      "qti_question_id": this.params.source_pk_id,
-      "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
-      "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
-    }
-    getStatistics.getinfo(param).then((r) => {
-      this.allCorrect = r.all_correct;
-      this.record = r.record;
-      this.answer = r.answer;
-      this.correctRate = r.correct_rate
-      this.alias = r.alias;
-    })
+  watch: {
+    params: 'getinfo'
   },
   computed: {
     correct() {
@@ -97,13 +73,27 @@ export default {
     })
   },
   methods: {
-    goBack() {
-      this.$router.go(-1)
-    },
     toggleAllCorrec(title, list) {
       this.showAllCorrec = !this.showAllCorrec
       this.popupTitle = title
       this.popupList = list
+    },
+    getinfo() {
+      let param = {
+        "course_hour_publish_id": this.params.course_hour_publish_id,
+        "course_resource_id": this.params.course_resource_id,
+        "qti_question_id": this.params.source_pk_id,
+        "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
+        "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
+      }
+      getStatistics.getinfo(param).then((r) => {
+        this.allCorrect = r.all_correct;
+        this.record = r.record;
+        this.answer = r.answer;
+        this.correctRate = r.correct_rate
+        this.alias = r.alias;
+        this.loading = false;
+      })
     }
   },
   components: {
