@@ -3,7 +3,8 @@ export default {
   namespaced: true,
   state: {
     params: {},
-    mini: {}
+    mini: {},
+    index: 0
   },
   getters: {
   },
@@ -13,6 +14,22 @@ export default {
     },
     setmini(state, val) {
       state.mini = val
+    },
+    setIndex(state, val) {
+      if (val > 0) {
+        if (state.index === state.mini.length) {
+          return false
+        } else {
+          state.index++
+        }
+      } else {
+        if (state.index === 0) {
+          return false
+        } else {
+          state.index--
+        }
+      }
+      state.params = state.mini[state.index];
     }
   },
   actions: {

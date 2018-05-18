@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.go(-1)
+      this.$router.go(-2)
     },
     toggleAllCorrec(title, list) {
       this.showAllCorrec = !this.showAllCorrec

@@ -7,6 +7,8 @@ import store from './store/index.js'
 import router from './router'
 import 'es6-promise/auto'
 
+import Vuetouch from 'vue-touch'
+
 import '@/assets/css/base.css'
 import '@/assets/css/global.css'
 
@@ -40,6 +42,7 @@ Vue.use(Vant)
 
 Vue.use(Cube)
 
+Vue.use(Vuetouch, {name: 'v-touch'})
 Vue.prototype.config = config
 Vue.prototype.util = util
 Vue.config.productionTip = false
