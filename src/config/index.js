@@ -1,10 +1,11 @@
+
 // 运行环境 dt/dev/test/t/mirror/prod
-const ENV = 'dev'
+let ENV = window.runEnv || '.dev'
 const HOST = 'anoah.com'
 const PRO = 'http'
 
-let api2 = `${PRO}://api2.${ENV}.${HOST}/`
-let old = `${PRO}://e.${ENV}.${HOST}/`
+let api2 = `${PRO}://api2${ENV}.${HOST}/`
+let old = `${PRO}://e${ENV}.${HOST}/`
 
 export default{
   apiDomain: {

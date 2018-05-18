@@ -62,6 +62,7 @@ let app = {
     Vue.use({
       APP
     })
+    window.bus.$store = store;
   },
   onDeviceReady: function () {
   }
