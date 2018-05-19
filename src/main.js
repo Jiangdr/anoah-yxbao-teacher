@@ -58,8 +58,8 @@ window.ICOM_EVN_VAR = {
   api_address_router: `${store.getters['runEnv/old']}/api_router/`,
   api_cache: true
 }
-addQti(`${store.getters['runEnv/old']}/icoms/qtidiv/icombase.js`)
 addQti(`${store.getters['runEnv/old']}/icoms/qtidiv/jquery.js`)
+addQti(`${store.getters['runEnv/old']}/icoms/qtidiv/icombase.js`)
 let app = {
   initialize: function () {
     // android壳子里

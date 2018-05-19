@@ -19,7 +19,9 @@
       <van-col span="18">
         <span class="text">查看统计</span>
       </van-col>
-      <van-col span="4">原题</van-col>
+      <van-col span="4">
+        <span @click="linkTo">原题</span>
+      </van-col>
     </van-row>
   </div>
   <answer-column :params="params" v-if="type === 1 || type === 2 || type === 3 || type === 6 || type === 15"></answer-column>
@@ -80,6 +82,9 @@ export default {
       } else {
         Toast('第一道题');
       }
+    },
+    linkTo() {
+      this.$router.push({path: '/originalQuestion'})
     }
   },
   components: {
