@@ -17,7 +17,9 @@
       <van-col span="18">
         <span class="text">查看统计</span>
       </van-col>
-      <van-col span="4">原题</van-col>
+      <van-col span="4">
+        <span @click="linkTo">原题</span>
+      </van-col>
     </van-row>
   </div>
   <router-view></router-view>
@@ -47,6 +49,10 @@ export default {
   methods: {
     goBack() {
       this.$router.go(-1)
+    },
+    // 跳转原题查看
+    linkTo() {
+      this.$router.push({path: '/originalQuestion'})
     },
     detail() {
       let type = parseInt(this.params.qti_question_type_id);

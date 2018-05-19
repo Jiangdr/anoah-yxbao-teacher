@@ -58,8 +58,8 @@ window.ICOM_EVN_VAR = {
   api_address_router: `${config.apiDomain.old}/api_router/`,
   api_cache: true
 }
-addQti(`${config.apiDomain.old}/icoms/qtidiv/icombase.js`)
 addQti(`${config.apiDomain.old}/icoms/qtidiv/jquery.js`)
+addQti(`${config.apiDomain.old}/icoms/qtidiv/icombase.js`)
 let app = {
   initialize: function () {
     // android壳子里
