@@ -21,7 +21,6 @@ import Cube from '../lib/cube.min.js'
 
 import 'font-awesome/css/font-awesome.css'
 
-import config from '@/config/index.js'
 import util from '@/utils/index.js'
 
 import dayjs from 'dayjs';
@@ -43,23 +42,24 @@ Vue.use(Vant)
 Vue.use(Cube)
 
 Vue.use(Vuetouch, {name: 'v-touch'})
-Vue.prototype.config = config
+
 Vue.prototype.util = util
 Vue.config.productionTip = false
 
 window.bus = new Vue()
+window.bus.$store = store;
 // 初始化老版本qti参数，和动态引入需要icombase
 window.ICOM_EVN_VAR = {
   debug: true,
-  lib_address: `${config.apiDomain.old}/icoms/qtidiv/jslibs/`,
-  base: `${config.apiDomain.old}/icoms/qtidiv/icoms/`,
-  api_address: `${config.apiDomain.old}/api/`,
-  api_address_dist: `${config.apiDomain.old}/api_dist/`,
-  api_address_router: `${config.apiDomain.old}/api_router/`,
+  lib_address: `${store.getters['runEnv/old']}/icoms/qtidiv/jslibs/`,
+  base: `${store.getters['runEnv/old']}/icoms/qtidiv/icoms/`,
+  api_address: `${store.getters['runEnv/old']}/api/`,
+  api_address_dist: `${store.getters['runEnv/old']}/api_dist/`,
+  api_address_router: `${store.getters['runEnv/old']}/api_router/`,
   api_cache: true
 }
-addQti(`${config.apiDomain.old}/icoms/qtidiv/jquery.js`)
-addQti(`${config.apiDomain.old}/icoms/qtidiv/icombase.js`)
+addQti(`${store.getters['runEnv/old']}/icoms/qtidiv/jquery.js`)
+addQti(`${store.getters['runEnv/old']}/icoms/qtidiv/icombase.js`)
 let app = {
   initialize: function () {
     // android壳子里

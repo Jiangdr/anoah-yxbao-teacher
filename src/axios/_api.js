@@ -1,8 +1,8 @@
 'use strict'
 import http from './_axios'
-import config from '@/config/index'
 import qs from 'qs'
 import { Toast } from 'vant'
+import store from '@/store/index'
 
 class API {
   // 为对象添加属性
@@ -28,7 +28,7 @@ class API {
   // 获取数据通用方法
   // 获取数据通用方法
   fetch (url, data, type = 'post', options = {'errorTips': true, 'api': 'api2'}) {
-    const apiDomain = config.apiDomain[options.api] ? config.apiDomain[options.api] : config.apiDomain['api2']
+    const apiDomain = window.bus.$store.getters['runEnv/' + options.api] ? window.bus.$store.getters['runEnv/' + options.api] : window.bus.$store.getters['runEnv/' + options.api]
     url = !~url.indexOf('http') ? apiDomain + url : url
     if (type === 'post') {
       data = qs.stringify(data)
