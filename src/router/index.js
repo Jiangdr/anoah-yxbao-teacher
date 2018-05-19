@@ -13,6 +13,8 @@ import userCenter from '@/module/user-center/router'
 import home from '@/module/home/index'
 import list from '@/module/home/list'
 import homeworkRoutes from '@/module/homework/homework.route'
+// 批量评价
+import batchEvaluateRoutes from '@/module/batchEvaluate/batchEvaluate.route'
 Vue.use(Router)
 let routes = [
   {
@@ -33,7 +35,8 @@ let routes = [
   ...correction,
   ...notice,
   ...tongji,
-  ...homeworkDetail
+  ...homeworkDetail,
+  ...batchEvaluateRoutes
 ]
 let router = new Router({
   routes: routes
