@@ -108,7 +108,7 @@ export default {
 
 <style scoped>
   .wanxing {
-    height: 100vh;
+    height: auto;
   }
 
   .wanxing>.title {

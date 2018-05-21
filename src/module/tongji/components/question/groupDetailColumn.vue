@@ -128,7 +128,7 @@ export default {
 
 <style scoped>
   .groupColumn {
-    height: 100vh;
+    height: auto;
   }
 
   .groupColumn>.title {

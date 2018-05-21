@@ -172,7 +172,7 @@ export default {
 
 <style scoped>
   .tiankong {
-    height: 100vh;
+    height: auto;
   }
 
   .tiankong>.title {
