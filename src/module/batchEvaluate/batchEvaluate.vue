@@ -3,12 +3,12 @@
 
     <header class="header">
       <h1>批量评价</h1>
-      <i class="cubeic-back" @click="goHome">
+      <i class="cubeic-back" @click="goHomework">
         <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
       </i>
     </header>
 
-    <div class="select-container">
+    <!-- <div class="select-container">
       <span class="select-span">
         <div class="select-span-div" @click="clickTime">时间</div>
       </span>
@@ -18,9 +18,9 @@
       <span class="select-span">
         <div class="select-span-div" @click="clickClass">班级</div>
       </span>
-    </div>
+    </div> -->
 
-    <div>
+    <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;">
         <div style="display: inline-block;">正确率：</div>
         <div style="display: inline-block;">全部</div>
         <div style="display: inline-block;">100%</div>
@@ -36,23 +36,37 @@
     </div>
 
     <div>
-        <span>张三</span>
-        <span>张三</span>
-        <span>张三</span>
+        <span @click="clickStudent">张三</span>
+        <span @click="clickStudent">张三</span>
+        <span @click="clickStudent">张三</span>
     </div>
 
-    <div class="yxban-tabbar--fixed"></div>
-
-    <van-tabbar v-model="active">
-  <van-tabbar-item icon="shop">
-    <span>自定义</span>
-    <template slot="icon" slot-scope="props">
-      <img :src="props.active ? icon.active : icon.normal" />
-    </template>
-  </van-tabbar-item>
-  <van-tabbar-item icon="chat">标签</van-tabbar-item>
-  <van-tabbar-item icon="records">标签</van-tabbar-item>
-</van-tabbar>
+    <div class="yxban-tabbar--fixed van-tabbar">
+      <div class="van-tabbar-item">
+        <div class="van-tabbar-item__icon">
+          <i class="fa fa-location-arrow"></i>
+        </div>
+        <div class="van-tabbar-item__text">
+          <span>退回作业</span>
+        </div>
+      </div>
+      <div class="van-tabbar-item">
+        <div class="van-tabbar-item__icon">
+          <i class="fa fa-location-arrow"></i>
+        </div>
+        <div class="van-tabbar-item__text">
+          <span>给表扬</span>
+        </div>
+      </div>
+      <div class="van-tabbar-item">
+        <div class="van-tabbar-item__icon">
+          <i class="fa fa-location-arrow"></i>
+        </div>
+        <div class="van-tabbar-item__text">
+          <span>写评语</span>
+        </div>
+      </div>
+    </div>
 
     <!-- <div class="listContainer" v-bind:style="listContainerStyle">
       <van-pull-refresh v-model="pullRefresIsLoading" @refresh="onRefresh">
@@ -80,18 +94,6 @@
       </van-pull-refresh>
     </div> -->
 
-    <van-popup v-model="showClassPopup" position="bottom" :overlay="true">
-      <van-picker show-toolbar :columns="columnsOfClass" @cancel="onCancelClassPopup" @confirm="onConfirmClassPopup"/>
-    </van-popup>
-
-    <van-popup v-model="showStatusPopup" position="bottom" :overlay="true">
-      <van-picker show-toolbar :columns="columnsOfStatus" @cancel="onCancelStatusPopup" @confirm="onConfirmStatusPopup"/>
-    </van-popup>
-
-    <van-popup v-model="showTimePopup" position="bottom" :overlay="true">
-      <van-picker show-toolbar :columns="columnsOfTime" @cancel="onCancelTimePopup" @confirm="onConfirmTimePopup"/>
-    </van-popup>
-
     <!-- <div class="publishHomeworkBtnDiv" @click="goChooseTextbook">
       <div class="publishHomeworkBtn">
         <div>布置<br/>作业</div>
@@ -117,204 +119,21 @@ export default {
       pullRefresIsLoading: false,
       currentPage: 1,
       totalPage: 1,
-      showClassPopup: false,
-      showStatusPopup: false,
-      showTimePopup: false,
-      columnsOfClass: [],
-      columnsOfStatus: [
-        {
-          text: "全部",
-          value: "all"
-        },
-        {
-          text: "待批改",
-          value: "correct"
-        },
-        {
-          text: "已批改",
-          value: "finish"
-        }
-      ],
       countNum: 0,
       totalCountNum: 0,
-      active: 0,
-      icon: {
-        normal: "//img.yzcdn.cn/1.png",
-        active: "//img.yzcdn.cn/2.png"
-      }
+      active: 0
     };
-  },
-  created: function() {
-    var nowdate = new Date();
-    var yNow = nowdate.getFullYear();
-    var mNow = nowdate.getMonth() + 1;
-    var dNow = nowdate.getDate();
-    var formatnowdate = yNow + "-" + mNow + "-" + dNow;
-
-    // 获取系统前一周的时间
-    var oneweekdate = new Date(nowdate - 7 * 24 * 3600 * 1000);
-    var yWeek = oneweekdate.getFullYear();
-    var mWeek = oneweekdate.getMonth() + 1;
-    var dWeek = oneweekdate.getDate();
-    var formatWeekdate = yWeek + "-" + mWeek + "-" + dWeek;
-
-    // 获取系统前一个月的时间
-    nowdate.setMonth(nowdate.getMonth() - 1);
-    var yOneMonth = nowdate.getFullYear();
-    var mOneMonth = nowdate.getMonth() + 1;
-    var dOneMonth = nowdate.getDate();
-    var formatOneMonthdate = yOneMonth + "-" + mOneMonth + "-" + dOneMonth;
-
-    // 获取系统前三个月的时间
-    nowdate.setMonth(nowdate.getMonth() - 2);
-    var yThreeMonth = nowdate.getFullYear();
-    var mThreeMonth = nowdate.getMonth() + 1;
-    var dThreeMonth = nowdate.getDate();
-    var formatThreeMonthdate =
-      yThreeMonth + "-" + mThreeMonth + "-" + dThreeMonth;
-    this.columnsOfTime = [
-      {
-        text: "全部",
-        from: "",
-        to: ""
-      },
-      {
-        text: "最近一周",
-        from: formatWeekdate,
-        to: formatnowdate
-      },
-      {
-        text: "最近一个月",
-        from: formatOneMonthdate,
-        to: formatnowdate
-      },
-      {
-        text: "最近三个月",
-        from: formatThreeMonthdate,
-        to: formatnowdate
-      }
-    ];
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
-    var array = [
-      {
-        text: "全部",
-        class_id: ""
-      }
-    ];
-    for (
-      let i = 0;
-      i < this.$store.state.account.userInfo.classes.length;
-      i++
-    ) {
-      array.push({
-        text: this.$store.state.account.userInfo.classes[i].class_name,
-        class_id: this.$store.state.account.userInfo.classes[i].class_id
-      });
-    }
-    this.columnsOfClass = array;
-    this.chooseClass = this.columnsOfClass[0];
-    this.chooseStatus = this.columnsOfStatus[0];
-    this.chooseTime = this.columnsOfTime[0];
-    this.getHomeworkList();
   },
   methods: {
-    clickClass() {
-      this.showClassPopup = !this.showClassPopup;
-    },
-    clickStatus() {
-      this.showStatusPopup = !this.showStatusPopup;
-    },
-    clickTime() {
-      this.showTimePopup = !this.showTimePopup;
-    },
-    onConfirmClassPopup(value, index) {
-      this.showClassPopup = false;
-      this.chooseClass = value;
-      this.getHomeworkList();
-    },
-    onCancelClassPopup() {
-      this.showClassPopup = false;
-    },
-    onConfirmStatusPopup(value, index) {
-      this.showStatusPopup = false;
-      this.chooseStatus = value;
-      this.getHomeworkList();
-    },
-    onCancelStatusPopup() {
-      this.showStatusPopup = false;
-    },
-    onConfirmTimePopup(value, index) {
-      this.showTimePopup = false;
-      this.chooseTime = value;
-      this.getHomeworkList();
-    },
-    onCancelTimePopup() {
-      this.showTimePopup = false;
-    },
-    onRefresh() {
-      setTimeout(() => {
-        this.$toast("刷新成功");
-        this.pullRefresIsLoading = false;
-      }, 500);
-      this.getHomeworkList();
-    },
-    goHomeworkDetail(item) {
+    goHomework () {
       this.$router.push({
-        path: "/homeworkDetail/:publishId/:classId",
-        name: "homeworkDetail",
-        params: {
-          publishId: item.course_hour_publish_id,
-          classId: item.class_id
-        }
+        path: "/homework"
       });
     },
-    loadMore() {
-      console.log("loadMore......");
-      if (this.totalPage < this.currentPage) {
-        this.finished = true;
-        this.loading = false;
-      } else {
-        // this.loading = false;
-        this.currentPage += 1;
-        this.getHomeworkList();
-      }
-    },
-    goHome() {
-      this.$router.push({
-        path: "/"
-      });
-    },
-    goChooseTextbook() {
-      this.$router.push({
-        path: "/chooseTextbook"
-      });
-    },
-    getHomeworkList() {
-      var self = this;
-      var data = {
-        user_id: self.userInfo.userid,
-        class_id: self.chooseClass.class_id,
-        status: self.chooseStatus.value,
-        from: self.chooseTime.from,
-        to: self.chooseTime.to,
-        page: self.currentPage,
-        per_page: 7
-      };
-
-      api.homeworkLists(data).then(function(r) {
-        self.homeworkListArray = self.homeworkListArray.concat(r.lists);
-        self.currentPage = Number(r.page);
-        self.totalPage = Number(r.total_count);
-        self.loading = false;
-        self.countNum = r.count;
-        self.totalCountNum = r.total_count;
-        //  self.$nextTick(_ => {
-        // self.loading = false
-        // })
-      });
-    }
+    clickStudent() {}
   }
 };
 </script>
@@ -394,5 +213,42 @@ export default {
   left: 0;
   bottom: 0;
   position: fixed;
+}
+.van-tabbar {
+  width: 100%;
+  height: 13.33333vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #fff;
+}
+.van-tabbar-item {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  color: #666;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  line-height: 1;
+  font-size: 3.2vw;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+.van-tabbar-item--active {
+  color: #2ec2a9;
+}
+.van-tabbar-item__icon {
+    font-size: 4.8vw;
+    margin-bottom: 1.33333vw;
+    position: relative;
 }
 </style>
