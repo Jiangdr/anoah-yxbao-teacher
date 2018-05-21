@@ -10,21 +10,51 @@
 
     <div class="select-container">
       <span class="select-span">
-        <div class="select-span-div" @click="clickTime">时间<i class="fa fa-angle-down"></i></div>
+        <div class="select-span-div" @click="clickTime">时间</div>
       </span>
       <span class="select-span">
-        <div class="select-span-div" @click="clickStatus">状态<i class="fa fa-angle-down"></i></div>
+        <div class="select-span-div" @click="clickStatus">状态</div>
       </span>
       <span class="select-span">
-        <div class="select-span-div" @click="clickClass">班级<i class="fa fa-angle-down"></i></div>
+        <div class="select-span-div" @click="clickClass">班级</div>
       </span>
+    </div>
+
+    <div>
+        <div style="display: inline-block;">正确率：</div>
+        <div style="display: inline-block;">全部</div>
+        <div style="display: inline-block;">100%</div>
+        <div style="display: inline-block;">90-99%</div>
     </div>
 
     <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;">
-      共{{totalCountNum}}个作业&nbsp;&nbsp;<span style="color: red;">{{countNum}}</span>个待批改
+        <div style="display: inline-block;">评价：</div>
+        <div style="display: inline-block;">待评价</div>
+        <div style="display: inline-block;">已评价</div>
+        <div style="display: inline-block;">待批改</div>
+      <!-- 共{{totalCountNum}}个作业&nbsp;&nbsp;<span style="color: red;">{{countNum}}</span>个待批改 -->
     </div>
 
-    <div class="listContainer" v-bind:style="listContainerStyle">
+    <div>
+        <span>张三</span>
+        <span>张三</span>
+        <span>张三</span>
+    </div>
+
+    <div class="yxban-tabbar--fixed"></div>
+
+    <van-tabbar v-model="active">
+  <van-tabbar-item icon="shop">
+    <span>自定义</span>
+    <template slot="icon" slot-scope="props">
+      <img :src="props.active ? icon.active : icon.normal" />
+    </template>
+  </van-tabbar-item>
+  <van-tabbar-item icon="chat">标签</van-tabbar-item>
+  <van-tabbar-item icon="records">标签</van-tabbar-item>
+</van-tabbar>
+
+    <!-- <div class="listContainer" v-bind:style="listContainerStyle">
       <van-pull-refresh v-model="pullRefresIsLoading" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" @load="loadMore" :offset="300" :immediate-check="false">
           <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
@@ -48,7 +78,7 @@
           没有数据
         </div>
       </van-pull-refresh>
-    </div>
+    </div> -->
 
     <van-popup v-model="showClassPopup" position="bottom" :overlay="true">
       <van-picker show-toolbar :columns="columnsOfClass" @cancel="onCancelClassPopup" @confirm="onConfirmClassPopup"/>
@@ -62,11 +92,11 @@
       <van-picker show-toolbar :columns="columnsOfTime" @cancel="onCancelTimePopup" @confirm="onConfirmTimePopup"/>
     </van-popup>
 
-    <div class="publishHomeworkBtnDiv" @click="goChooseTextbook">
+    <!-- <div class="publishHomeworkBtnDiv" @click="goChooseTextbook">
       <div class="publishHomeworkBtn">
         <div>布置<br/>作业</div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -106,7 +136,12 @@ export default {
         }
       ],
       countNum: 0,
-      totalCountNum: 0
+      totalCountNum: 0,
+      active: 0,
+      icon: {
+        normal: "//img.yzcdn.cn/1.png",
+        active: "//img.yzcdn.cn/2.png"
+      }
     };
   },
   created: function() {
@@ -351,8 +386,13 @@ export default {
   color: #989ca0;
 }
 .arrow-right {
-  font-size:36px;
-  float:right;
+  font-size: 36px;
+  float: right;
   color: #989ca0;
+}
+.yxban-tabbar--fixed {
+  left: 0;
+  bottom: 0;
+  position: fixed;
 }
 </style>
