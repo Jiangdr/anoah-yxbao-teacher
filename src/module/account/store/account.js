@@ -8,7 +8,8 @@ export default {
     username: 'zh1234',
     password: '111111',
     userInfo: stroage['persistent'].get('userinfo'),
-    jwt: stroage['persistent'].get('jwt')
+    jwt: stroage['persistent'].get('jwt'),
+    userid: 33737
   },
   getters: {
   },
@@ -27,9 +28,31 @@ export default {
     setUserInfo (state, val) {
       state.userInfo = val.userinfo
       state.jwt = val.jwt
+    },
+    setUserId (state, val) {
+      state.userid = val;
     }
   },
   actions: {
+    doLoginOld ({state, commit}) {
+      return userApi.doLoginOld({
+        username: state.username,
+        password: state.password,
+        token: '',
+        machine_number: '',
+        machine_type: ''
+      }).then(r => {
+        console.log('r', r)
+        // 登录成功后持久用户名和密码
+        stroage['persistent'].set('user.username', state.username)
+        stroage['persistent'].set('user.password', state.password)
+        stroage['persistent'].set('jwt', '')
+        stroage['persistent'].set('userinfo', r)
+        commit('setIsLogin', true)
+        commit('setUserInfo', {"userinfo": r, "jwt": ""})
+        commit('setUserId', r.userid)
+      })
+    },
     doLogin ({state, commit}) {
       return userApi.doLogin({
         'device': 'PC_BROWSER',

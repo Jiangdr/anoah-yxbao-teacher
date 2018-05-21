@@ -304,16 +304,16 @@ export default {
     goTongji(curr, index, key) {
       console.log(curr, index, key);
       return false
-      if (curr.status === 0) {
-        return false;
-      }
-      this.$store.commit('homeworkDetail/setParams', curr)
-      this.$store.commit('homeworkDetail/setmini', this.miniResource[index])
-      this.$store.commit('homeworkDetail/setIndex', key)
-      // 单选题、判断题统计页面
-      this.$router.push({
-        name: 'tongji'
-      });
+      // if (curr.status === 0) {
+      //   return false;
+      // }
+      // this.$store.commit('homeworkDetail/setParams', curr)
+      // this.$store.commit('homeworkDetail/setmini', this.miniResource[index])
+      // this.$store.commit('homeworkDetail/setIndex', key)
+      // // 单选题、判断题统计页面
+      // this.$router.push({
+      //   name: 'tongji'
+      // });
     },
     // 资源正确率计算方法
     itemCorrect(correct) {

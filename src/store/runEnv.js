@@ -1,8 +1,9 @@
+import stroage from '@/store/stroage.js'
 
 export default {
   namespaced: true,
   state: {
-    env: '.dev',
+    env: stroage['persistent'].get('runEnv.env') || '.dev',
     host: 'anoah.com',
     pro: 'http'
   },
@@ -17,6 +18,7 @@ export default {
   mutations: {
     setEnv(state, val) {
       state.env = val;
+      stroage['persistent'].set('runEnv.env', val)
     }
   },
   actions: {
