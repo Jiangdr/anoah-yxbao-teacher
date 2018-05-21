@@ -9,7 +9,8 @@ export default {
   },
   getters: {
     api2: state => {
-      return `${state.pro}://api2${state.env}.${state.host}/`
+      let tmp = state.env.replace('.', '');
+      return `${state.pro}://${tmp}.${state.host}/yxp_api2`
     },
     old: state => {
       return `${state.pro}://e${state.env}.${state.host}/`
