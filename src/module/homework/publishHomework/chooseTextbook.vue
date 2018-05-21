@@ -103,9 +103,15 @@ export default {
       var data = {
         user_id: self.userInfo.userid
       };
-      api.getGradeLists(data).then(function(r) {
-        self.gradeLists = r;
-      });
+      api.getGradeLists(data).then(
+        success => {
+          self.gradeLists = success;
+        },
+        err => {
+          console.log(err);
+          self.$toast("网络异常");
+        }
+      );
     },
     getTextBookLists() {
       var self = this;
@@ -116,14 +122,20 @@ export default {
         grade_id: self.activeGradeId,
         term_id: self.activeTermId
       };
-      api.getBookLists(data).then(function(r) {
-        self.loading = false;
-        if (r.lists.length < 1) {
-          self.noMore = true;
-          return;
+      api.getBookLists(data).then(
+        success => {
+          self.loading = false;
+          if (success.lists.length < 1) {
+            self.noMore = true;
+          } else {
+            self.textBookList = self.textBookList.concat(success.lists);
+          }
+        },
+        err => {
+          console.log(err);
+          self.$toast("网络异常");
         }
-        self.textBookList = self.textBookList.concat(r.lists);
-      });
+      );
     },
     clickTextBook(book) {
       this.chooseTextbookId = book.edu_book_id;
@@ -149,7 +161,7 @@ export default {
 $primary-color: #08b783;
 $active-color: #13d098;
 $border-state: 1px solid rgb(234, 237, 240);
-.text-font{
+.text-font {
   font-size: 16px;
   color: #9c9ea1;
 }
@@ -173,7 +185,7 @@ $border-state: 1px solid rgb(234, 237, 240);
   text-align: center;
   color: #fff;
 }
-.comfirmBtn:active{
+.comfirmBtn:active {
   background-color: $active-color;
 }
 .unitTabClass {
@@ -206,21 +218,21 @@ $border-state: 1px solid rgb(234, 237, 240);
   height: calc(100% - 30vw);
   overflow: auto;
   padding-top: 2vw;
-  .sectionDiv{
+  .sectionDiv {
     font-size: 14px;
-    color: #9c9ea1
+    color: #9c9ea1;
   }
-   .gradeP {
-     font-size: 16px;
-   }
+  .gradeP {
+    font-size: 16px;
+  }
   .gradeDiv {
     line-height: 35px;
     height: 35px;
   }
   p {
-      padding-left: 20px;
-      margin: 7px 0 0 0;
-    }
+    padding-left: 20px;
+    margin: 7px 0 0 0;
+  }
 }
 .activeTabClass {
   color: $primary-color;
