@@ -4,7 +4,7 @@
       <div class="popup-container">
         <div class="bar">{{text}}</div>
         <div class="container">
-          <span v-for="(stu, index) in list" :key="index" class="van-hairline--surround">{{stu.real_name}}</span>
+          <span v-for="(stu, index) in list" :key="index" @click="linkTo(stu.userid)" class="van-hairline--surround">{{stu.real_name}}</span>
         </div>
       </div>
     </van-popup>
@@ -37,6 +37,10 @@ export default {
     toggle() {
       this.$emit('toggleAllCorrec')
       return false;
+    },
+    // 查看带学习记录的qti
+    linkTo(userid) {
+      this.$router.push({path: `/originalQuestion/${userid}`})
     }
   }
 }

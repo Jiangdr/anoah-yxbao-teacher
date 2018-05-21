@@ -1,6 +1,6 @@
 <template>
   <div class="wanxing">
-    <div class="title border-bottom-1px">
+    <!-- <div class="title border-bottom-1px">
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
@@ -13,6 +13,7 @@
         <van-col span="4">原题</van-col>
       </van-row>
     </div>
+    -->
     <div class="title-bar">
       <van-row>
         <van-col span="6">
@@ -42,9 +43,10 @@
 <script>
 import getStatistics from '../../axios/getQuestionStatistics.js'
 import studentList from '../common/studentList.vue'
-import {mapState} from 'vuex'
+// import {mapState} from 'vuex'
 export default {
   name: 'wanxing',
+  props: ['params'],
   data() {
     return {
       allCorrect: {},
@@ -57,21 +59,12 @@ export default {
     }
   },
   created() {
+    this.getinfo();
+  },
+  watch: {
+    params: 'getinfo'
   },
   activated() {
-    let param = {
-      "course_hour_publish_id": this.params.course_hour_publish_id,
-      "course_resource_id": this.params.course_resource_id,
-      "qti_question_id": this.params.source_pk_id,
-      "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
-      "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
-    }
-    getStatistics.getinfo(param).then((r) => {
-      this.allCorrect = r.all_correct;
-      this.record = r.record;
-      this.alias = r.alias;
-      this.correctRate = r.correct_rate;
-    })
   },
   computed: {
     correct() {
@@ -80,19 +73,31 @@ export default {
       } else {
         return Math.round(this.correctRate * 100) + '%'
       }
-    },
-    ...mapState({
-      'params': (state) => state.homeworkDetail.params
-    })
+    }
+    // ...mapState({
+    //   'params': (state) => state.homeworkDetail.params
+    // })
   },
   methods: {
-    goBack() {
-      this.$router.go(-1)
-    },
     toggleAllCorrec(title, list) {
       this.showAllCorrec = !this.showAllCorrec
       this.popupTitle = title
       this.popupList = list
+    },
+    getinfo() {
+      let param = {
+        "course_hour_publish_id": this.params.course_hour_publish_id,
+        "course_resource_id": this.params.course_resource_id,
+        "qti_question_id": this.params.source_pk_id,
+        "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
+        "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
+      }
+      getStatistics.getinfo(param).then((r) => {
+        this.allCorrect = r.all_correct;
+        this.record = r.record;
+        this.alias = r.alias;
+        this.correctRate = r.correct_rate;
+      })
     }
   },
   components: {
@@ -103,7 +108,7 @@ export default {
 
 <style scoped>
   .wanxing {
-    height: 100vh;
+    height: auto;
   }
 
   .wanxing>.title {

@@ -168,7 +168,7 @@ export default {
   display: inline-block;
   width:110px;
   height: 40px;
-  flex:0 auto auto;
+  flex:auto;
   line-height: 40px;
   border-radius: 5px;
   background: rgb(246,247,249);

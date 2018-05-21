@@ -54,6 +54,10 @@ export default {
       correctRate: this.$route.params.correct_rate
     }
   },
+  created() {
+  },
+  watch: {
+  },
   computed: {
     correct() {
       if (this.correctRate === '') {

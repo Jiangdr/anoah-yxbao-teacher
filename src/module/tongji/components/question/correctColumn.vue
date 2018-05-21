@@ -1,6 +1,6 @@
 <template>
   <div class="danxuan">
-    <div class="title border-bottom-1px">
+    <!-- <div class="title border-bottom-1px">
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
@@ -12,7 +12,7 @@
         </van-col>
         <van-col span="4">原题</van-col>
       </van-row>
-    </div>
+    </div>-->
     <div class="title-bar">
       <van-row>
         <van-col span="6">
@@ -45,6 +45,7 @@ import {mapState} from 'vuex'
 
 export default {
   name: 'lianxian',
+  props: ['params'],
   data() {
     return {
       record: {
@@ -60,25 +61,12 @@ export default {
     }
   },
   created() {
+    this.getinfo();
+  },
+  watch: {
+    params: 'getinfo'
   },
   activated() {
-    let param = {
-      "course_hour_publish_id": this.params.course_hour_publish_id,
-      "course_resource_id": this.params.course_resource_id,
-      "qti_question_id": this.params.source_pk_id,
-      "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
-      "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
-    }
-    getStatistics.getinfo(param).then((r) => {
-      // r.all_correct ===>   连线题、竖式题
-      // r.record.allcorrect ===>   连词成句
-      this.record['right'] = r.all_correct || r.record.allcorrect;
-      this.record['half'] = r.all_half || r.record.halfcorrect || {};
-      this.record['wrong'] = r.all_wrong || r.record.allfault;
-      this.record['no'] = r.all_no_answer || r.record.noanswer;
-      this.correctRate = r.correct_rate >= 0 ? r.correct_rate : r.class_average_correct_rate
-      console.log(r.correct_rate)
-    })
   },
   computed: {
     correct() {
@@ -94,15 +82,9 @@ export default {
         this.record[key].count && (num += this.record[key].count)
       }
       return num
-    },
-    ...mapState({
-      'params': (state) => state.homeworkDetail.params
-    })
+    }
   },
   methods: {
-    goBack() {
-      this.$router.go(-1)
-    },
     toggleAllCorrec(title, list) {
       this.showAllCorrec = !this.showAllCorrec
       this.popupTitle = title
@@ -113,6 +95,25 @@ export default {
         return key === 'right' ? '答对' : (key === 'wrong' ? '答错' : (key === 'no' ? '未答' : ''))
       }
       return key === 'right' ? '全对' : (key === 'wrong' ? '全错' : (key === 'no' ? '未答' : '半对'))
+    },
+    getinfo() {
+      let param = {
+        "course_hour_publish_id": this.params.course_hour_publish_id,
+        "course_resource_id": this.params.course_resource_id,
+        "qti_question_id": this.params.source_pk_id,
+        "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
+        "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
+      }
+      getStatistics.getinfo(param).then((r) => {
+      // r.all_correct ===>   连线题、竖式题
+      // r.record.allcorrect ===>   连词成句
+        this.record['right'] = r.all_correct || r.record.allcorrect;
+        this.record['half'] = r.all_half || r.record.halfcorrect || {};
+        this.record['wrong'] = r.all_wrong || r.record.allfault;
+        this.record['no'] = r.all_no_answer || r.record.noanswer;
+        this.correctRate = r.correct_rate >= 0 ? r.correct_rate : r.class_average_correct_rate
+        console.log(r.correct_rate)
+      })
     }
   },
   components: {
@@ -123,7 +124,7 @@ export default {
 
 <style scoped>
   .danxuan {
-    height: 100vh;
+    height: auto;
   }
 
   .danxuan>.title {
