@@ -5,6 +5,7 @@ let apis = {
   launch: "/jwt/zuoye/publish/launch",
   getResourceLists: "/jwt/resource/package/getResourceLists",
   getBookLists: "/jwt/resource/common/getBookLists",
+  getGradeLists: "/jwt/resource/common/getGradeLists",
   getLists: "/jwt/resource/package/getLists"
 }
 
@@ -24,6 +25,10 @@ publishHomeWork.getResourceLists = (params) => {
 
 publishHomeWork.getBookLists = (params) => {
   return publishHomeWork.fetch(apis.getBookLists, params, 'post')
+}
+
+publishHomeWork.getGradeLists = (params) => {
+  return publishHomeWork.fetch(apis.getGradeLists, params, 'post')
 }
 
 publishHomeWork.getLists = (params) => {
