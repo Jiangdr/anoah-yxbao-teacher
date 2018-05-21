@@ -82,6 +82,7 @@ export default {
     },
     handleNumberKey(num) {
       if (this.score.length === 1 && this.score[0] === '0') this.score = ''
+      if (this.score.indexOf('.') > 0 && this.score.split('.')[1].length >= 1) return false
       this.score += num
       if (Number(this.score) >= this.shouldScore) {
         this.score = this.shouldScore + ''
@@ -106,7 +107,7 @@ export default {
       this.score = ''
     },
     handleConfirmKey() {
-      if (this.score[this.score.length - 1] === '.') this.score = this.score.substring(0, this.score.length - 1) 
+      if (this.score[this.score.length - 1] === '.') this.score = this.score.substring(0, this.score.length - 1)
       if (this.score) this.$emit('score', this.score)
     }
   }
