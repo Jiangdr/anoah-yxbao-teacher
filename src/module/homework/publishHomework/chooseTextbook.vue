@@ -2,17 +2,18 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>选择教材</h1>
-      <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i> 返回</i>
+      <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i></i>
     </header>
 
     <div class="gradelist">
         <div v-for="items in gradeLists" :key="items.grade_name">
-            <p>{{items.grade_name}}</p>
-           <div v-for='item in items.grade_list' :key="item.name" v-bind:class="{activeGradeSelClass:activeGradeId === item.id}"  @click="clickGrade(item.id)">
-             <p v-bind:class="{activeTxtClass:activeGradeId === item.id}">
+            <p class="sectionDiv">{{items.grade_name}}</p>
+           <div v-for='item in items.grade_list' :key="item.name" class="gradeDiv" v-bind:class="{activeGradeSelClass:activeGradeId === item.id}"  @click="clickGrade(item.id)">
+             <p class="gradeP" v-bind:class="{activeTxtClass:activeGradeId === item.id}">
                {{item.name}}
               </p>
           </div>
+           <div style="clear:both;"></div>
         </div>
     </div>
 
@@ -28,12 +29,14 @@
               <div class="textBook" v-for="(textBook, index) in textBookList" :key="index" @click="clickTextBook(textBook)"
             v-bind:class="{activeRightTabClass: chooseTextbookId === textBook.edu_book_id}">{{textBook.name}}</div>
             </van-list>
-          <div v-if="textBookList.length==0" style="height: 200px;line-height: 200px;text-align: center;">
+          <div v-if="textBookList.length==0" class="text-font" style="height: 200px;line-height: 200px;text-align: center;">
             没有数据
           </div>
       </div>
     </div>
-    <cube-button style="position:absolute;bottom:0px;height:100px" :outline="true" @click="goSummerHomework">确认</cube-button>
+    <div class="comfirmBtnContainer">
+      <div class="comfirmBtn" :outline="true" @click="goSummerHomework">确认</div>
+    </div>
   </div>
 </template>
 
@@ -143,8 +146,36 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$primary-color: #2ec2a9;
+$primary-color: #08b783;
+$active-color: #13d098;
 $border-state: 1px solid rgb(234, 237, 240);
+.text-font{
+  font-size: 16px;
+  color: #9c9ea1;
+}
+.comfirmBtnContainer {
+  background-color: #ffffff;
+  width: 100%;
+  height: 62px;
+  bottom: 0px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.comfirmBtn {
+  height: 54px;
+  line-height: 54px;
+  width: 50%;
+  border-radius: 26px;
+  background-color: $primary-color;
+  font-size: 16px;
+  text-align: center;
+  color: #fff;
+}
+.comfirmBtn:active{
+  background-color: $active-color;
+}
 .unitTabClass {
   @extend .singleLine;
   background-color: #ffffff;
@@ -175,14 +206,21 @@ $border-state: 1px solid rgb(234, 237, 240);
   height: calc(100% - 28vw);
   overflow: auto;
   padding-top: 2vw;
-  div {
+  .sectionDiv{
+    font-size: 14px;
+    color: #9c9ea1
+  }
+   .gradeP {
+     font-size: 16px;
+   }
+  .gradeDiv {
     line-height: 35px;
     height: 35px;
-    p {
+  }
+  p {
       padding-left: 20px;
       margin: 7px 0 0 0;
     }
-  }
 }
 .activeTabClass {
   color: $primary-color;
@@ -217,10 +255,11 @@ $border-state: 1px solid rgb(234, 237, 240);
 .textBook {
   @extend .singleLine;
   border-bottom: $border-state;
-  line-height: 10vw;
+  line-height: 11vw;
   margin: 0 auto;
   width: 93%;
   text-align: left;
+  font-size: 16px;
 }
 .activeRightTabClass {
   background-color: $primary-color;
