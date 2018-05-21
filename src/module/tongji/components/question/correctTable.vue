@@ -52,10 +52,11 @@
 <script>
 import getStatistics from '../../axios/getQuestionStatistics.js'
 import studentList from '../common/studentList.vue'
-import {mapState} from 'vuex'
+// import {mapState} from 'vuex'
 
 export default {
   name: 'kgtk',
+  props: ['params'],
   data() {
     return {
       allCorrect: {},
@@ -82,10 +83,7 @@ export default {
       } else {
         return Math.round(this.correctRate * 100) + '%'
       }
-    },
-    ...mapState({
-      'params': (state) => state.homeworkDetail.params
-    })
+    }
   },
   methods: {
     toggleAllCorrec(title, list) {
@@ -117,7 +115,7 @@ export default {
 
 <style scoped>
   .kgtk {
-    height: 100vh;
+    height: auto;
   }
 
   .kgtk>.title {

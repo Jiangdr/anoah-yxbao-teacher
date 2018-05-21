@@ -1,6 +1,6 @@
 <template>
   <div class="groupColumn">
-    <!-- <div class="title border-bottom-1px">
+    <div class="title border-bottom-1px">
       <van-row>
         <van-col span="2">
           <span class="back" @click="goBack">
@@ -12,7 +12,7 @@
         </van-col>
         <van-col span="2"></van-col>
       </van-row>
-    </div>-->
+    </div>
     <div class="title-bar">
       <van-row>
         <van-col span="6">
@@ -64,21 +64,23 @@
 
 <script>
 import studentList from '../common/studentList.vue'
-import {mapState} from 'vuex'
 export default {
   name: 'groupColumn',
   data() {
     return {
+      'record': this.$route.params.record,
+      'curr': this.$route.params.curr,
+      'index': this.$route.params.index,
+      'currItem': this.$route.params.curr.child[0],
+      'correctRate': this.$route.params.curr.child[0].correct_rate,
       showAllCorrec: false,
       popupTitle: '',
       popupList: []
     }
   },
   created() {
-    this.getinfo();
   },
   watch: {
-    params: 'getinfo'
   },
   activated() {
   },
@@ -93,16 +95,12 @@ export default {
     count() {
       // return 0
       return this.currItem.right.length + this.currItem.wrong.length + this.currItem.none.length
-    },
-    ...mapState({
-      'record': (state) => state.groupDetail.groupDetail,
-      'curr': (state) => state.groupDetail.curr,
-      'index': (state) => state.groupDetail.index,
-      'currItem': (state) => state.groupDetail.curr.child[0],
-      'correctRate': (state) => state.groupDetail.curr.child[0].correct_rate
-    })
+    }
   },
   methods: {
+    goBack() {
+      this.$router.go(-1)
+    },
     toggleAllCorrec(title, list) {
       this.showAllCorrec = !this.showAllCorrec
       this.popupTitle = title
@@ -111,13 +109,15 @@ export default {
     change(num) {
       console.log(num)
       if (num === -1) {
-        this.$store.commit('groupDetail/setindex', 0)
+        this.index = 0
       } else if (num === this.record.length) {
-        this.$store.commit('groupDetail/setindex', this.record.length)
+        this.index = this.record.length
       } else {
-        this.$store.commit('groupDetail/setindex', num)
+        this.index = num
       }
-      this.$store.commit('groupDetail/setcurr', this.record[num])
+      this.curr = this.record[this.index];
+      this.currItem = this.record[this.index].child[0]
+      this.correctRate = this.record[this.index].child[0].correct_rate
     }
   },
   components: {
@@ -128,7 +128,7 @@ export default {
 
 <style scoped>
   .groupColumn {
-    height: 100vh;
+    height: auto;
   }
 
   .groupColumn>.title {

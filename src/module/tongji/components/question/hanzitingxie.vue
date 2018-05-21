@@ -51,10 +51,11 @@ import groupWord from '../common/groupWord.vue'
 import calculation from '../common/calculation.vue'
 import student from '../common/studentTable.vue'
 
-import {mapState} from 'vuex'
+// import {mapState} from 'vuex'
 
 export default {
   name: 'hanzitingxie',
+  props: ['params'],
   data() {
     return {
       allCorrect: {},
@@ -82,10 +83,7 @@ export default {
       } else {
         return Math.round(this.correctRate * 100) + '%'
       }
-    },
-    ...mapState({
-      'params': (state) => state.homeworkDetail.params
-    })
+    }
   },
   methods: {
 
@@ -123,7 +121,7 @@ export default {
 
 <style scoped>
   .hanzitingxie {
-    height: 100vh;
+    height: auto;
     background: #f8f8f8;
   }
 
