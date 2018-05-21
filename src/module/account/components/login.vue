@@ -9,8 +9,8 @@
   <div id="login" class="page" :class="{slideUp: slideUp}">
     <img class="icon-box" :class="{slideUp: slideUp}" src="/static/img/account/logo.png" alt="">
     <div>
-      <yx-field @focus="slideUp=true" @blur="slideUp=false" v-model="username" label="用户名" label-icon="user" placeholder="请输入用户名" @click-clear="username = ''"></yx-field>
-      <yx-field @focus="slideUp=true" @blur="slideUp=false" v-model="password" type="password" label="密码" label-icon="password" placeholder="请输入密码" @click-clear="password = ''"></yx-field>
+      <yx-field @focus="slideUp=true" @blur="slideUp=false" v-model.trim="username" label="用户名" label-icon="user" placeholder="请输入用户名" @click-clear="username = ''"></yx-field>
+      <yx-field @focus="slideUp=true" @blur="slideUp=false" v-model.trim="password" type="password" label="密码" label-icon="password" placeholder="请输入密码" @click-clear="password = ''"></yx-field>
     </div>
     <yx-login-btn :loading="loading" :disabled="isDisabled" @click="doLogin" class="login-btn" text="登 录"></yx-login-btn>
     <div class="forget-pwd" :class="{slideUp: slideUp}">
@@ -57,7 +57,10 @@ export default {
       }
     }
   },
-  mounted: {
+  mounted() {
+    if (this.username && this.password) {
+      this.isDisabled = false
+    }
   },
   watch: {
     username (newVal) {

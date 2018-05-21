@@ -1,7 +1,7 @@
 import API from '@/axios/_api'
 
 let apis = {
-  'login': '/user/logon/login', // 登录
+  'login': '/user/session/init', // 登录
   'loginOld': '/api_dist/?q=json/user/Login/login&info=',
   'exists': '/user/logon/exists', // 检查账号是否存在
   'reset': '/user/password/reset', // 重置密码
