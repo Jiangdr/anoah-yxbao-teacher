@@ -24,7 +24,7 @@
         <div class="unitTabClass" @click="clickTerm(3)" v-bind:class="{cubeBtnActive: activeTermId === 3}">全册</div>
       </div>
 
-      <div style="margin-top: 2vw;overflow-y: auto;height:calc(100% - 40vw)">
+      <div style="margin-top: 1vw;overflow-y: auto;height:calc(100% - 41vw)">
             <van-list v-model="loading" loading-text="加载中。。。" :finished="finished" @load="loadMore" :offset="100" :immediate-check="false">
               <div class="textBook" v-for="(textBook, index) in textBookList" :key="index" @click="clickTextBook(textBook)"
             v-bind:class="{activeRightTabClass: chooseTextbookId === textBook.edu_book_id}">{{textBook.name}}</div>
@@ -203,7 +203,7 @@ $border-state: 1px solid rgb(234, 237, 240);
 .gradelist {
   width: 25%;
   float: left;
-  height: calc(100% - 28vw);
+  height: calc(100% - 30vw);
   overflow: auto;
   padding-top: 2vw;
   .sectionDiv{
