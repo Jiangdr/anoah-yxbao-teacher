@@ -82,6 +82,7 @@ export default {
   encrypt,
   decrypt,
   hasClass,
+  addClass,
   removeClass,
   getData,
   getRect

@@ -57,6 +57,8 @@ export default {
       }
     }
   },
+  mounted: {
+  },
   watch: {
     username (newVal) {
       newVal.length && this.password.length ? this.isDisabled = false : this.isDisabled = true
@@ -68,7 +70,7 @@ export default {
   methods: {
     doLogin () {
       this.doValidate()
-      this.$store.dispatch('account/doLoginOld').then(r => {
+      this.$store.dispatch('account/doLogin').then(r => {
         this.afterLogin()
       }, j => {
       })
