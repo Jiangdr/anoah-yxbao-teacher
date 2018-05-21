@@ -60,7 +60,7 @@ export default {
   methods: {
     doLogin () {
       this.doValidate()
-      this.$store.dispatch('account/doLogin').then(r => {
+      this.$store.dispatch('account/doLoginOld').then(r => {
         this.afterLogin()
       }, j => {
       })
