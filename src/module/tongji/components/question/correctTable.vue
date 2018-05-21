@@ -115,7 +115,7 @@ export default {
 
 <style scoped>
   .kgtk {
-    height: 100vh;
+    height: auto;
   }
 
   .kgtk>.title {

@@ -39,7 +39,7 @@ export default
   },
   {
     name: 'originalQuestion',
-    path: '/originalQuestion',
+    path: '/originalQuestion/:userid',
     meta: { requiresAuth: false, keepAlive: true },
     component: originalQuestion
   }

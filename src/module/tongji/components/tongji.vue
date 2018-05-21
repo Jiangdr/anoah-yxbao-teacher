@@ -1,35 +1,38 @@
 <template>
 <div>
  <router-view style='height:100vh'></router-view>
-<v-touch
-  class="tongji"
-  v-on:swipeleft="onSwipeLeft"
-  v-on:swiperight="onSwipeRight"
->
-  <div class="title border-bottom-1px">
-    <van-row>
-      <van-col span="2">
-        <span
-          class="back"
-          @click="goBack"
-        >
-          <van-icon name='arrow-left'></van-icon>
-          </span>
-      </van-col>
-      <van-col span="18">
-        <span class="text">查看统计</span>
-      </van-col>
-      <van-col span="4">
-        <span @click="linkTo">原题</span>
-      </van-col>
-    </van-row>
-  </div>
-  <answer-column :params="params" v-if="type === 1 || type === 2 || type === 3 || type === 6 || type === 15"></answer-column>
-  <choice-table :params="params" v-if="type === 11"></choice-table>
-  <correct-column :params="params" v-if="type === 9 || type === 21 || type === 23 || type === 24 || type === 25 || type === 26"></correct-column>
-  <correct-table :params="params" v-if="type === 4 || type === 20"></correct-table>
-  <hanzitingxie :params="params" v-if="parseInt(params.icom_id) || type === 17"></hanzitingxie>
-  <Subjective :params="params" v-if="type === 5"></Subjective>
+  <v-touch
+    class="tongji"
+    v-on:swipeleft="onSwipeLeft"
+    v-on:swiperight="onSwipeRight"
+  >
+    <!-- <keep-alive exclude="RenderQti"> -->
+      <div class="title border-bottom-1px">
+        <van-row>
+          <van-col span="2">
+            <span
+              class="back"
+              @click="goBack"
+            >
+              <van-icon name='arrow-left'></van-icon>
+              </span>
+          </van-col>
+          <van-col span="18">
+            <span class="text">查看统计</span>
+          </van-col>
+          <van-col span="4">
+            <span @click="linkTo">原题</span>
+          </van-col>
+        </van-row>
+      </div>
+      <answer-column :params="params" v-if="type === 1 || type === 2 || type === 3 || type === 6 || type === 15"></answer-column>
+      <choice-table :params="params" v-if="type === 11"></choice-table>
+      <correct-column :params="params" v-if="type === 9 || type === 21 || type === 23 || type === 24 || type === 25 || type === 26"></correct-column>
+      <correct-table :params="params" v-if="type === 4 || type === 20"></correct-table>
+      <!-- <hanzitingxie :params="params" v-if="parseInt(params.icom_id) || type === 17"></hanzitingxie> -->
+      <Subjective :params="params" v-if="type === 5"></Subjective>
+      <render-qti :id="params.source_pk_id + ''" :icom_id="params.icom_id" :dcom_id="params.source_pk_id" user_id="0" :setting="setting"></render-qti>
+    <!-- </keep-alive> -->
   </v-touch>
   </div>
 </template>
@@ -49,6 +52,7 @@ import groupDetail from './question/groupDetail.vue'
 import groupDetailColumn from './question/groupDetailColumn.vue'
 import hanzitingxie from './question/hanzitingxie.vue'
 import Subjective from './question/Subjective.vue'
+import renderQti from '@/components/renderQti.vue'
 export default {
   name: 'tongji',
   created() {
@@ -63,6 +67,17 @@ export default {
     }),
     type() {
       return parseInt(this.params.qti_question_type_id)
+    },
+    setting() {
+      let result = {
+        'smt': 'no_self_smt',
+        'publish_id': this.params.course_hour_publish_id,
+        'course_resource_id': this.params.course_resource_id,
+        'caller': 'ICLASS',
+        'dcom_entity_id': this.params.dcom_entity_id,
+        'titleflag': 1
+      }
+      return result
     }
   },
   methods: {
@@ -84,7 +99,7 @@ export default {
       }
     },
     linkTo() {
-      this.$router.push({path: '/originalQuestion'})
+      this.$router.push({path: '/originalQuestion/0'})
     }
   },
   components: {
@@ -95,7 +110,8 @@ export default {
     groupDetail,
     groupDetailColumn,
     hanzitingxie,
-    Subjective
+    Subjective,
+    renderQti
   }
 }
 </script>

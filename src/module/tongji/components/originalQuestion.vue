@@ -1,10 +1,10 @@
 <template>
   <div id="original-question">
     <render-qti
-      id="qti"
+      :id="questionId"
       icom_id="4629"
       :dcom_id="questionId"
-      user_id="0"
+      :user_id="$route.params.userid"
       :setting="setting"
     ></render-qti>
   </div>
@@ -37,10 +37,8 @@ export default {
       return result
     }
   },
-  mounted () {
-    this.$nextTick(() => {
-      $i('qti', '', () => {});
-    })
+  activated () {
+    $i(this.questionId, '', () => {});
   },
   components: {
     RenderQti

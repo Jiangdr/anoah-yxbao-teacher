@@ -60,6 +60,15 @@ export default {
     this.$nextTick(() => {
       $i(this.id, '', () => {});
     })
+  },
+  watch: {
+    dcom_id(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$nextTick(() => {
+          $i(this.id, '', () => {});
+        })
+      }
+    }
   }
 }
 </script>

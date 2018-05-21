@@ -124,7 +124,7 @@ export default {
 
 <style scoped>
   .danxuan {
-    height: 100vh;
+    height: auto;
   }
 
   .danxuan>.title {
