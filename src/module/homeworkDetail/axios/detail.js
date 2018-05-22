@@ -3,7 +3,7 @@ import API from '@/axios/_api'
 let apis = {
   'detail': '/jwt/zuoye/stat/homework/homeworkDetail', // 单题统计
   'resource': '/jwt/zuoye/stat/homework/homeworkAnswerDetail',
-  'getMiniResource': '/jwt/zuoye/stat/homework/markByMiniResource'
+  'getMiniResource': '/jwt/homework/stat/getMinResourceList'
 }
 
 let homeworkinfo = new API(apis)
