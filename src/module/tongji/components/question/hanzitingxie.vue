@@ -121,7 +121,7 @@ export default {
 
 <style scoped>
   .hanzitingxie {
-    height: 100vh;
+    height: auto;
     background: #f8f8f8;
   }
 

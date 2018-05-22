@@ -10,11 +10,20 @@ import tongji from '@/module/tongji/router'
 // 批改作业--作业详情
 import homeworkDetail from '@/module/homeworkDetail/router'
 import userCenter from '@/module/user-center/router'
-import home from '@/components/home/index'
-import list from '@/components/home/list'
-import homeworkRoutes from '@/components/homework/homework.route'
+import home from '@/module/home/index'
+import list from '@/module/home/list'
+import test from '@/components/test'
+import homeworkRoutes from '@/module/homework/homework.route'
+// 批量评价
+import batchEvaluateRoutes from '@/module/batchEvaluate/batchEvaluate.route'
 Vue.use(Router)
 let routes = [
+  {
+    path: '/test',
+    name: 'test',
+    component: test,
+    meta: { requiresAuth: true, keepAlive: false }
+  },
   {
     path: '/',
     name: 'Home',
@@ -33,7 +42,8 @@ let routes = [
   ...correction,
   ...notice,
   ...tongji,
-  ...homeworkDetail
+  ...homeworkDetail,
+  ...batchEvaluateRoutes
 ]
 let router = new Router({
   routes: routes

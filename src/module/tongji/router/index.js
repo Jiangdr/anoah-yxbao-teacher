@@ -1,4 +1,5 @@
 import tongji from '@/module/tongji/components/tongji.vue'
+import originalQuestion from '@/module/tongji/components/originalQuestion.vue'
 // 正确率表格图  例：客观填空、选词填空
 // import correctTable from '@/module/tongji/components/question/correctTable.vue'
 // 答案柱状图  例：判断题、单选题、多选题、不定选项、排序题
@@ -16,20 +17,30 @@ import groupDetail from '@/module/tongji/components/question/groupDetail.vue'
 // 组件详情   口算训练
 import groupDetailColumn from '@/module/tongji/components/question/groupDetailColumn.vue'
 export default
-[{name: 'tongji',
-  path: '/tongji',
-  meta: { requiresAuth: false, keepAlive: true },
-  component: tongji,
-  children: [{
-    path: '/groupDetail',
-    name: 'groupDetail',
-    component: groupDetail,
-    meta: { requiresAuth: false, keepAlive: false }
-  }, {
-    path: '/groupDetailColumn',
-    name: 'groupDetailColumn',
-    component: groupDetailColumn,
-    meta: { requiresAuth: false, keepAlive: false }
+[
+  {
+    name: 'tongji',
+    path: '/tongji',
+    meta: { requiresAuth: false, keepAlive: true },
+    component: tongji,
+    children: [
+      {
+        path: '/groupDetail',
+        name: 'groupDetail',
+        component: groupDetail,
+        meta: { requiresAuth: false, keepAlive: false }
+      }, {
+        path: '/groupDetailColumn',
+        name: 'groupDetailColumn',
+        component: groupDetailColumn,
+        meta: { requiresAuth: false, keepAlive: false }
+      }
+    ]
+  },
+  {
+    name: 'originalQuestion',
+    path: '/originalQuestion/:userid',
+    meta: { requiresAuth: false, keepAlive: true },
+    component: originalQuestion
   }
-  ]
-}]
+]

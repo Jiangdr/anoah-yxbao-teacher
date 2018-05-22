@@ -1,7 +1,8 @@
 import API from '@/axios/_api'
 
 let apis = {
-  'login': '/user/logon/login', // 登录
+  'login': '/user/session/init', // 登录
+  'loginOld': '/api_dist/?q=json/user/Login/login&info=',
   'exists': '/user/logon/exists', // 检查账号是否存在
   'reset': '/user/password/reset', // 重置密码
   'captcha': '/user/sms/captcha', // 发送验证码
@@ -14,6 +15,10 @@ let user = new API(apis)
 
 user.doLogin = (params) => {
   return user.fetch(user.apis.login, params, 'post')
+}
+
+user.doLoginOld = (params) => {
+  return user.fetch(user.apis.loginOld, params, 'get', {'api': 'old'})
 }
 
 user.exists = (params) => {

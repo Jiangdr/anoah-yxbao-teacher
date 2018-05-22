@@ -1,6 +1,5 @@
 <template>
   <div class="cube-page cube-view button-view">
-    <!-- <div> -->
 
     <header class="header">
       <h1>作业</h1>

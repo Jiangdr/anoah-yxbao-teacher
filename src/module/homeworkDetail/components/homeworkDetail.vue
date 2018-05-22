@@ -214,7 +214,7 @@
           span="6"
           offset="2"
           class="btn"
-        >批量评价</van-col>
+        ><p @click="goBatchEvaluate">批量评价</p></van-col>
           <van-col
             span="6"
             offset="2"
@@ -327,6 +327,12 @@ export default {
     },
     goBack() {
       this.$router.go(-1);
+    },
+    goBatchEvaluate() {
+      console.log('a')
+      this.$router.push({
+        path: "/batchEvaluate"
+      });
     },
     // 作业作答情况、学生详情切换tab
     toggleContent(items) {
