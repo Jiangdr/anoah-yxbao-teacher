@@ -2,7 +2,7 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>选择教材</h1>
-      <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i></i>
+      <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left back-up-arrow"></i></i>
     </header>
 
     <div class="gradelist">
@@ -161,6 +161,7 @@ export default {
 $primary-color: #08b783;
 $active-color: #13d098;
 $border-state: 1px solid rgb(234, 237, 240);
+ @import "@/style/variable.scss";
 .text-font {
   font-size: 16px;
   color: #9c9ea1;
@@ -168,7 +169,7 @@ $border-state: 1px solid rgb(234, 237, 240);
 .comfirmBtnContainer {
   background-color: #ffffff;
   width: 100%;
-  height: 62px;
+  height: $bottom-height;
   bottom: 0px;
   position: absolute;
   display: flex;
@@ -179,9 +180,9 @@ $border-state: 1px solid rgb(234, 237, 240);
   height: 54px;
   line-height: 54px;
   width: 50%;
-  border-radius: 26px;
+  border-radius: $bottom-btn-radius;
   background-color: $primary-color;
-  font-size: 16px;
+  font-size: $bottom-btn-font-size;
   text-align: center;
   color: #fff;
 }
@@ -219,7 +220,7 @@ $border-state: 1px solid rgb(234, 237, 240);
   overflow: auto;
   padding-top: 2vw;
   .sectionDiv {
-    font-size: 14px;
+    font-size: 15px;
     color: #9c9ea1;
   }
   .gradeP {
@@ -274,8 +275,8 @@ $border-state: 1px solid rgb(234, 237, 240);
   font-size: 16px;
 }
 .activeRightTabClass {
-  background-color: $primary-color;
-  color: #ffffff;
+  //background-color: $primary-color;
+  color:$primary-color;
 }
 .activeGradeSelClass {
   background-color: #fff;
