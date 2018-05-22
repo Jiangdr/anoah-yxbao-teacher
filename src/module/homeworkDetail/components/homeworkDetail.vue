@@ -206,7 +206,7 @@
         span="6"
         offset="1"
         class="btn"
-        :class="{disable:homeworkStatus==3}"
+        :class="{disable:homeworkStatus!=1}"
       >
         <p @click="toggleCorrectPopup">一键批阅</p>
         </van-col>
@@ -238,8 +238,9 @@
         <correct
           v-if="correctTip"
           @toggle="toggleCorrectPopup"
-          :resource="resourceList"
-          :type="'all'"
+          @callback="getResource"
+          :publishId="$route.params.publishId"
+          :send="0"
         ></correct>
           </div>
 </template>
@@ -251,7 +252,7 @@ import top from './common/title.vue'
 import tips from './common/tips.vue' // 正确率提示
 import urge from './common/urge.vue' // 催交作业
 import remind from './common/remind.vue' // 提醒订正
-import correct from './common/correctPopup.vue' // 一键批阅
+import correct from '@/components/common/correctPopup.vue' // 一键批阅
 import answer from './common/answer.vue' // 一键批阅
 
 // import {mapState} from 'vuex'
@@ -324,6 +325,8 @@ export default {
         this.resourceList = d.list;
         this.homeworkStatus = d.status;
       });
+      // 一键批阅后清空小资源列表
+      this.miniResource = {};
     },
     goBack() {
       this.$router.go(-1);
@@ -359,6 +362,9 @@ export default {
       }, 3000);
     },
     toggleCorrectPopup() {
+      if (this.homeworkStatus !== 1) {
+        return false;
+      }
       this.correctTip = !this.correctTip
     },
     // 查看小题
@@ -382,7 +388,7 @@ export default {
           if (this.miniResource[index]) {
             return false;
           }
-          // 位加载则走接口加载资源
+          // 未加载则走接口加载资源
           homeworkDetil.getMiniResource(param).then(r => {
             Vue.set(this.miniResource, index, r);
           });
@@ -391,7 +397,7 @@ export default {
         this.goTongji(curr);
       }
     },
-    // 产看单题统计
+    // 查看单题统计
     goTongji(curr, index, key) {
       if (curr.status === 0) {
         return false;

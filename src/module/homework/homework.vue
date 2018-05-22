@@ -35,8 +35,8 @@
               <div class="homework_list_inline_list font-color" style="font-size: 14px;"><span class="font-color">截止：</span>{{item.deadline}}</div>
             </div>
             <div class="listContainerRight">
-              正确率:&nbsp;&nbsp;&nbsp;
-                <span class="font-color" style="font-size:28px;color: #2ec2a9">{{item.right_rate >= 0 ? item.right_rate*100 : '--'}}</span>
+              正确率:&nbsp;
+                <span class="font-color" style="font-size:28px;color: #2ec2a9">{{item.right_rate >= 0 ? Math.round(item.right_rate*100) : '--'}}</span>
                 <span v-if="item.right_rate > 0" style="font-size:16px;color: #2ec2a9">%</span>
                 <i class="fa fa-angle-right arrow-right"></i>
             </div>
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import api from "@/axios/publishHomeWork.js";
+import api from "@/module/homework/axios/publishHomeWork.js";
 
 export default {
   name: "Homework",
