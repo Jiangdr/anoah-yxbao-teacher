@@ -2,7 +2,7 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>选择教材</h1>
-      <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i></i>
+      <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left back-up-arrow"></i></i>
     </header>
 
     <div class="gradelist">
@@ -179,7 +179,7 @@ $border-state: 1px solid rgb(234, 237, 240);
   height: 54px;
   line-height: 54px;
   width: 50%;
-  border-radius: 26px;
+  border-radius: 14px;
   background-color: $primary-color;
   font-size: 16px;
   text-align: center;
