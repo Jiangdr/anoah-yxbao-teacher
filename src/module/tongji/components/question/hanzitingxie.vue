@@ -61,7 +61,7 @@ export default {
       allCorrect: {},
       resource: [],
       user: [],
-      orderName: 'student',
+      orderName: 'question',
       sortNum: 0,
       correctRate: 0,
       ordertype: 'column',

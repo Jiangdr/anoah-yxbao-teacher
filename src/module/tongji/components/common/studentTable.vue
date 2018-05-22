@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       sortNum: -1,
-      ordertype: 'column'
+      ordertype: 'list'
     }
   },
   mounted() {
