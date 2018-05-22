@@ -35,7 +35,7 @@
               <div class="homework_list_inline_list font-color" style="font-size: 14px;"><span class="font-color">截止：</span>{{item.deadline}}</div>
             </div>
             <div class="listContainerRight">
-              正确率:&nbsp;&nbsp;&nbsp;
+              正确率:&nbsp;
                 <span class="font-color" style="font-size:28px;color: #2ec2a9">{{item.right_rate >= 0 ? item.right_rate*100 : '--'}}</span>
                 <span v-if="item.right_rate > 0" style="font-size:16px;color: #2ec2a9">%</span>
                 <i class="fa fa-angle-right arrow-right"></i>
