@@ -7,7 +7,7 @@
 
     <div>
         <van-cell-group>
-          <van-field v-model="homeworkName" placeholder="请输入作业名称" label="作业名称：" />
+          <van-field v-model="homeworkName" placeholder="请填写作业名称" label="作业名称：" />
           <van-cell title="发布时间" is-link :value="publishDateFormat" @click="clickShowPupUpDatePickerFun('发布时间')"/>
           <van-cell title="截止时间" is-link :value="endDateFormat" @click="clickShowPupUpDatePickerFun('截止时间')"/>
         </van-cell-group>
@@ -100,7 +100,7 @@ export default {
       for (let i = 0; i < array2.length; i++) {
         resourceId.push({
           title: array2[i].name,
-          rids: [array2[i].resource_id]
+          rids: array2[i].resource_id
         });
       }
 
@@ -134,7 +134,7 @@ export default {
       } else {
         self.$toast({
           message: "请填写完整条件！",
-          duration: 1000
+          duration: 750
         });
       }
     }

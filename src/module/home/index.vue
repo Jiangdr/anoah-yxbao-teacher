@@ -74,7 +74,9 @@ export default {
   },
   methods: {
     message () {
-      alert('消息')
+      this.$router.push({
+        path: '/notice'
+      })
     },
     scan () {
       alert('扫码')

@@ -148,7 +148,6 @@ export default {
               }
               self.lists.push(element);
             });
-            // self.lists = self.lists.concat(success.lists);
           }
         },
         err => {

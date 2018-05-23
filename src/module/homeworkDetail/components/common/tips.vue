@@ -1,12 +1,14 @@
 <template>
   <van-popup v-model="showTips" class="tip-popup van-hairline--surround">
     <div class="tip-container">
-      <h2 class="title van-hairline--bottom">班级正确率</h2>
+      <h2 class="title">班级平均正确率：</h2>
       <div class="tip-content">
         <p>
           班级正确率统计的是当前已经部分的学生平均正确率，未完成部分和已完成学生中暂未批改的题目暂不统计。
         </p>
-        <van-button type="primary" size="large" @click="toggle">知道了</van-button>
+        <div class="btn">
+          <button size="large" @click="toggle">知道了~</button>
+        </div>
       </div>
     </div>
   </van-popup>
@@ -27,29 +29,43 @@ export default{
 }
 </script>
 <style scoped>
-  .detail .tip-popup {
-    width: calc(100vw - 40px);
+  .tip-popup {
+    width: calc(100vw - 85px);
     border-radius: 10px;
+    padding:30px;
+    box-sizing: border-box;
   }
-  .detail .tip-popup[class*="van-hairline"]::after {
+  .tip-popup[class*="van-hairline"]::after {
     border-radius: 20px;
   }
 
-  .detail .tip-container>.title {
-    line-height: 60px;
-    height: 60px;
-    text-align: center;
+  .tip-container>.title {
     font-weight: bold;
     font-size: 20px;
+    line-height: 35px;
   }
-
-  .detail .tip-container>.tip-content {
-    padding: 15px 20px;
-  }
-
-  .detail .tip-container>.tip-content>p {
+  .tip-container>.tip-content>p {
+    text-indent: 40px;
     line-height: 25px;
+    font-size: 18px;
     margin-bottom: 30px;
+    color:rgb(87,85,86)
   }
-
+  .tip-container .btn{
+    width:100px;
+    margin:0 auto;
+  }
+  .tip-container .btn button{
+    border-radius: 10px;
+    background:#08b783;
+    color:#fff;
+    font-size: 17px;
+    height: 45px;
+    line-height: 45px;
+    border:none;
+    width:100px;
+  }
+   .tip-container .btn button:active{
+     background: #13d098;
+   }
 </style>

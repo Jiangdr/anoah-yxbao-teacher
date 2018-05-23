@@ -4,16 +4,13 @@
 <!-- 接收函数  关闭弹出框：toggle   回调函数：callback -->
   <van-popup v-model="correct" class="tip-popup van-hairline--surround">
     <div class="tip-container">
-      <van-row class="title van-hairline--bottom">
-        <van-col span="18" offset="3">
-          <h2>
+    <p @click="toggle" style="text-align:right">x</p>
+      <van-row class="title">
+        <van-col span="24">
+          <p>
             以下操作针对全部待批改的题目
-          </h2>
-          <!-- <h2 v-else>
-            以下操作针对本题中的待批改题目
-          </h2> -->
+          </p>
         </van-col>
-        <van-col span="3"><p @click="toggle">x</p></van-col>
       </van-row>
 
       <div class="tip-content">
@@ -71,28 +68,31 @@ export default{
 </script>
 <style scoped>
 .tip-popup {
-    width: calc(100vw - 40px);
+    width: calc(100vw - 85px);
     border-radius: 10px;
+    padding:15px;
+    box-sizing: border-box;;
   }
  .tip-popup[class*="van-hairline"]::after {
     border-radius: 20px;
   }
 
 .tip-container>.title {
-    line-height: 60px;
-    height: 60px;
+    line-height: 38px;
     text-align: center;
     font-weight: 400;
     font-size: 16px;
   }
 
 .tip-container>.tip-content {
-    padding: 15px 20px;
     text-align: center;
   }
 .tip-container>.tip-content>p {
-    line-height: 25px;
-    margin-bottom: 30px;
+    line-height: 50px;
+    margin-bottom: 15px;
+    border:1px solid #08b783;
+    color:#08b783;
+    border-radius: 13px;
   }
   .tip-container .warm{
     font-size: 14px;

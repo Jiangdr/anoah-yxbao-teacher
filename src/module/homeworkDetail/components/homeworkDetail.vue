@@ -1,10 +1,12 @@
 <template>
 <div class="detail">
-  <top @back="goBack" @tabChange="tabChange"></top>
   <div class="wrapper">
     <!-- 作业名称 开始时间 结束时间 -->
     <div class="info">
-      <p class="name">{{homeworkInfo.title}}</p>
+      <p class="name">
+        {{homeworkInfo.title}}
+        <span style="float:right">共<b>{{resourceList.length}}</b>份</span>
+      </p>
       <p class="times">
         <span class="start-time">{{homeworkInfo.start_time }}</span>
         <span class="end-time">{{homeworkInfo.deadline}}</span>
@@ -29,20 +31,12 @@
       <!-- 作业作答情况 学生完成情况tab -->
       <div class="btns van-hairline--surround">
         <van-row>
-          <van-col
-            span="12"
-            class="van-hairline--right"
-            :class="{'active':activeBtn=='homework'}"
-          >
+          <van-col span="12" :class="{'active':activeBtn=='homework'}">
             <span @click="toggleContent('homework')">作业作答情况</span>
             </van-col>
-            <van-col
-              span="12"
-              class="student"
-              :class="{'active':activeBtn=='student'}"
-            >
+            <van-col span="12" class="student" :class="{'active':activeBtn=='student'}">
               <span @click="toggleContent('student')">学生完成情况</span>
-              </van-col>
+            </van-col>
         </van-row>
       </div>
       <!-- 作业作答情况内容 -->
@@ -51,34 +45,21 @@
         v-if="activeBtn=='homework'"
       >
         <div class="total van-hairline--bottom">
-          <span>共{{resourceList.length}}题</span>
-          <span class="right"><input type="checkbox" v-model="notcorrect"> 只看待批阅</span>
+          <!-- <span>共{{resourceList.length}}题</span> -->
+          <span>只看待批阅</span>
+          <span class="right"><van-checkbox v-model="notcorrect"></van-checkbox> </span>
         </div>
         <!-- 作业资源列表 -->
         <div class="lists">
-          <div
-            class="item"
-            v-for='(ques,index) in resourceList'
-            :key="index"
-            v-show="!(notcorrect&&ques.pigai_status==3)"
-          >
-            <div
-              class="iteminfo"
-              @click="changeCollapse(index)"
-            >
+          <div class="item" v-for='(ques,index) in resourceList' :key="index" v-show="!(notcorrect&&ques.pigai_status==3)">
+            <div class="iteminfo" @click="changeCollapse(index)">
               <div class="left">{{index+1}}、</div>
               <div class="right">
                 <p>[{{ques.icom_name}}]
-                  <span
-                    class="resource-name"
-                    v-html="ques.resource_name"
-                  ></span><span v-if="ques.pigai_status!=3"> 待批阅</span></p>
+                  <span class="resource-name" v-html="ques.resource_name"></span><span v-if="ques.pigai_status!=3"> 待批阅</span></p>
                 <p>
                   已完成：{{ques.finished_counter}}/{{homeworkInfo.student_counter}}人 正确率：{{itemCorrect(ques.average_rate)}}
-                  <van-icon
-                    name="arrow"
-                    class="showdetail"
-                  ></van-icon>
+                  <van-icon name="arrow" class="showdetail"></van-icon>
                 </p>
               </div>
         </div>
@@ -108,43 +89,24 @@
   <template v-if="finishCounter>0">
     <div class="status">
       <van-row class="item">
-        <van-col span="8">未完成</van-col>
-        <van-col span="10">{{homeworkInfo.unfinished_counter}}人</van-col>
-        <van-col
-          span="6"
-          class="btn"
-          v-if="!isUrge"
-        >
-          <p
-            @click="toggleUrge"
-            :class="{disable:finishCounter==0}"
-          >催交作业</p>
-            </van-col>
-            <van-col
-              span="6"
-              class="btn"
-              v-if="isUrge"
-            >
-              <p class="disable">今日已提醒</p>
-              </van-col>
+        <van-col span="9">未完成</van-col>
+        <van-col span="9">{{homeworkInfo.unfinished_counter}}人</van-col>
+        <van-col span="6" class="btn" v-if="!isUrge">
+          <p @click="toggleUrge" :class="{disable:finishCounter==0}">催交作业</p>
+        </van-col>
+        <van-col span="6" class="btn" v-if="isUrge">
+          <p class="disable">今日已提醒</p>
+        </van-col>
       </van-row>
       <van-row class="item">
-        <van-col span="8">未订正</van-col>
-        <van-col span="10">{{homeworkInfo.unretyr_counter}}人</van-col>
-        <van-col
-          span="6"
-          class="btn"
-          v-if="!isRemind"
-        >
+        <van-col span="9">未订正</van-col>
+        <van-col span="9">{{homeworkInfo.unretyr_counter}}人</van-col>
+        <van-col span="6" class="btn" v-if="!isRemind">
           <p @click="toggleRemind">提醒订正</p>
-          </van-col>
-          <van-col
-            span="6"
-            class="btn"
-            v-if="isRemind"
-          >
-            <p class="disable">今日已提醒</p>
-            </van-col>
+        </van-col>
+        <van-col span="6" class="btn" v-if="isRemind">
+          <p class="disable">今日已提醒</p>
+        </van-col>
       </van-row>
     </div>
     <div class="blank"></div>
@@ -173,73 +135,42 @@
   </div>
   </div>
   <!-- 底部按钮 -->
-  <div class="bottom-btn van-hairline--top">
-    <van-row>
-      <van-col
-        span="6"
-        offset="1"
-        class="btn"
-        :class="{disable:homeworkStatus!=1}"
-      >
+  <div class="bottom-btn">
+      <div class="btn" :class="{disable:homeworkStatus!=1}">
         <p @click="toggleCorrectPopup">一键批阅</p>
-        </van-col>
-        <van-col
-          span="6"
-          offset="2"
-          class="btn"
-        ><p @click="goBatchEvaluate">批量评价</p></van-col>
-          <van-col
-            span="6"
-            offset="2"
-            class="btn"
-          >公布答案</van-col>
-    </van-row>
+      </div>
+      <div class="btn">
+        <p @click="goBatchEvaluate">批量评价</p>
+      </div>
+      <div class="btn">
+        <p @click="toggleAnswerTip">公布答案</p>
+      </div>
   </div>
   <!-- 班级平均正确率计算规则tip -->
-  <tips
-    v-if="showTips"
-    @toggle="toggleTips"
-  ></tips>
-    <urge
-      v-if="urge"
-      @toggle="toggleUrge"
-    ></urge>
-      <remind
-        v-if="remind"
-        @toggle="toggleRemind"
-      ></remind>
-        <correct
-          v-if="correctTip"
-          @toggle="toggleCorrectPopup"
-          @callback="getResource"
-          :publishId="$route.params.publishId"
-          :send="0"
-        ></correct>
-          </div>
+    <tips v-if="showTips" @toggle="toggleTips"></tips>
+    <urge v-if="urge" @toggle="toggleUrge"></urge>
+    <remind v-if="remind" @toggle="toggleRemind"></remind>
+    <correct v-if="correctTip" @toggle="toggleCorrectPopup" @callback="getResource" :publishId="$route.params.publishId" :send="0"></correct>
+    <answer v-if="answerTip" @toggle="toggleAnswerTip"></answer>
+  </div>
 </template>
 
 <script>
 import homeworkDetil from "../axios/detail.js";
 import Vue from "vue";
-import top from './common/title.vue'
-import tips from './common/tips.vue' // 正确率提示
-import urge from './common/urge.vue' // 催交作业
-import remind from './common/remind.vue' // 提醒订正
-import correct from '@/components/common/correctPopup.vue' // 一键批阅
-import answer from './common/answer.vue' // 一键批阅
-import studentList from './common/studentList.vue' // 一键批阅
+import tips from "./common/tips.vue"; // 正确率提示
+import urge from "./common/urge.vue"; // 催交作业
+import remind from "./common/remind.vue"; // 提醒订正
+import correct from "@/components/common/correctPopup.vue"; // 一键批阅
+import answer from "./common/answer.vue"; // 发送答案
+import studentList from "./common/studentList.vue"; // 学生列表
 
-// import {mapState} from 'vuex'
+import {mapActions} from 'vuex'
 export default {
   name: "detail",
+  props: ["publishId", "classId"],
   data() {
     return {
-      params: {
-        // publish_id: '009002511525867000001f',
-        // class_id: '1106785'
-        publish_id: this.$route.params.publishId,
-        class_id: this.$route.params.classId
-      },
       homeworkInfo: {}, // 作业信息
       resourceList: [], // 作业列表
       studentList: [], // 班级学生完成情况，
@@ -251,6 +182,7 @@ export default {
       notcorrect: false, // 是否只看待批阅
       isUrge: false, // 是否已催交作业
       isRemind: false, // 是否已题型订正
+      answerTip: false,
       correctTip: false,
       homeworkStatus: "",
       miniResource: {}
@@ -266,16 +198,10 @@ export default {
     // }),
     // 班级正确率
     classCorrect() {
-      if (
-        this.correct === "" ||
-        this.correct === -1
-      ) {
+      if (this.correct === "" || this.correct === -1) {
         return "--";
       } else {
-        return this.correct === 0
-          ? 0
-          : Math.round(this.correct * 100) +
-          "%";
+        return this.correct === 0 ? 0 : Math.round(this.correct * 100) + "%";
       }
     },
     // 作业完成人数
@@ -288,25 +214,28 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+    }),
     getResource() {
-      homeworkDetil.getinfo(this.params).then(r => {
+      let params = {
+        publish_id: this.publishId || this.$route.params.publishId,
+        class_id: this.classId || this.$route.params.classId
+      };
+      homeworkDetil.getinfo(params).then(r => {
         this.homeworkInfo = r;
         this.studentList = r.student_list;
-        this.correct = r.class_average_correct_rate
+        this.correct = r.class_average_correct_rate;
       });
       // 获取作业资源
-      homeworkDetil.getResourceList(this.params).then(d => {
+      homeworkDetil.getResourceList(params).then(d => {
         this.resourceList = d.list;
         this.homeworkStatus = d.status;
       });
       // 一键批阅后清空小资源列表
       this.miniResource = {};
     },
-    goBack() {
-      this.$router.go(-1);
-    },
     goBatchEvaluate() {
-      console.log('a')
+      console.log("a");
       this.$router.push({
         path: "/batchEvaluate"
       });
@@ -336,10 +265,13 @@ export default {
       }, 3000);
     },
     toggleCorrectPopup() {
-      if (this.homeworkStatus !== 1) {
-        return false;
-      }
-      this.correctTip = !this.correctTip
+      // if (this.homeworkStatus !== 1) {
+      //   return false;
+      // }
+      this.correctTip = !this.correctTip;
+    },
+    toggleAnswerTip() {
+      this.answerTip = !this.answerTip;
     },
     // 查看小题
     changeCollapse(index, ismini) {
@@ -376,14 +308,14 @@ export default {
       if (curr.status === 0) {
         return false;
       }
-      this.$store.commit('homeworkDetail/setParams', curr)
+      this.$store.commit("homeworkDetail/setParams", curr);
       if (this.miniResource[index]) {
-        this.$store.commit('homeworkDetail/setmini', this.miniResource[index])
+        this.$store.commit("homeworkDetail/setmini", this.miniResource[index]);
       }
-      this.$store.commit('homeworkDetail/changIndex', key)
+      this.$store.commit("homeworkDetail/changIndex", key);
       // 单选题、判断题统计页面
       this.$router.push({
-        name: 'questionDetail'
+        name: "questionDetail"
       });
     },
     // 资源正确率计算方法
@@ -412,16 +344,16 @@ export default {
     },
     // 顶部tab切换
     tabChange(type) {
-      console.log(type)
+      console.log(type);
     }
   },
   components: {
-    top,
     tips,
     urge,
     remind,
     correct,
-    studentList
+    studentList,
+    answer
   }
 };
 </script>
@@ -435,7 +367,7 @@ export default {
 /* title样式 */
 
 .detail>.wrapper {
-  background: #eaeaea;
+  background: #e8ebee;;
   height: calc(100vh - 100px);
 }
 
@@ -452,7 +384,7 @@ export default {
 .detail>.wrapper .itemdetail {
   display: flex;
   flex-wrap: wrap;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid #e8ebee;;
 }
 
 .detail>.wrapper .itemdetail p span:first-child {
@@ -520,26 +452,27 @@ export default {
 
 .detail>.wrapper>.content>.btns span {
   display: inline-block;
-  width: 100%;
+  height: 38px;
+  border-bottom: 1px solid transparent;
 }
 
 .detail>.wrapper>.content>.btns {
-  line-height: 40px;
-  height: 40px;
+  line-height: 39px;
+  height: 39px;
   box-sizing: border-box;
   text-align: center;
 }
 
-.detail>.wrapper>.content>.btns .active {
-  background: #06bb9c;
-  color: #fff;
+.detail>.wrapper>.content>.btns .active span{
+  color: #08b783;
+  border-bottom:1px solid #08b783;
 }
 
 /* 作业作答情况content */
 
 .detail>.wrapper>.content>.homework-content,
 .detail>.wrapper>.content>.student-content {
-  height: calc(100% - 40px);
+  height: calc(100% - 50px);
 }
 
 .detail>.wrapper>.content>.homework-content>.total {
@@ -559,7 +492,7 @@ export default {
 
 .detail>.wrapper>.content>.homework-content .lists .item .iteminfo {
   height: 60px;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid #e8ebee;;
   display: flex;
   padding: 0 10px;
 }
@@ -615,7 +548,7 @@ export default {
 .detail>.wrapper>.content>.student-content .unfinish-state p {
   width: 80px;
   text-align: center;
-  border: 1px solid #eaeaea;
+  border: 1px solid #e8ebee;;
   padding: 10px 20px;
 }
 
@@ -631,34 +564,39 @@ export default {
 }
 
 .detail>.wrapper>.content>.student-content .status>.item {
-  padding: 0 10px;
-  height: 40px;
-  line-height: 40px;
-  border-bottom: 1px solid #eaeaea;
+  padding: 0 13px;
+  height: 55px;
+  line-height: 55px;
+  border-bottom: 1px solid #e8ebee;
   box-sizing: border-box;
 }
 
 .detail>.wrapper>.content>.student-content .status>.item .disable {
-  background: #999;
+  opacity: 0.5;
 }
 
 .detail>.wrapper>.content>.student-content .status>.item .btn {
-  background: #06bb9c;
+  background: #08b783;
+  float: right;
+  width:75px;
   color: #fff;
   height: 30px;
   line-height: 30px;
-  margin-top: 5px;
+  margin-top: 12.5px;
   text-align: center;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 12px;
 }
 
 .detail>.wrapper>.content>.student-content .blank {
   height: 10px;
-  background: #eaeaea;
+  background: #e8ebee;;
 }
-.detail>.wrapper>.content>.student-content .student-list{
-  height: calc(100% - 90px - 46px);
+
+.detail>.wrapper>.content>.student-content .student-list {
+  height: calc(100% - 120px);
 }
+
 /* 班级平均正确率计算规则提示样式 */
 
 /* 底部按钮 */
@@ -667,26 +605,38 @@ export default {
   position: fixed;
   bottom: 0px;
   width: 100%;
-  height: 50px;
-  line-height: 50px;
+  height: 65px;
   background: #fff;
-}
-.detail .bottom-btn>div{
-  height: 100%;
-}
-.detail .bottom-btn .btn {
-  background: #06bb9c;
-  border: 1px solid #06bb9c;
-  border-radius: 5px;
-  color: #fff;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  margin-top: 5px;
+  padding:7.5px 13px;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-top:1px solid #e8ebee;
 }
 
+.detail .bottom-btn .btn {
+  flex:1 1 auto;
+  background: #06bb9c;
+  border-radius: 13px;
+  color: #fff;
+  height: 50px;
+  line-height: 50px;
+  margin-right: 15px;
+  text-align: center;
+  font-size: 17px;
+  width:100px;
+}
+.detail .bottom-btn .btn:first-child{
+  background: #08b783;
+}
+.detail .bottom-btn .btn:nth-child(2){
+  background: #3ea2ff;
+}
+.detail .bottom-btn .btn:last-child{
+  background: #2ecbd0;
+  margin-right: 0;
+}
 .detail .bottom-btn .btn.disable {
-  background: #999;
-  border: 1px solid #999;
+  opacity: 0.5;
 }
 </style>
