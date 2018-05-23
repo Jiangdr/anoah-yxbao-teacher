@@ -219,6 +219,7 @@ export default {
       this.showTimePopup = false;
     },
     onRefresh() {
+      this.currentPage = 1;
       setTimeout(() => {
         this.$toast("刷新成功");
         this.pullRefresIsLoading = false;
