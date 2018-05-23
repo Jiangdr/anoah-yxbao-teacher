@@ -4,7 +4,7 @@
       <h1>暑假作业</h1>
       <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
     </header>
-    <div :class="{listdiv:!showFooter,listfooterdiv:showFooter}" style="overflow-y: auto;">
+    <div :class="{listdiv:this.hasChoosePagesNumArray.length === 0,listfooterdiv:this.hasChoosePagesNumArray.length !== 0}" style="overflow-y: auto;">
         <van-list v-model="loading" loading-text="加载中。。。" :finished="finished" @load="loadMore" :offset="100" :immediate-check="false">
           <div class="list-item" v-for="(item, index) in lists" :key="index">
             <div style="float:left;margin-top: 3vw;" @click="clickTiltleName(item)">
@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div v-if="showFooter" class="footer-container">
+    <div v-if="this.hasChoosePagesNumArray.length !== 0" class="footer-container">
       <p class="footer-p">已选试卷<span>{{hasChoosePagesNumArray.length}}</span>份，共<span>{{hasChooseProblemsNum}}</span>道题</p>
       <div class="yx-green-btn buzhi-div"  @click="clickPublish">布&nbsp;&nbsp;&nbsp;&nbsp;置</div>
     </div>
@@ -38,7 +38,6 @@ export default {
       checkList: [],
       lists: [],
       result: [],
-      showFooter: false,
       hasChooseProblemsNum: 0,
       checked: true,
       hasChoosePagesNumArray: [],
@@ -54,16 +53,19 @@ export default {
     this.userInfo = this.$store.state.account.userInfo;
     this.chooseTextBookObj = this.$store.state.homework.chooseTextBookObj;
     this.summerHomeworkPackId = this.$store.state.homework.summerHomeworkPackId;
-    this.summerHomeworkSelPageIDs = this.$store.state.homework.summerHomeworkSelPageIDs;
+    this.hasChoosePagesNumArray = JSON.parse(JSON.stringify(this.$store.state.homework.summerHomeworkSelPageIDs));
   },
   mounted: function() {
     this.getList();
+    this.hasChoosePagesNumArray.forEach(element => {
+      this.summerHomeworkSelPageIDs.push(element.resource_id);
+      this.hasChooseProblemsNum =
+        parseInt(this.hasChooseProblemsNum) + parseInt(element.qti_num);
+    });
   },
   methods: {
     goPublishHomework() {
-      this.hasChoosePagesNumArray.forEach(element => {
-        this.summerHomeworkSelPageIDs.push(element.resource_id);
-      });
+      this.$store.dispatch("summerHomeworkSelPageIDs", this.hasChoosePagesNumArray);
       this.$router.push({
         path: "/publishHomework"
       });
@@ -80,7 +82,7 @@ export default {
       for (var i = 0; i < this.hasChoosePagesNumArray.length; i++) {
         result.push({
           name: this.hasChoosePagesNumArray[i].name,
-          resource_id: this.hasChoosePagesNumArray[i].id
+          resource_id: this.hasChoosePagesNumArray[i].resource_id
         });
       }
       this.result = result;
@@ -102,7 +104,6 @@ export default {
         this.hasChooseProblemsNum =
           parseInt(this.hasChooseProblemsNum) - parseInt(item.qti_num);
       }
-      this.showFooter = this.hasChoosePagesNumArray.length !== 0;
     },
     clickTab(name) {
       this.activeTabName = name;
@@ -129,7 +130,7 @@ export default {
         user_id: self.userInfo.userid,
         pack_id: self.summerHomeworkPackId,
         page: self.page,
-        per_page: 50
+        per_page: 30
       };
       api.getResourceLists(data).then(
         success => {
