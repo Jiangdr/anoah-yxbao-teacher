@@ -80,7 +80,7 @@ export default {
       for (var i = 0; i < this.hasChoosePagesNumArray.length; i++) {
         result.push({
           name: this.hasChoosePagesNumArray[i].name,
-          resource_id: this.hasChoosePagesNumArray[i].id
+          resource_id: this.hasChoosePagesNumArray[i].qti_ids
         });
       }
       this.result = result;
@@ -147,7 +147,6 @@ export default {
               }
               self.lists.push(element);
             });
-            // self.lists = self.lists.concat(success.lists);
           }
         },
         err => {

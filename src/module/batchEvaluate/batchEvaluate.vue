@@ -88,6 +88,7 @@ export default {
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
+    this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
     this.getStudentsList();
   },
   methods: {
@@ -113,7 +114,7 @@ export default {
     getStudentsList() {
       var self = this;
       var data = {
-        publish_id: "229002511525863300001f"
+        publish_id: self.homeworkOneListInfoObj.course_hour_publish_id
       };
 
       api.getHomeworkDetailBasic(data).then(function(response) {
