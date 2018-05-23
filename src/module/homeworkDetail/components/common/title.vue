@@ -16,8 +16,8 @@
           offset="4"
           class="van-hairline--surround tabs"
         >
-          <span class="text van-hairline--right">作业详情</span>
-          <span class="text">作业报告</span>
+          <span class="text van-hairline--right" @click="tabChange('detail')">作业详情</span>
+          <span class="text" @click="tabChange('report')">作业报告</span>
     </van-col>
     </van-row>
     </van-col>
@@ -32,6 +32,9 @@ export default {
   methods: {
     back() {
       this.$emit('back')
+    },
+    tabChange(type) {
+      this.$emit('tabChange', type)
     }
   }
 }

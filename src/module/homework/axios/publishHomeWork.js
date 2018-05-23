@@ -3,10 +3,10 @@ import API from '@/axios/_api'
 let apis = {
   homeworkLists: '/jwt/zuoye/homework/homeworkLists',
   launch: "/jwt/zuoye/publish/launch",
-  getResourceLists: "/jwt/resource/package/getResourceLists",
+  getResourceLists: "/jwt/resource/package/get",
   getBookLists: "/jwt/resource/common/getBookLists",
   getGradeLists: "/jwt/resource/common/getGradeLists",
-  getLists: "/jwt/resource/package/getLists"
+  getLists: "/jwt/resource/package/search"
 }
 
 let publishHomeWork = new API(apis)

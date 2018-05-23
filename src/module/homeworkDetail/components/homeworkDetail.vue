@@ -1,6 +1,6 @@
 <template>
 <div class="detail">
-  <top @back="goBack"></top>
+  <top @back="goBack" @tabChange="tabChange"></top>
   <div class="wrapper">
     <!-- 作业名称 开始时间 结束时间 -->
     <div class="info">
@@ -104,10 +104,7 @@
   </div>
 </div>
 </div>
-<div
-  class="student-content"
-  v-if="activeBtn=='student'"
->
+<div class="student-content" v-if="activeBtn=='student'">
   <template v-if="finishCounter>0">
     <div class="status">
       <van-row class="item">
@@ -151,32 +148,8 @@
       </van-row>
     </div>
     <div class="blank"></div>
-    <div class="table">
-      <div class="table-name">学生成绩</div>
-      <div class="table-header">
-        <van-row>
-          <van-col span="5">姓名</van-col>
-          <van-col span="5">完成进度</van-col>
-          <van-col span="5">正确率</van-col>
-          <van-col span="5">错题订正</van-col>
-        </van-row>
-      </div>
-      <div class="table-body">
-        <van-row
-          v-for="(stu, index) in studentList"
-          :key='index'
-          class="stu"
-        >
-          <van-col span="5">{{stu.real_name}}</van-col>
-          <van-col span="5">{{stu.completed_num}}</van-col>
-          <van-col span="5">{{itemCorrect(stu.rate)}}</van-col>
-          <van-col span="5">{{stu.correct_num}}</van-col>
-          <van-col span="4">
-            <van-icon name="arrow"></van-icon>
-          </van-col>
-          </van-row>
-      </div>
-    </div>
+    <!-- 学生列表 -->
+    <student-list :studentList="studentList"></student-list>
   </template>
   <template v-else>
     <div class="unfinish-state">
@@ -254,6 +227,7 @@ import urge from './common/urge.vue' // 催交作业
 import remind from './common/remind.vue' // 提醒订正
 import correct from '@/components/common/correctPopup.vue' // 一键批阅
 import answer from './common/answer.vue' // 一键批阅
+import studentList from './common/studentList.vue' // 一键批阅
 
 // import {mapState} from 'vuex'
 export default {
@@ -406,7 +380,7 @@ export default {
       if (this.miniResource[index]) {
         this.$store.commit('homeworkDetail/setmini', this.miniResource[index])
       }
-      this.$store.commit('homeworkDetail/setIndex', key)
+      this.$store.commit('homeworkDetail/changIndex', key)
       // 单选题、判断题统计页面
       this.$router.push({
         name: 'questionDetail'
@@ -435,6 +409,10 @@ export default {
         return false;
       }
       return false;
+    },
+    // 顶部tab切换
+    tabChange(type) {
+      console.log(type)
     }
   },
   components: {
@@ -442,7 +420,8 @@ export default {
     tips,
     urge,
     remind,
-    correct
+    correct,
+    studentList
   }
 };
 </script>
@@ -677,30 +656,9 @@ export default {
   height: 10px;
   background: #eaeaea;
 }
-
-.detail>.wrapper>.content>.student-content .table {
-  text-align: center;
-  line-height: 30px;
-  height: calc(100% - 90px);
+.detail>.wrapper>.content>.student-content .student-list{
+  height: calc(100% - 90px - 46px);
 }
-
-.detail>.wrapper>.content>.student-content .table-name {
-  text-align: left;
-  padding-left: 10px;
-}
-
-.detail>.wrapper>.content>.student-content .table-name,
-.detail>.wrapper>.content>.student-content .table-header,
-.detail>.wrapper>.content>.student-content .table-body .stu {
-  height: 30px;
-  border-bottom: 1px solid #eaeaea;
-}
-
-.detail>.wrapper>.content>.student-content .table-body {
-  height: calc(100% - 60px);
-  overflow-y: scroll;
-}
-
 /* 班级平均正确率计算规则提示样式 */
 
 /* 底部按钮 */
@@ -713,7 +671,9 @@ export default {
   line-height: 50px;
   background: #fff;
 }
-
+.detail .bottom-btn>div{
+  height: 100%;
+}
 .detail .bottom-btn .btn {
   background: #06bb9c;
   border: 1px solid #06bb9c;
