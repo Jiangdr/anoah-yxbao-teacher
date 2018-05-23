@@ -4,16 +4,6 @@
       <h1>暑假作业</h1>
       <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
     </header>
-
-    <!-- <van-checkbox v-model="checked">复选框</van-checkbox> -->
-
-    <!-- <van-checkbox-group v-model="result" @change="checkboxChange">
-      <van-cell-group>
-        <van-cell v-for="(item, index) in lists" :title="`${item.name}-共${item.qti_num}题`" :key="index">
-          <van-checkbox :name="item"/>
-        </van-cell>
-      </van-cell-group>
-    </van-checkbox-group> -->
     <div :class="{listdiv:!showFooter,listfooterdiv:showFooter}" style="overflow-y: auto;">
         <van-list v-model="loading" loading-text="加载中。。。" :finished="finished" @load="loadMore" :offset="100" :immediate-check="false">
           <div class="list-item" v-for="(item, index) in lists" :key="index">
@@ -21,7 +11,7 @@
                <p>{{(index+1)+"."+item.name}}</p>
                <p class="des-item">共<span>{{item.qti_num}}</span>道题</p>
             </div>
-            <YxCheckBox class="checkbox" :selected="false" :id="item.resource_id" :value="item.qti_num" @select="checkboxChange(item,$event)"></YxCheckBox>
+            <YxCheckBox class="checkbox" :selected="item.isSel" :id="item.resource_id" :value="item.qti_num" @select="checkboxChange(item,$event)"></YxCheckBox>
           </div>
         </van-list>
         <div v-if="lists.length==0" class="text-font" style="height: 200px;line-height: 200px;text-align: center;">
@@ -52,6 +42,7 @@ export default {
       hasChooseProblemsNum: 0,
       checked: true,
       hasChoosePagesNumArray: [],
+      summerHomeworkSelPageIDs: [],
       loading: false,
       finished: false,
       noMore: false,
@@ -63,12 +54,16 @@ export default {
     this.userInfo = this.$store.state.account.userInfo;
     this.chooseTextBookObj = this.$store.state.homework.chooseTextBookObj;
     this.summerHomeworkPackId = this.$store.state.homework.summerHomeworkPackId;
+    this.summerHomeworkSelPageIDs = this.$store.state.homework.summerHomeworkSelPageIDs;
   },
   mounted: function() {
     this.getList();
   },
   methods: {
     goPublishHomework() {
+      this.hasChoosePagesNumArray.forEach(element => {
+        this.summerHomeworkSelPageIDs.push(element.resource_id);
+      });
       this.$router.push({
         path: "/publishHomework"
       });
@@ -142,7 +137,17 @@ export default {
           if (success.lists.length < 1) {
             self.noMore = true;
           } else {
-            self.lists = self.lists.concat(success.lists);
+            success.lists.forEach(element => {
+              if (
+                this.summerHomeworkSelPageIDs.indexOf(element.resource_id) < 0
+              ) {
+                element.isSel = false;
+              } else {
+                element.isSel = true;
+              }
+              self.lists.push(element);
+            });
+            // self.lists = self.lists.concat(success.lists);
           }
         },
         err => {
