@@ -1,0 +1,33 @@
+@import "@/style/variable.scss";
+.single-line {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.div-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.footer-container {
+    background-color: #ffffff;
+    width: 100%;
+    height: $bottom-height;
+    bottom: 0px;
+    position: absolute;
+    border-top: $border-state;
+}
+.yx-green-btn {
+    height: 54px;
+    line-height: 54px;
+    width: 50%;
+    border-radius: $bottom-btn-radius;
+    background-color: $green-primary-color;
+    font-size: $bottom-btn-font-size;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+  }
+  .yx-green-btn:active {
+    background-color: $green-active-color;
+  }
