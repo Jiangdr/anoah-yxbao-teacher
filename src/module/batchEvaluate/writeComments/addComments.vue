@@ -81,6 +81,10 @@ export default {
         self.$router.push({
           path: "/comments"
         });
+        self.$toast({
+          message: "添加成功！",
+          duration: 750
+        });
       });
     },
     clearTextArea() {

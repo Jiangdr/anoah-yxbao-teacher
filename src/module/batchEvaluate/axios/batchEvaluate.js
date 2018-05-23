@@ -3,7 +3,8 @@ import API from '@/axios/_api'
 let apis = {
   getHomeworkDetailBasic: 'jwt/homework/stat/basic',
   commentplGetList: 'jwt/homework/commentpl/getList',
-  commentplCreate: 'jwt/homework/commentpl/create'
+  commentplCreate: 'jwt/homework/commentpl/create',
+  commentplRemove: 'jwt/homework/commentpl/remove'
 }
 
 let batchEvaluate = new API(apis)
@@ -18,6 +19,10 @@ batchEvaluate.commentplGetList = (params) => {
 
 batchEvaluate.commentplCreate = (params) => {
   return batchEvaluate.fetch(apis.commentplCreate, params, 'post')
+}
+
+batchEvaluate.commentplRemove = (params) => {
+  return batchEvaluate.fetch(apis.commentplRemove, params, 'post')
 }
 
 export default batchEvaluate
