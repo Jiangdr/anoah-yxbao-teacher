@@ -154,7 +154,7 @@ import correct from "@/components/common/correctPopup.vue"; // 一键批阅
 import answer from "./common/answer.vue"; // 发送答案
 import studentList from "./common/studentList.vue"; // 学生列表
 
-// import {mapState} from 'vuex'
+import {mapActions} from 'vuex'
 export default {
   name: "detail",
   props: ["publishId", "classId"],
@@ -203,6 +203,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+    }),
     getResource() {
       let params = {
         publish_id: this.publishId || this.$route.params.publishId,

@@ -1,11 +1,16 @@
 <template>
   <div id="homework-report">
     <report-tab :tab-type="tabType" @tabChange="tabChange"></report-tab>
-    <div class="split-line"></div>
-    <div class="content">
-      <class-score v-if="tabType === 1"></class-score>
-      <answer-situation v-if="tabType === 2"></answer-situation>
-      <knowledge-point-analysis v-if="tabType === 3"></knowledge-point-analysis>
+    <div class="wrapper">
+      <div class="split-line"></div>
+      <div class="content">
+        <!-- 班级成绩 -->
+        <class-score v-if="tabType === 1"></class-score>
+        <!-- 答案情况 -->
+        <answer-situation v-if="tabType === 2"></answer-situation>
+        <!-- 知识点分析 -->
+        <knowledge-point-analysis v-if="tabType === 3"></knowledge-point-analysis>
+      </div>
     </div>
   </div>
 </template>
@@ -15,6 +20,7 @@ import reportTab from './common/reportTab'
 import classScore from './common/classScore'
 import answerSituation from './common/answerSituation'
 import knowledgePointAnalysis from './common/knowledgePointAnalysis'
+import {mapActions} from 'vuex'
 export default {
   name: 'HomeworkReport',
   data() {
@@ -22,7 +28,16 @@ export default {
       tabType: 1 // 1:全部成绩;2:答案情况;3:知识点分析
     }
   },
+  mounted() {
+    this.getInfo({
+      publish_id: this.$route.params.publishId,
+      class_id: this.$route.params.classId
+    })
+  },
   methods: {
+    ...mapActions({
+      'getInfo': 'homeworkDetail/basicStateInfo'
+    }),
     tabChange(type) {
       this.tabType = type
     }
@@ -37,10 +52,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 #homework-report{
-  .split-line{
+  height: 100%;
+  .wrapper{
     width: 100%;
-    height: 10px;
-    background: #f5f8f8;
+    height: calc(100% - 45px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    .split-line{
+      width: 100%;
+      height: 10px;
+      background: #f5f8f8;
+    }
   }
 }
 </style>

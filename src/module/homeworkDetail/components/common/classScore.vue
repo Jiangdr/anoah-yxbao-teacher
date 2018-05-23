@@ -4,17 +4,20 @@
     <div class="split-line"></div>
     <circle-chart></circle-chart>
     <div class="split-line"></div>
+    <student-score-table></student-score-table>
   </div>
 </template>
 <script>
 // 全班成绩
 import classScoreOverview from './classScoreOverview'
 import circleChart from './circleChart'
+import studentScoreTable from './studentScoreTable'
 export default {
   name: 'ClassScore',
   components: {
     classScoreOverview,
-    circleChart
+    circleChart,
+    studentScoreTable
   }
 }
 </script>

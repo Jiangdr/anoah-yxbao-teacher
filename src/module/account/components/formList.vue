@@ -2,12 +2,13 @@
   <div id="form-list">
     <van-cell-group>
       <van-field v-model="userAccount" label="登录账号" icon="clear" placeholder="请输入用户名" required @click-icon="userAccount = ''" />
-      <van-field v-model="userName" label="姓名" icon="clear" placeholder="必填,否则无法查找您的信息" required @click-icon="userName = ''" />
+      <van-field v-model="userName" label="姓名" icon="clear" placeholder="必填,否则无法查找到你的信息" required @click-icon="userName = ''" />
       <van-field v-model="schoolArea" @focus="areaChange" label="学校所在地" icon="clear" placeholder="必填,否则无法查找学校" required @click-icon="schoolArea = ''" />
       <van-field v-model="schoolName" @focus = "fillSchoolName" label="学校名称" icon="clear" placeholder="必填,否则无法查找学校" required @click-icon="schoolName = ''" />
-      <van-field v-model="className" label="班级名称" icon="clear" placeholder="必填,否则无法查找学校" required @click-icon="className = ''" />
-      <van-field v-model="phoneNum" label="联系方式" icon="clear" placeholder="必填,否则无法查找学校" required @click-icon="phoneNum = ''" />
+      <van-field v-model="className" label="班级名称" icon="clear" placeholder="必填,否则无法查找到你的信息" required @click-icon="className = ''" />
+      <van-field v-model="phoneNum" label="联系方式" icon="clear" placeholder="必填,请输入你的手机号或邮箱" required @click-icon="phoneNum = ''" />
     </van-cell-group>
+    <next-btn class="btn-next" text="提 交"></next-btn>
     <transition name="van-fade">
       <div class="model" v-show="chooseArea" @click="closeChooseArea"></div>
     </transition>
@@ -18,8 +19,12 @@
 </template>
 <script>
 import api from '@/module/account/axios/user'
+import NextBtn from '@/module/account/components/yx-next-btn'
 export default {
   name: 'FormList',
+  components: {
+    NextBtn
+  },
   data () {
     return {
       userAccount: '',
@@ -105,20 +110,30 @@ export default {
 }
 </script>
 <style scoped>
-.choose-area{
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 2019;
-}
-.model{
-  position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
-  height: calc(100% - 220px);
-  background-color: rgba(0,0,0,.6);
-  z-index: 2018;
-}
+  #form-list{
+    padding: 24px;
+    height: 86%;
+    background: url("/static/img/account/pwd-bottom.png") no-repeat bottom;
+  }
+  .choose-area{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2019;
+  }
+  .model{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: calc(100% - 220px);
+    background-color: rgba(0,0,0,.6);
+    z-index: 2018;
+  }
+  .btn-next{
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 150px;
+  }
 </style>
