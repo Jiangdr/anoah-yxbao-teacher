@@ -403,7 +403,7 @@ export default {
       if (this.miniResource[index]) {
         this.$store.commit('homeworkDetail/setmini', this.miniResource[index])
       }
-      this.$store.commit('homeworkDetail/setIndex', key)
+      this.$store.commit('homeworkDetail/changIndex', key)
       // 单选题、判断题统计页面
       this.$router.push({
         name: 'questionDetail'
