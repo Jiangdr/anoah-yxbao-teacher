@@ -1,6 +1,6 @@
 <template>
 <div class="detail">
-  <top @back="goBack" @tabChange="tabChange"></top>
+  <!-- <top @back="goBack" @tabChange="tabChange"></top> -->
   <div class="wrapper">
     <!-- 作业名称 开始时间 结束时间 -->
     <div class="info">

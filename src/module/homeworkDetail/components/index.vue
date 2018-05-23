@@ -9,6 +9,10 @@
         <span>...</span>
       </div>
     </header-bar>
+    <div class="content">
+      <homework-report v-if="tabType === 'report'"></homework-report>
+      <homework-detail v-if="tabType === 'detail'"></homework-detail>
+    </div>
   </div>
 </template>
 <script>
@@ -47,7 +51,7 @@ export default {
     height: 30px;
     line-height: 30px;
     width: 200px;
-    font-size: 18px;
+    font-size: 16px;
     color: #08b884;
     border: 1px solid #08b884;
     border-radius: 5px;
@@ -66,6 +70,12 @@ export default {
     font-size: 18px;
     font-weight: 800;
     color: #4e4e4e
+  }
+  .content{
+    width: 100%;
+    height: calc(100% - 45px);
+    overflow: hidden;
+    box-sizing: border-box;
   }
 }
 </style>
