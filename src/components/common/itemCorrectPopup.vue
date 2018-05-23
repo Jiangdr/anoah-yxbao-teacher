@@ -76,15 +76,12 @@ export default {
     padding:15px;
     box-sizing: border-box;;
   }
- .tip-popup[class*="van-hairline"]::after {
-    border-radius: 20px;
-  }
-
 .tip-container>.title {
     line-height: 38px;
     text-align: center;
     font-weight: 400;
     font-size: 16px;
+    margin-bottom: 10px;
   }
 
 .tip-container>.tip-content {
@@ -101,5 +98,7 @@ export default {
     font-size: 14px;
     text-align: center;
     padding-bottom: 20px;
+    text-align: left;
+    line-height: 20px;
   }
 </style>
