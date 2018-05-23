@@ -100,7 +100,7 @@ export default {
       for (let i = 0; i < array2.length; i++) {
         resourceId.push({
           title: array2[i].name,
-          rids: [array2[i].resource_id]
+          rids: array2[i].resource_id
         });
       }
 
