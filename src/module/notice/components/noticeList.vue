@@ -34,7 +34,7 @@ export default {
     return {
       isNewWorkMsg: true,
       isNewSchoolMsg: true,
-      identity: 'student'
+      identity: 'teacher'
     }
   },
   created () {},

@@ -402,13 +402,11 @@ export default {
       if (curr.status === 0) {
         return false;
       }
+      this.$store.commit('homeworkDetail/setParams', curr)
       if (this.miniResource[index]) {
         this.$store.commit('homeworkDetail/setmini', this.miniResource[index])
-        this.$store.commit('homeworkDetail/setIndex', key)
-      } else {
-        this.$store.commit('homeworkDetail/setmini', [curr])
-        this.$store.commit('homeworkDetail/setIndex', 0)
       }
+      this.$store.commit('homeworkDetail/changIndex', key)
       // 单选题、判断题统计页面
       this.$router.push({
         name: 'tongji'
