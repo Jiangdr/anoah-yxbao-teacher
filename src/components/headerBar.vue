@@ -9,7 +9,9 @@
         标题
       </slot>
     </div>
-    <slot name="right-area"></slot>
+    <div class="right-area">
+      <slot name="right-area"></slot>
+    </div>
   </div>
 </template>
 <script>
@@ -33,17 +35,22 @@ export default {
   padding: 0 13px;
   overflow: hidden;
   display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
   .back-btn{
     display: inline-block;
     font-size: 15px;
     width: 50px;
-    color: #4e4e4e
+    color: #4f4f50;
   }
   .title-name{
     font-size: 18px;
-    width: 150px;
-    text-align: center;
-    margin-left: calc(50% - 65px - 75px)
+    max-width: 200px;
+    // align-items: center;
+  }
+  .right-area{
+    width: 50px;
+    text-align: right;
   }
 }
 </style>
