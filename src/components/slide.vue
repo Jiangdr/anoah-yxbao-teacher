@@ -78,10 +78,11 @@ export default {
   },
   activated() {
     if (!this.slide) {
-      return
+      return false
     }
     this.slide.enable()
-    let pageIndex = this.slide.getCurrentPage().pageX
+    // let pageIndex = this.slide.getCurrentPage().pageX
+    let pageIndex = this.currentPage
     this.slide.goToPage(pageIndex, 0, 0)
     this.currentPageIndex = pageIndex
     if (this.autoPlay) {
@@ -148,8 +149,9 @@ export default {
     _initSlide() {
       this.slide = new BScroll(this.$refs.slide, {
         scrollX: true,
-        scrollY: false,
+        scrollY: true,
         momentum: false,
+        // eventPassthrough: 'vertical',
         snap: {
           loop: this.loop,
           threshold: this.threshold,
@@ -160,7 +162,7 @@ export default {
         click: this.click
       })
 
-      this.slide.goToPage(1, 0, 0)
+      this.slide.goToPage(this.currentPage, 0, 0)
 
       this.slide.on('scrollEnd', this._onScrollEnd)
 
@@ -206,6 +208,9 @@ export default {
     threshold() {
       this.update()
     },
+    currentPage() {
+      this.update()
+    },
     currentPageIndex(newVal, oldValue) {
       if (newVal !== oldValue) {
         this.$emit('slideEnd', this.currentPageIndex)
@@ -220,11 +225,11 @@ export default {
   .slide-group{
     position: relative;
     overflow: hidden;
-    white-space: nowrap;
     .slide-item{
       float: left;
       box-sizing: border-box;
-      overflow: hidden;
+      overflow-x: hidden;
+      height: auto;
       text-align: center;
       a{
         display: block;

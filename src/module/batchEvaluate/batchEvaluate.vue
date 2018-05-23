@@ -8,102 +8,55 @@
       </i>
     </header>
 
-    <!-- <div class="select-container">
-      <span class="select-span">
-        <div class="select-span-div" @click="clickTime">时间</div>
-      </span>
-      <span class="select-span">
-        <div class="select-span-div" @click="clickStatus">状态</div>
-      </span>
-      <span class="select-span">
-        <div class="select-span-div" @click="clickClass">班级</div>
-      </span>
-    </div> -->
-
     <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;">
         <div style="display: inline-block;">正确率：</div>
-        <div style="display: inline-block;">全部</div>
-        <div style="display: inline-block;">100%</div>
-        <div style="display: inline-block;">90-99%</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === ''}" @click="clickRateTab('')">全部</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 1}" @click="clickRateTab(1)">100%</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 0.9}" @click="clickRateTab(0.9)">90-99%</div>
     </div>
 
     <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;">
         <div style="display: inline-block;">评价：</div>
-        <div style="display: inline-block;">待评价</div>
-        <div style="display: inline-block;">已评价</div>
-        <div style="display: inline-block;">待批改</div>
-      <!-- 共{{totalCountNum}}个作业&nbsp;&nbsp;<span style="color: red;">{{countNum}}</span>个待批改 -->
+        <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === ''}" @click="clickEvaluateTab('')">全部</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === 1}" @click="clickEvaluateTab(1)">待评价</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === 3}" @click="clickEvaluateTab(3)">已评价</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === 33}" @click="clickEvaluateTab(33)">待批改</div>
     </div>
 
     <div>
-        <span @click="clickStudent">张三</span>
-        <span @click="clickStudent">张三</span>
-        <span @click="clickStudent">张三</span>
+      <!-- <span style="padding: 10px;display:inline-block;" @click="clickStudent(item)" v-for="(item, index) in allStudentsArrayFormat" :key="index">{{item.real_name}}</span> -->
+      <van-checkbox-group v-model="checkBoxGroup">
+        <van-checkbox style="padding: 10px;display:inline-block;" v-for="(item, index) in allStudentsArrayFormat" :key="index" :name="item" >
+          {{ item.real_name }}
+        </van-checkbox>
+      </van-checkbox-group>
     </div>
 
     <div class="yxban-tabbar--fixed van-tabbar">
       <div class="van-tabbar-item">
-        <div class="van-tabbar-item__icon">
-          <i class="fa fa-location-arrow"></i>
-        </div>
         <div class="van-tabbar-item__text">
           <span>退回作业</span>
         </div>
       </div>
       <div class="van-tabbar-item">
-        <div class="van-tabbar-item__icon">
-          <i class="fa fa-location-arrow"></i>
-        </div>
         <div class="van-tabbar-item__text">
-          <span>给表扬</span>
+          <span><i class="fa fa-heart-o"></i>表扬</span>
         </div>
       </div>
-      <div class="van-tabbar-item">
+      <div class="van-tabbar-item" @click="writeComments">
         <div class="van-tabbar-item__icon">
-          <i class="fa fa-location-arrow"></i>
         </div>
         <div class="van-tabbar-item__text">
-          <span>写评语</span>
+          <span>
+            <i class="fa fa-pencil-square-o"></i>写评语</span>
         </div>
       </div>
     </div>
-
-    <!-- <div class="listContainer" v-bind:style="listContainerStyle">
-      <van-pull-refresh v-model="pullRefresIsLoading" @refresh="onRefresh">
-        <van-list v-model="loading" :finished="finished" @load="loadMore" :offset="300" :immediate-check="false">
-          <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
-            <div class="listContainerLeft">
-              <div class="homework_list_inline_list"><span style="font-size:18px;font-weight:700;">{{item.title}}</span>&nbsp;&nbsp;<span class="font-color">{{item.resource_count}}份</span></div>
-              <div class="homework_list_inline_list font-color">{{item.edu_subject_name}}&nbsp;&nbsp;&nbsp;{{item.class_name}}</div>
-              <div class="homework_list_inline_list"><span class="font-color">完成：</span><span style="color:#2ec2a9;font-size:22px;">{{item.finished_counter}}</span><span class="font-color">/{{item.student_counter}}人</span></div>
-              <div class="homework_list_inline_list font-color" style="font-size: 14px;"><span class="font-color">截止：</span>{{item.deadline}}</div>
-            </div>
-            <div class="listContainerRight">
-              正确率:&nbsp;&nbsp;&nbsp;
-                <span class="font-color" style="font-size:28px;color: #2ec2a9">{{item.right_rate >= 0 ? item.right_rate*100 : '--'}}</span>
-                <span v-if="item.right_rate > 0" style="font-size:16px;color: #2ec2a9">%</span>
-                <i class="fa fa-angle-right arrow-right"></i>
-            </div>
-            <div style="clear:both;"></div>
-          </div>
-        </van-list>
-
-        <div v-if="homeworkListArray.length === 0" style="height: 200px;line-height: 200px;text-align: center;">
-          没有数据
-        </div>
-      </van-pull-refresh>
-    </div> -->
-
-    <!-- <div class="publishHomeworkBtnDiv" @click="goChooseTextbook">
-      <div class="publishHomeworkBtn">
-        <div>布置<br/>作业</div>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
-import api from "@/axios/publishHomeWork.js";
+import api from "@/module/batchEvaluate/axios/batchEvaluate.js";
 
 export default {
   name: "Homework",
@@ -121,24 +74,120 @@ export default {
       totalPage: 1,
       countNum: 0,
       totalCountNum: 0,
-      active: 0
+      active: 0,
+      studentList: [],
+      willCorrectStudentsArray: [],
+      didCorrectStudents: [],
+      didJudgementStudents: [],
+      allStudentsArray: [],
+      allStudentsArrayFormat: [],
+      statusType: "",
+      rateType: "",
+      checkBoxGroup: []
     };
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
+    this.getStudentsList();
   },
   methods: {
-    goHomework () {
+    goHomework() {
       this.$router.push({
         path: "/homework"
       });
     },
-    clickStudent() {}
+    writeComments() {
+      if (this.checkBoxGroup.length === 0) {
+        this.$toast({
+          message: "请选择学生！",
+          duration: 500
+        });
+        return;
+      }
+      this.$store.dispatch("chooseBatchEvaluateStudentsArray", this.checkBoxGroup);
+      this.$router.push({
+        path: "/comments"
+      });
+    },
+    clickStudent() {},
+    getStudentsList() {
+      var self = this;
+      var data = {
+        publish_id: "229002511525863300001f"
+      };
+
+      api.getHomeworkDetailBasic(data).then(function(response) {
+        var array = response.student_list;
+        array.forEach(item => {
+          item.status = 1;
+          // if (item.status === 1) {
+          //   self.willCorrectStudentsArray.push(item);
+          // } else if (item.status === 3) {
+          //   if (item.comment === null) {
+          //     self.didCorrectStudents.push(item);
+          //   } else {
+          //     self.didJudgementStudents.push(item);
+          //   }
+          // }
+        });
+        self.allStudentsArray = array;
+        self.allStudentsArrayFormat = array;
+      });
+    },
+    clickEvaluateTab(type) {
+      this.statusType = type;
+      this.formartAllstudentsArrayFun(this.rateType);
+    },
+    clickRateTab(type) {
+      this.rateType = type;
+      this.formartAllstudentsArrayFun(type);
+    },
+    formartAllstudentsArrayFun(rateType) {
+      this.allStudentsArrayFormat = [];
+      var array = this.allStudentsArray;
+      // debugger
+      if (this.statusType === 1) {
+        array.forEach(item => {
+          if (item.status === 1 && item.rate === rateType) {
+            this.allStudentsArrayFormat.push(item);
+          }
+        });
+      } else if (this.statusType === 3) {
+        array.forEach(item => {
+          if (item.status === 3 && item.rate === rateType) {
+            if (item.comment === null) {
+              this.allStudentsArrayFormat.push(item);
+            } else {
+              this.allStudentsArrayFormat.push(item);
+            }
+          }
+        });
+      } else if (!this.statusType) {
+        array.forEach(item => {
+          if (item.rate === rateType) {
+            this.allStudentsArrayFormat.push(item);
+          }
+        });
+      }
+    }
   }
 };
 </script>
 
 <style scoped>
+.correct-rate-btn {
+  display: inline-block;
+  width: 4rem;
+  height: 2rem;
+  line-height: 2rem;
+  text-align: center;
+  border: 1px solid #2ec3b8;
+  border-radius: 5px;
+  margin: 0.5rem 0.25rem;
+  box-sizing: border-box;
+  vertical-align: top;
+  background-color: #fff;
+}
 .homework_list {
   margin-top: 1.33333vw;
   padding: 1.86667vw;
@@ -247,8 +296,12 @@ export default {
   color: #2ec2a9;
 }
 .van-tabbar-item__icon {
-    font-size: 4.8vw;
-    margin-bottom: 1.33333vw;
-    position: relative;
+  font-size: 4.8vw;
+  margin-bottom: 1.33333vw;
+  position: relative;
+}
+.activeTab {
+  background-color: #2ec2a9;
+  color: #fff;
 }
 </style>
