@@ -74,6 +74,8 @@ export default {
     doLogin () {
       this.doValidate()
       this.$store.dispatch('account/doLogin').then(r => {
+        console.log("===");
+        console.log(r);
         this.afterLogin()
       }, j => {
       })
