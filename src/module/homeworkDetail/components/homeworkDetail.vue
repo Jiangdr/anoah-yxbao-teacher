@@ -1,6 +1,6 @@
 <template>
 <div class="detail">
-  <top @back="goBack"></top>
+  <top @back="goBack" @tabChange="tabChange"></top>
   <div class="wrapper">
     <!-- 作业名称 开始时间 结束时间 -->
     <div class="info">
@@ -104,10 +104,7 @@
   </div>
 </div>
 </div>
-<div
-  class="student-content"
-  v-if="activeBtn=='student'"
->
+<div class="student-content" v-if="activeBtn=='student'">
   <template v-if="finishCounter>0">
     <div class="status">
       <van-row class="item">
@@ -435,6 +432,10 @@ export default {
         return false;
       }
       return false;
+    },
+    // 顶部tab切换
+    tabChange(type) {
+      console.log(type)
     }
   },
   components: {

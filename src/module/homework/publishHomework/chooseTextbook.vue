@@ -7,9 +7,9 @@
 
     <div class="gradelist">
         <div v-for="items in gradeLists" :key="items.grade_name">
-            <p class="sectionDiv">{{items.grade_name}}</p>
-           <div v-for='item in items.grade_list' :key="item.name" class="gradeDiv" v-bind:class="{activeGradeSelClass:activeGradeId === item.id}"  @click="clickGrade(item.id)">
-             <p class="gradeP" v-bind:class="{activeTxtClass:activeGradeId === item.id}">
+            <p class="section-div">{{items.grade_name}}</p>
+           <div v-for='item in items.grade_list' :key="item.name" class="grade-div" v-bind:class="{activegradeselclass:activeGradeId === item.id}"  @click="clickGrade(item.id)">
+             <p class="grade-p" v-bind:class="{activetxtclass:activeGradeId === item.id}">
                {{item.name}}
               </p>
           </div>
@@ -18,24 +18,24 @@
     </div>
 
     <div style="width: 75%;float: left;padding-top: 2vw;height: 100%;text-align: center;background-color: #fff;">
-      <div class="unitTabDiv">
-        <div class="unitTabClass" @click="clickTerm(1)" v-bind:class="{cubeBtnActive:activeTermId === 1}">上册</div>
-        <div class="unitTabClass" @click="clickTerm(2)" v-bind:class="{cubeBtnActive: activeTermId === 2}">下册</div>
-        <div class="unitTabClass" @click="clickTerm(3)" v-bind:class="{cubeBtnActive: activeTermId === 3}">全册</div>
+      <div class="unit-tab-div">
+        <div class="unit-tab-class" @click="clickTerm(1)" v-bind:class="{cubebtnactive:activeTermId === 1}">上册</div>
+        <div class="unit-tab-class" @click="clickTerm(2)" v-bind:class="{cubebtnactive: activeTermId === 2}">下册</div>
+        <div class="unit-tab-class" @click="clickTerm(3)" v-bind:class="{cubebtnactive: activeTermId === 3}">全册</div>
       </div>
 
-      <div style="margin-top: 1vw;overflow-y: auto;height:calc(100% - 41vw)">
+      <div class="list-container">
             <van-list v-model="loading" loading-text="加载中。。。" :finished="finished" @load="loadMore" :offset="100" :immediate-check="false">
-              <div class="textBook" v-for="(textBook, index) in textBookList" :key="index" @click="clickTextBook(textBook)"
-            v-bind:class="{activeRightTabClass: chooseTextbookId === textBook.edu_book_id}">{{textBook.name}}</div>
+              <div class="text-book" v-for="(textBook, index) in textBookList" :key="index" @click="clickTextBook(textBook)"
+            v-bind:class="{activerighttabclass: chooseTextbookId === textBook.edu_book_id}">{{textBook.name}}</div>
             </van-list>
           <div v-if="textBookList.length==0" class="text-font" style="height: 200px;line-height: 200px;text-align: center;">
             没有数据
           </div>
       </div>
     </div>
-    <div class="comfirmBtnContainer">
-      <div class="comfirmBtn" :outline="true" @click="goSummerHomework">确认</div>
+    <div class="footer-container div-center">
+      <div class="yx-green-btn" :outline="true" @click="goSummerHomework">确认</div>
     </div>
   </div>
 </template>
@@ -90,7 +90,6 @@ export default {
       this.getTextBookLists();
     },
     loadMore() {
-      console.log("loadMore......");
       if (this.noMore) {
         this.finished = true;
         this.loading = false;
@@ -158,42 +157,22 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$primary-color: #08b783;
-$active-color: #13d098;
-$border-state: 1px solid rgb(234, 237, 240);
- @import "@/style/variable.scss";
+@import "@/assets/css/custom.scss";
 .text-font {
   font-size: 16px;
   color: #9c9ea1;
 }
-.comfirmBtnContainer {
-  background-color: #ffffff;
-  width: 100%;
-  height: $bottom-height;
-  bottom: 0px;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.list-container {
+  margin-top: 1vw;
+  overflow-y: scroll;
+  height: calc(100% - #{$header-height} - #{$bottom-height} - 13vw);
 }
-.comfirmBtn {
-  height: 54px;
-  line-height: 54px;
-  width: 50%;
-  border-radius: $bottom-btn-radius;
-  background-color: $primary-color;
-  font-size: $bottom-btn-font-size;
-  text-align: center;
-  color: #fff;
-}
-.comfirmBtn:active {
-  background-color: $active-color;
-}
-.unitTabClass {
-  @extend .singleLine;
+
+.unit-tab-class {
+  @extend .single-line;
   background-color: #ffffff;
   color: #000;
-  border: 1px solid #eaedf0;
+  border: $border-state;
   display: inline-block;
   width: 27%;
   padding: 2vw;
@@ -208,41 +187,33 @@ $border-state: 1px solid rgb(234, 237, 240);
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
-.singleLine {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 .gradelist {
   width: 25%;
   float: left;
-  height: calc(100% - 30vw);
+  height: calc(100% - #{$header-height} - #{$bottom-height} - 2vw);
   overflow: auto;
   padding-top: 2vw;
-  .sectionDiv {
+  .section-div {
     font-size: 15px;
     color: #9c9ea1;
   }
-  .gradeP {
+  .grade-p {
     font-size: 16px;
   }
-  .gradeDiv {
+  .grade-div {
     line-height: 35px;
     height: 35px;
   }
   p {
-    padding-left: 20px;
+    padding-left: 15px;
     margin: 7px 0 0 0;
   }
 }
-.activeTabClass {
-  color: $primary-color;
-}
-.unitTabDiv {
+.unit-tab-div {
   display: inline-block;
   vertical-align: top;
   width: 100%;
-  .cubeBtnActive {
+  .cubebtnactive {
     background-color: #2ec2a9 !important;
     color: #fff !important;
   }
@@ -256,34 +227,33 @@ $border-state: 1px solid rgb(234, 237, 240);
     border-radius: 1.3vw;
   }
 }
-.comfirmTxtBtn {
+.comfirm-txt-btn {
   position: absolute;
   right: 0px;
   top: 0%;
   height: 100%;
   background: #fff;
-  color: $primary-color;
+  color: $green-primary-color;
   padding: 0 4vw;
 }
-.textBook {
-  @extend .singleLine;
+.text-book {
+  @extend .single-line;
   border-bottom: $border-state;
-  line-height: 11vw;
+  line-height: 12vw;
   margin: 0 auto;
   width: 93%;
   text-align: left;
   font-size: 16px;
 }
-.activeRightTabClass {
-  //background-color: $primary-color;
-  color:$primary-color;
+.activerighttabclass {
+  color: $green-primary-color;
 }
-.activeGradeSelClass {
+.activegradeselclass {
   background-color: #fff;
   color: #000;
 }
-.activeTxtClass {
-  @extend .singleLine;
-  border-left: 2px solid $primary-color;
+.activetxtclass {
+  @extend .single-line;
+  border-left: 2px solid $green-primary-color;
 }
 </style>

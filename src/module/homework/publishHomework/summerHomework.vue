@@ -1,8 +1,8 @@
 <template>
-  <div class="cube-page cube-view button-view">
+  <div class="cube-page cube-view button-view" style="background-color: #fff;">
     <header class="header">
       <h1>暑假作业</h1>
-      <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left"></i> 返回</i>
+      <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
     </header>
 
     <!-- <van-checkbox v-model="checked">复选框</van-checkbox> -->
@@ -14,36 +14,48 @@
         </van-cell>
       </van-cell-group>
     </van-checkbox-group> -->
-
-    <div style="line-height:24px;background-color:#fff;padding:10px 15px;font-size:14px;" v-for="(item, index) in lists" :key="index">
-      <div style="float:left;" @click="clickTiltleName(item)">{{item.name}}-共{{item.qti_num}}题</div>
-      <div style="float:right;">
-        <input type="checkbox" style="width:18px;height:18px;" :name="item.name" :id="item.resource_id" :value="item.qti_num" @click="checkboxChange">
-      </div>
-      <div style="clear:both;"></div>
+    <div :class="{listdiv:!showFooter,listfooterdiv:showFooter}" style="overflow-y: auto;">
+        <van-list v-model="loading" loading-text="加载中。。。" :finished="finished" @load="loadMore" :offset="100" :immediate-check="false">
+          <div class="list-item" v-for="(item, index) in lists" :key="index">
+            <div style="float:left;margin-top: 3vw;" @click="clickTiltleName(item)">
+               <p>{{(index+1)+"."+item.name}}</p>
+               <p class="des-item">共<span>{{item.qti_num}}</span>道题</p>
+            </div>
+            <YxCheckBox class="checkbox" :selected="false" :id="item.resource_id" :value="item.qti_num" @select="checkboxChange(item,$event)"></YxCheckBox>
+          </div>
+        </van-list>
+        <div v-if="lists.length==0" class="text-font" style="height: 200px;line-height: 200px;text-align: center;">
+          没有数据
+        </div>
     </div>
 
-    <div style="position:absolute;bottom:0px;background: transparent;border:1px solid rgb(102, 102, 102); background-color: rgba(102, 102, 102, 1);" class="cube-btn">
-      <div style="float:left;font-size:13px;">已选试卷{{hasChoosePagesNum}}份，共{{hasChooseProblemsNum}}道题</div>
-      <div style="background-color:rgba(22, 155, 213, 1);width:59px;height:22px;line-height:22px;font-size:13px;float:right;border-radius:5px;" @click="clickPublish">布&nbsp;&nbsp;&nbsp;&nbsp;置</div>
+    <div v-if="showFooter" class="footer-container">
+      <p class="footer-p">已选试卷<span>{{hasChoosePagesNumArray.length}}</span>份，共<span>{{hasChooseProblemsNum}}</span>道题</p>
+      <div class="yx-green-btn buzhi-div"  @click="clickPublish">布&nbsp;&nbsp;&nbsp;&nbsp;置</div>
     </div>
   </div>
 </template>
 
 <script>
-import api from '@/module/homework/axios/publishHomeWork.js'
+import api from "@/module/homework/axios/publishHomeWork.js";
+import YxCheckBox from "@/components/common/yx-check-box.vue";
 
 export default {
   name: "publishHomework",
+  components: { YxCheckBox },
   data() {
     return {
       checkList: [],
       lists: [],
       result: [],
-      hasChoosePagesNum: 0,
+      showFooter: false,
       hasChooseProblemsNum: 0,
       checked: true,
-      hasChoosePagesNumArray: []
+      hasChoosePagesNumArray: [],
+      loading: false,
+      finished: false,
+      noMore: false,
+      page: 0
     };
   },
   computed: {},
@@ -62,7 +74,7 @@ export default {
       });
     },
     clickPublish() {
-      if (this.hasChoosePagesNum === 0) {
+      if (this.hasChoosePagesNumArray.length === 0) {
         this.$toast({
           message: "请选择试卷！",
           duration: 1000
@@ -82,21 +94,20 @@ export default {
         path: "/homeworkPublishSetting"
       });
     },
-    checkboxChange() {
-      var inputArray = document.getElementsByTagName("input");
-      this.hasChoosePagesNumArray = [];
-      this.hasChooseProblemsNum = 0;
-      for (var i = 0; i < inputArray.length; i++) {
-        if (inputArray[i].checked) {
-          this.hasChoosePagesNumArray.push(inputArray[i]);
-        }
-      }
-      this.hasChoosePagesNum = this.hasChoosePagesNumArray.length;
-      for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
-        this.hasChooseProblemsNum += Number(
-          this.hasChoosePagesNumArray[i].value
+    checkboxChange(item, event) {
+      if (event.selecteState) {
+        this.hasChoosePagesNumArray.push(item);
+        this.hasChooseProblemsNum =
+          parseInt(this.hasChooseProblemsNum) + parseInt(item.qti_num);
+      } else {
+        this.hasChoosePagesNumArray.splice(
+          this.hasChoosePagesNumArray.indexOf(item),
+          1
         );
+        this.hasChooseProblemsNum =
+          parseInt(this.hasChooseProblemsNum) - parseInt(item.qti_num);
       }
+      this.showFooter = this.hasChoosePagesNumArray.length !== 0;
     },
     clickTab(name) {
       this.activeTabName = name;
@@ -108,16 +119,37 @@ export default {
         this.checkList.push(array[i].value);
       }
     },
+    loadMore() {
+      if (this.noMore) {
+        this.finished = true;
+        this.loading = false;
+      } else {
+        this.getList();
+      }
+    },
     getList: function(value) {
       var self = this;
+      self.page++;
       var data = {
         user_id: self.userInfo.userid,
-        pack_id: self.summerHomeworkPackId
+        pack_id: self.summerHomeworkPackId,
+        page: self.page,
+        per_page: 50
       };
-      api.getResourceLists(data)
-        .then(function(r) {
-          self.lists = r.lists;
-        })
+      api.getResourceLists(data).then(
+        success => {
+          self.loading = false;
+          if (success.lists.length < 1) {
+            self.noMore = true;
+          } else {
+            self.lists = self.lists.concat(success.lists);
+          }
+        },
+        err => {
+          console.log(err);
+          self.$toast("网络异常");
+        }
+      );
     },
     clickTiltleName(item) {
       this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.qti_ids);
@@ -129,8 +161,60 @@ export default {
 };
 </script>
 
-<style scoped>
-.activeTabClass {
-  color: #2ec2a9;
+<style scoped  lang="scss">
+@import "@/assets/css/custom.scss";
+.listfooterdiv {
+  height: calc(100% - #{$header-height} - #{$bottom-height});
+}
+.listdiv {
+  height: calc(100% - #{$header-height});
+}
+.list-item {
+  height: 20vw;
+  background-color: #fff;
+  margin: 0px 14px;
+  font-size: 18px;
+  border-bottom: $border-state;
+  p {
+    @extend .single-line;
+    width: 70vw;
+    margin: 2vw 0;
+  }
+  .checkbox {
+    width: 25px;
+    height: 25px;
+    float: right;
+    top: 6.5vw;
+    border-radius: 20px;
+    position: relative;
+  }
+  .des-item {
+    font-size: 16px;
+    color: #7f8184;
+    padding-left: 4vw;
+    span {
+      color: #4e4e50;
+    }
+  }
+}
+.des-item:active {
+  color: $green-primary-color;
+}
+
+.footer-p {
+  @extend .single-line;
+  line-height: $bottom-height;
+  font-size: 18px;
+  display: inline-block;
+  padding-left: 14px;
+  span {
+    color: $orange-active-color;
+  }
+}
+.buzhi-div {
+  width: 100px;
+  position: absolute;
+  top: calc((#{$bottom-height} - 54px) / 2);
+  right: 14px;
 }
 </style>
