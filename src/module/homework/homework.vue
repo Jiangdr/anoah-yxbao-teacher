@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import api from "@/axios/publishHomeWork.js";
+import api from "@/module/homework/axios/publishHomeWork.js";
 
 export default {
   name: "Homework",

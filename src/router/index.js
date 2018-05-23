@@ -5,8 +5,8 @@ import account from '@/module/account/router'
 import correction from '@/module/correction/router'
 // 通知/消息
 import notice from '@/module/notice/router'
-// 批改作业统计--按题
-import tongji from '@/module/tongji/router'
+// 批改作业--按题
+import questionDetail from '@/module/questionDetail/router'
 // 批改作业--作业详情
 import homeworkDetail from '@/module/homeworkDetail/router'
 import userCenter from '@/module/user-center/router'
@@ -41,7 +41,7 @@ let routes = [
   ...account,
   ...correction,
   ...notice,
-  ...tongji,
+  ...questionDetail,
   ...homeworkDetail,
   ...batchEvaluateRoutes
 ]

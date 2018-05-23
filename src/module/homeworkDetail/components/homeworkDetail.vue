@@ -409,7 +409,7 @@ export default {
       this.$store.commit('homeworkDetail/changIndex', key)
       // 单选题、判断题统计页面
       this.$router.push({
-        name: 'tongji'
+        name: 'questionDetail'
       });
     },
     // 资源正确率计算方法

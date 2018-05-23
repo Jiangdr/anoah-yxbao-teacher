@@ -1,5 +1,5 @@
-import tongji from '@/module/tongji/components/tongji.vue'
-import originalQuestion from '@/module/tongji/components/originalQuestion.vue'
+import questionDetail from '@/module/questionDetail/components/tongji.vue'
+import originalQuestion from '@/module/questionDetail/components/originalQuestion.vue'
 // 正确率表格图  例：客观填空、选词填空
 // import correctTable from '@/module/tongji/components/question/correctTable.vue'
 // 答案柱状图  例：判断题、单选题、多选题、不定选项、排序题
@@ -13,16 +13,16 @@ import originalQuestion from '@/module/tongji/components/originalQuestion.vue'
 // 主观题  例：主观填空
 // import correctColumn from '@/module/tongji/components/question/correctColumn.vue'
 // 组件详情---选词填空  一般组件
-import groupDetail from '@/module/tongji/components/question/groupDetail.vue'
+import groupDetail from '@/module/questionDetail/components/question/groupDetail.vue'
 // 组件详情   口算训练
-import groupDetailColumn from '@/module/tongji/components/question/groupDetailColumn.vue'
+import groupDetailColumn from '@/module/questionDetail/components/question/groupDetailColumn.vue'
 export default
 [
   {
-    name: 'tongji',
-    path: '/tongji',
+    name: 'questionDetail',
+    path: '/questionDetail',
     meta: { requiresAuth: false, keepAlive: true },
-    component: tongji,
+    component: questionDetail,
     children: [
       {
         path: '/groupDetail',
