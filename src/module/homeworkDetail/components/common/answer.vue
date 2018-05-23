@@ -29,9 +29,10 @@ export default{
         'class_id': this.classID,
         'teacher_id': this.teacherId
       }
-      homeworkDetil.sendAnswer(params).then((r) => {
-        console.log(r)
-      })
+      // homeworkDetil.sendAnswer(params).then((r) => {
+      //   console.log(r)
+      // })
+      this.toggle()
     }
   }
 }

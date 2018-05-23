@@ -1,10 +1,12 @@
 <template>
 <div class="detail">
-  <top @back="goBack" @tabChange="tabChange"></top>
   <div class="wrapper">
     <!-- 作业名称 开始时间 结束时间 -->
     <div class="info">
-      <p class="name">{{homeworkInfo.title}}</p>
+      <p class="name">
+        {{homeworkInfo.title}}
+        <span style="float:right">共<b>{{resourceList.length}}</b>份</span>
+      </p>
       <p class="times">
         <span class="start-time">{{homeworkInfo.start_time }}</span>
         <span class="end-time">{{homeworkInfo.deadline}}</span>
@@ -51,8 +53,9 @@
         v-if="activeBtn=='homework'"
       >
         <div class="total van-hairline--bottom">
-          <span>共{{resourceList.length}}题</span>
-          <span class="right"><input type="checkbox" v-model="notcorrect"> 只看待批阅</span>
+          <!-- <span>共{{resourceList.length}}题</span> -->
+          <span>只看待批阅</span>
+          <span class="right"><van-checkbox v-model="notcorrect"></van-checkbox> </span>
         </div>
         <!-- 作业资源列表 -->
         <div class="lists">
@@ -104,7 +107,10 @@
   </div>
 </div>
 </div>
-<div class="student-content" v-if="activeBtn=='student'">
+<div
+  class="student-content"
+  v-if="activeBtn=='student'"
+>
   <template v-if="finishCounter>0">
     <div class="status">
       <van-row class="item">
@@ -187,12 +193,16 @@
           span="6"
           offset="2"
           class="btn"
-        ><p @click="goBatchEvaluate">批量评价</p></van-col>
+        >
+          <p @click="goBatchEvaluate">批量评价</p>
+          </van-col>
           <van-col
             span="6"
             offset="2"
             class="btn"
-          >公布答案</van-col>
+          >
+            <p @click="toggleAnswerTip">公布答案</p>
+            </van-col>
     </van-row>
   </div>
   <!-- 班级平均正确率计算规则tip -->
@@ -215,31 +225,29 @@
           :publishId="$route.params.publishId"
           :send="0"
         ></correct>
-          </div>
+          <answer
+            v-if="answerTip"
+            @toggle="toggleAnswerTip"
+          ></answer>
+            </div>
 </template>
 
 <script>
 import homeworkDetil from "../axios/detail.js";
 import Vue from "vue";
-import top from './common/title.vue'
-import tips from './common/tips.vue' // 正确率提示
-import urge from './common/urge.vue' // 催交作业
-import remind from './common/remind.vue' // 提醒订正
-import correct from '@/components/common/correctPopup.vue' // 一键批阅
-import answer from './common/answer.vue' // 一键批阅
-import studentList from './common/studentList.vue' // 一键批阅
+import tips from "./common/tips.vue"; // 正确率提示
+import urge from "./common/urge.vue"; // 催交作业
+import remind from "./common/remind.vue"; // 提醒订正
+import correct from "@/components/common/correctPopup.vue"; // 一键批阅
+import answer from "./common/answer.vue"; // 发送答案
+import studentList from "./common/studentList.vue"; // 学生列表
 
 // import {mapState} from 'vuex'
 export default {
   name: "detail",
+  props: ["publishId", "classId"],
   data() {
     return {
-      params: {
-        // publish_id: '009002511525867000001f',
-        // class_id: '1106785'
-        publish_id: this.$route.params.publishId,
-        class_id: this.$route.params.classId
-      },
       homeworkInfo: {}, // 作业信息
       resourceList: [], // 作业列表
       studentList: [], // 班级学生完成情况，
@@ -251,6 +259,7 @@ export default {
       notcorrect: false, // 是否只看待批阅
       isUrge: false, // 是否已催交作业
       isRemind: false, // 是否已题型订正
+      answerTip: false,
       correctTip: false,
       homeworkStatus: "",
       miniResource: {}
@@ -266,16 +275,10 @@ export default {
     // }),
     // 班级正确率
     classCorrect() {
-      if (
-        this.correct === "" ||
-        this.correct === -1
-      ) {
+      if (this.correct === "" || this.correct === -1) {
         return "--";
       } else {
-        return this.correct === 0
-          ? 0
-          : Math.round(this.correct * 100) +
-          "%";
+        return this.correct === 0 ? 0 : Math.round(this.correct * 100) + "%";
       }
     },
     // 作业完成人数
@@ -289,24 +292,25 @@ export default {
   },
   methods: {
     getResource() {
-      homeworkDetil.getinfo(this.params).then(r => {
+      let params = {
+        publish_id: this.publishId,
+        class_id: this.classId
+      };
+      homeworkDetil.getinfo(params).then(r => {
         this.homeworkInfo = r;
         this.studentList = r.student_list;
-        this.correct = r.class_average_correct_rate
+        this.correct = r.class_average_correct_rate;
       });
       // 获取作业资源
-      homeworkDetil.getResourceList(this.params).then(d => {
+      homeworkDetil.getResourceList(params).then(d => {
         this.resourceList = d.list;
         this.homeworkStatus = d.status;
       });
       // 一键批阅后清空小资源列表
       this.miniResource = {};
     },
-    goBack() {
-      this.$router.go(-1);
-    },
     goBatchEvaluate() {
-      console.log('a')
+      console.log("a");
       this.$router.push({
         path: "/batchEvaluate"
       });
@@ -339,7 +343,10 @@ export default {
       if (this.homeworkStatus !== 1) {
         return false;
       }
-      this.correctTip = !this.correctTip
+      this.correctTip = !this.correctTip;
+    },
+    toggleAnswerTip() {
+      this.answerTip = !this.answerTip;
     },
     // 查看小题
     changeCollapse(index, ismini) {
@@ -376,14 +383,14 @@ export default {
       if (curr.status === 0) {
         return false;
       }
-      this.$store.commit('homeworkDetail/setParams', curr)
+      this.$store.commit("homeworkDetail/setParams", curr);
       if (this.miniResource[index]) {
-        this.$store.commit('homeworkDetail/setmini', this.miniResource[index])
+        this.$store.commit("homeworkDetail/setmini", this.miniResource[index]);
       }
-      this.$store.commit('homeworkDetail/changIndex', key)
+      this.$store.commit("homeworkDetail/changIndex", key);
       // 单选题、判断题统计页面
       this.$router.push({
-        name: 'questionDetail'
+        name: "questionDetail"
       });
     },
     // 资源正确率计算方法
@@ -412,16 +419,16 @@ export default {
     },
     // 顶部tab切换
     tabChange(type) {
-      console.log(type)
+      console.log(type);
     }
   },
   components: {
-    top,
     tips,
     urge,
     remind,
     correct,
-    studentList
+    studentList,
+    answer
   }
 };
 </script>
@@ -656,9 +663,11 @@ export default {
   height: 10px;
   background: #eaeaea;
 }
-.detail>.wrapper>.content>.student-content .student-list{
-  height: calc(100% - 90px - 46px);
+
+.detail>.wrapper>.content>.student-content .student-list {
+  height: calc(100% - 87px);
 }
+
 /* 班级平均正确率计算规则提示样式 */
 
 /* 底部按钮 */
@@ -671,9 +680,11 @@ export default {
   line-height: 50px;
   background: #fff;
 }
-.detail .bottom-btn>div{
+
+.detail .bottom-btn>div {
   height: 100%;
 }
+
 .detail .bottom-btn .btn {
   background: #06bb9c;
   border: 1px solid #06bb9c;
