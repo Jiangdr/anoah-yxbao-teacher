@@ -22,9 +22,9 @@ export default{
 </script>
 <style scoped>
   .detail .urge-popup {
-    width: calc(100vw - 40px);
+    width: calc(100vw - 85px);
     border-radius: 10px;
-    padding: 30px 20px;
+    padding:30px;
     box-sizing: border-box;
   }
 
