@@ -7,7 +7,7 @@
           班级正确率统计的是当前已经部分的学生平均正确率，未完成部分和已完成学生中暂未批改的题目暂不统计。
         </p>
         <div class="btn">
-          <van-button size="large" @click="toggle">知道了~</van-button>
+          <button size="large" @click="toggle">知道了~</button>
         </div>
       </div>
     </div>
@@ -30,9 +30,9 @@ export default{
 </script>
 <style scoped>
   .tip-popup {
-    width: calc(100vw - 40px);
+    width: calc(100vw - 85px);
     border-radius: 10px;
-    padding:35px;
+    padding:30px;
     box-sizing: border-box;
   }
   .tip-popup[class*="van-hairline"]::after {
@@ -55,11 +55,17 @@ export default{
     width:100px;
     margin:0 auto;
   }
-  .tip-container .btn .van-button{
+  .tip-container .btn button{
     border-radius: 10px;
-    background: rgb(10, 184, 133);
+    background:#08b783;
     color:#fff;
+    font-size: 17px;
     height: 45px;
     line-height: 45px;
+    border:none;
+    width:100px;
   }
+   .tip-container .btn button:active{
+     background: #13d098;
+   }
 </style>
