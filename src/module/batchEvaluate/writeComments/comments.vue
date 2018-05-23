@@ -103,7 +103,6 @@ export default {
       };
 
       api.commentplGetList(data).then(function(response) {
-        console.log(response);
         self.templateLists = response;
       });
     },
