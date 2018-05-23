@@ -1,6 +1,5 @@
 <template>
 <div class="detail">
-  <!-- <top @back="goBack" @tabChange="tabChange"></top> -->
   <div class="wrapper">
     <!-- 作业名称 开始时间 结束时间 -->
     <div class="info">
@@ -229,14 +228,12 @@ import correct from '@/components/common/correctPopup.vue' // 一键批阅
 import answer from './common/answer.vue' // 一键批阅
 import studentList from './common/studentList.vue' // 一键批阅
 
-// import {mapState} from 'vuex'
+import {mapActions} from 'vuex'
 export default {
   name: "detail",
   data() {
     return {
       params: {
-        // publish_id: '009002511525867000001f',
-        // class_id: '1106785'
         publish_id: this.$route.params.publishId,
         class_id: this.$route.params.classId
       },
@@ -288,6 +285,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+    }),
     getResource() {
       homeworkDetil.getinfo(this.params).then(r => {
         this.homeworkInfo = r;

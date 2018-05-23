@@ -6,7 +6,7 @@
 <script>
 // 全班成绩
 export default {
-  name: 'AnswerSituation',
+  name: 'AnswerSituation'
 }
 </script>
 <style lang="scss" scoped>

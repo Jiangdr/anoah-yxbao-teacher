@@ -6,7 +6,7 @@
 <script>
 // 知识点分析
 export default {
-  name: 'knowledgePointAnalysis',
+  name: 'knowledgePointAnalysis'
 }
 </script>
 <style lang="scss" scoped>

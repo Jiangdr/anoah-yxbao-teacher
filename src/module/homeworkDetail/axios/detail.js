@@ -1,7 +1,7 @@
 import API from '@/axios/_api'
 
 let apis = {
-  'detail': '/jwt/homework/stat/basic', // 单题统计
+  'detail': '/jwt/homework/stat/basic', // 统计
   'resource': '/jwt/homework/stat/getResourceList',
   'getMiniResource': '/jwt/homework/stat/getMinResourceList',
   'sendAnswer': '/jwt/homework/correct/sendAnswer'

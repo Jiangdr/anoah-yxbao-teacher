@@ -1,6 +1,8 @@
 <template>
   <div id="circle-chart">
     <div class="title van-hairline--bottom">学生作业成绩分布</div>
+    <div class="chart-content">
+    </div>
   </div>
 </template>
 <script>

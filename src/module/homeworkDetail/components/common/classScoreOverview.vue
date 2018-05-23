@@ -24,7 +24,7 @@
 <script>
 // 全班成绩总览
 export default {
-  name: 'classScoreOverview',
+  name: 'classScoreOverview'
 }
 </script>
 <style lang="scss" scoped>
