@@ -2,7 +2,7 @@
   <div class="cube-page cube-view button-view">
 
     <header class="header">
-      <h1>批量写评语</h1>
+      <h1>添加评语</h1>
       <i class="cubeic-back" @click="goBatchEvaluate">
         <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
       </i>
@@ -17,21 +17,8 @@
       <div style="float: right;" @click="clearTextArea">清空</div>
     </div>
 
-    <div style="background: #fff;height: 35px;line-height: 35px;padding: 5px 10px;border-bottom: 1px solid rgb(204, 204, 204);">
-      <div style="float: left;">评语模板</div>
-      <div style="float: right;color: #2ec2a9;" @click="goAddComments">添加评语</div>
-      <div style="float: right;color: #2ec2a9;margin-right:10px;">编辑模板</div>
-      <div style="clear: both;"></div>
-    </div>
-
-    <div style="background: #fff;">
-      <div class="listContainer" v-bind:style="listContainerStyle">
-        <div class="templateList" v-for="(item, index) in templateLists" :key="index" @click="chooseTemplate(item)">{{item.comment}}</div>
-      </div>
-    </div>
-
     <div class="comfirmBtnContainer">
-      <div class="comfirmBtn" :outline="true" @click="sureBtn">确认</div>
+      <div class="comfirmBtn" :outline="true" @click="addTemplateListsBtn">确认</div>
     </div>
   </div>
 </template>
@@ -54,7 +41,8 @@ export default {
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
-    this.getTemplateList();
+    this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
+    this.chooseBatchEvaluateStudentsArray = this.$store.state.batchEvaluate.chooseBatchEvaluateStudentsArray;
   },
   watch: {
     comment: function(val, oldVal) {
@@ -69,37 +57,30 @@ export default {
         path: "/batchEvaluate"
       });
     },
-    goAddComments() {
-      this.$router.push({
-        path: "/addComments"
-      });
-    },
-    writeComments() {
-      if (this.checkBoxGroup.length === 0) {
-        this.$toast({
-          message: "请选择学生！",
-          duration: 500
-        });
-        return;
-      }
-      this.$store.dispatch(
-        "chooseBatchEvaluateStudentsArray",
-        this.checkBoxGroup
-      );
-      this.$router.push({
-        path: "/comments"
-      });
-    },
-    getTemplateList() {
+    addTemplateListsBtn() {
       var self = this;
+
+      var array = self.chooseBatchEvaluateStudentsArray;
+      var studentIds = "";
+
+      for (let i = 0; i < array.length; i++) {
+        if (i + 1 === array.length) {
+          studentIds += array[i].userid;
+        } else {
+          studentIds += array[i].userid + ",";
+        }
+      }
+
       var data = {
         user_id: self.userInfo.userid,
+        comment: self.comment,
         type: 1
       };
 
-      api.commentplGetList(data).then(function(response) {
-        console.log(response);
-        self.templateLists = response;
+      api.commentplCreate(data).then(function(response) {
+        self.$router.push({
+          path: "/comments"
+        });
       });
     },
     clearTextArea() {

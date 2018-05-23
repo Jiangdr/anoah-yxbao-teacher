@@ -227,6 +227,7 @@ export default {
       this.getHomeworkList();
     },
     goHomeworkDetail(item) {
+      this.$store.dispatch("homeworkOneListInfoObj", item);
       this.$router.push({
         path: "/homeworkDetail/:publishId/:classId",
         name: "homeworkDetail",
@@ -352,8 +353,8 @@ export default {
   color: #989ca0;
 }
 .arrow-right {
-  font-size:36px;
-  float:right;
+  font-size: 36px;
+  float: right;
   color: #989ca0;
 }
 </style>
