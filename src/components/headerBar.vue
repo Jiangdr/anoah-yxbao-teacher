@@ -5,7 +5,9 @@
       <span>返回</span>
     </div>
     <div class="title-name">
-      个人中心
+      <slot name="title-name">
+        标题
+      </slot>
     </div>
     <slot name="right-area"></slot>
   </div>
@@ -26,22 +28,22 @@ export default {
 <style scoped lang="scss">
 #header-bar{
   width: 100%;
-  height: 90px;
-  line-height: 90px;
-  padding: 0 30px;
+  height: 45px;
+  line-height: 45px;
+  padding: 0 13px;
   overflow: hidden;
   display: flex;
   .back-btn{
     display: inline-block;
-    font-size: 30px;
-    width: 100px;
+    font-size: 15px;
+    width: 50px;
     color: #4e4e4e
   }
   .title-name{
-    font-size: 35px;
-    width: 300px;
+    font-size: 18px;
+    width: 150px;
     text-align: center;
-    margin-left: calc(50% - 130px - 150px)
+    margin-left: calc(50% - 65px - 75px)
   }
 }
 </style>

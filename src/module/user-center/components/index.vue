@@ -15,7 +15,7 @@
 
 <script>
 import NavBar from '@/module/user-center/components/common/navbar'
-import HeaderBar from '@/components/common/header-bar'
+// import HeaderBar from '@/components/common/header-bar'
 export default {
   name: 'UserCenter',
   data () {
@@ -32,8 +32,7 @@ export default {
     }
   },
   components: {
-    NavBar,
-    HeaderBar
+    NavBar
   }
 }
 </script>

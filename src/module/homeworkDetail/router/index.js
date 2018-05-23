@@ -1,4 +1,4 @@
-import homeworkDetail from '@/module/homeworkDetail/components/homeworkDetail.vue'
+import homeworkDetail from '@/module/homeworkDetail/components/index.vue'
 
 export default [{
   path: '/homeworkDetail/:publishId/:classId',
