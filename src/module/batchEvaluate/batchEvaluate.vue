@@ -104,7 +104,10 @@ export default {
         });
         return;
       }
-      console.log(this.checkBoxGroup);
+      this.$store.dispatch("chooseBatchEvaluateStudentsArray", this.checkBoxGroup);
+      this.$router.push({
+        path: "/comments"
+      });
     },
     clickStudent() {},
     getStudentsList() {
