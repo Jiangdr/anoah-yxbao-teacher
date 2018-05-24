@@ -4,7 +4,7 @@
     <header class="header">
       <h1>作业退回重做</h1>
       <i class="cubeic-back" @click="goBatchEvaluate">
-        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
+        <i class="fa fa-angle-left back-up-arrow"></i>
       </i>
     </header>
 
@@ -62,7 +62,7 @@ export default {
   data() {
     return {
       listContainerStyle: {
-        height: window.innerHeight - 300 + "px"
+        height: window.innerHeight - 430 + "px"
       },
       rateType: "",
       comment: "",
@@ -98,11 +98,13 @@ export default {
       });
     },
     goAddComments() {
+      this.$store.dispatch("batchEvaluateCommentsTemplateType", 3);
       this.$router.push({
         path: "/addComments"
       });
     },
     goEditComments() {
+      this.$store.dispatch("batchEvaluateCommentsTemplateType", 3);
       this.$router.push({
         path: "/editComments"
       });
@@ -110,7 +112,6 @@ export default {
     showEndTime() {
       this.publishDatePickerShow = true;
     },
-
     clickConfirmTimeFun(date) {
       var formatTime = this.$dayjs(date).format("YYYY-MM-DD HH:mm:ss");
       this.endTime = formatTime;
@@ -123,7 +124,7 @@ export default {
       if (this.checkBoxGroup.length === 0) {
         this.$toast({
           message: "请选择学生！",
-          duration: 500
+          duration: 750
         });
         return;
       }

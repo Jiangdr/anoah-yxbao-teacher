@@ -9,8 +9,10 @@ export default {
   state: {
     chooseSummerHomeworkArray: [],
     chooseExamExerciseQtiIdsArray: [],
-    summerHomeworkSelPageIDs: [],
-    chooseTextBookObj: {}
+    chooseTextBookObj: {},
+    summerHomeworkPackId: '',
+    homeworkOneListInfoObj: {},
+    summerHomeworkSelPageIDs: []
   },
   actions: {
     chooseSummerHomeworkArray: function ({ commit }, result) {

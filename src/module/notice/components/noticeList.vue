@@ -1,33 +1,40 @@
 <template>
   <div class="notice">
-      <div class="title">
-        <van-row>
-          <van-col span="4">
-            <span class="back" @click="goBack">
-              <van-icon name="arrow-left"></van-icon>
-              <span>返回</span>
-            </span>
-          </van-col>
-          <van-col span="16">
-             <p>通知中心</p>
-          </van-col>
-          <van-col span="4"></van-col>
-        </van-row>
+    <div class="title">
+      <header-bar>
+        <div slot="title-name">
+          <div>通知中心</div>
+        </div>
+      </header-bar>
+    </div>
+    <div class="wrapper">
+      <div class="items">
+        <router-link to="/notice/homeworkList">
+        <i class="icon"></i>
+          <span>
+            作业消息
+            <b class="redIcon" v-show="isNewWorkMsg"></b>
+          </span>
+          <van-icon name="arrow" class="icon-right"></van-icon>
+        </router-link>
       </div>
-      <van-cell-group class="items">
-        <van-cell title="作业消息" value="" is-link :to="identity=='teacher'?'homeworkList':'homeworkList_stu'">
-          <b class="redIcon" v-show="isNewWorkMsg"></b>
-        </van-cell>
-        <router-view></router-view>
-        <van-cell title="学校消息" value="" is-link to="schoolList">
-           <b class="redIcon" v-show="isNewSchoolMsg"></b>
-        </van-cell>
-        <router-view></router-view>
-      </van-cell-group>
+      <div class="items">
+        <router-link to="/notice/schoolList">
+        <i class="icon"></i>
+          <span>
+            学校消息
+            <b class="redIcon" v-show="isNewSchoolMsg"></b>
+          </span>
+          <van-icon name="arrow" class="icon-right"></van-icon>
+        </router-link>
+      </div>
+    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
+import headerBar from '@/components/headerBar.vue'
 export default {
   name: 'noticeList',
   data () {
@@ -43,23 +50,51 @@ export default {
     goBack () {
       this.$router.go(-1)
     }
+  },
+  components: {
+    headerBar
   }
 }
 </script>
 <style scoped>
-.notice .title {
-  text-align: center;
-  line-height: 50px;
-  height: 50px;
+.notice{
+  height: 100vh;
 }
-.notice .title p {
-  font-weight: bold;
+.wrapper{
+  padding:13px 13px 0;
+  background: #f5f7f8;
+  height: calc(100% - 45px);
 }
-.notice .title>span {
-  float: left;
+.notice .items{
+  height: 45px;
+  line-height: 45px;
+  background: #fff;
+  border-radius: 8px;
+  padding:0 13px;
+  display: flex;
+  box-sizing: border-box;
 }
-.notice .title span i {
-  top: 2px;
+.notice .items a{
+  display:inline-block;
+  width:100%;
+  position: relative;
+}
+.notice .items:first-child{
+  margin-bottom: 13px;
+  color:#1e1e1e;
+}
+.notice .items .icon{
+  vertical-align: middle;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url('./images/school.png')
+}
+.notice .items:first-child .icon{
+  background-image: url('./images/homework.png')
 }
 .notice .items b.redIcon{
   display: inline-block;
@@ -67,5 +102,12 @@ export default {
   height: 6px;
   border-radius: 50%;
   background-color: red;
+  vertical-align: text-top;
+}
+.notice .items .icon-right{
+  position: absolute;
+  right: 0;
+  top:50%;
+  transform: translateY(-50%);
 }
 </style>
