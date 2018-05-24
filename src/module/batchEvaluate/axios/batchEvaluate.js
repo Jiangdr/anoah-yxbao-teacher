@@ -5,6 +5,7 @@ let apis = {
   commentplGetList: 'jwt/homework/commentpl/getList',
   commentplCreate: 'jwt/homework/commentpl/create',
   setPraise: 'jwt/homework/correct/setPraise',
+  returnRewrite: 'jwt/homework/publish/redo',
   commentplRemove: 'jwt/homework/commentpl/remove'
 }
 
@@ -24,6 +25,10 @@ batchEvaluate.commentplCreate = (params) => {
 
 batchEvaluate.setPraise = (params) => {
   return batchEvaluate.fetch(apis.setPraise, params, 'post')
+}
+
+batchEvaluate.returnRewrite = (params) => {
+  return batchEvaluate.fetch(apis.returnRewrite, params, 'post')
 }
 
 batchEvaluate.commentplRemove = (params) => {
