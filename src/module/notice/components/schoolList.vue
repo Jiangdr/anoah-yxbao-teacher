@@ -85,6 +85,8 @@
 </template>
 
 <script>
+import headerBar from '@/components/headerBar.vue'
+
 export default {
   name: 'schoolList',
   data() {

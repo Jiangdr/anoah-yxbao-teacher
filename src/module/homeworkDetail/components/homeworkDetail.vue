@@ -197,7 +197,7 @@ export default {
     },
     getinfo() {
       // 获取作业信息
-      this.studentList = this.homeworkInfo.student_list;
+      // this.studentList = this.homeworkInfo.student_list;
       // 班级正确率
       this.correct = this.homeworkInfo.class_average_correct_rate;
       // 是否催交过作业  0 未催交 1 当日已催交

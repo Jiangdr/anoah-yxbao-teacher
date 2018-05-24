@@ -36,6 +36,7 @@ export default {
     return {
       homeworkInfo: {}, // 作业信息
       resourceList: [], // 作业列表
+      homeworkStatus: 0,
       tabType: 'detail',
       morePopup: false
     }
@@ -58,6 +59,7 @@ export default {
       // 获取作业信息
       homeworkDetil.getinfo(params).then(r => {
       // 作业信息
+        console.log(r)
         this.homeworkInfo = r;
       });
       // 获取作业资源
