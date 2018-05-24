@@ -68,13 +68,12 @@
       <!-- 学生完成情况 -->
       <div class="student-content" v-if="activeBtn=='student'">
         <!-- 完成人数大于0 显示列表 -->
-        <template v-if="finishCounter>0">
           <div class="status">
             <van-row class="item">
               <van-col span="9">未完成</van-col>
               <van-col span="9">{{homeworkInfo.unfinished_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isUrge">
-                <p @click="toggleUrge" :class="{disable:finishCounter==0}">催交作业</p>
+                <p @click="toggleUrge" :class="{disable:finishCounter===0}">催交作业</p>
               </van-col>
               <van-col span="6" class="btn" v-if="!isUrge">
                 <p class="disable">今日已提醒</p>
@@ -84,7 +83,7 @@
               <van-col span="9">未订正</van-col>
               <van-col span="9">{{homeworkInfo.unretyr_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isRemind">
-                <p @click="toggleRemind">提醒订正</p>
+                <p @click="toggleRemind" :class="{disable:finishCounter===0}">提醒订正</p>
               </van-col>
               <van-col span="6" class="btn" v-if="!isRemind">
                 <p class="disable">今日已提醒</p>
@@ -92,25 +91,12 @@
             </van-row>
           </div>
           <div class="blank"></div>
+        <template v-if="finishCounter>0">
           <!-- 学生列表 -->
           <student-list :studentList="studentList"></student-list>
         </template>
         <!-- 没人完成 -->
         <template v-else>
-          <div class="unfinish-state">
-            <div>
-              <p>
-                <span>{{homeworkInfo.unfinished_counter}}人</span><br>
-                <span>未完成</span>
-              </p>
-            </div>
-            <div>
-              <p>
-                <span>{{homeworkInfo.unretyr_counter}}人</span><br>
-                <span>未订正</span>
-              </p>
-            </div>
-          </div>
           <div class="title">学生成绩</div>
           <div class="noanswer-tip">还没有学生提交作业哟～</div>
         </template>
@@ -125,8 +111,9 @@
         <div class="btn">
           <p @click="goBatchEvaluate">批量评价</p>
         </div>
-        <div class="btn">
-          <p @click="toggleAnswerTip">公布答案</p>
+        <div class="btn" :class="{disable:homeworkInfo.is_send_answer<1}">
+          <p v-if="homeworkInfo.is_send_answer<1">公布答案</p>
+          <p v-else @click="toggleAnswerTip">公布答案</p>
         </div>
     </div>
     <!-- 班级平均正确率计算规则tip -->
@@ -138,7 +125,7 @@
     <!-- 一键批阅 -->
     <correct v-if="correctTip" @toggle="toggleCorrectPopup" @callback="getResource" :publishId="$route.params.publishId" :send="0"></correct>
     <!-- 发布答案 -->
-    <answer v-if="answerTip" @toggle="toggleAnswerTip"></answer>
+    <answer v-if="answerTip" @toggle="toggleAnswerTip" :publishId="$route.params.publishId" :classId="$route.params.classId"></answer>
   </div>
 </template>
 
@@ -214,9 +201,9 @@ export default {
       // 班级正确率
       this.correct = this.homeworkInfo.class_average_correct_rate;
       // 是否催交过作业  0 未催交 1 当日已催交
-      this.isUrge = this.homeworkInfo.notice_zuoye === 0 ? 'false' : true
+      this.isUrge = this.homeworkInfo.notice_zuoye === 0
       // 是否提醒订正  0 未提醒 1 当日已提醒
-      this.isRemind = this.homeworkInfo.notice_retry === 0 ? 'false' : true
+      this.isRemind = this.homeworkInfo.notice_retry === 0
     },
     goBatchEvaluate() {
       // 批量评价
@@ -235,19 +222,41 @@ export default {
     },
     // 催交作业弹出框
     toggleUrge() {
-      this.urge = !this.urge;
-      this.isUrge = true;
-      setTimeout(() => {
-        this.urge = false;
-      }, 3000);
+      if (this.finishCounter === 0 || !this.isUrge) {
+        return false
+      }
+      let params = {
+        teacher_id: JSON.parse(window.localStorage.userinfo).userid,
+        course_hour_publish_id: this.homeworkInfo.course_hour_publish_id
+      }
+      homeworkDetil.urge(params).then((r) => {
+        if (r.rs === true) {
+          this.urge = !this.urge;
+          this.isUrge = true;
+          setTimeout(() => {
+            this.urge = false;
+          }, 3000);
+        }
+      })
     },
     // 提醒订正弹出框
     toggleRemind() {
-      this.remind = !this.remind;
-      this.isRemind = true;
-      setTimeout(() => {
-        this.remind = false;
-      }, 3000);
+      if (this.finishCounter === 0 || !this.isRemind) {
+        return false
+      }
+      let params = {
+        teacher_id: JSON.parse(window.localStorage.userinfo).userid,
+        course_hour_publish_id: this.homeworkInfo.course_hour_publish_id
+      }
+      homeworkDetil.remind(params).then((r) => {
+        if (r.rs === true) {
+          this.remind = !this.remind;
+          this.isRemind = true;
+          setTimeout(() => {
+            this.remind = false;
+          }, 3000);
+        }
+      })
     },
     // 一键批阅弹框
     toggleCorrectPopup() {
@@ -257,7 +266,12 @@ export default {
       this.correctTip = !this.correctTip;
     },
     // 发布答案弹窗
-    toggleAnswerTip() {
+    toggleAnswerTip(send) {
+      // is_send_answer==0 已发布过答案
+      // is_send_answer==1 未发布过答案
+      if (send === 1) {
+        this.homeworkInfo.is_send_answer = 0
+      }
       this.answerTip = !this.answerTip;
     },
     // 查看小题
@@ -545,14 +559,14 @@ export default {
   padding: 10px 20px;
 }
 
-.detail>.wrapper>.content>.student-content .unfinish-state+.title {
+.detail>.wrapper>.content>.student-content .title {
   margin-top: 20px;
   margin-bottom: 20px;
   padding-left: 10px;
   font-weight: 500;
 }
 
-.detail>.wrapper>.content>.student-content .unfinish-state+.title+div.noanswer-tip {
+.detail>.wrapper>.content>.student-content   .noanswer-tip {
   text-align: center;
 }
 

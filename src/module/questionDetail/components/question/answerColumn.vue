@@ -1,4 +1,4 @@
-<template>
+·<template>
   <div class="danxuan">
     <div class="title-bar">
       <van-row>
