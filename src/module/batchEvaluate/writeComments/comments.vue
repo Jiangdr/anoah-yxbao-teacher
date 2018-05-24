@@ -70,11 +70,13 @@ export default {
       });
     },
     goAddComments() {
+      this.$store.dispatch("batchEvaluateCommentsTemplateType", 1);
       this.$router.push({
         path: "/addComments"
       });
     },
     goEditComments() {
+      this.$store.dispatch("batchEvaluateCommentsTemplateType", 1);
       this.$router.push({
         path: "/editComments"
       });

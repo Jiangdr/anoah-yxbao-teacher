@@ -39,6 +39,7 @@ export default {
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
+    this.batchEvaluateCommentsTemplateType = this.$store.state.batchEvaluate.batchEvaluateCommentsTemplateType;
     this.getTemplateList();
   },
   watch: {
@@ -52,11 +53,6 @@ export default {
     goBatchEvaluate() {
       this.$router.push({
         path: "/batchEvaluate"
-      });
-    },
-    goAddComments() {
-      this.$router.push({
-        path: "/addComments"
       });
     },
     writeComments() {
@@ -84,7 +80,6 @@ export default {
 
       api.commentplRemove(data).then(function(response) {
         self.templateLists = response;
-        // self.templateLists = response.concat(response);
         self.getTemplateList();
       });
     },
@@ -92,7 +87,7 @@ export default {
       var self = this;
       var data = {
         user_id: self.userInfo.userid,
-        type: 1
+        type: self.batchEvaluateCommentsTemplateType
       };
 
       api.commentplGetList(data).then(function(response) {
