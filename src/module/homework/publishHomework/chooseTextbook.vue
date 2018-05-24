@@ -144,7 +144,7 @@ export default {
       if (!this.chooseTextbookId) {
         this.$toast({
           message: "请选择教材！",
-          duration: 500
+          duration: 750
         });
         return;
       }
