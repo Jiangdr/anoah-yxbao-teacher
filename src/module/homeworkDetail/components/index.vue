@@ -36,7 +36,7 @@ export default {
     return {
       homeworkInfo: {}, // 作业信息
       resourceList: [], // 作业列表
-      tabType: 'report',
+      tabType: 'detail',
       morePopup: false
     }
   },

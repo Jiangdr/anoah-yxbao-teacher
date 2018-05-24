@@ -23,6 +23,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 #class-score{
+  height: 100%;
+  overflow-y: scroll;
   .split-line{
     width: 100%;
     height: 10px;

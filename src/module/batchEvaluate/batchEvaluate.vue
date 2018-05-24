@@ -37,7 +37,7 @@
 
     <div class="bottom-btn">
       <div class="btn">
-        <p>退回作业</p>
+        <p @click="goReturnRewrite">退回作业</p>
       </div>
       <div class="btn">
         <p @click="setPraise"><i style="margin-right: 6px;" class="fa fa-heart-o"></i>表扬</p>
@@ -90,6 +90,19 @@ export default {
     goHomework() {
       this.$router.push({
         path: "/homework"
+      });
+    },
+    goReturnRewrite() {
+      if (this.checkBoxGroup.length === 0) {
+        this.$toast({
+          message: "请选择学生！",
+          duration: 750
+        });
+        return;
+      }
+      this.$store.dispatch("chooseBatchEvaluateStudentsArray", this.checkBoxGroup);
+      this.$router.push({
+        path: "/returnRewrite"
       });
     },
     writeComments() {
