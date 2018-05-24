@@ -6,7 +6,8 @@ export default {
     params: {}, // 当前题数据
     mini: {}, // 当前套题的小题
     index: 0, // 当前题再miniResource中位置
-    homeworkInfo: null
+    homeworkInfo: null, // 作业信息
+    homeworkQuestionInfo: null
   },
   getters: {
     getStudentInfo: (state, getters) => (payload) => {
@@ -88,6 +89,9 @@ export default {
     },
     // 正确率分布图数据
     getCorrectInfo: (state) => {
+      if (!state.homeworkInfo) {
+        return false
+      }
       let stuList = state.homeworkInfo.student_list.filter(item => item.status === 3)
       let result = {
         '优秀': {
@@ -115,6 +119,10 @@ export default {
         }
       })
       return result
+    },
+    // 获取作业的题信息
+    getHomeworkQuestionInfo: state => {
+      return state.homeworkQuestionInfo && state.homeworkQuestionInfo.list
     }
   },
   mutations: {
@@ -146,23 +154,13 @@ export default {
     },
     // 单个作业信息
     homeworkInfo(state, payload) {
-      state.homeworkInfo = payload.info
+      state.homeworkInfo = payload
+    },
+    // 作业的题信息
+    homeworkQuestionInfo(state, payload) {
+      state.homeworkQuestionInfo = payload
     }
   },
   actions: {
-    // 获取作业基本信息，统计和学生列表
-    basicStateInfo({rootState, rootGetters, commit}, payload) {
-      apis.getinfo(payload).then((succ) => {
-        succ.student_list.forEach(ele => {
-          if (ele.avatar.indexOf('http://') === -1) {
-            ele.avatar = rootGetters['runEnv/old'] + ele.avatar
-          }
-        });
-        commit({
-          type: 'homeworkInfo',
-          info: succ
-        })
-      })
-    }
   }
 }

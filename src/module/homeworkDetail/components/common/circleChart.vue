@@ -50,7 +50,6 @@ export default {
     }
   },
   mounted() {
-    // console.log(window.echarts)
     this.$nextTick(() => {
       this.chart = this.$echarts.init(document.getElementById('chart'))
       this.chart.setOption({
@@ -74,19 +73,6 @@ export default {
             type: 'pie',
             radius: ['50%', '70%'],
             avoidLabelOverlap: false,
-            label: {
-              normal: {
-                show: false,
-                position: 'center'
-              },
-              emphasis: {
-                show: true,
-                textStyle: {
-                  fontSize: '30',
-                  fontWeight: 'bold'
-                }
-              }
-            },
             labelLine: {
               normal: {
                 show: false
@@ -96,25 +82,25 @@ export default {
               {
                 value: this.info['优秀'].num,
                 itemStyle: {
-                  color: '#84d7a6'
+                  color: '#55a3fe'
                 }
               },
               {
                 value: this.info['良好'].num,
                 itemStyle: {
-                  color: '#12d198'
+                  color: '#27d29e'
                 }
               },
               {
                 value: this.info['及格'].num,
                 itemStyle: {
-                  color: '#aae9b7'
+                  color: '#9673fe'
                 }
               },
               {
                 value: this.info['待提升'].num,
                 itemStyle: {
-                  color: '#ecffc0'
+                  color: '#ffa743'
                 }
               }
             ]
@@ -181,7 +167,7 @@ export default {
         top: 21px;
         left: 13px;
         .label{
-          background-color: #ecffc0;
+          background-color: #ffa743;
           margin-right: 5px;
         }
       }
@@ -189,7 +175,7 @@ export default {
         bottom: 21px;
         left: 13px;
         .label{
-          background-color: #aae9b7;
+          background-color: #9673fe;
           margin-right: 5px;
         }
       }
@@ -197,7 +183,7 @@ export default {
         top: 21px;
         right: 13px;
         .label{
-          background-color: #12d198;
+          background-color: #55a3fe;
           margin-left: 5px;
         }
       }
@@ -205,7 +191,7 @@ export default {
         bottom: 21px;
         right: 13px;
         .label{
-          background-color: #84d7a6;
+          background-color: #27d29e;
           margin-left: 5px;
         }
       }

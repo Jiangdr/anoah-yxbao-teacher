@@ -25,7 +25,7 @@ import reportTab from './common/reportTab'
 import classScore from './common/classScore'
 import answerSituation from './common/answerSituation'
 import knowledgePointAnalysis from './common/knowledgePointAnalysis'
-import {mapState, mapActions} from 'vuex'
+import {mapState} from 'vuex'
 export default {
   name: 'HomeworkReport',
   data() {
@@ -44,16 +44,7 @@ export default {
       return require('@/assets/images/homewordDetail/no-data.png')
     }
   },
-  mounted() {
-    this.getInfo({
-      publish_id: this.$route.params.publishId,
-      class_id: this.$route.params.classId
-    })
-  },
   methods: {
-    ...mapActions({
-      'getInfo': 'homeworkDetail/basicStateInfo'
-    }),
     tabChange(type) {
       this.tabType = type
     }

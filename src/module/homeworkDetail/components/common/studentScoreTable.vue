@@ -42,7 +42,7 @@
           </div>
           <div class="table-cell">
             <div class="correct-per">
-              <span v-if="stu.status == 3">{{stu.rate * 100}}%</span>
+              <span v-if="stu.status == 3">{{Math.round(stu.rate * 100)}}%</span>
               <span v-else-if="stu.status == 1">未批改</span>
               <span v-else>未提交</span>
             </div>
@@ -55,7 +55,7 @@
           </div>
           <div class="table-cell">
             <div class="time-length">
-              <span v-if="stu.status == 3 || stu.status == 1">{{stu.time_length | time}}</span>
+              <span v-if="stu.status == 3 || stu.status == 1">{{stu.time_length | timeFormat}}</span>
               <span v-else>--</span>
             </div>
           </div>
@@ -93,11 +93,6 @@ export default {
         }
       },
       sortParam: 'correct_down'
-    }
-  },
-  filters: {
-    time(val) {
-      return val.replace('分', "''").replace('秒', "'''").replace('小时', "'")
     }
   },
   computed: {

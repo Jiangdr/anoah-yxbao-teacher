@@ -145,8 +145,6 @@ export default {
   props: ['homeworkInfo', 'resourceList', 'homeworkStatus'],
   data() {
     return {
-      // homeworkInfo: {}, // 作业信息
-      // resourceList: [], // 作业列表
       studentList: [], // 班级学生完成情况，
       correct: -1, // 班级正确率
       activeBtn: "homework", // content内容显示
@@ -166,9 +164,6 @@ export default {
     this.getinfo();
   },
   computed: {
-    // ...mapState({
-    //   'user': (state) => state.account.userInfo
-    // }),
     // 班级正确率
     classCorrect() {
       if (this.correct === "" || this.correct === -1) {

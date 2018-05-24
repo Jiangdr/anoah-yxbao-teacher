@@ -33,6 +33,12 @@ import echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
+import '@/style/global.scss'
+// 引入全局过滤器
+import * as filters from '@/filter/index'
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 
 Vue.prototype.$dayjs = dayjs;
 

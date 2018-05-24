@@ -15,7 +15,7 @@
         <span class="name">错题攻克率</span>
       </div>
       <div class="score-item">
-        <span class="percent">{{hwAverageTime}}</span>
+        <span class="percent">{{this.info.class_time_length | timeFormatSecond}}</span>
         <span class="name">班平均用时</span>
       </div>
     </div>
@@ -32,15 +32,6 @@ export default {
     }),
     hwCompleteRate() {
       return (this.info.student_counter - this.info.unfinished_counter) / this.info.student_counter
-    },
-    hwAverageTime() {
-      let str = ''
-      let time = this.info.class_time_length
-      let s = time % 60
-      let m = Math.floor(time / 60) % 60
-      let h = Math.round(Math.round(time / 60) / 60)
-      str = h ? `${h}'${m}''${s}'''` : `${m}''${s}'''`
-      return str
     }
   }
 }
