@@ -10,7 +10,7 @@
     <div class="container">
       <div class="wrapper">
       <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
-        <van-list v-model="loading" :finished="finished" @load="onLoad">
+        <van-list v-model="loading" :finished="finished" @load="onLoad" immediate-check="false">
           <div v-for="(item, index) in list" :key="index" class="item">
               <div class="date">{{item.push_time}}</div>
               <div class="container">
