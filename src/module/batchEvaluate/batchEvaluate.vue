@@ -28,7 +28,6 @@
     </div>
 
     <div v-bind:style="listContainerStyle">
-      <!-- <span style="padding: 10px;display:inline-block;" @click="clickStudent(item)" v-for="(item, index) in allStudentsArrayFormat" :key="index">{{item.real_name}}</span> -->
       <van-checkbox-group v-model="checkBoxGroup">
         <van-checkbox style="padding: 10px;display:inline-block;" v-for="(item, index) in allStudentsArrayFormat" :key="index" :name="item" >
           {{ item.real_name }}
@@ -41,10 +40,10 @@
         <p>退回作业</p>
       </div>
       <div class="btn">
-        <p><i class="fa fa-heart-o"></i>表扬</p>
+        <p @click="setPraise"><i style="margin-right: 6px;" class="fa fa-heart-o"></i>表扬</p>
       </div>
       <div class="btn">
-        <p @click="writeComments"><i class="fa fa-pencil-square-o"></i>写评语</p>
+        <p @click="writeComments"><i style="margin-right: 6px;" class="fa fa-pencil-square-o"></i>写评语</p>
       </div>
     </div>
   </div>
@@ -97,7 +96,7 @@ export default {
       if (this.checkBoxGroup.length === 0) {
         this.$toast({
           message: "请选择学生！",
-          duration: 500
+          duration: 750
         });
         return;
       }
@@ -106,7 +105,40 @@ export default {
         path: "/comments"
       });
     },
-    clickStudent() {},
+    setPraise() {
+      var self = this;
+      if (self.checkBoxGroup.length === 0) {
+        self.$toast({
+          message: "请选择学生！",
+          duration: 750
+        });
+        return;
+      }
+
+      var array = self.checkBoxGroup;
+      var studentIds = "";
+
+      for (let i = 0; i < array.length; i++) {
+        if (i + 1 === array.length) {
+          studentIds += array[i].userid;
+        } else {
+          studentIds += array[i].userid + ",";
+        }
+      }
+
+      var data = {
+        publish_id: self.homeworkOneListInfoObj.course_hour_publish_id,
+        user_id: studentIds,
+        teacher_id: self.userInfo.userid
+      };
+
+      api.setPraise(data).then(function(response) {
+        self.$toast({
+          message: "已表扬！",
+          duration: 750
+        });
+      });
+    },
     getStudentsList() {
       var self = this;
       var data = {
