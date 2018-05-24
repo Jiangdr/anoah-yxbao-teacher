@@ -24,7 +24,7 @@ export default {
   name: 'HomeContent',
   data() {
     return {
-      tabType: 'report'
+      tabType: 'detail'
     }
   },
   methods: {
