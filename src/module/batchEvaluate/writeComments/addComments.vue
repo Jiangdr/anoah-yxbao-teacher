@@ -60,17 +60,6 @@ export default {
     addTemplateListsBtn() {
       var self = this;
 
-      var array = self.chooseBatchEvaluateStudentsArray;
-      var studentIds = "";
-
-      for (let i = 0; i < array.length; i++) {
-        if (i + 1 === array.length) {
-          studentIds += array[i].userid;
-        } else {
-          studentIds += array[i].userid + ",";
-        }
-      }
-
       var data = {
         user_id: self.userInfo.userid,
         comment: self.comment,
