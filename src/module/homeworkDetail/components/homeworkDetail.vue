@@ -8,9 +8,7 @@
         <span style="float:right">共<b>{{resourceList.length}}</b>份</span>
       </p>
       <p class="times">
-        <span class="start-time">{{homeworkInfo.start_time }}</span>
-        <span class="end-time">{{homeworkInfo.deadline}}</span>
-        <span class="end" v-if="new Date(homeworkInfo.deadline) < new Date()">已截止</span>
+        截止时间：{{homeworkInfo.deadline}}
       </p>
     </div>
     <!-- 平均正确率 -->
@@ -157,11 +155,11 @@ import studentList from "./common/studentList.vue"; // 学生列表
 import {mapActions} from 'vuex'
 export default {
   name: "detail",
-  props: ["publishId", "classId"],
+  props: ['homeworkInfo', 'resourceList', 'homeworkStatus'],
   data() {
     return {
-      homeworkInfo: {}, // 作业信息
-      resourceList: [], // 作业列表
+      // homeworkInfo: {}, // 作业信息
+      // resourceList: [], // 作业列表
       studentList: [], // 班级学生完成情况，
       correct: -1, // 班级正确率
       activeBtn: "homework", // content内容显示
@@ -173,13 +171,12 @@ export default {
       isRemind: false, // 是否已题型订正
       answerTip: false, // 发布答案弹框
       correctTip: false, // 一键批阅弹框
-      homeworkStatus: "", // 当前作业完成状态 1未批改 3已批改
+      // homeworkStatus: "", // 当前作业完成状态 1未批改 3已批改
       miniResource: {} // 小资源
     };
   },
   created() {
-    // 获取作业信息
-    this.getResource();
+    this.getinfo();
   },
   computed: {
     // ...mapState({
@@ -206,32 +203,20 @@ export default {
     ...mapActions({
     }),
     getResource() {
-      let params = {
-        publish_id: this.publishId || this.$route.params.publishId,
-        class_id: this.classId || this.$route.params.classId
-      };
-      // 获取作业信息
-      homeworkDetil.getinfo(params).then(r => {
-        // 作业信息
-        this.homeworkInfo = r;
-        // 学生列表
-        this.studentList = r.student_list;
-        // 班级正确率
-        this.correct = r.class_average_correct_rate;
-        // 是否催交过作业  0 未催交 1 当日已催交
-        this.isUrge = r.notice_zuoye === 0 ? 'false' : true
-        // 是否提醒订正  0 未提醒 1 当日已提醒
-        this.isRemind = r.notice_retry === 0 ? 'false' : true
-      });
-      // 获取作业资源
-      homeworkDetil.getResourceList(params).then(d => {
-        // 作业资源
-        this.resourceList = d.list;
-        // 作业状态
-        this.homeworkStatus = d.status;
-      });
+      this.$emit('getresource');
+      this.getinfo();
       // 一键批阅后清空小资源列表
       this.miniResource = {};
+    },
+    getinfo() {
+      // 获取作业信息
+      this.studentList = this.homeworkInfo.student_list;
+      // 班级正确率
+      this.correct = this.homeworkInfo.class_average_correct_rate;
+      // 是否催交过作业  0 未催交 1 当日已催交
+      this.isUrge = this.homeworkInfo.notice_zuoye === 0 ? 'false' : true
+      // 是否提醒订正  0 未提醒 1 当日已提醒
+      this.isRemind = this.homeworkInfo.notice_retry === 0 ? 'false' : true
     },
     goBatchEvaluate() {
       // 批量评价

@@ -6,13 +6,20 @@
         <span class="tab-item" :class="{active: tabType === 'report'}" @click="tabChange('report')">作业报告</span>
       </div>
       <div slot="right-area" class="more-btn">
-        <span>...</span>
+        <span @click="toggleMorePopup">...</span>
       </div>
     </header-bar>
     <div class="content">
       <homework-report v-if="tabType === 'report'"></homework-report>
-      <homework-detail v-if="tabType === 'detail'"></homework-detail>
+      <homework-detail v-if="tabType === 'detail'"
+        :homeworkInfo="homeworkInfo"
+        :resourceList="resourceList"
+        :homeworkStatus="homeworkStatus"
+        @getresource="getresource"
+        >
+        </homework-detail>
     </div>
+    <more v-if="morePopup" @toggle="toggleMorePopup"></more>
   </div>
 </template>
 <script>
@@ -20,22 +27,52 @@
 import headerBar from '@/components/headerBar.vue'
 import homeworkDetail from './homeworkDetail'
 import homeworkReport from './homewordReport'
+import more from './common/more.vue'
+import homeworkDetil from "../axios/detail.js";
+
 export default {
   name: 'HomeContent',
   data() {
     return {
-      tabType: 'report'
+      homeworkInfo: {}, // 作业信息
+      resourceList: [], // 作业列表
+      tabType: 'report',
+      morePopup: false
     }
+  },
+  created() {
+    this.getresource();
   },
   methods: {
     tabChange(type) {
       this.tabType = type
+    },
+    toggleMorePopup() {
+      this.morePopup = !this.morePopup
+    },
+    getresource() {
+      let params = {
+        publish_id: this.$route.params.publishId,
+        class_id: this.$route.params.classId
+      };
+      // 获取作业信息
+      homeworkDetil.getinfo(params).then(r => {
+      // 作业信息
+        this.homeworkInfo = r;
+      });
+      // 获取作业资源
+      homeworkDetil.getResourceList(params).then(d => {
+      // 作业资源
+        this.resourceList = d.list;
+        this.homeworkStatus = d.status;
+      });
     }
   },
   components: {
     headerBar,
     homeworkDetail,
-    homeworkReport
+    homeworkReport,
+    more
   }
 }
 </script>
