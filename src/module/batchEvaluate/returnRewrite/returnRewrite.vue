@@ -2,15 +2,29 @@
   <div class="cube-page cube-view button-view">
 
     <header class="header">
-      <h1>批量写评语</h1>
+      <h1>作业退回重做</h1>
       <i class="cubeic-back" @click="goBatchEvaluate">
         <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
       </i>
     </header>
 
-    <van-cell-group>
-      <van-field v-model="comment" type="textarea" placeholder="输入评语内容" rows="3"/>
-    </van-cell-group>
+    <div style="background: #fff;height: 35px;line-height: 35px;padding: 5px 10px;border-bottom: 1px solid rgb(204, 204, 204);">
+      <div>确认退回这<span style="color: #ff4e00;">{{chooseBatchEvaluateStudentsArray.length}}</span>个学生的作业</div>
+    </div>
+
+    <div style="background: #fff;">
+      <div style="padding: 10px 10px;">延迟时间到</div>
+
+      <div style="background: #fff;padding: 0 10px;margin-bottom: 13px;" @click="showEndTime">
+        <div style="height: 35px;line-height: 35px;border: 1px solid #ccc;padding: 0 10px;">
+          {{endTime}}
+        </div>
+      </div>
+
+      <van-cell-group>
+        <van-field v-model="comment" type="textarea" placeholder="输入评语内容" rows="3"/>
+      </van-cell-group>
+    </div>
 
     <div class="noticeWordNum">
       <div style="float: left;">还可以输入<span style="color: #f7af6c">{{50 - comment.length}}</span>字</div>
@@ -31,8 +45,12 @@
     </div>
 
     <div class="comfirmBtnContainer">
-      <div class="comfirmBtn" :outline="true" @click="sureBtn">确认</div>
+      <div class="comfirmBtn" :outline="true" @click="sureBtn">确认退回</div>
     </div>
+
+    <van-popup v-model="publishDatePickerShow" position="bottom">
+      <van-datetime-picker v-model="currentDate" type="datetime" :min-date="minDate" :max-date="maxDate" @cancel="clickCancelTimeFun" @confirm="clickConfirmTimeFun"/>
+    </van-popup>
   </div>
 </template>
 
@@ -49,11 +67,21 @@ export default {
       rateType: "",
       comment: "",
       checkBoxGroup: [],
-      templateLists: []
+      templateLists: [],
+      minDate: new Date(2016, 1, 1),
+      maxDate: new Date(2019, 12, 30),
+      currentDate: new Date(),
+      publishDatePickerShow: false,
+      chooseBatchEvaluateStudentsArray: 0
     };
+  },
+  created: function() {
+    this.endTime = this.$dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
+    this.chooseBatchEvaluateStudentsArray = this.$store.state.batchEvaluate.chooseBatchEvaluateStudentsArray;
+    this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
     this.getTemplateList();
   },
   watch: {
@@ -79,6 +107,18 @@ export default {
         path: "/editComments"
       });
     },
+    showEndTime() {
+      this.publishDatePickerShow = true;
+    },
+
+    clickConfirmTimeFun(date) {
+      var formatTime = this.$dayjs(date).format("YYYY-MM-DD HH:mm:ss");
+      this.endTime = formatTime;
+      this.publishDatePickerShow = false;
+    },
+    clickCancelTimeFun() {
+      this.publishDatePickerShow = false;
+    },
     writeComments() {
       if (this.checkBoxGroup.length === 0) {
         this.$toast({
@@ -99,7 +139,7 @@ export default {
       var self = this;
       var data = {
         user_id: self.userInfo.userid,
-        type: 1
+        type: 3
       };
 
       api.commentplGetList(data).then(function(response) {
@@ -110,7 +150,34 @@ export default {
       this.comment = "";
     },
     sureBtn() {
+      var self = this;
+      var array = self.chooseBatchEvaluateStudentsArray;
+      var studentIds = "";
 
+      for (let i = 0; i < array.length; i++) {
+        if (i + 1 === array.length) {
+          studentIds += array[i].userid;
+        } else {
+          studentIds += array[i].userid + ",";
+        }
+      }
+      var data = {
+        user_id: studentIds,
+        publish_id: self.homeworkOneListInfoObj.course_hour_publish_id,
+        teacher_id: self.userInfo.userid,
+        end_time: self.endTime,
+        return_reason: self.comment
+      };
+
+      api.returnRewrite(data).then(function(response) {
+        self.$toast({
+          message: "退回成功！",
+          duration: 750
+        });
+        self.$router.push({
+          path: "/batchEvaluate"
+        });
+      });
     },
     chooseTemplate(item) {
       this.comment = item.comment

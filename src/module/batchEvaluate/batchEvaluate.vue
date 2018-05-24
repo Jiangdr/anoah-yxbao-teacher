@@ -4,27 +4,30 @@
     <header class="header">
       <h1>批量评价</h1>
       <i class="cubeic-back" @click="goHomework">
-        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
+        <i class="fa fa-angle-left back-up-arrow"></i>
       </i>
     </header>
 
-    <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;">
-        <div style="display: inline-block;">正确率：</div>
-        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === ''}" @click="clickRateTab('')">全部</div>
+    <div style="background-color: #fff;overflow-x: auto;">
+      <div style="background-color: #fff; width: 570px;">
+        <div class="correct-rate-btn-all" v-bind:class="{activeTab:rateType === ''}" @click="clickRateTab('')">全部正确率</div>
         <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 1}" @click="clickRateTab(1)">100%</div>
         <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 0.9}" @click="clickRateTab(0.9)">90-99%</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 0.8}" @click="clickRateTab(0.8)">80-89%</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 0.7}" @click="clickRateTab(0.7)">70-79%</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 0.6}" @click="clickRateTab(0.6)">60-69%</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 0.5}" @click="clickRateTab(0.5)">0-59%</div>
+      </div>
     </div>
 
-    <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;">
-        <div style="display: inline-block;">评价：</div>
-        <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === ''}" @click="clickEvaluateTab('')">全部</div>
-        <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === 1}" @click="clickEvaluateTab(1)">待评价</div>
-        <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === 3}" @click="clickEvaluateTab(3)">已评价</div>
-        <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === 33}" @click="clickEvaluateTab(33)">待批改</div>
+    <div style="background-color: #fff;border-bottom: 1px solid #ededf0;">
+      <div class="correct-rate-btn-all" v-bind:class="{activeTab:statusType === ''}" @click="clickEvaluateTab('')">全部状态</div>
+      <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === 1}" @click="clickEvaluateTab(1)">待评价</div>
+      <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === 3}" @click="clickEvaluateTab(3)">已评价</div>
+      <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === 33}" @click="clickEvaluateTab(33)">待批改</div>
     </div>
 
-    <div>
-      <!-- <span style="padding: 10px;display:inline-block;" @click="clickStudent(item)" v-for="(item, index) in allStudentsArrayFormat" :key="index">{{item.real_name}}</span> -->
+    <div v-bind:style="listContainerStyle">
       <van-checkbox-group v-model="checkBoxGroup">
         <van-checkbox style="padding: 10px;display:inline-block;" v-for="(item, index) in allStudentsArrayFormat" :key="index" :name="item" >
           {{ item.real_name }}
@@ -32,24 +35,15 @@
       </van-checkbox-group>
     </div>
 
-    <div class="yxban-tabbar--fixed van-tabbar">
-      <div class="van-tabbar-item">
-        <div class="van-tabbar-item__text">
-          <span>退回作业</span>
-        </div>
+    <div class="bottom-btn">
+      <div class="btn">
+        <p @click="goReturnRewrite">退回作业</p>
       </div>
-      <div class="van-tabbar-item">
-        <div class="van-tabbar-item__text">
-          <span><i class="fa fa-heart-o"></i>表扬</span>
-        </div>
+      <div class="btn">
+        <p @click="setPraise"><i style="margin-right: 6px;" class="fa fa-heart-o"></i>表扬</p>
       </div>
-      <div class="van-tabbar-item" @click="writeComments">
-        <div class="van-tabbar-item__icon">
-        </div>
-        <div class="van-tabbar-item__text">
-          <span>
-            <i class="fa fa-pencil-square-o"></i>写评语</span>
-        </div>
+      <div class="btn">
+        <p @click="writeComments"><i style="margin-right: 6px;" class="fa fa-pencil-square-o"></i>写评语</p>
       </div>
     </div>
   </div>
@@ -64,7 +58,8 @@ export default {
     return {
       homeworkListArray: [],
       listContainerStyle: {
-        height: window.innerHeight - 90 + "px"
+        'height': window.innerHeight - 200 + "px",
+        'overflow-y': 'auto'
       },
       list: [],
       loading: false,
@@ -97,11 +92,24 @@ export default {
         path: "/homework"
       });
     },
+    goReturnRewrite() {
+      if (this.checkBoxGroup.length === 0) {
+        this.$toast({
+          message: "请选择学生！",
+          duration: 750
+        });
+        return;
+      }
+      this.$store.dispatch("chooseBatchEvaluateStudentsArray", this.checkBoxGroup);
+      this.$router.push({
+        path: "/returnRewrite"
+      });
+    },
     writeComments() {
       if (this.checkBoxGroup.length === 0) {
         this.$toast({
           message: "请选择学生！",
-          duration: 500
+          duration: 750
         });
         return;
       }
@@ -110,7 +118,40 @@ export default {
         path: "/comments"
       });
     },
-    clickStudent() {},
+    setPraise() {
+      var self = this;
+      if (self.checkBoxGroup.length === 0) {
+        self.$toast({
+          message: "请选择学生！",
+          duration: 750
+        });
+        return;
+      }
+
+      var array = self.checkBoxGroup;
+      var studentIds = "";
+
+      for (let i = 0; i < array.length; i++) {
+        if (i + 1 === array.length) {
+          studentIds += array[i].userid;
+        } else {
+          studentIds += array[i].userid + ",";
+        }
+      }
+
+      var data = {
+        publish_id: self.homeworkOneListInfoObj.course_hour_publish_id,
+        user_id: studentIds,
+        teacher_id: self.userInfo.userid
+      };
+
+      api.setPraise(data).then(function(response) {
+        self.$toast({
+          message: "已表扬！",
+          duration: 750
+        });
+      });
+    },
     getStudentsList() {
       var self = this;
       var data = {
@@ -178,12 +219,25 @@ export default {
 <style scoped>
 .correct-rate-btn {
   display: inline-block;
-  width: 4rem;
-  height: 2rem;
+  width: 64px;
+  height: 32px;
   line-height: 2rem;
   text-align: center;
-  border: 1px solid #2ec3b8;
-  border-radius: 5px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  margin: 0.5rem 0.25rem;
+  box-sizing: border-box;
+  vertical-align: top;
+  background-color: #fff;
+}
+.correct-rate-btn-all {
+  display: inline-block;
+  width: 96px;
+  height: 32px;
+  line-height: 2rem;
+  text-align: center;
+  border: 1px solid #eee;
+  border-radius: 10px;
   margin: 0.5rem 0.25rem;
   box-sizing: border-box;
   vertical-align: top;
@@ -259,50 +313,42 @@ export default {
   float: right;
   color: #989ca0;
 }
-.yxban-tabbar--fixed {
-  left: 0;
-  bottom: 0;
-  position: fixed;
-}
-.van-tabbar {
-  width: 100%;
-  height: 13.33333vw;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  background-color: #fff;
-}
-.van-tabbar-item {
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  color: #666;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  line-height: 1;
-  font-size: 3.2vw;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-}
-.van-tabbar-item--active {
-  color: #2ec2a9;
-}
-.van-tabbar-item__icon {
-  font-size: 4.8vw;
-  margin-bottom: 1.33333vw;
-  position: relative;
-}
 .activeTab {
   background-color: #2ec2a9;
   color: #fff;
+}
+.bottom-btn {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  height: 65px;
+  background: #fff;
+  padding:7.5px 13px;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-top:1px solid #e8ebee;
+}
+.btn {
+  flex:1 1 auto;
+  background: #06bb9c;
+  border-radius: 13px;
+  color: #fff;
+  height: 50px;
+  line-height: 50px;
+  margin-right: 15px;
+  text-align: center;
+  font-size: 17px;
+  width:100px;
+}
+.btn:first-child{
+  background: #08b783;
+}
+.btn:nth-child(2){
+  background: #3ea2ff;
+}
+.btn:last-child{
+  background: #2ecbd0;
+  margin-right: 0;
 }
 </style>
