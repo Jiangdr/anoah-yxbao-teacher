@@ -43,8 +43,8 @@
       <ul>
         <li class="list-item" v-for="(item, index) in allStudentsArrayFormat" :key="index" @click="clickStudent(item)">
           <div style="position: relative;margin-bottom:8px;">
-            <span style="width: 65px;height: 65px;display: inline-block;position: relative;">
-              <img style="border-radius: 50%;width: 100%;height: 100%;" src="http://e.dev.anoah.com/uploads/users/61/11/33521.jpg?t="/>
+            <span style="width: 60px;height: 60px;display: inline-block;position: relative;">
+              <img style="border-radius: 50%;width: 100%;height: 100%;" :src="item.avatar"/>
             </span>
             <div class="bg-class checkbox">
               <img src="@/assets/images/public/checksel.png" v-if="item.selectState" style="width:100%;height:100%"/>
@@ -71,6 +71,7 @@
 
 <script>
 import api from "@/module/batchEvaluate/axios/batchEvaluate.js";
+import {mapGetters, mapMutations} from 'vuex'
 
 export default {
   name: "batchEvaluate",
@@ -102,6 +103,11 @@ export default {
       checkBoxGroup: [],
       chooseAllStudentsShow: false
     };
+  },
+  computed: {
+    ...mapGetters({
+      env: 'runEnv/old'
+    })
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
@@ -208,6 +214,9 @@ export default {
         array.forEach(item => {
           item.status = 1;
           item.selectState = false;
+          if (item.avatar.indexOf('http://') === -1) {
+            item.avatar = self.env + item.avatar
+          }
         });
         self.allStudentsArray = array;
         self.allStudentsArrayFormat = array;
