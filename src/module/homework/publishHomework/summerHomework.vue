@@ -3,6 +3,7 @@
     <header class="header">
       <h1>暑假作业</h1>
       <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
+      <p class="select-all-p" @click="selectAll">{{hasChoosePagesNumArray.length==lists.length?取消全选:全选}}</p>
     </header>
     <div :class="{listdiv:this.hasChoosePagesNumArray.length === 0,listfooterdiv:this.hasChoosePagesNumArray.length !== 0}" style="overflow-y: auto;">
         <van-list v-model="loading" loading-text="加载中。。。" :finished="finished" @load="loadMore" :offset="100" :immediate-check="false">
@@ -11,7 +12,7 @@
                <p>{{(index+1)+"."+item.name}}</p>
                <p class="des-item">共<span>{{item.qti_num}}</span>道题</p>
             </div>
-            <YxCheckBox class="checkbox" :selected="item.isSel" :id="item.resource_id" :value="item.qti_num" @select="checkboxChange(item,$event)"></YxCheckBox>
+            <YxCheckBox class="checkbox" :selected="item.isSel" :ref="'cb-'+item.resource_id" @select="checkboxChange(item,$event)"></YxCheckBox>
           </div>
         </van-list>
         <div v-if="lists.length==0" class="text-font" style="height: 200px;line-height: 200px;text-align: center;">
@@ -39,12 +40,11 @@ export default {
       lists: [],
       result: [],
       hasChooseProblemsNum: 0,
-      checked: true,
+      olded: false,
       hasChoosePagesNumArray: [],
-      summerHomeworkSelPageIDs: [],
       loading: false,
-      finished: false,
-      noMore: false,
+      finished: true,
+      noMore: true,
       page: 0
     };
   },
@@ -53,19 +53,23 @@ export default {
     this.userInfo = this.$store.state.account.userInfo;
     this.chooseTextBookObj = this.$store.state.homework.chooseTextBookObj;
     this.summerHomeworkPackId = this.$store.state.homework.summerHomeworkPackId;
-    this.hasChoosePagesNumArray = JSON.parse(JSON.stringify(this.$store.state.homework.summerHomeworkSelPageIDs));
+    if (this.$store.state.homework.hasChoosePagesArray.length > 0) {
+      olded = true;
+      this.hasChoosePagesNumArray = JSON.parse(
+        JSON.stringify(this.$store.state.homework.hasChoosePagesArray)
+      );
+    }
   },
   mounted: function() {
     this.getList();
     this.hasChoosePagesNumArray.forEach(element => {
-      this.summerHomeworkSelPageIDs.push(element.resource_id);
       this.hasChooseProblemsNum =
         parseInt(this.hasChooseProblemsNum) + parseInt(element.qti_num);
     });
   },
   methods: {
     goPublishHomework() {
-      this.$store.dispatch("summerHomeworkSelPageIDs", this.hasChoosePagesNumArray);
+      this.$store.dispatch("hasChoosePagesArray", this.hasChoosePagesNumArray);
       this.$router.push({
         path: "/publishHomework"
       });
@@ -89,6 +93,17 @@ export default {
       this.$store.dispatch("chooseSummerHomeworkArray", this.result);
       this.$router.push({
         path: "/homeworkPublishSetting"
+      });
+    },
+    selectAll() {
+      var self = this;
+      this.lists.forEach(element => {
+        if (self.hasChoosePagesNumArray.indexOf(element) < 0) {
+          self.hasChoosePagesNumArray.push(element);
+          self.hasChooseProblemsNum =
+            parseInt(self.hasChooseProblemsNum) + parseInt(element.qti_num);
+        }
+        self.$refs["cb-" + element.resource_id][0].selecteState = true;
       });
     },
     checkboxChange(item, event) {
@@ -139,12 +154,12 @@ export default {
             self.noMore = true;
           } else {
             success.lists.forEach(element => {
-              if (
-                this.summerHomeworkSelPageIDs.indexOf(element.resource_id) < 0
-              ) {
-                element.isSel = false;
-              } else {
-                element.isSel = true;
+              if ((olded && self.isSelect(element)) || !olded) {
+                self.hasChoosePagesNumArray.push(element);
+                self.hasChooseProblemsNum =
+                  parseInt(self.hasChooseProblemsNum) +
+                  parseInt(element.qti_num);
+                  element.isSel = true;
               }
               self.lists.push(element);
             });
@@ -155,6 +170,12 @@ export default {
           self.$toast("网络异常");
         }
       );
+    },
+    isSelect(item) {
+      this.hasChoosePagesNumArray.forEach(element => {
+        if (element.resource_id === item.resource_id) return true;
+      });
+      return false;
     },
     clickTiltleName(item) {
       this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.qti_ids);
@@ -205,7 +226,13 @@ export default {
 .des-item:active {
   color: $green-primary-color;
 }
-
+.select-all-p {
+  color: $green-primary-color;
+  position: absolute;
+  right: 4vw;
+  top: 0;
+  font-size: 18px;
+}
 .footer-p {
   @extend .single-line;
   line-height: $bottom-height;
