@@ -1,11 +1,10 @@
 import notice from '@/module/notice/components/noticeList.vue'
 import homeworkList from '@/module/notice/components/homeworkList.vue'
-import homeworkListStu from '@/module/notice/components/homeworkList_stu.vue'
 import schoolList from '@/module/notice/components/schoolList.vue'
 import noticeDetail from '@/module/notice/components/noticeDetail.vue'
 
 export default [{
-  path: '/notice',
+  path: '/notice/:role',
   name: 'notice',
   component: notice,
   meta: {
@@ -13,32 +12,24 @@ export default [{
     keepAlive: true
   }
 }, {
-  path: '/homeworkList',
-  name: 'homeworkList',
+  path: '/notice/homeworkList/:role',
+  name: 'homeworkNoticeList',
   component: homeworkList,
-  meta: {
-    requiresAuth: false,
-    keepAlive: true
-  }
-}, {
-  path: '/homeworkList_stu',
-  name: 'homeworkList_stu',
-  component: homeworkListStu,
   meta: {
     requiresAuth: false,
     keepAlive: true
   }
 },
 {
-  path: '/schoolList',
-  name: 'schoolList',
+  path: '/notice/schoolList',
+  name: 'schoolNoticeList',
   component: schoolList,
   meta: {
     requiresAuth: false,
     keepAlive: true
   }
 }, {
-  path: '/noticeDetail',
+  path: '/notice/noticeDetail',
   name: 'noticeDetail',
   component: noticeDetail,
   meta: {

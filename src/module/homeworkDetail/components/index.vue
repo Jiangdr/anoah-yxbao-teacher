@@ -1,6 +1,6 @@
 <template>
   <div id="homework-content">
-    <header-bar>
+    <header-bar @back="back">
       <div slot="title-name" class="tab">
         <span class="tab-item" :class="{active: tabType === 'detail'}" @click="tabChange('detail')">作业详情</span>
         <span class="tab-item" :class="{active: tabType === 'report'}" @click="tabChange('report')">作业报告</span>
@@ -9,7 +9,7 @@
         <span @click="toggleMorePopup">...</span>
       </div>
     </header-bar>
-    <div class="content">
+    <div v-if="!loading" class="content">
       <homework-report v-if="tabType === 'report'"></homework-report>
       <homework-detail v-if="tabType === 'detail'"
         :homeworkInfo="homeworkInfo"
@@ -19,6 +19,7 @@
         >
         </homework-detail>
     </div>
+    <div v-if="loading" class="place-holder">加载中</div>
     <more v-if="morePopup" @toggle="toggleMorePopup"></more>
   </div>
 </template>
@@ -28,44 +29,69 @@ import headerBar from '@/components/headerBar.vue'
 import homeworkDetail from './homeworkDetail'
 import homeworkReport from './homewordReport'
 import more from './common/more.vue'
-import homeworkDetil from "../axios/detail.js";
-
+import homeworkDetil from '../axios/detail.js'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'HomeContent',
   data() {
     return {
       homeworkInfo: {}, // 作业信息
       resourceList: [], // 作业列表
-      tabType: 'report',
-      morePopup: false
+      homeworkStatus: 0,
+      tabType: 'detail',
+      morePopup: false,
+      loading: true
     }
+  },
+  computed: {
+    ...mapGetters({
+      env: 'runEnv/old'
+    })
   },
   created() {
     this.getresource();
   },
   methods: {
+    ...mapMutations({
+      saveHomeworkInfo: 'homeworkDetail/homeworkInfo',
+      saveHomeworkQuestionInfo: 'homeworkDetail/homeworkQuestionInfo'
+    }),
+    // 返回
+    back() {
+      this.$router.back(-1)
+    },
+    // 顶部tab切换
     tabChange(type) {
       this.tabType = type
     },
+    // 弹出或收起更多
     toggleMorePopup() {
       this.morePopup = !this.morePopup
     },
+    // 获取作业详情所需资源
     getresource() {
+      this.loading = true
       let params = {
         publish_id: this.$route.params.publishId,
         class_id: this.$route.params.classId
       };
       // 获取作业信息
-      homeworkDetil.getinfo(params).then(r => {
-      // 作业信息
-        this.homeworkInfo = r;
-      });
+      homeworkDetil.getinfo(params).then(succ => {
+        this.loading = false
+        succ.student_list.forEach(ele => {
+          if (ele.avatar.indexOf('http://') === -1) {
+            ele.avatar = this.env + ele.avatar
+          }
+        });
+        this.saveHomeworkInfo(succ)
+        this.homeworkInfo = succ
+      })
       // 获取作业资源
       homeworkDetil.getResourceList(params).then(d => {
-      // 作业资源
-        this.resourceList = d.list;
-        this.homeworkStatus = d.status;
-      });
+        this.resourceList = d.list
+        this.homeworkStatus = d.status
+        this.saveHomeworkQuestionInfo(d)
+      })
     }
   },
   components: {
@@ -113,6 +139,9 @@ export default {
     height: calc(100% - 45px);
     overflow: hidden;
     box-sizing: border-box;
+  }
+  .place-holder{
+    @extend .content
   }
 }
 </style>

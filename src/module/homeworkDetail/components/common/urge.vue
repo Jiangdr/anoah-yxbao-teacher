@@ -1,5 +1,5 @@
 <template>
-<van-popup v-model="urge" class="urge-popup">
+<van-popup v-model="urge" class="urge-popup" @click-overlay="toggle">
       <div class="urge-container">
         <p>催促发送成功，“未完成学生”将收到提醒</p>
       </div>

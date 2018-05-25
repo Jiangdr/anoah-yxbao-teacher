@@ -27,9 +27,24 @@ import dayjs from 'dayjs';
 
 import Axios from 'axios';
 
+// 引入 ECharts 主模块
+import echarts from 'echarts/lib/echarts'
+// 引入柱状图
+import 'echarts/lib/chart/pie'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title'
+import '@/style/global.scss'
+// 引入全局过滤器
+import * as filters from '@/filter/index'
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
+
 Vue.prototype.$dayjs = dayjs;
 
 Vue.prototype.$http = Axios;
+
+Vue.prototype.$echarts = echarts
 // Axios.defaults.withCredentials = true;
 
 Vue.use(window.qtivue.default)

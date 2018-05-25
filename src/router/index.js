@@ -9,6 +9,8 @@ import notice from '@/module/notice/router'
 import questionDetail from '@/module/questionDetail/router'
 // 批改作业--作业详情
 import homeworkDetail from '@/module/homeworkDetail/router'
+// 批改作业--统计
+import tongji from '@/module/tongji/router/index'
 import userCenter from '@/module/user-center/router'
 import home from '@/module/home/index'
 import list from '@/module/home/list'
@@ -43,6 +45,7 @@ let routes = [
   ...notice,
   ...questionDetail,
   ...homeworkDetail,
+  ...tongji,
   ...batchEvaluateRoutes
 ]
 let router = new Router({

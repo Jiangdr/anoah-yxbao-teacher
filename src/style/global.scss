@@ -45,3 +45,9 @@ div.van-actionsheet__cancel.van-hairline--top
   margin-right: auto;
   overflow: hidden;
 }
+
+.ellipsis{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

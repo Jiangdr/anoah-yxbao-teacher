@@ -3,11 +3,11 @@
     <div class="title van-hairline--bottom">全班成绩情况</div>
     <div class="content">
       <div class="score-item">
-        <span class="percent">80%</span>
+        <span class="percent">{{Math.round(this.info.class_average_correct_rate * 100)}}%</span>
         <span class="name">平均正确率</span>
       </div>
       <div class="score-item">
-        <span class="percent">80%</span>
+        <span class="percent">{{Math.round(hwCompleteRate * 100)}}%</span>
         <span class="name">作业完成率</span>
       </div>
       <div class="score-item">
@@ -15,7 +15,7 @@
         <span class="name">错题攻克率</span>
       </div>
       <div class="score-item">
-        <span class="percent">80''40'''</span>
+        <span class="percent">{{this.info.class_time_length | timeFormatSecond}}</span>
         <span class="name">班平均用时</span>
       </div>
     </div>
@@ -23,8 +23,17 @@
 </template>
 <script>
 // 全班成绩总览
+import {mapState} from 'vuex'
 export default {
-  name: 'classScoreOverview'
+  name: 'classScoreOverview',
+  computed: {
+    ...mapState({
+      info: state => state.homeworkDetail.homeworkInfo
+    }),
+    hwCompleteRate() {
+      return (this.info.student_counter - this.info.unfinished_counter) / this.info.student_counter
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

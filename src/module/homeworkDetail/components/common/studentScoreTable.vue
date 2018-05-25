@@ -3,7 +3,7 @@
     <div class="title van-hairline--bottom">学生成绩表</div>
     <div class="content">
       <div class="table-title van-hairline--bottom">
-        <div class="table-cell" @click="sortList(1)">
+        <div class="table-cell name" @click="sortList(1)">
           <span>姓名</span>
           <span class="caret">
             <i class="fa fa-caret-up" :class="{active: sortRule.name.up}"></i>
@@ -33,18 +33,34 @@
         </div>
       </div>
       <div class="table-body">
-        <div class="table-row van-hairline--bottom" v-for="(stu, index) in studentInfo" :key="index">
-          <div class="table-cell">
-            <div class="stu-name">{{stu.real_name}}</div>
+        <div class="table-row van-hairline--bottom" v-for="(stu, index) in studentInfo" :key="index" @click="linkTo(stu.status)">
+          <div class="table-cell name">
+            <div class="stu-name">
+              <img :src="stu.avatar" alt="">
+              <span>{{stu.real_name}}</span>
+            </div>
           </div>
           <div class="table-cell">
-            <div class="correct-per">{{stu.rate * 100}}%</div>
+            <div class="correct-per">
+              <span v-if="stu.status == 3">{{Math.round(stu.rate * 100)}}%</span>
+              <span v-else-if="stu.status == 1">未批改</span>
+              <span v-else>未提交</span>
+            </div>
           </div>
           <div class="table-cell">
-            <div class="cuoti">{{stu.correct_num}}</div>
+            <div class="cuoti">
+              <span v-if="stu.status == 3 || stu.status == 1">{{stu.correct_num}}</span>
+              <span v-if="stu.status == 0">--</span>
+            </div>
           </div>
           <div class="table-cell">
-            <div class="time-length">{{stu.time_length | time}}</div>
+            <div class="time-length">
+              <span v-if="stu.status == 3 || stu.status == 1">{{stu.time_length | timeFormat}}</span>
+              <span v-else>--</span>
+            </div>
+          </div>
+          <div class="arrow" v-show="stu.status == 3 || stu.status == 1">
+            <i class="fa fa-angle-right"></i>
           </div>
         </div>
       </div>
@@ -75,18 +91,17 @@ export default {
           up: false,
           down: false
         }
-      }
-    }
-  },
-  filters: {
-    time(val) {
-      return val.replace('分', "''").replace('秒', "'''")
+      },
+      sortParam: 'correct_down'
     }
   },
   computed: {
     ...mapGetters({
-      studentInfo: 'homeworkDetail/getStudentInfo'
-    })
+      studentList: 'homeworkDetail/getStudentInfo'
+    }),
+    studentInfo() {
+      return this.studentList(this.sortParam)
+    }
   },
   methods: {
     // 转换排序规则
@@ -125,15 +140,26 @@ export default {
     },
     sortByName() {
       this.switchSort('name')
+      this.sortParam = this.sortRule.name.up ? 'name_up' : 'name_down'
     },
     sortByCorrect() {
       this.switchSort('correctPer')
+      this.sortParam = this.sortRule.correctPer.up ? 'correct_up' : 'correct_down'
     },
     sortByCuoti() {
       this.switchSort('cuoti')
+      this.sortParam = this.sortRule.cuoti.up ? 'cuoti_up' : 'cuoti_down'
     },
     sortByTime() {
       this.switchSort('time')
+      this.sortParam = this.sortRule.time.up ? 'time_up' : 'time_down'
+    },
+    linkTo(status) {
+      if (status === 0) {
+        return false
+      } else {
+        console.log('单个学生答题页面')
+      }
     }
   }
 }
@@ -154,6 +180,7 @@ export default {
       font-size: 14px;
     }
     .table-title{
+      padding: 0 13px;
       height: 45px;
       line-height: 45px;
       text-align: center;
@@ -161,6 +188,9 @@ export default {
     }
     .table-cell{
       flex: 1;
+      &.name{
+        flex: 0 0 75px;
+      }
     }
     .caret{
       display: inline-flex;
@@ -177,6 +207,7 @@ export default {
       }
     }
     .table-body{
+      padding: 0 13px;
       .table-row{
         width: 100%;
         color: #1e1e1e;
@@ -184,6 +215,24 @@ export default {
         height: 55px;
         line-height: 55px;
         text-align: center;
+      }
+    }
+    .stu-name{
+      display: inline-flex;
+      justify-content: flex-start;
+      align-items: center;
+      width: 75px;
+      img{
+        flex: 0 0 25px;
+        // width: 25px;
+        height: 25px;
+        border-radius: 50%;
+      }
+      span{
+        flex: 0 0 50px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }

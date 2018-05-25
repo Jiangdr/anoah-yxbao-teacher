@@ -87,11 +87,12 @@ export default {
   background: #fff;
   border-radius: 13px;
 }
+
 .wrapper > i {
   display: inline-block;
   width: 24px;
   height: 24px;
-  background: url("../images/collect.png") no-repeat center;
+  background: url("/assets/images/homeworkDetail/collect.png") no-repeat center;
   background-size: 100% 100%;
   margin-top: 3px;
   vertical-align: text-bottom;

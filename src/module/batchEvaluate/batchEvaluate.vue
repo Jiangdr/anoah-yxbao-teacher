@@ -28,11 +28,28 @@
     </div>
 
     <div v-bind:style="listContainerStyle">
-      <van-checkbox-group v-model="checkBoxGroup">
+      <!-- <van-checkbox-group v-model="checkBoxGroup">
         <van-checkbox style="padding: 10px;display:inline-block;" v-for="(item, index) in allStudentsArrayFormat" :key="index" :name="item" >
+          <span style="width: 65px;height: 65px;display: inline-block;position: relative;">
+            <img style="border-radius: 50%;width: 100%;height: 100%;" :src="'http://e.dev.anoah.com/' + item.avatar"/>
+          </span>
           {{ item.real_name }}
         </van-checkbox>
-      </van-checkbox-group>
+      </van-checkbox-group> -->
+
+      <ul>
+        <li class="list-item" v-for="(item, index) in allStudentsArrayFormat" :key="index" @click="clickStudent(item)">
+          <div style="position: relative;margin-bottom:8px;">
+            <span style="width: 65px;height: 65px;display: inline-block;position: relative;">
+              <img style="border-radius: 50%;width: 100%;height: 100%;" src="http://e.dev.anoah.com/uploads/users/61/11/33521.jpg?t="/>
+            </span>
+            <div class="bg-class checkbox">
+              <img src="@/assets/images/public/checksel.png" v-if="item.selectState" style="width:100%;height:100%"/>
+            </div>
+          </div>
+          <div>{{ item.real_name }}</div>
+        </li>
+      </ul>
     </div>
 
     <div class="bottom-btn">
@@ -53,7 +70,7 @@
 import api from "@/module/batchEvaluate/axios/batchEvaluate.js";
 
 export default {
-  name: "Homework",
+  name: "batchEvaluate",
   data() {
     return {
       homeworkListArray: [],
@@ -93,6 +110,12 @@ export default {
       });
     },
     goReturnRewrite() {
+      var array = this.allStudentsArrayFormat;
+      array.forEach(item => {
+        if (item.selectState) {
+          this.checkBoxGroup.push(item);
+        }
+      });
       if (this.checkBoxGroup.length === 0) {
         this.$toast({
           message: "请选择学生！",
@@ -106,6 +129,12 @@ export default {
       });
     },
     writeComments() {
+      var array = this.allStudentsArrayFormat;
+      array.forEach(item => {
+        if (item.selectState) {
+          this.checkBoxGroup.push(item);
+        }
+      });
       if (this.checkBoxGroup.length === 0) {
         this.$toast({
           message: "请选择学生！",
@@ -118,8 +147,28 @@ export default {
         path: "/comments"
       });
     },
+    clickStudent(item) {
+      var array = this.allStudentsArrayFormat;
+      array.forEach(arrayOne => {
+        if (item.userid === arrayOne.userid) {
+          arrayOne.selectState = !arrayOne.selectState;
+        }
+        // if (arrayOne.selectState) {
+        //   this.checkBoxGroup.push(arrayOne);
+        // } else if (item.userid === arrayOne.userid) {
+        //   this.checkBoxGroup.pop(arrayOne);
+        // }
+      });
+      this.allStudentsArrayFormat = array;
+    },
     setPraise() {
       var self = this;
+      self.allStudentsArrayFormatray.forEach(item => {
+        if (item.selectState) {
+          this.checkBoxGroup.push(item);
+        }
+      });
+
       if (self.checkBoxGroup.length === 0) {
         self.$toast({
           message: "请选择学生！",
@@ -162,6 +211,7 @@ export default {
         var array = response.student_list;
         array.forEach(item => {
           item.status = 1;
+          item.selectState = false;
           // if (item.status === 1) {
           //   self.willCorrectStudentsArray.push(item);
           // } else if (item.status === 3) {
@@ -217,6 +267,12 @@ export default {
 </script>
 
 <style scoped>
+.van-checkbox--round {
+  position: absolute !important;
+  right: 19px !important;
+  bottom: 17px !important;
+  z-index: 99 !important;
+}
 .correct-rate-btn {
   display: inline-block;
   width: 64px;
@@ -350,5 +406,28 @@ export default {
 .btn:last-child{
   background: #2ecbd0;
   margin-right: 0;
+}
+li {
+  display: inline-block;
+  width: 20%;
+  box-sizing: border-box;
+  text-align: center;
+  margin-top: 1rem;
+  position: relative;
+}
+.list-item .checkbox {
+  width: 25px;
+  height: 25px;
+  right: 3px;
+  top: 42px;
+  border-radius: 20px;
+  position: absolute;
+}
+.bg-class {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

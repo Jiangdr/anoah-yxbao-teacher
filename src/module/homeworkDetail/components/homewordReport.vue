@@ -1,16 +1,21 @@
 <template>
   <div id="homework-report">
-    <report-tab :tab-type="tabType" @tabChange="tabChange"></report-tab>
-    <div class="wrapper">
+    <report-tab v-if="hwCompleteRate <= 80" :tab-type="tabType" @tabChange="tabChange"></report-tab>
+    <div v-if="hwCompleteRate <= 80" class="wrapper">
       <div class="split-line"></div>
       <div class="content">
         <!-- 班级成绩 -->
-        <class-score v-if="tabType === 1"></class-score>
+        <class-score v-show="tabType === 1"></class-score>
         <!-- 答案情况 -->
-        <answer-situation v-if="tabType === 2"></answer-situation>
+        <answer-situation v-show="tabType === 2"></answer-situation>
         <!-- 知识点分析 -->
-        <knowledge-point-analysis v-if="tabType === 3"></knowledge-point-analysis>
+        <knowledge-point-analysis v-show="tabType === 3"></knowledge-point-analysis>
       </div>
+    </div>
+    <div v-else class="no-data">
+      <img :src="imgUrl" alt="">
+      <span style="color:#1e1e1e;font-weight:600;margin-bottom:10px;">暂无报告</span>
+      <span style="color:#c8c8c8;line-height:26px">80%学生完成或者作业截止后可查看作业</span>
     </div>
   </div>
 </template>
@@ -20,7 +25,7 @@ import reportTab from './common/reportTab'
 import classScore from './common/classScore'
 import answerSituation from './common/answerSituation'
 import knowledgePointAnalysis from './common/knowledgePointAnalysis'
-import {mapActions} from 'vuex'
+import {mapState} from 'vuex'
 export default {
   name: 'HomeworkReport',
   data() {
@@ -28,16 +33,18 @@ export default {
       tabType: 1 // 1:全部成绩;2:答案情况;3:知识点分析
     }
   },
-  mounted() {
-    this.getInfo({
-      publish_id: this.$route.params.publishId,
-      class_id: this.$route.params.classId
-    })
+  computed: {
+    ...mapState({
+      info: state => state.homeworkDetail.homeworkInfo
+    }),
+    hwCompleteRate() {
+      return (this.info.student_counter - this.info.unfinished_counter) / this.info.student_counter
+    },
+    imgUrl() {
+      return require('@/assets/images/homewordDetail/no-data.png')
+    }
   },
   methods: {
-    ...mapActions({
-      'getInfo': 'homeworkDetail/basicStateInfo'
-    }),
     tabChange(type) {
       this.tabType = type
     }
@@ -56,13 +63,30 @@ export default {
   .wrapper{
     width: 100%;
     height: calc(100% - 45px);
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow: hidden;
+    .content{
+      height: calc(100% - 10px);
+    }
     .split-line{
       width: 100%;
       height: 10px;
       background: #f5f8f8;
     }
+  }
+  .no-data{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    padding: 0 26px;
+    text-align: center;
+    img{
+      width: 100px;
+      height: 130px;
+    }
+
   }
 }
 </style>
