@@ -28,4 +28,7 @@ export default {
 }
 </script>
 <style scoped>
+  #contact-us{
+    height: 100%;
+  }
 </style>

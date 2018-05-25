@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model="showTips" class="tip-popup van-hairline--surround">
+  <van-popup v-model="showTips" class="tip-popup van-hairline--surround" @click-overlay="toggle">
     <div class="tip-container">
       <h2 class="title">班级平均正确率：</h2>
       <div class="tip-content">

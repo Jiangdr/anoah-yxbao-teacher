@@ -8,22 +8,13 @@
         <span style="float:right">共<b>{{resourceList.length}}</b>份</span>
       </p>
       <p class="times">
-        <span class="start-time">{{homeworkInfo.start_time }}</span>
-        <span class="end-time">{{homeworkInfo.deadline}}</span>
-        <span
-          class="end"
-          v-if="new Date(homeworkInfo.deadline) < new Date()"
-        >已截止</span>
+        截止时间：{{homeworkInfo.deadline}}
       </p>
     </div>
     <!-- 平均正确率 -->
     <div class="correct">
-      <van-icon
-        name="info-o"
-        @click="toggleTips"
-      />
-      <p class="num">{{classCorrect}}
-      </p>
+      <van-icon name="info-o" @click="toggleTips"/>
+      <p class="num">{{classCorrect}}</p>
       <p class="text">平均正确率</p>
     </div>
     <!-- 内容 -->
@@ -40,118 +31,101 @@
         </van-row>
       </div>
       <!-- 作业作答情况内容 -->
-      <div
-        class="homework-content"
-        v-if="activeBtn=='homework'"
-      >
+      <div class="homework-content" v-if="activeBtn=='homework'">
         <div class="total van-hairline--bottom">
           <!-- <span>共{{resourceList.length}}题</span> -->
           <span>只看待批阅</span>
           <span class="right"><van-checkbox v-model="notcorrect"></van-checkbox> </span>
         </div>
         <!-- 作业资源列表 -->
-        <div class="lists">
-          <div class="item" v-for='(ques,index) in resourceList' :key="index" v-show="!(notcorrect&&ques.pigai_status==3)">
-            <div class="iteminfo" @click="changeCollapse(index)">
-              <div class="left">{{index+1}}、</div>
-              <div class="right">
-                <p>[{{ques.icom_name}}]
-                  <span class="resource-name" v-html="ques.resource_name"></span><span v-if="ques.pigai_status!=3"> 待批阅</span></p>
-                <p>
-                  已完成：{{ques.finished_counter}}/{{homeworkInfo.student_counter}}人 正确率：{{itemCorrect(ques.average_rate)}}
-                  <van-icon name="arrow" class="showdetail"></van-icon>
-                </p>
-              </div>
+          <div class="lists">
+            <div class="item" v-for='(ques,index) in resourceList' :key="index" v-show="!(notcorrect&&ques.pigai_status==3)">
+              <div class="iteminfo" @click="changeCollapse(index)">
+                <div class="left">{{index+1}}、</div>
+                <div class="right">
+                  <p>[{{ques.icom_name}}]
+                    <span class="resource-name" v-html="ques.resource_name"></span><span v-if="ques.pigai_status!=3"> 待批阅</span></p>
+                  <p>
+                    已完成：{{ques.finished_counter}}/{{homeworkInfo.student_counter}}人 正确率：{{itemCorrect(ques.average_rate)}}
+                    <van-icon name="arrow" class="showdetail"></van-icon>
+                  </p>
+                </div>
+          </div>
+          <div class="itemdetail" :class="{hide:!ques.isShow}" v-if="ques.resource_type=='qti_exam'||isCompound(ques.qti_question_type_id,ques.resource_type)">
+            <p v-for="(mini,key) in miniResource[index]" :key="key" @click="goTongji(mini,index,key)">
+              <span>
+                <template v-if="mini.status===1">待批阅</template>
+                <template v-if="mini.status===0">未提交</template>
+                <template v-else-if="mini.status==3&&mini.marked==1">阅</template>
+                <template v-else>{{itemCorrect(mini.correct_rate)}}</template>
+              </span>
+              <span>{{(index+1)+'-'+(key+1)}}</span>
+              </p>
+          </div>
+          </div>
         </div>
-        <div
-          class="itemdetail"
-          :class="{hide:!ques.isShow}"
-          v-if="ques.resource_type=='qti_exam'||isCompound(ques.qti_question_type_id,ques.resource_type)"
-        >
-          <p
-            v-for="(mini,key) in miniResource[index]"
-            :key="key"
-            @click="goTongji(mini,index,key)"
-          >
-            <span>
-                    <template v-if="mini.status===1">待批阅</template>
-                    <template v-if="mini.status===0">未提交</template>
-                    <template v-else-if="mini.status==3&&mini.marked==1">阅</template>
-                    <template v-else>{{itemCorrect(mini.correct_rate)}}</template>
-                  </span>
-            <span>{{(index+1)+'-'+(key+1)}}</span>
-            </p>
-    </div>
-  </div>
-</div>
-</div>
-<div class="student-content" v-if="activeBtn=='student'">
-  <template v-if="finishCounter>0">
-    <div class="status">
-      <van-row class="item">
-        <van-col span="9">未完成</van-col>
-        <van-col span="9">{{homeworkInfo.unfinished_counter}}人</van-col>
-        <van-col span="6" class="btn" v-if="!isUrge">
-          <p @click="toggleUrge" :class="{disable:finishCounter==0}">催交作业</p>
-        </van-col>
-        <van-col span="6" class="btn" v-if="isUrge">
-          <p class="disable">今日已提醒</p>
-        </van-col>
-      </van-row>
-      <van-row class="item">
-        <van-col span="9">未订正</van-col>
-        <van-col span="9">{{homeworkInfo.unretyr_counter}}人</van-col>
-        <van-col span="6" class="btn" v-if="!isRemind">
-          <p @click="toggleRemind">提醒订正</p>
-        </van-col>
-        <van-col span="6" class="btn" v-if="isRemind">
-          <p class="disable">今日已提醒</p>
-        </van-col>
-      </van-row>
-    </div>
-    <div class="blank"></div>
-    <!-- 学生列表 -->
-    <student-list :studentList="studentList"></student-list>
-  </template>
-  <template v-else>
-    <div class="unfinish-state">
-      <div>
-        <p>
-          <span>{{homeworkInfo.unfinished_counter}}人</span><br>
-          <span>未完成</span>
-        </p>
       </div>
-      <div>
-        <p>
-          <span>{{homeworkInfo.unretyr_counter}}人</span><br>
-          <span>未订正</span>
-        </p>
+      <!-- 学生完成情况 -->
+      <div class="student-content" v-if="activeBtn=='student'">
+        <!-- 完成人数大于0 显示列表 -->
+          <div class="status">
+            <van-row class="item">
+              <van-col span="9">未完成</van-col>
+              <van-col span="9">{{homeworkInfo.unfinished_counter}}人</van-col>
+              <van-col span="6" class="btn" v-if="isUrge">
+                <p @click="toggleUrge" :class="{disable:finishCounter===0}">催交作业</p>
+              </van-col>
+              <van-col span="6" class="btn" v-if="!isUrge">
+                <p class="disable">今日已提醒</p>
+              </van-col>
+            </van-row>
+            <van-row class="item">
+              <van-col span="9">未订正</van-col>
+              <van-col span="9">{{homeworkInfo.unretyr_counter}}人</van-col>
+              <van-col span="6" class="btn" v-if="isRemind">
+                <p @click="toggleRemind" :class="{disable:finishCounter===0}">提醒订正</p>
+              </van-col>
+              <van-col span="6" class="btn" v-if="!isRemind">
+                <p class="disable">今日已提醒</p>
+              </van-col>
+            </van-row>
+          </div>
+          <div class="blank"></div>
+        <template v-if="finishCounter>0">
+          <!-- 学生列表 -->
+          <student-list :studentList="studentList"></student-list>
+        </template>
+        <!-- 没人完成 -->
+        <template v-else>
+          <div class="title">学生成绩</div>
+          <div class="noanswer-tip">还没有学生提交作业哟～</div>
+        </template>
+        </div>
       </div>
     </div>
-    <div class="title">学生成绩</div>
-    <div class="noanswer-tip">还没有学生提交作业哟～</div>
-  </template>
-  </div>
-  </div>
-  </div>
-  <!-- 底部按钮 -->
-  <div class="bottom-btn">
-      <div class="btn" :class="{disable:homeworkStatus!=1}">
-        <p @click="toggleCorrectPopup">一键批阅</p>
-      </div>
-      <div class="btn">
-        <p @click="goBatchEvaluate">批量评价</p>
-      </div>
-      <div class="btn">
-        <p @click="toggleAnswerTip">公布答案</p>
-      </div>
-  </div>
-  <!-- 班级平均正确率计算规则tip -->
+    <!-- 底部按钮 -->
+    <div class="bottom-btn">
+        <div class="btn" :class="{disable:homeworkStatus!=1}">
+          <p @click="toggleCorrectPopup">一键批阅</p>
+        </div>
+        <div class="btn">
+          <p @click="goBatchEvaluate">批量评价</p>
+        </div>
+        <div class="btn" :class="{disable:homeworkInfo.is_send_answer<1}">
+          <p v-if="homeworkInfo.is_send_answer<1">公布答案</p>
+          <p v-else @click="toggleAnswerTip">公布答案</p>
+        </div>
+    </div>
+    <!-- 班级平均正确率计算规则tip -->
     <tips v-if="showTips" @toggle="toggleTips"></tips>
+    <!-- 催交作业 -->
     <urge v-if="urge" @toggle="toggleUrge"></urge>
+    <!-- 订正提醒 -->
     <remind v-if="remind" @toggle="toggleRemind"></remind>
+    <!-- 一键批阅 -->
     <correct v-if="correctTip" @toggle="toggleCorrectPopup" @callback="getResource" :publishId="$route.params.publishId" :send="0"></correct>
-    <answer v-if="answerTip" @toggle="toggleAnswerTip"></answer>
+    <!-- 发布答案 -->
+    <answer v-if="answerTip" @toggle="toggleAnswerTip" :publishId="$route.params.publishId" :classId="$route.params.classId"></answer>
   </div>
 </template>
 
@@ -168,13 +142,11 @@ import studentList from "./common/studentList.vue"; // 学生列表
 import {mapActions} from 'vuex'
 export default {
   name: "detail",
-  props: ["publishId", "classId"],
+  props: ['homeworkInfo', 'resourceList', 'homeworkStatus'],
   data() {
     return {
-      homeworkInfo: {}, // 作业信息
-      resourceList: [], // 作业列表
       studentList: [], // 班级学生完成情况，
-      correct: -1,
+      correct: -1, // 班级正确率
       activeBtn: "homework", // content内容显示
       showTips: false, // 提示遮罩层
       urge: false, // 催交作业遮罩层
@@ -182,20 +154,16 @@ export default {
       notcorrect: false, // 是否只看待批阅
       isUrge: false, // 是否已催交作业
       isRemind: false, // 是否已题型订正
-      answerTip: false,
-      correctTip: false,
-      homeworkStatus: "",
-      miniResource: {}
+      answerTip: false, // 发布答案弹框
+      correctTip: false, // 一键批阅弹框
+      // homeworkStatus: "", // 当前作业完成状态 1未批改 3已批改
+      miniResource: {} // 小资源
     };
   },
   created() {
-    // 获取作业信息
-    this.getResource();
+    this.getinfo();
   },
   computed: {
-    // ...mapState({
-    //   'user': (state) => state.account.userInfo
-    // }),
     // 班级正确率
     classCorrect() {
       if (this.correct === "" || this.correct === -1) {
@@ -217,24 +185,23 @@ export default {
     ...mapActions({
     }),
     getResource() {
-      let params = {
-        publish_id: this.publishId || this.$route.params.publishId,
-        class_id: this.classId || this.$route.params.classId
-      };
-      homeworkDetil.getinfo(params).then(r => {
-        this.homeworkInfo = r;
-        this.studentList = r.student_list;
-        this.correct = r.class_average_correct_rate;
-      });
-      // 获取作业资源
-      homeworkDetil.getResourceList(params).then(d => {
-        this.resourceList = d.list;
-        this.homeworkStatus = d.status;
-      });
+      this.$emit('getresource');
+      this.getinfo();
       // 一键批阅后清空小资源列表
       this.miniResource = {};
     },
+    getinfo() {
+      // 获取作业信息
+      // this.studentList = this.homeworkInfo.student_list;
+      // 班级正确率
+      this.correct = this.homeworkInfo.class_average_correct_rate;
+      // 是否催交过作业  0 未催交 1 当日已催交
+      this.isUrge = this.homeworkInfo.notice_zuoye === 0
+      // 是否提醒订正  0 未提醒 1 当日已提醒
+      this.isRemind = this.homeworkInfo.notice_retry === 0
+    },
     goBatchEvaluate() {
+      // 批量评价
       console.log("a");
       this.$router.push({
         path: "/batchEvaluate"
@@ -250,27 +217,56 @@ export default {
     },
     // 催交作业弹出框
     toggleUrge() {
-      this.urge = !this.urge;
-      this.isUrge = true;
-      setTimeout(() => {
-        this.urge = false;
-      }, 3000);
+      if (this.finishCounter === 0 || !this.isUrge) {
+        return false
+      }
+      let params = {
+        teacher_id: JSON.parse(window.localStorage.userinfo).userid,
+        course_hour_publish_id: this.homeworkInfo.course_hour_publish_id
+      }
+      homeworkDetil.urge(params).then((r) => {
+        if (r.rs === true) {
+          this.urge = !this.urge;
+          this.isUrge = true;
+          setTimeout(() => {
+            this.urge = false;
+          }, 3000);
+        }
+      })
     },
     // 提醒订正弹出框
     toggleRemind() {
-      this.remind = !this.remind;
-      this.isRemind = true;
-      setTimeout(() => {
-        this.remind = false;
-      }, 3000);
+      if (this.finishCounter === 0 || !this.isRemind) {
+        return false
+      }
+      let params = {
+        teacher_id: JSON.parse(window.localStorage.userinfo).userid,
+        course_hour_publish_id: this.homeworkInfo.course_hour_publish_id
+      }
+      homeworkDetil.remind(params).then((r) => {
+        if (r.rs === true) {
+          this.remind = !this.remind;
+          this.isRemind = true;
+          setTimeout(() => {
+            this.remind = false;
+          }, 3000);
+        }
+      })
     },
+    // 一键批阅弹框
     toggleCorrectPopup() {
       // if (this.homeworkStatus !== 1) {
       //   return false;
       // }
       this.correctTip = !this.correctTip;
     },
-    toggleAnswerTip() {
+    // 发布答案弹窗
+    toggleAnswerTip(send) {
+      // is_send_answer==0 已发布过答案
+      // is_send_answer==1 未发布过答案
+      if (send === 1) {
+        this.homeworkInfo.is_send_answer = 0
+      }
       this.answerTip = !this.answerTip;
     },
     // 查看小题
@@ -279,18 +275,21 @@ export default {
       let detailbox = "";
       // 套题或试卷  获取当前点击资源
       curr = this.resourceList[index];
+      // 小资源列表显示或隐藏
       Vue.set(curr, "isShow", !curr.isShow);
+      // 加载小资源参数
       let param = {
         publish_id: curr.course_hour_publish_id,
         course_resource_id: curr.course_resource_id,
         dcom_entity_id: curr.dcom_entity_id
       };
       if (
+        // 判断是否为试卷或复合题
         curr.resource_type === "qti_exam" ||
         this.isCompound(curr.qti_question_type_id, curr.resource_type)
       ) {
         if (curr.isShow) {
-          // 小资源加载过则不在走接口
+          // 小资源加载过则不再走接口
           if (this.miniResource[index]) {
             return false;
           }
@@ -308,10 +307,13 @@ export default {
       if (curr.status === 0) {
         return false;
       }
+      // 当前资源参数
       this.$store.commit("homeworkDetail/setParams", curr);
       if (this.miniResource[index]) {
+        // 当前试卷小资源
         this.$store.commit("homeworkDetail/setmini", this.miniResource[index]);
       }
+      // 当前资源在小资源中的index
       this.$store.commit("homeworkDetail/changIndex", key);
       // 单选题、判断题统计页面
       this.$router.push({
@@ -552,14 +554,14 @@ export default {
   padding: 10px 20px;
 }
 
-.detail>.wrapper>.content>.student-content .unfinish-state+.title {
+.detail>.wrapper>.content>.student-content .title {
   margin-top: 20px;
   margin-bottom: 20px;
   padding-left: 10px;
   font-weight: 500;
 }
 
-.detail>.wrapper>.content>.student-content .unfinish-state+.title+div.noanswer-tip {
+.detail>.wrapper>.content>.student-content   .noanswer-tip {
   text-align: center;
 }
 

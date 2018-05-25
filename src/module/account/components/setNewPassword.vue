@@ -1,25 +1,53 @@
 <template>
   <div id="new-password">
     <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
-      <van-field-group name="password">
-        <van-field label="手机号86" v-model="phoneNum" disabled />
-        <van-field center v-model="sms" label="短信验证码" placeholder="请输入短信验证码" icon="clear" @click-icon="sms = ''" @blur="valid" :error-message="validsms">
+    <p class="title">请设置新密码</p>
+    <div class="div-cell">
+      <p class="cell-title">手机号</p>
+      <van-cell center>
+        <img slot="icon" class="img-cell" src="@/assets/images/account/phone.png" alt="">
+        <span>+86</span>
+        <span>|</span>
+        <span >{{phoneNum}}</span>
+      </van-cell>
+    </div>
+    <div class="div-cell">
+      <p class="cell-title">验证码</p>
+      <van-cell center :border="false">
+        <img slot="icon" class="img-cell img-margin-top" src="@/assets/images/account/verification.png" alt="">
+        <van-field center style="padding-bottom: 0" v-model="sms" placeholder="请输入验证码" icon="clear" @click-icon="sms = ''" @blur="valid" :error-message="validsms">
           <van-button slot="button" size="small" type="primary" :disabled="smsUseable" @click="sendsms">{{content}}</van-button>
         </van-field>
-        <van-field v-model.trim="password" type="password" label="新密码" placeholder="请输入密码" :error-message="errorMsg" @blur="validpassword"/>
-        <van-field v-model.trim="password2" type="password" label="确认新密码" placeholder="再次输入密码" :error-message="errorMsg2" @blur="validpassword2"/>
-      </van-field-group>
-      <van-button size="large" type="primary" :disabled="setBtnUseable" @click="set">设置密码</van-button>
+      </van-cell>
+    </div>
+    <div class="div-cell">
+      <p class="cell-title">新密码</p>
+      <van-cell center :border="false">
+        <img slot="icon" class="img-cell img-margin-top" src="@/assets/images/account/icon-pwd.png" alt="">
+        <van-field style="padding-bottom: 0" v-model.trim="password" type="password" placeholder="请输入密码" @blur="validpassword"/>
+      </van-cell>
+    </div>
+    <p class="pwd-prompt" v-html="newPasswordPrompt"></p>
+    <div class="div-cell">
+      <p class="cell-title">确认密码</p>
+      <van-cell center :border="false">
+        <img slot="icon" class="img-cell img-margin-top" src="@/assets/images/account/icon-pwd.png" alt="">
+        <van-field style="padding-bottom: 0" v-model.trim="password2" type="password" placeholder="再次输入密码" :error-message="errorMsg2" @blur="validpassword2"/>
+      </van-cell>
+    </div>
+    <next-btn @click="set" :disabled="setBtnDisenabled" class="btn-next" text="设置新密码"></next-btn>
   </div>
 </template>
 <script>
 /**
- * 发送验证码验证成功后，密码输入框可输入
- * 密码输入时，再次输入清空
- * 修改验证码后，验证成功后才可以设置
-*/
+   * 发送验证码验证成功后，密码输入框可输入
+   * 密码输入时，再次输入清空
+   * 修改验证码后，验证成功后才可以设置
+   */
 import NavBar from '@/module/user-center/components/common/navbar'
 import api from '@/module/account/axios/user'
+import ErrorMsg from '@/module/account/components/error-msg'
+import NextBtn from '@/module/account/components/yx-next-btn'
 import { Toast } from 'vant'
 export default {
   name: 'NewPassword',
@@ -39,10 +67,20 @@ export default {
       content: '发送验证码',
       timeLen: 120,
       smsUseable: false,
-      hasValidSms: false
+      hasValidSms: false,
+      newPasswordPrompt: `<span>密码需要由</span><span style="color: #ff5266;">6-20</span><span>位英文字母、数字或符号组成</span>`
     }
   },
   computed: {
+    setBtnDisenabled() {
+      let bool = true;
+      if (this.password !== '' && this.password === this.password2 &&
+          this.errorMsg === '' && this.errorMsg2 === '' &&
+          this.sms !== '' && this.validsms === '') {
+        bool = false;
+      }
+      return bool;
+    }
   },
   methods: {
     back () {
@@ -85,10 +123,12 @@ export default {
           captcha: this.sms
         }).then(succ => {
           console.log(succ);
+          Toast('修改成功');
           this.validsms = ''
           this.hasValidSms = true
         }, err => {
           console.log(err)
+          Toast('修改失败');
           this.validsms = '手机校验码输入有误'
         })
       }
@@ -142,9 +182,56 @@ export default {
     clearInterval(this.timer)
   },
   components: {
-    NavBar
+    NavBar,
+    ErrorMsg,
+    NextBtn
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+  #new-password{
+    height: 100%;
+    background: url("/static/img/account/pwd-bottom.png") no-repeat bottom;
+    padding-left: 16px;
+    padding-right: 16px;
+    .title{
+      padding-left: 14px;
+      font-size: 20px;
+      line-height: 60px;
+    }
+    .img-cell{
+      height: 26px;
+    }
+    .img-margin-top{
+      margin-top: 6px;
+    }
+    .cell-title{
+      color: #d2d2d2;
+      padding-left: 16px;
+    }
+    .div-cell {
+      margin-bottom: 10px;
+      color: #666666;
+      border-bottom: 1px solid #e8e8e8;
+      & * {
+        padding-right: 10px;
+      }
+    }
+    .line{
+      border-top:0px solid #deded9;
+      overflow: hidden;
+    }
+    .pwd-prompt{
+      color: #b8b8b8;
+      font-size: 14px;
+      margin-top: -6px;
+      padding-left: 14px;
+      padding-bottom: 20px;
+    }
+    .btn-next{
+      width: 80%;
+      margin: 0 auto;
+      padding-top: 50px;
+    }
+  }
 </style>

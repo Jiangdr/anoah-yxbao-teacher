@@ -3,7 +3,7 @@
     <header class="header">
       <h1>暑假作业</h1>
       <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
-      <p class="select-all-p" @click="selectAll">{{hasChoosePagesNumArray.length==lists.length?取消全选:全选}}</p>
+      <p class="select-all-p" @click="selectAll">{{hasChoosePagesNumArray.length==lists.length?'取消全选':'全选'}}</p>
     </header>
     <div :class="{listdiv:this.hasChoosePagesNumArray.length === 0,listfooterdiv:this.hasChoosePagesNumArray.length !== 0}" style="overflow-y: auto;">
         <van-list v-model="loading" loading-text="加载中。。。" :finished="finished" @load="loadMore" :offset="100" :immediate-check="false">
@@ -53,8 +53,8 @@ export default {
     this.userInfo = this.$store.state.account.userInfo;
     this.chooseTextBookObj = this.$store.state.homework.chooseTextBookObj;
     this.summerHomeworkPackId = this.$store.state.homework.summerHomeworkPackId;
+    this.olded = this.$store.state.homework.isOldPackId === "1";
     if (this.$store.state.homework.hasChoosePagesArray.length > 0) {
-      olded = true;
       this.hasChoosePagesNumArray = JSON.parse(
         JSON.stringify(this.$store.state.homework.hasChoosePagesArray)
       );
@@ -70,6 +70,7 @@ export default {
   methods: {
     goPublishHomework() {
       this.$store.dispatch("hasChoosePagesArray", this.hasChoosePagesNumArray);
+      this.$store.dispatch("isOldPackId", "1");
       this.$router.push({
         path: "/publishHomework"
       });
@@ -89,6 +90,8 @@ export default {
           resource_id: this.hasChoosePagesNumArray[i].qti_ids
         });
       }
+      this.$store.dispatch("hasChoosePagesArray", []);
+      this.$store.dispatch("isOldPackId", "0");
       this.result = result;
       this.$store.dispatch("chooseSummerHomeworkArray", this.result);
       this.$router.push({
@@ -97,14 +100,22 @@ export default {
     },
     selectAll() {
       var self = this;
-      this.lists.forEach(element => {
-        if (self.hasChoosePagesNumArray.indexOf(element) < 0) {
-          self.hasChoosePagesNumArray.push(element);
-          self.hasChooseProblemsNum =
-            parseInt(self.hasChooseProblemsNum) + parseInt(element.qti_num);
-        }
-        self.$refs["cb-" + element.resource_id][0].selecteState = true;
-      });
+      if (this.hasChoosePagesNumArray.length === this.lists.length) {
+        this.hasChoosePagesNumArray = [];
+        this.hasChooseProblemsNum = 0;
+        this.lists.forEach(element => {
+          self.$refs["cb-" + element.resource_id][0].selecteState = false;
+        });
+      } else {
+        this.lists.forEach(element => {
+          if (self.hasChoosePagesNumArray.indexOf(element) < 0) {
+            self.hasChoosePagesNumArray.push(element);
+            self.hasChooseProblemsNum =
+              parseInt(self.hasChooseProblemsNum) + parseInt(element.qti_num);
+          }
+          self.$refs["cb-" + element.resource_id][0].selecteState = true;
+        });
+      }
     },
     checkboxChange(item, event) {
       if (event.selecteState) {
@@ -145,7 +156,7 @@ export default {
         user_id: self.userInfo.userid,
         pack_id: self.summerHomeworkPackId,
         page: self.page,
-        per_page: 30
+        per_page: 100
       };
       api.getResourceLists(data).then(
         success => {
@@ -154,12 +165,14 @@ export default {
             self.noMore = true;
           } else {
             success.lists.forEach(element => {
-              if ((olded && self.isSelect(element)) || !olded) {
+              if (self.olded && self.isSelect(element)) {
+                element.isSel = true;
+              } else if (!self.olded) {
                 self.hasChoosePagesNumArray.push(element);
                 self.hasChooseProblemsNum =
                   parseInt(self.hasChooseProblemsNum) +
                   parseInt(element.qti_num);
-                  element.isSel = true;
+                element.isSel = true;
               }
               self.lists.push(element);
             });
@@ -172,10 +185,11 @@ export default {
       );
     },
     isSelect(item) {
-      this.hasChoosePagesNumArray.forEach(element => {
-        if (element.resource_id === item.resource_id) return true;
+      var isContain = false;
+      this.hasChoosePagesNumArray.forEach(elements => {
+        if (elements.resource_id === item.resource_id) isContain = true;
       });
-      return false;
+      return isContain;
     },
     clickTiltleName(item) {
       this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.qti_ids);
@@ -204,13 +218,13 @@ export default {
   p {
     @extend .single-line;
     width: 70vw;
-    margin: 2vw 0;
+    margin: 1.5vw 0;
   }
   .checkbox {
     width: 25px;
     height: 25px;
     float: right;
-    top: 6.5vw;
+    top: 7vw;
     border-radius: 20px;
     position: relative;
   }
@@ -218,6 +232,7 @@ export default {
     font-size: 16px;
     color: #7f8184;
     padding-left: 4vw;
+    padding-top: 1vw;
     span {
       color: #4e4e50;
     }

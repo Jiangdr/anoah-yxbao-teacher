@@ -70,11 +70,13 @@ export default {
       });
     },
     goAddComments() {
+      this.$store.dispatch("batchEvaluateCommentsTemplateType", 1);
       this.$router.push({
         path: "/addComments"
       });
     },
     goEditComments() {
+      this.$store.dispatch("batchEvaluateCommentsTemplateType", 1);
       this.$router.push({
         path: "/editComments"
       });
@@ -83,7 +85,7 @@ export default {
       if (this.checkBoxGroup.length === 0) {
         this.$toast({
           message: "请选择学生！",
-          duration: 500
+          duration: 750
         });
         return;
       }
@@ -103,7 +105,6 @@ export default {
       };
 
       api.commentplGetList(data).then(function(response) {
-        console.log(response);
         self.templateLists = response;
       });
     },

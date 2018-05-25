@@ -1,30 +1,28 @@
 <template>
   <div id="forget-password">
     <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
-    <div style="text-align:center;line-height:50px;">请输入你需要找回密码的账号信息</div>
-    <van-cell-group>
-      <van-field
-        v-model="account"
-        label="账号"
-        placeholder="请输入登录账号/手机号"
-        :error-message="errorMsg"
-      />
-    </van-cell-group>
-    <div style="text-align:right;line-height:50px;padding-right:20px">
-      <span>找回密码遇到问题,请</span>
-      <router-link :to="{path:'/contactUs'}">联系我们</router-link>
+    <div class="forget-pwd-title">请输入你需要找回密码的账号信息</div>
+    <p class="p-username">用户名</p>
+    <div style="padding: 0 30px;width: 100%">
+      <img class="login-input-icon" src="@/assets/images/account/icon-user.png"/>
+      <van-cell-group style="display: inline-block; width: 76%">
+        <van-field
+          v-model="account"
+          placeholder="请输入登录账号/手机号"
+          :error-message="errorMsg"
+        />
+      </van-cell-group>
     </div>
-    <div class="footer-btn van-hairline--top">
-      <van-button size="large" type="primary" class="btn-next" :disabled="btnUseable" :loading="btnLoading" @click="nextStep">
-        下一步
-      </van-button>
-    </div>
+    <next-btn :loading="btnLoading" :disabled="btnUseable" @click="nextStep" class="btn-next" text="下一步"></next-btn>
+    <span class="span-question">找回密码遇到问题？</span>
+    <a is="router-link" class="a-contact" :to="{path:'/contactUs'}">联系我们</a>
   </div>
 </template>
 
 <script>
 import NavBar from '@/module/user-center/components/common/navbar'
 import api from '@/module/account/axios/user'
+import nextBtn from '@/module/account/components/yx-next-btn'
 export default {
   name: 'ForgetPassword',
   data () {
@@ -66,28 +64,49 @@ export default {
         this.btnLoading = false
         this.errorMsg = error.msg
       })
+      // this.$router.push({path: `/newPassword/${'15198028106'}/${'zh1234'}`})
     }
   },
   components: {
-    NavBar
+    NavBar,
+    nextBtn
   }
 }
 </script>
-<style scoped>
-  .footer-btn{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    height: 50px;
-    width: 100%;
-    background-color: #ddd;
-    display: flex;
-    justify-content: center;
-  }
-  .btn-next{
-    align-self: center;
-    height: 40px;
-    width: 200px;
-    line-height: 40px;
+<style lang="scss" scoped>
+  #forget-password{
+    height: 100%;
+    background: url("/static/img/account/pwd-bottom.png") no-repeat bottom;
+    padding: 25px 0px;
+    .forget-pwd-title{
+      padding:20px 0 30px 30px;line-height: 50px;
+    }
+    .p-username{
+      padding-left: 30px;
+      color: #c8c9c9;
+      line-height: 30px;
+    }
+    .login-input-icon{
+      width: 20px; position: relative;top:4px;
+    }
+    .span-question{
+      text-align: center;
+      color: #9c9ea1;
+      width: 100%;
+      display: inline-block;
+      padding-top: 30px;
+    }
+    .btn-next{
+      width: 80%;
+      margin: 0 auto;
+      padding-top: 30px;
+    }
+    .a-contact{
+      text-align: center;
+      color: #08b783;
+      width: 100%;
+      display: inline-block;
+      padding-top: 10px;
+    }
   }
 </style>

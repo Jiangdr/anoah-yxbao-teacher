@@ -2,7 +2,7 @@
 <template>
 <!-- 接收参数 发布ID：publishId、是否发送结果给学生：send/ 0:不发送，1:发送 -->
 <!-- 接收函数  关闭弹出框：toggle   回调函数：callback -->
-  <van-popup v-model="correct" class="tip-popup van-hairline--surround">
+  <van-popup v-model="correct" class="tip-popup">
     <div class="tip-container">
     <p @click="toggle" style="text-align:right">x</p>
       <van-row class="title">
@@ -73,15 +73,13 @@ export default{
     padding:15px;
     box-sizing: border-box;;
   }
- .tip-popup[class*="van-hairline"]::after {
-    border-radius: 20px;
-  }
 
 .tip-container>.title {
     line-height: 38px;
     text-align: center;
     font-weight: 400;
     font-size: 16px;
+    margin-bottom: 10px;
   }
 
 .tip-container>.tip-content {
@@ -98,5 +96,7 @@ export default{
     font-size: 14px;
     text-align: center;
     padding-bottom: 20px;
+    text-align: left;
+    line-height: 20px;
   }
 </style>

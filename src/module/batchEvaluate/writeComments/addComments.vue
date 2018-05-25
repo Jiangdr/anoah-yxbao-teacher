@@ -43,6 +43,7 @@ export default {
     this.userInfo = this.$store.state.account.userInfo;
     this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
     this.chooseBatchEvaluateStudentsArray = this.$store.state.batchEvaluate.chooseBatchEvaluateStudentsArray;
+    this.batchEvaluateCommentsTemplateType = this.$store.state.batchEvaluate.batchEvaluateCommentsTemplateType;
   },
   watch: {
     comment: function(val, oldVal) {
@@ -60,27 +61,22 @@ export default {
     addTemplateListsBtn() {
       var self = this;
 
-      var array = self.chooseBatchEvaluateStudentsArray;
-      var studentIds = "";
-
-      for (let i = 0; i < array.length; i++) {
-        if (i + 1 === array.length) {
-          studentIds += array[i].userid;
-        } else {
-          studentIds += array[i].userid + ",";
-        }
-      }
-
       var data = {
         user_id: self.userInfo.userid,
         comment: self.comment,
-        type: 1
+        type: self.batchEvaluateCommentsTemplateType
       };
 
       api.commentplCreate(data).then(function(response) {
-        self.$router.push({
-          path: "/comments"
-        });
+        if (self.batchEvaluateCommentsTemplateType === 3) {
+          self.$router.push({
+            path: "/returnRewrite"
+          });
+        } else if (self.batchEvaluateCommentsTemplateType === 1) {
+          self.$router.push({
+            path: "/comments"
+          });
+        }
         self.$toast({
           message: "添加成功！",
           duration: 750
