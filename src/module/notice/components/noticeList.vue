@@ -1,7 +1,7 @@
 <template>
   <div class="notice">
     <div class="title">
-      <header-bar>
+      <header-bar @back="goBack">
         <div slot="title-name">
           <div>通知中心</div>
         </div>
@@ -9,7 +9,7 @@
     </div>
     <div class="wrapper">
       <div class="items">
-        <router-link to="/notice/homeworkList">
+        <router-link :to="{name:'homeworkNoticeList',params:{role:identity}}">
         <i class="icon"></i>
           <span>
             作业消息
@@ -41,7 +41,7 @@ export default {
     return {
       isNewWorkMsg: true,
       isNewSchoolMsg: true,
-      identity: 'teacher'
+      identity: this.$route.params.role
     }
   },
   created () {},

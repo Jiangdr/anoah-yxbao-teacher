@@ -27,12 +27,32 @@
       <div class="correct-rate-btn" v-bind:class="{activeTab:statusType === 33}" @click="clickEvaluateTab(33)">待批改</div>
     </div>
 
+    <div style="padding: 5px;">
+      <div class="list-item" style="float: left;position: relative;">
+        <span style="float: left;margin-right: 10px;" class="bg-class checkboxAll" @click="clickChooseAll">
+          <img src="@/assets/images/public/checkunsel.png" v-if="!chooseAllStudentsShow" style="width:100%;height:100%"/>
+          <img src="@/assets/images/public/checksel.png" v-if="chooseAllStudentsShow" style="width:100%;height:100%"/>
+        </span>
+        <span style="height: 28px;line-height: 28px;">全选</span>
+      </div>
+      <div style="float: right;height: 28px;line-height: 28px;">已选择<span style="color: #fe8d16;font-size: 20px;">{{checkBoxGroup.length}}</span>位同学</div>
+      <div style="clear: both;"></div>
+    </div>
+
     <div v-bind:style="listContainerStyle">
-      <van-checkbox-group v-model="checkBoxGroup">
-        <van-checkbox style="padding: 10px;display:inline-block;" v-for="(item, index) in allStudentsArrayFormat" :key="index" :name="item" >
-          {{ item.real_name }}
-        </van-checkbox>
-      </van-checkbox-group>
+      <ul>
+        <li class="list-item" v-for="(item, index) in allStudentsArrayFormat" :key="index" @click="clickStudent(item)">
+          <div style="position: relative;margin-bottom:8px;">
+            <span style="width: 60px;height: 60px;display: inline-block;position: relative;">
+              <img style="border-radius: 50%;width: 100%;height: 100%;" :src="item.avatar"/>
+            </span>
+            <div class="bg-class checkbox">
+              <img src="@/assets/images/public/checksel.png" v-if="item.selectState" style="width:100%;height:100%"/>
+            </div>
+          </div>
+          <div>{{ item.real_name }}</div>
+        </li>
+      </ul>
     </div>
 
     <div class="bottom-btn">
@@ -51,15 +71,17 @@
 
 <script>
 import api from "@/module/batchEvaluate/axios/batchEvaluate.js";
+import {mapGetters, mapMutations} from 'vuex'
 
 export default {
-  name: "Homework",
+  name: "batchEvaluate",
   data() {
     return {
       homeworkListArray: [],
       listContainerStyle: {
         'height': window.innerHeight - 200 + "px",
-        'overflow-y': 'auto'
+        'overflow-y': 'auto',
+        'background': '#fff'
       },
       list: [],
       loading: false,
@@ -78,8 +100,14 @@ export default {
       allStudentsArrayFormat: [],
       statusType: "",
       rateType: "",
-      checkBoxGroup: []
+      checkBoxGroup: [],
+      chooseAllStudentsShow: false
     };
+  },
+  computed: {
+    ...mapGetters({
+      env: 'runEnv/old'
+    })
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
@@ -118,8 +146,31 @@ export default {
         path: "/comments"
       });
     },
+    clickStudent(item) {
+      this.checkBoxGroup = [];
+      var array = this.allStudentsArrayFormat;
+      array.forEach(arrayOne => {
+        if (item.userid === arrayOne.userid) {
+          arrayOne.selectState = !arrayOne.selectState;
+        }
+      });
+      this.allStudentsArrayFormat = array;
+
+      var array2 = this.allStudentsArrayFormat;
+      array2.forEach(item => {
+        if (item.selectState) {
+          this.checkBoxGroup.push(item);
+        }
+      });
+    },
     setPraise() {
       var self = this;
+      self.allStudentsArrayFormatray.forEach(item => {
+        if (item.selectState) {
+          this.checkBoxGroup.push(item);
+        }
+      });
+
       if (self.checkBoxGroup.length === 0) {
         self.$toast({
           message: "请选择学生！",
@@ -162,15 +213,10 @@ export default {
         var array = response.student_list;
         array.forEach(item => {
           item.status = 1;
-          // if (item.status === 1) {
-          //   self.willCorrectStudentsArray.push(item);
-          // } else if (item.status === 3) {
-          //   if (item.comment === null) {
-          //     self.didCorrectStudents.push(item);
-          //   } else {
-          //     self.didJudgementStudents.push(item);
-          //   }
-          // }
+          item.selectState = false;
+          if (item.avatar.indexOf('http://') === -1) {
+            item.avatar = self.env + item.avatar
+          }
         });
         self.allStudentsArray = array;
         self.allStudentsArrayFormat = array;
@@ -187,7 +233,6 @@ export default {
     formartAllstudentsArrayFun(rateType) {
       this.allStudentsArrayFormat = [];
       var array = this.allStudentsArray;
-      // debugger
       if (this.statusType === 1) {
         array.forEach(item => {
           if (item.status === 1 && item.rate === rateType) {
@@ -211,12 +256,34 @@ export default {
           }
         });
       }
+    },
+    clickChooseAll() {
+      this.chooseAllStudentsShow = !this.chooseAllStudentsShow;
+      if (this.chooseAllStudentsShow) {
+        var array = this.allStudentsArrayFormat;
+        array.forEach(item => {
+          item.selectState = true;
+        });
+        this.checkBoxGroup = array;
+      } else {
+        var array2 = this.allStudentsArrayFormat;
+        array2.forEach(item => {
+          item.selectState = false;
+        });
+        this.checkBoxGroup = []
+      }
     }
   }
 };
 </script>
 
 <style scoped>
+.van-checkbox--round {
+  position: absolute !important;
+  right: 19px !important;
+  bottom: 17px !important;
+  z-index: 99 !important;
+}
 .correct-rate-btn {
   display: inline-block;
   width: 64px;
@@ -350,5 +417,33 @@ export default {
 .btn:last-child{
   background: #2ecbd0;
   margin-right: 0;
+}
+li {
+  display: inline-block;
+  width: 20%;
+  box-sizing: border-box;
+  text-align: center;
+  margin-top: 1rem;
+  position: relative;
+}
+.list-item .checkbox {
+  width: 25px;
+  height: 25px;
+  right: 3px;
+  top: 42px;
+  border-radius: 20px;
+  position: absolute;
+}
+.list-item .checkboxAll {
+  width: 25px;
+  height: 25px;
+  border-radius: 20px;
+}
+.bg-class {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

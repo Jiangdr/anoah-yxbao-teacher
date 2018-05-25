@@ -1,11 +1,4 @@
 <template>
-  <!--<div id="login">
-    <div class="tt"></div>
-    <cube-input v-model="username" placeholder="请输入用户名" type="text"  :clearable="clearable"></cube-input>
-    <cube-input v-model="password" placeholder="请输入密码" type="password" :clearable="clearable"></cube-input>
-    <router-link :to="{path:'/forgetPassword'}">忘记密码?</router-link>
-    <cube-button :disabled="isDisabled" @click="doLogin">登录{{version}}</cube-button>
-  </div>-->
   <div id="login" class="page" :class="{slideUp: slideUp}">
     <img class="icon-box" :class="{slideUp: slideUp}" src="/static/img/account/logo.png" alt="">
     <div>
@@ -74,8 +67,6 @@ export default {
     doLogin () {
       this.doValidate()
       this.$store.dispatch('account/doLogin').then(r => {
-        console.log("===");
-        console.log(r);
         this.afterLogin()
       }, j => {
       })
@@ -92,17 +83,16 @@ export default {
   components: {
     YxField,
     YxLoginBtn
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (from.name === 'setNewPassword') { // 重置过密码后，清空密码框
+        vm.password = ''
+      }
+    })
   }
 }
 </script>
-<!--<style scoped>
-#login{
-  padding: 0 20px
-}
-.tt{
-  height: 300px;
-}
-</style>-->
 <style lang="scss" scoped>
   #login{
     background: url("/static/img/account/login-back.png");

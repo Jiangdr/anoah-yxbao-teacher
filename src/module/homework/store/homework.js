@@ -3,16 +3,18 @@ export const chooseExamExerciseQtiIdsArray = 'chooseExamExerciseQtiIdsArray';
 export const chooseTextBookObj = 'chooseTextBookObj';
 export const summerHomeworkPackId = 'summerHomeworkPackId';
 export const homeworkOneListInfoObj = 'homeworkOneListInfoObj';
-export const summerHomeworkSelPageIDs = 'summerHomeworkSelPageIDs';
+export const hasChoosePagesArray = 'hasChoosePagesArray';
+export const isOldPackId = "0";
 
 export default {
   state: {
     chooseSummerHomeworkArray: [],
     chooseExamExerciseQtiIdsArray: [],
+    hasChoosePagesArray: [],
     chooseTextBookObj: {},
     summerHomeworkPackId: '',
     homeworkOneListInfoObj: {},
-    summerHomeworkSelPageIDs: []
+    isOldPackId: "0"
   },
   actions: {
     chooseSummerHomeworkArray: function ({ commit }, result) {
@@ -30,8 +32,11 @@ export default {
     homeworkOneListInfoObj: function ({ commit }, result) {
       commit(homeworkOneListInfoObj, result);
     },
-    summerHomeworkSelPageIDs: function ({ commit }, result) {
-      commit(summerHomeworkSelPageIDs, result);
+    hasChoosePagesArray: function ({ commit }, result) {
+      commit(hasChoosePagesArray, result);
+    },
+    isOldPackId: function ({ commit }, result) {
+      commit(isOldPackId, result);
     }
   },
   mutations: {
@@ -45,13 +50,20 @@ export default {
       state.chooseTextBookObj = result;
     },
     [summerHomeworkPackId](state, result) {
+      if (state.summerHomeworkPackId !== result) {
+        state.hasChoosePagesArray = [];
+        state.isOldPackId = "0";
+      }
       state.summerHomeworkPackId = result;
     },
     [homeworkOneListInfoObj](state, result) {
       state.homeworkOneListInfoObj = result;
     },
-    [summerHomeworkSelPageIDs](state, result) {
-      state.summerHomeworkSelPageIDs = result;
+    [hasChoosePagesArray](state, result) {
+      state.hasChoosePagesArray = result;
+    },
+    [isOldPackId](state, result) {
+      state.isOldPackId = result;
     }
   }
 };
