@@ -18,6 +18,9 @@
       <span class="select-span">
         <div class="select-span-div" @click="clickClass">班级<i class="fa fa-angle-down"></i></div>
       </span>
+      <!-- <span class="select-span">
+        <div class="select-span-div" @click="clickMore">更多<i class="fa fa-angle-down"></i></div>
+      </span> -->
     </div>
 
     <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;padding-left: 10px;">
