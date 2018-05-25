@@ -43,7 +43,7 @@
               <div class="iteminfo" @click="changeCollapse(index)">
                 <div class="left">{{index+1}}、</div>
                 <div class="right">
-                  <p>[{{ques.icom_name}}]
+                  <p>[{{ques.icom_name | questionName(ques)}}]
                     <span class="resource-name" v-html="ques.resource_name"></span><span v-if="ques.pigai_status!=3"> 待批阅</span></p>
                   <p>
                     已完成：{{ques.finished_counter}}/{{homeworkInfo.student_counter}}人 正确率：{{itemCorrect(ques.average_rate)}}

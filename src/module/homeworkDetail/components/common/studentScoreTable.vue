@@ -42,24 +42,25 @@
           </div>
           <div class="table-cell">
             <div class="correct-per">
-              <span v-if="stu.status == 3">{{Math.round(stu.rate * 100)}}%</span>
+              <span v-if="stu.status == 3 || stu.status == 4">{{Math.round(stu.rate * 100)}}%</span>
               <span v-else-if="stu.status == 1">未批改</span>
-              <span v-else>未提交</span>
+              <span v-else-if="stu.status == 0">未提交</span>
+              <!-- <span v-else-if="stu.status == 4">已批改</span> -->
             </div>
           </div>
           <div class="table-cell">
             <div class="cuoti">
-              <span v-if="stu.status == 3 || stu.status == 1">{{stu.correct_num}}</span>
+              <span v-if="stu.status == 3 || stu.status == 1 || stu.status == 4">{{stu.correct_num}}</span>
               <span v-if="stu.status == 0">--</span>
             </div>
           </div>
           <div class="table-cell">
             <div class="time-length">
-              <span v-if="stu.status == 3 || stu.status == 1">{{stu.time_length | timeFormat}}</span>
+              <span v-if="stu.status == 3 || stu.status == 1 || stu.status == 4">{{stu.time_length | timeFormat}}</span>
               <span v-else>--</span>
             </div>
           </div>
-          <div class="arrow" v-show="stu.status == 3 || stu.status == 1">
+          <div class="arrow" v-show="stu.status == 3 || stu.status == 1 || stu.status == 4">
             <i class="fa fa-angle-right"></i>
           </div>
         </div>
