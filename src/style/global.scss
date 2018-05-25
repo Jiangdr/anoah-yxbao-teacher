@@ -1,0 +1,47 @@
+.van-cell__title  .van-cell__label
+{
+  color: #b8b8b8;
+}
+.feedbackuserLink .van-cell__title span
+{
+  display:block;
+  float:left;
+  width: 100%;
+  white-space: nowrap;
+  overflow: visible;
+}
+.feedbackuserLink .van-field__control
+{
+  width: 80%;
+  float: right;
+}
+.feedbackotherquestion .van-cell__value span
+{
+  color: #b8b8b8;
+}
+.van-cell.feedbackmsglist,.van-cell.feedbackuserLink
+{
+  width:97%;
+}
+.halfscaleelement
+{
+  transform:scale(.5);
+}
+div.van-actionsheet{
+  background: none;
+  bottom: 15px;
+}
+div.van-actionsheet ul.van-hairline--bottom{
+  border-radius: 15px;
+  width: 95%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+div.van-actionsheet__cancel.van-hairline--top
+{
+  border-radius: 15px;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
