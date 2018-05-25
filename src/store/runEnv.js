@@ -14,6 +14,9 @@ export default {
     },
     old: state => {
       return `${state.pro}://e${state.env}.${state.host}/`
+    },
+    apis2: state => {
+      return `${state.pro}://apis2.${state.env}.${state.host}:/8182`
     }
   },
   mutations: {
