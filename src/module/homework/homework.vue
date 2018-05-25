@@ -221,9 +221,12 @@ export default {
     onRefresh() {
       this.currentPage = 1;
       setTimeout(() => {
-        this.$toast("刷新成功");
+        this.$toast({
+          message: "刷新成功！",
+          duration: 750
+        });
         this.pullRefresIsLoading = false;
-      }, 500);
+      }, 200);
       this.getHomeworkList();
     },
     goHomeworkDetail(item) {
