@@ -4,7 +4,7 @@
       <div class="date">{{item.push_time}}</div>
       <div class="container">
         <p class="title"><i class="icon" :style="{'background-image':'url('+imgUrl('icon')+')'}"></i>{{item.title}}</p>
-        <div class="content" v-html="item.content"></div>
+        <div class="notice-content" v-html="item.content"></div>
       </div>
     </div>
   </div>
@@ -47,21 +47,21 @@ export default {
   margin-bottom: -3px;
   margin-right: 5px;
 }
-.item .content >>> p {
+.item .notice-content >>> p {
   color: #4e4e50;
   margin-bottom: 10px;
 }
-.item .content >>> p:last-child {
+.item .notice-content >>> p:last-child {
   color: #9c9ea1;
 }
-.item .content >>> .msg-count-grey,
-.item .content >>> .msg-count {
+.item .notice-content >>> .msg-count-grey,
+.item .notice-content >>> .msg-count {
   font-size: 19px;
   color: #7f8184;
   margin: 0 5px;
   font-weight: bold;
 }
-.item .content >>> .msg-count {
+.item .notice-content >>> .msg-count {
   color: #ff8d13;
 }
 </style>

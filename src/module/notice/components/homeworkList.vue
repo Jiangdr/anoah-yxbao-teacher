@@ -5,6 +5,9 @@
         <div slot="title-name">
           <div>作业通知</div>
         </div>
+        <!-- <div slot="right-area">
+          <i>删除</i>
+        </div> -->
       </header-bar>
   </div>
     <div class="container">
