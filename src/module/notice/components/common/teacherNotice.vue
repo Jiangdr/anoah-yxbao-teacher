@@ -3,7 +3,14 @@
     <div v-for="(item, index) in list" :key="index" class="item">
       <div class="date">{{item.push_time}}</div>
       <div class="container">
-        <p class="title"><i class="icon" :style="{'background-image':'url('+imgUrl('icon')+')'}"></i>{{item.title}}</p>
+        <p class="title">
+          <template v-if="item.feeds_type==='xinzuoye'">
+            <i class="icon" :style="{'background-image':'url('+imgUrl('icon1')+')'}"></i>
+          </template>
+           <template v-else>
+            <i class="icon" :style="{'background-image':'url('+imgUrl('icon')+')'}"></i>
+          </template>
+          {{item.title}}</p>
         <div class="notice-content" v-html="item.content"></div>
       </div>
     </div>
