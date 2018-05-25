@@ -9,8 +9,8 @@
     </div>
     <div class="wrapper">
       <div class="items">
-        <router-link :to="{name:'homeworkNoticeList',params:{role:identity}}">
-        <i class="icon"></i>
+        <router-link to="/notice/homeworkList">
+        <i class="icon" :style="{'background-image':'url('+imgUrl('homework')+')'}"></i>
           <span>
             作业消息
             <b class="redIcon" v-show="isNewWorkMsg"></b>
@@ -20,7 +20,7 @@
       </div>
       <div class="items">
         <router-link to="/notice/schoolList">
-        <i class="icon"></i>
+        <i class="icon" :style="{'background-image':'url('+imgUrl('school')+')'}"></i>
           <span>
             学校消息
             <b class="redIcon" v-show="isNewSchoolMsg"></b>
@@ -40,8 +40,7 @@ export default {
   data () {
     return {
       isNewWorkMsg: true,
-      isNewSchoolMsg: true,
-      identity: this.$route.params.role
+      isNewSchoolMsg: true
     }
   },
   created () {},
@@ -49,6 +48,9 @@ export default {
   methods: {
     goBack () {
       this.$router.go(-1)
+    },
+    imgUrl(name) {
+      return require('@/assets/images/notice/' + name + '.png')
     }
   },
   components: {
@@ -91,10 +93,6 @@ export default {
   background-size: 100% 100%;
   background-position: center center;
   background-repeat: no-repeat;
-  background-image: url('./images/school.png')
-}
-.notice .items:first-child .icon{
-  background-image: url('./images/homework.png')
 }
 .notice .items b.redIcon{
   display: inline-block;

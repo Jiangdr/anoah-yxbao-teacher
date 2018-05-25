@@ -5,13 +5,20 @@
         <div slot="title-name">
           <div>作业通知</div>
         </div>
+        <!-- <div slot="right-area">
+          <i>删除</i>
+        </div> -->
       </header-bar>
   </div>
     <div class="container">
       <div class="wrapper">
       <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" @load="onLoad" :immediate-check="false">
-          <teacher-notice :list="list" v-if="$route.params.role==='teacher'"></teacher-notice>
+          <div v-if="list.length===0" class="no-data">
+            <img :src="imgUrl('nodata')" alt="">
+            <p>暂时还没有通知哦～</p>
+          </div>
+          <homework-notice-list :list="list" v-else></homework-notice-list>
         </van-list>
       </van-pull-refresh>
       </div>
@@ -22,8 +29,7 @@
 <script>
 import notice from '../axios/notice.js'
 import headerBar from '@/components/headerBar.vue'
-import teacherNotice from './common/teacherNotice.vue'
-import studentNotice from './common/studentNotice.vue'
+import homeworkNoticeList from './common/teacherNotice.vue'
 export default {
   name: 'homeworkList',
   data () {
@@ -35,7 +41,6 @@ export default {
         type: 2, //  作业列表
         page: 1, // 页码
         per_page: 10, // 每页显示条数
-        role: this.$route.params.role,
         user_id: JSON.parse(localStorage.userinfo).userid
       },
       list: [],
@@ -53,6 +58,9 @@ export default {
       this.$router.push({
         name: 'noticeDetail'
       })
+    },
+    imgUrl(name) {
+      return require('@/assets/images/notice/' + name + '.png')
     },
     getNoticelist () {
       notice.getList(this.params).then((r) => {
@@ -86,8 +94,7 @@ export default {
   },
   components: {
     headerBar,
-    teacherNotice,
-    studentNotice
+    homeworkNoticeList
   }
 }
 </script>
@@ -105,5 +112,12 @@ export default {
   box-sizing: border-box;
   padding-bottom: 13px;
   background: #f5f7f8;
+}
+.homeworkList .container .no-data{
+  text-align: center;
+  margin-top:25vh;
+}
+.homeworkList .container .no-data img{
+  width:100px;
 }
 </style>

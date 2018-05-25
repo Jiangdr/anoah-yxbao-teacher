@@ -4,7 +4,7 @@ import schoolList from '@/module/notice/components/schoolList.vue'
 import noticeDetail from '@/module/notice/components/noticeDetail.vue'
 
 export default [{
-  path: '/notice/:role',
+  path: '/notice',
   name: 'notice',
   component: notice,
   meta: {
@@ -12,7 +12,7 @@ export default [{
     keepAlive: true
   }
 }, {
-  path: '/notice/homeworkList/:role',
+  path: '/notice/homeworkList',
   name: 'homeworkNoticeList',
   component: homeworkList,
   meta: {

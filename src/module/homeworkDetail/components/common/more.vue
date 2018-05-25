@@ -11,7 +11,7 @@
     </cube-popup>
     <cube-popup type="collection-popup" v-show="showCollectionPopup">
       <div class="wrapper">
-        <i></i>
+        <i :style="{'background-image':'url('+imgUrl('collect')+')'}"></i>
         <span>已收藏</span>
       </div>
     </cube-popup>
@@ -51,11 +51,16 @@ export default {
       this.showPopup = false;
       setTimeout(() => { this.togglePopup() }, 3000)
     },
-    deleteHomework() {}
+    deleteHomework() {
+
+    },
+    imgUrl(name) {
+      return require('@/assets/images/homewordDetail/' + name + '.png')
+    }
   }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 /* 操作列表样式 */
 .popupWrapper {
   margin: 0 13px 13px;
@@ -96,7 +101,9 @@ export default {
   display: inline-block;
   width: 24px;
   height: 24px;
-  background: url("/assets/images/homeworkDetail/collect.png") no-repeat center;
+  // background: url("/assets/images/homeworkDetail/collect.png") no-repeat center;
+  background-repeat:no-repeat;
+  background-position: center center;
   background-size: 100% 100%;
   margin-top: 3px;
   vertical-align: text-bottom;
