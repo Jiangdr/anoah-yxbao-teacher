@@ -93,10 +93,17 @@ export default {
 </script>
 
 <style scoped>
+.homeworkList{
+  height: 100%;
+}
+.homeworkList .container{
+  height: calc(100% - 45px);
+}
 .homeworkList .container>.wrapper {
   overflow: scroll;
-  height: calc(100vh - 45px);
+  height: 100%;
   box-sizing: border-box;
+  padding-bottom: 13px;
   background: #f5f7f8;
 }
 </style>

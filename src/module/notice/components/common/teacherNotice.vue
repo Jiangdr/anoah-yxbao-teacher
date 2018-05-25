@@ -17,21 +17,20 @@ export default{
 </script>
 <style scoped>
 .item .date{
-  height: 30px;
-  line-height: 30px;
-  margin: 10px;
+  margin: 19px auto 10px;
   text-align: center;
 }
 .item .container{
   margin: 0 13px;
   background: #fff;
-  padding:13px;
+  padding:15px;
   border-radius: 8px;
-  line-height: 25px;
+  line-height: 20px;
+  color:#1e1e1e;
 }
 .item .container .title{
-  height: 35px;
-  line-height: 35px;
+  margin-bottom: 19px;
+  font-size: 19px;
 }
 .item .container .title .icon{
   display: inline-block;
@@ -42,5 +41,22 @@ export default{
   background-size: 100% 100%;
   vertical-align: text-top;
   margin-right: 5px;
+}
+.item .content >>> p{
+  color:#4e4e50;
+  margin-bottom: 10px;
+}
+.item .content >>> p:last-child{
+  color:#9c9ea1;
+}
+.item .content >>> .msg-count-grey,
+.item .content >>> .msg-count{
+  font-size: 19px;
+  color:#7f8184;
+  margin:0 5px;
+  font-weight: bold;
+}
+.item .content >>> .msg-count{
+  color:#ff8d13;
 }
 </style>
