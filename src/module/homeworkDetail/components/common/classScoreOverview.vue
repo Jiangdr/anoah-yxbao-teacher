@@ -11,7 +11,7 @@
         <span class="name">作业完成率</span>
       </div>
       <div class="score-item">
-        <span class="percent">80%</span>
+        <span class="percent">{{Math.round(this.info.class_conquer_rate * 100)}}%</span>
         <span class="name">错题攻克率</span>
       </div>
       <div class="score-item">

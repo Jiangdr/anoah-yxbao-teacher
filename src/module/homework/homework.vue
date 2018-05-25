@@ -221,9 +221,12 @@ export default {
     onRefresh() {
       this.currentPage = 1;
       setTimeout(() => {
-        this.$toast("刷新成功");
+        this.$toast({
+          message: "刷新成功！",
+          duration: 750
+        });
         this.pullRefresIsLoading = false;
-      }, 500);
+      }, 200);
       this.getHomeworkList();
     },
     goHomeworkDetail(item) {
@@ -267,7 +270,8 @@ export default {
         from: self.chooseTime.from,
         to: self.chooseTime.to,
         page: self.currentPage,
-        per_page: 7
+        per_page: 7,
+        type: '1,2'
       };
 
       api.homeworkLists(data).then(function(r) {

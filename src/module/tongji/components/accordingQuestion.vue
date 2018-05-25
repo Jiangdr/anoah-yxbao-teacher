@@ -13,7 +13,7 @@
         <div class="list-row van-hairline--bottom" v-for="(qus, index) in homeworkInfo" :key="index">
           <div class="list-cell left">{{index + 1}}</div>
           <div class="list-cell left question-content ellipsis">
-            <span class="type">[{{qus.icom_name}}]</span>
+            <span class="type">[{{qus.icom_name | questionName(qus)}}]</span>
             <span v-html="qus.resource_name"></span>
           </div>
           <div class="list-cell">{{Math.round((qus.average_rate || qus.correct_rate) * 100)}}%</div>
@@ -36,7 +36,7 @@ export default {
   padding: 0 13px;
   font-size: 16px;
   .list-title{
-    color: #848484;
+    color: #848484
   }
   .list-body{
     color: #1e1e1e;

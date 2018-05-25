@@ -1,14 +1,14 @@
 <template>
   <div id="form-list">
     <van-cell-group>
-      <van-field v-model="userAccount" label="登录账号" icon="clear" placeholder="请输入用户名" required @click-icon="userAccount = ''" />
+      <van-field v-model="userAccount" label="登录账号" icon="clear" placeholder="请输入用户名" @click-icon="userAccount = ''" />
       <van-field v-model="userName" label="姓名" icon="clear" placeholder="必填,否则无法查找到你的信息" required @click-icon="userName = ''" />
       <van-field v-model="schoolArea" @focus="areaChange" label="学校所在地" icon="clear" placeholder="必填,否则无法查找学校" required @click-icon="schoolArea = ''" />
       <van-field v-model="schoolName" @focus = "fillSchoolName" label="学校名称" icon="clear" placeholder="必填,否则无法查找学校" required @click-icon="schoolName = ''" />
-      <van-field v-model="className" label="班级名称" icon="clear" placeholder="必填,否则无法查找到你的信息" required @click-icon="className = ''" />
-      <van-field v-model="phoneNum" label="联系方式" icon="clear" placeholder="必填,请输入你的手机号或邮箱" required @click-icon="phoneNum = ''" />
+      <van-field v-model="className" label="班级名称" icon="clear" placeholder="班级名称" @click-icon="className = ''" />
+      <van-field v-model="phoneNum" label="联系方式" icon="clear" placeholder="必填,请输入你的手机号或邮箱" required :error-message="phoneFormatMsg" @click-icon="phoneNum = ''" />
     </van-cell-group>
-    <next-btn class="btn-next" text="提 交"></next-btn>
+    <next-btn class="btn-next" :disabled="disable" @click="onSubmit" text="提 交"></next-btn>
     <transition name="van-fade">
       <div class="model" v-show="chooseArea" @click="closeChooseArea"></div>
     </transition>
@@ -20,6 +20,9 @@
 <script>
 import api from '@/module/account/axios/user'
 import NextBtn from '@/module/account/components/yx-next-btn'
+import {Toast} from 'vant'
+const phonereg = /^[1][3,4,5,7,8,9][0-9]{9}$/
+const emailreg = /^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/
 export default {
   name: 'FormList',
   components: {
@@ -38,7 +41,22 @@ export default {
       areaLoading: true,
       citys: null,
       area: null,
-      columns: []
+      columns: [],
+      phoneFormatMsg: ''
+    }
+  },
+  mounted () {
+    window.bus.$on('choose', (val) => {
+      this.schoolName = val.name
+    })
+  },
+  computed: {
+    disable() {
+      let bool = true
+      if (this.userName !== '' && this.schoolArea !== '' && this.schoolName !== '' && this.phoneNum !== '') {
+        bool = false
+      }
+      return bool
     }
   },
   methods: {
@@ -89,7 +107,9 @@ export default {
       this.chooseArea = false
     },
     confirm (value, index) {
-      console.log(value, index)
+      if (value[1] !== this.schoolArea) {
+        this.schoolName = '';
+      }
       this.schoolArea = value[1]
       this.area.filter(el => {
         if (el.nm === value[1]) {
@@ -97,6 +117,28 @@ export default {
         }
       })
       this.chooseArea = false
+    },
+    onSubmit() {
+      let phoneTest = phonereg.test(this.phoneNum);
+      let emailTest = emailreg.test(this.phoneNum);
+      if (phoneTest || emailTest) {
+        this.phoneFormatMsg = ''
+        api.contact({
+          loginName: this.userAccount,
+          name: this.userName,
+          schoolAddress: this.schoolArea,
+          schoolName: this.schoolName,
+          className: this.className,
+          contactInformation: this.phoneNum
+        }).then(succ => {
+          Toast('信息提交成功，我们会尽快联系您');
+          this.$router.back(-1)
+        }, err => {
+          console.log(err)
+        })
+      } else {
+        this.phoneFormatMsg = '请输入正确的手机号或邮箱'
+      }
     }
   },
   beforeRouteLeave (to, from, next) {

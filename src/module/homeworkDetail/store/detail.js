@@ -92,7 +92,7 @@ export default {
       if (!state.homeworkInfo) {
         return false
       }
-      let stuList = state.homeworkInfo.student_list.filter(item => item.status === 3)
+      let stuList = state.homeworkInfo.student_list.filter(item => item.status === 3 || item.status === 4)
       let result = {
         '优秀': {
           num: 0

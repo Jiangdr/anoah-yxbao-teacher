@@ -81,7 +81,6 @@ export default {
           result = 2
         }
       }
-      console.log(result)
       return result
     },
     getMiniResource() {
