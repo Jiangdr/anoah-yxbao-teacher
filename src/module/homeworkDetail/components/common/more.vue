@@ -59,10 +59,14 @@ export default {
 /* 操作列表样式 */
 .popupWrapper {
   margin: 0 13px 13px;
+  font-size: 17px;
+  color:#1e1e1e;
 }
 .popupItem {
   background: #fff;
-  line-height: 50px;
+  line-height: 48px;
+  height: 48px;
+  box-sizing: border-box;
   text-align: center;
   border-bottom: 1px solid #e8ebee;
 }
@@ -75,7 +79,7 @@ export default {
   border-bottom-right-radius: 13px;
 }
 .popupItem.cancel {
-  margin-top: 13px;
+  margin-top: 15px;
   border-radius: 13px;
 }
 /* 收藏成功样式 */
@@ -87,11 +91,12 @@ export default {
   background: #fff;
   border-radius: 13px;
 }
+
 .wrapper > i {
   display: inline-block;
   width: 24px;
   height: 24px;
-  background: url("../images/collect.png") no-repeat center;
+  background: url("/assets/images/homeworkDetail/collect.png") no-repeat center;
   background-size: 100% 100%;
   margin-top: 3px;
   vertical-align: text-bottom;

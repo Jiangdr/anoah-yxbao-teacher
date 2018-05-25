@@ -123,12 +123,11 @@ export default {
           captcha: this.sms
         }).then(succ => {
           console.log(succ);
-          Toast('修改成功');
           this.validsms = ''
           this.hasValidSms = true
         }, err => {
           console.log(err)
-          Toast('修改失败');
+          Toast(this.validsms);
           this.validsms = '手机校验码输入有误'
         })
       }
@@ -153,6 +152,8 @@ export default {
         password: this.password
       }).then(succ => {
         console.log(succ)
+        Toast('密码设置成功');
+        this.$router.replace('/login')
       }, err => {
         console.log(err)
       })
