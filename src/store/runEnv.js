@@ -16,7 +16,8 @@ export default {
       return `${state.pro}://e${state.env}.${state.host}/`
     },
     apis2: state => {
-      return `${state.pro}://apis2.${state.env}.${state.host}:/8182`
+      let tmp = state.env.replace('.', '');
+      return `${state.pro}://apis2.${tmp}.${state.host}:8182`
     }
   },
   mutations: {
