@@ -30,8 +30,8 @@
     <div style="padding: 5px;">
       <div class="list-item" style="float: left;position: relative;">
         <span style="float: left;margin-right: 10px;" class="bg-class checkboxAll" @click="clickChooseAll">
-          <img src="@/assets/images/public/checkunsel.png" v-if="!chooseAllStudentsShow" style="width:100%;height:100%"/>
-          <img src="@/assets/images/public/checksel.png" v-if="chooseAllStudentsShow" style="width:100%;height:100%"/>
+          <img src="@/assets/images/public/checkunsel.png" v-if="!chooseAllStudentsShow"/>
+          <img src="@/assets/images/public/checksel.png" v-if="chooseAllStudentsShow"/>
         </span>
         <span style="height: 28px;line-height: 28px;">全选</span>
       </div>
@@ -165,12 +165,6 @@ export default {
     },
     setPraise() {
       var self = this;
-      self.allStudentsArrayFormatray.forEach(item => {
-        if (item.selectState) {
-          this.checkBoxGroup.push(item);
-        }
-      });
-
       if (self.checkBoxGroup.length === 0) {
         self.$toast({
           message: "请选择学生！",
@@ -438,6 +432,10 @@ li {
   width: 25px;
   height: 25px;
   border-radius: 20px;
+}
+.checkboxAll img {
+  width:100%;
+  height:100%
 }
 .bg-class {
   width: 50px;
