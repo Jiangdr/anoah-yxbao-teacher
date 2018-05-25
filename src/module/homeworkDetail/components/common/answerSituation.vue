@@ -10,13 +10,13 @@
         </div>
       </div>
       <div class="list-body">
-        <div class="list-row van-hairline--bottom" v-for="(qus,index) in questionInfo" :key="index" @click="linkTo">
+        <div class="list-row van-hairline--bottom" v-for="(qus,index) in questionInfo" :key="index" @click="linkTo(qus)">
           <div class="list-cell left">{{index + 1}}</div>
           <div class="list-cell left question-content ellipsis">
             <span class="type">[{{qus.icom_name}}]</span>
             <span v-html="qus.resource_name"></span>
           </div>
-          <div class="list-cell">{{Math.floor(qus.average_rate * 100)}}%</div>
+          <div class="list-cell">{{Math.round(qus.average_rate * 100)}}%</div>
           <div class="list-cell">{{qus.average_time_length | timeFormatSecond}}</div>
           <div class="arrow">
             <i class="fa fa-angle-right"></i>
@@ -40,8 +40,8 @@ export default {
     })
   },
   methods: {
-    linkTo() {
-      this.$router.push({path: '/tongji'})
+    linkTo(qus) {
+      this.$router.push({path: '/tongji', query: qus})
     }
   }
 }
