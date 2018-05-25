@@ -75,7 +75,8 @@ export default {
   methods: {
     message () {
       this.$router.push({
-        path: '/notice'
+        name: 'notice',
+        params: {role: 'teacher'}
       })
     },
     scan () {
