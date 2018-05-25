@@ -9,7 +9,7 @@ let notice = new API(apis)
 notice.getList = (params) => {
   return notice.fetch(notice.apis.getList, params, 'post')
 }
-notice.getIcomInfo = (params) => {
+notice.getItemInfo = (params) => {
   return notice.fetch(notice.apis.getDetail, params, 'post')
 }
 export default notice

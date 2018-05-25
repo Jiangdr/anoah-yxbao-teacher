@@ -1,6 +1,6 @@
 <template>
   <div class="school-list">
-    <div v-for="(item, index) in list" :key="index" class="item">
+    <div v-for="(item, index) in list" :key="index" class="item" @click="goDetail(item.message_id)">
       <div class="date">{{item.push_time}}</div>
       <div class="container">
         <p class="title">
@@ -22,6 +22,15 @@ export default {
   methods: {
     imgUrl(name) {
       return require("@/assets/images/notice/" + name + ".png");
+    },
+    goDetail (id) {
+      this.$router.push({
+        name: 'noticeDetail',
+        params: {
+          message_id: id
+        }
+      })
+      console.log(id)
     }
   }
 };
