@@ -267,7 +267,8 @@ export default {
         from: self.chooseTime.from,
         to: self.chooseTime.to,
         page: self.currentPage,
-        per_page: 7
+        per_page: 7,
+        type: '1,2'
       };
 
       api.homeworkLists(data).then(function(r) {
