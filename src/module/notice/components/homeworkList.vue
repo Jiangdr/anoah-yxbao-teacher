@@ -1,7 +1,7 @@
 <template>
 <div class="homeworkList">
   <div class="title">
-    <header-bar>
+    <header-bar @back="goBack">
         <div slot="title-name">
           <div>作业通知</div>
         </div>
@@ -10,14 +10,8 @@
     <div class="container">
       <div class="wrapper">
       <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
-        <van-list v-model="loading" :finished="finished" @load="onLoad" immediate-check="false">
-          <div v-for="(item, index) in list" :key="index" class="item">
-              <div class="date">{{item.push_time}}</div>
-              <div class="container">
-                <p class="title"><i class="icon"></i>{{item.title}}</p>
-                <div class="content" v-html="item.content"></div>
-              </div>
-          </div>
+        <van-list v-model="loading" :finished="finished" @load="onLoad" :immediate-check="false">
+          <teacher-notice :list="list" v-if="$route.params.role==='teacher'"></teacher-notice>
         </van-list>
       </van-pull-refresh>
       </div>
@@ -28,7 +22,8 @@
 <script>
 import notice from '../axios/notice.js'
 import headerBar from '@/components/headerBar.vue'
-
+import teacherNotice from './common/teacherNotice.vue'
+import studentNotice from './common/studentNotice.vue'
 export default {
   name: 'homeworkList',
   data () {
@@ -40,7 +35,7 @@ export default {
         type: 2, //  作业列表
         page: 1, // 页码
         per_page: 10, // 每页显示条数
-        role: 'teacher',
+        role: this.$route.params.role,
         user_id: JSON.parse(localStorage.userinfo).userid
       },
       list: [],
@@ -62,8 +57,12 @@ export default {
     getNoticelist () {
       notice.getList(this.params).then((r) => {
         this.totalPage = r.totalPage
-        for (let i = 0; i < r.list.length; i++) {
-          this.list.push(r.list[i])
+        if (this.params.page === 1) {
+          this.list = r.list
+        } else {
+          for (let i = 0; i < r.list.length; i++) {
+            this.list.push(r.list[i])
+          }
         }
         this.loading = false;
       })
@@ -86,7 +85,9 @@ export default {
     }
   },
   components: {
-    headerBar
+    headerBar,
+    teacherNotice,
+    studentNotice
   }
 }
 </script>
@@ -97,37 +98,5 @@ export default {
   height: calc(100vh - 45px);
   box-sizing: border-box;
   background: #f5f7f8;
-}
-
-.homeworkList .container>.wrapper>.date {
-  text-align: center;
-}
-
-.item .date{
-  height: 30px;
-  line-height: 30px;
-  margin: 10px;
-  text-align: center;
-}
-.item .container{
-  margin: 0 13px;
-  background: #fff;
-  padding:13px;
-  border-radius: 8px;
-  line-height: 25px;
-}
-.item .container .title{
-  height: 35px;
-  line-height: 35px;
-}
-.item .container .title .icon{
-  display: inline-block;
-  height: 20px;
-  width:20px;
-  background-image: url('./images/icon.png');
-  background-position: center center;
-  background-size: 100% 100%;
-  vertical-align: text-top;
-  margin-right: 5px;
 }
 </style>
