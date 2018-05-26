@@ -67,14 +67,16 @@ function getRect(el) {
       top: rect.top,
       left: rect.left,
       width: rect.width,
-      height: rect.height
+      height: rect.height,
+      scrollTop: rect.scrollTop
     }
   } else {
     return {
       top: el.offsetTop,
       left: el.offsetLeft,
       width: el.offsetWidth,
-      height: el.offsetHeight
+      height: el.offsetHeight,
+      scrollTop: el.scrollTop
     }
   }
 }

@@ -6,7 +6,8 @@ let apis = {
   'getMiniResource': '/jwt/homework/stat/getMinResourceList',
   'sendAnswer': '/jwt/homework/correct/sendAnswer',
   'urge': '/jwt/notice/message/jiaozuoye', // 催交作业
-  'remind': '/jwt/notice/message/dingzheng'
+  'remind': '/jwt/notice/message/dingzheng',
+  'kp': '	/jwt/homework/stat/getKpList' // 知识点
 }
 
 let homeworkinfo = new API(apis)
@@ -27,5 +28,8 @@ homeworkinfo.urge = (params) => {
 }
 homeworkinfo.remind = (params) => {
   return homeworkinfo.fetch(homeworkinfo.apis.remind, params, 'post')
+}
+homeworkinfo.kp = (params) => {
+  return homeworkinfo.fetch(homeworkinfo.apis.kp, params, 'post')
 }
 export default homeworkinfo

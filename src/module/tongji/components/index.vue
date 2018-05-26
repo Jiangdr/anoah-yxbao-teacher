@@ -16,19 +16,20 @@
       </div>
     </div>
     <div class="list-wrapper according-q" v-if="routeInfo.question_type === 'subjectiveqti' && !loading">
-      <according-student :info="homeworkInfo.user" :type="routeInfo.question_type"></according-student>
+      <according-student :info="homeworkInfo" :type="routeInfo.question_type"></according-student>
     </div>
     <div class="tab-wrapper van-hairline--bottom" v-if="routeInfo.question_type === 'combineqti' && !loading">
       <tab :tabType="tabType" @tabChange="tabChange"></tab>
     </div>
-    <div class="list-wrapper" v-if="routeInfo.question_type === 'combineqti' && !loading">
+    <div class="list-wrapper" ref="list" :class="{noScroll: chartType === 2}" v-if="routeInfo.question_type === 'combineqti' && !loading">
       <according-question v-show="tabType === 1 && homeworkInfo.resource.length && !loading" :homeworkInfo="homeworkInfo.resource"></according-question>
-      <according-student v-show="tabType === 2 && homeworkInfo.user.length && !loading" :info="homeworkInfo.user" :type="routeInfo.question_type"></according-student>
+      <according-student @showStudent="showStudent" v-show="tabType === 2 && homeworkInfo && !loading" :info="homeworkInfo" :type="routeInfo.question_type" :chartType="chartType"></according-student>
     </div>
     <div class="model-icon" v-show="tabType === 2" @click="changeChart">
       <img :src="iconUrl" alt="...">
-      <span>统计</span>
+      <span>{{chartType === 1 ? '统计' : '列表'}}</span>
     </div>
+    <student-list v-if="studentListShow" :title="studentListInfo.title" :studentList="studentListInfo.studentList" @close="studentListShow = false"></student-list>
   </div>
 </template>
 <script>
@@ -36,6 +37,7 @@ import headerBar from '@/components/headerBar.vue'
 import tab from './tab'
 import accordingQuestion from './accordingQuestion'
 import accordingStudent from './accordingStudent'
+import studentList from './studentList'
 import api from '../axios/api'
 export default {
   name: 'Tongji',
@@ -44,7 +46,12 @@ export default {
       tabType: 1, // 1按试题统计，2按学生统计
       chartType: 1, // 1列表,2图表
       homeworkInfo: null,
-      loading: true
+      loading: true,
+      studentListShow: false,
+      studentListInfo: {
+        title: null,
+        studentList: []
+      }
     }
   },
   computed: {
@@ -80,6 +87,7 @@ export default {
       this.tabType = 1
       this.homeworkInfo = null
       this.loading = true
+      this.chartType = 1
     },
     // 顶部tab切换
     tabChange(type) {
@@ -137,18 +145,27 @@ export default {
     },
     // 图标和列表的切换
     changeChart() {
+      let wrapper = this.$refs.list
+      this.$refs.list.scrollTop = 0;
       if (this.chartType === 1) {
         this.chartType = 2
       } else {
         this.chartType = 1
       }
+    },
+    // 显示学生该正确率下的学生列表
+    showStudent(title, studentList) {
+      this.studentListShow = true
+      this.studentListInfo.title = title
+      this.studentListInfo.studentList = studentList
     }
   },
   components: {
     headerBar,
     tab,
     accordingQuestion,
-    accordingStudent
+    accordingStudent,
+    studentList
   }
 }
 </script>
@@ -199,6 +216,9 @@ export default {
     overflow-y: scroll;
     &.according-q{
       height: calc(100% - 80px - 45px);
+    }
+    &.noScroll{
+      overflow: hidden;
     }
   }
   .model-icon{

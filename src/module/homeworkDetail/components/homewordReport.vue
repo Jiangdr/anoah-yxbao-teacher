@@ -9,7 +9,7 @@
         <!-- 答案情况 -->
         <answer-situation v-show="tabType === 2"></answer-situation>
         <!-- 知识点分析 -->
-        <knowledge-point-analysis v-show="tabType === 3"></knowledge-point-analysis>
+        <knowledge-point-analysis v-show="tabType === 3" :publishId="info.course_hour_publish_id"></knowledge-point-analysis>
       </div>
     </div>
     <div v-else class="no-data">
