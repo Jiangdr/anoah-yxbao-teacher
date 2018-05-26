@@ -274,7 +274,7 @@ export default {
       };
 
       api.homeworkLists(data).then(function(r) {
-        if(self.currentPage === 1) {
+        if (self.currentPage === 1) {
           self.homeworkListArray = r.lists;
         } else {
           self.homeworkListArray = self.homeworkListArray.concat(r.lists);

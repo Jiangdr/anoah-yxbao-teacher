@@ -50,7 +50,7 @@
               <img src="@/assets/images/public/checksel.png" v-if="item.selectState" style="width:100%;height:100%"/>
             </div>
           </div>
-          <div>{{ item.real_name }}</div>
+          <div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ item.real_name }}</div>
         </li>
       </ul>
     </div>
