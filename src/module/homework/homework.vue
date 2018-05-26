@@ -27,8 +27,8 @@
       共{{totalCountNum}}个作业&nbsp;&nbsp;<span style="color: red;">{{countNum}}</span>个待批改
     </div>
 
-    <div class="listContainer" v-bind:style="listContainerStyle">
-      <van-pull-refresh v-model="pullRefresIsLoading" @refresh="onRefresh">
+    <!-- <div class="listContainer" v-bind:style="listContainerStyle"> -->
+      <van-pull-refresh class="listContainer" v-bind:style="listContainerStyle" v-model="pullRefresIsLoading" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" @load="loadMore" :offset="300" :immediate-check="false">
           <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
             <div class="listContainerLeft">
@@ -51,7 +51,7 @@
           没有数据
         </div>
       </van-pull-refresh>
-    </div>
+    <!-- </div> -->
 
     <van-popup v-model="showClassPopup" position="bottom" :overlay="true">
       <van-picker show-toolbar :columns="columnsOfClass" @cancel="onCancelClassPopup" @confirm="onConfirmClassPopup"/>
@@ -223,6 +223,7 @@ export default {
     },
     onRefresh() {
       this.currentPage = 1;
+      this.homeworkListArray = [];
       setTimeout(() => {
         this.$toast({
           message: "刷新成功！",
@@ -245,7 +246,7 @@ export default {
     },
     loadMore() {
       console.log("loadMore......");
-      if (this.totalPage < this.currentPage) {
+      if (this.totalPage <= this.currentPage) {
         this.finished = true;
         this.loading = false;
       } else {
