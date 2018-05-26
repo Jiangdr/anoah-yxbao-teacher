@@ -223,14 +223,9 @@ export default {
     },
     onRefresh() {
       this.currentPage = 1;
-      this.homeworkListArray = [];
       setTimeout(() => {
-        this.$toast({
-          message: "刷新成功！",
-          duration: 750
-        });
         this.pullRefresIsLoading = false;
-      }, 200);
+      }, 500);
       this.getHomeworkList();
     },
     goHomeworkDetail(item) {
@@ -279,7 +274,11 @@ export default {
       };
 
       api.homeworkLists(data).then(function(r) {
-        self.homeworkListArray = self.homeworkListArray.concat(r.lists);
+        if(self.currentPage === 1) {
+          self.homeworkListArray = r.lists;
+        } else {
+          self.homeworkListArray = self.homeworkListArray.concat(r.lists);
+        }
         self.currentPage = Number(r.page);
         self.totalPage = Number(r.total_count);
         self.loading = false;
