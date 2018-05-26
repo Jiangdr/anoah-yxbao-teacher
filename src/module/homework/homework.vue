@@ -18,9 +18,12 @@
       <span class="select-span">
         <div class="select-span-div" @click="clickClass">班级<i class="fa fa-angle-down"></i></div>
       </span>
+      <!-- <span class="select-span">
+        <div class="select-span-div" @click="clickMore">更多<i class="fa fa-angle-down"></i></div>
+      </span> -->
     </div>
 
-    <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;">
+    <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;padding-left: 10px;">
       共{{totalCountNum}}个作业&nbsp;&nbsp;<span style="color: red;">{{countNum}}</span>个待批改
     </div>
 
@@ -221,9 +224,12 @@ export default {
     onRefresh() {
       this.currentPage = 1;
       setTimeout(() => {
-        this.$toast("刷新成功");
+        this.$toast({
+          message: "刷新成功！",
+          duration: 750
+        });
         this.pullRefresIsLoading = false;
-      }, 500);
+      }, 200);
       this.getHomeworkList();
     },
     goHomeworkDetail(item) {
@@ -267,7 +273,8 @@ export default {
         from: self.chooseTime.from,
         to: self.chooseTime.to,
         page: self.currentPage,
-        per_page: 7
+        per_page: 7,
+        type: '1,2'
       };
 
       api.homeworkLists(data).then(function(r) {
@@ -295,7 +302,7 @@ export default {
   margin: 0 auto;
   margin-top: 10px;
   margin-bottom: 10px;
-  border-radius: 4px;
+  border-radius: 8px;
   position: relative;
 }
 .listContainerLeft {
@@ -322,20 +329,21 @@ export default {
   box-sizing: border-box;
 }
 .publishHomeworkBtn {
-  height: 50px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .publishHomeworkBtnDiv {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   background-color: #2ec2a9;
-  border-radius: 25px;
+  border-radius: 50%;
   position: absolute;
   bottom: 20px;
   right: 20px;
   color: #ffffff;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
 }
 .select-container {
   display: flex;

@@ -8,7 +8,8 @@ let apis = {
   'captcha': '/user/sms/captcha', // 发送验证码
   'valid': '/user/sms/valid', // 验证验证码
   'area': '/user/area/get', // 获取地区
-  'schoolList': '/user/school/city'
+  'schoolList': '/user/school/city',
+  'contact': '/feedback/addContact'
 }
 
 let user = new API(apis)
@@ -42,5 +43,8 @@ user.area = (params) => {
 }
 user.schoolList = (params) => {
   return user.fetch(user.apis.schoolList, params, 'post')
+}
+user.contact = (params) => {
+  return user.fetch(user.apis.contact, params, 'post', {'api': 'apis2'})
 }
 export default user

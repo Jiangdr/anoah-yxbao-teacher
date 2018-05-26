@@ -1,16 +1,15 @@
 <template>
-  <div class="teacher-list">
-    <div v-for="(item, index) in list" :key="index" class="item">
+  <div class="school-list">
+    <div v-for="(item, index) in list" :key="index" class="item" @click="goDetail(item.message_id)">
       <div class="date">{{item.push_time}}</div>
       <div class="container">
         <p class="title">
-          <template v-if="item.feeds_type==='xinzuoye'">
-            <i class="icon" :style="{'background-image':'url('+imgUrl('icon1')+')'}"></i>
-          </template>
-           <template v-else>
             <i class="icon" :style="{'background-image':'url('+imgUrl('icon')+')'}"></i>
-          </template>
-          {{item.title}}</p>
+          {{item.title}}
+        </p>
+        <div style="text-align:center">
+          <img :src="item.thumb" alt="">
+        </div>
         <div class="notice-content" v-html="item.content"></div>
       </div>
     </div>
@@ -18,11 +17,20 @@
 </template>
 <script>
 export default {
-  name: "teacherList",
-  props: ["list"],
+  name: 'schoolNoticeList',
+  props: ['list'],
   methods: {
     imgUrl(name) {
       return require("@/assets/images/notice/" + name + ".png");
+    },
+    goDetail (id) {
+      this.$router.push({
+        name: 'noticeDetail',
+        params: {
+          message_id: id
+        }
+      })
+      console.log(id)
     }
   }
 };
@@ -44,6 +52,9 @@ export default {
   margin-bottom: 19px;
   font-size: 19px;
   text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .item .container .title .icon {
   display: inline-block;
@@ -54,9 +65,14 @@ export default {
   margin-bottom: -3px;
   margin-right: 5px;
 }
-.item .notice-content >>> p {
+.item .notice-content{
   color: #4e4e50;
   margin-bottom: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp:2;
 }
 .item .notice-content >>> p:last-child {
   color: #9c9ea1;

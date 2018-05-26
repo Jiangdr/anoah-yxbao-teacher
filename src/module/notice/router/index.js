@@ -34,7 +34,7 @@ export default [{
   component: noticeDetail,
   meta: {
     requiresAuth: false,
-    keepAlive: true
+    keepAlive: false
   }
 }
 ]
