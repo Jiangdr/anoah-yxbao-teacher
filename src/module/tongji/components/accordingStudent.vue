@@ -17,8 +17,8 @@
             <i class="fa fa-caret-down" :class="{active: sortRule.correctPer.down}"></i>
           </span>
         </div>
-        <div class="table-cell" @click="sortList(3)">
-          <span>错题订正</span>
+        <div class="table-cell" @click="sortList(3)" v-if="type!=='subjectiveqti'">
+          <span>得分</span>
           <span class="caret">
             <i class="fa fa-caret-up" :class="{active: sortRule.cuoti.up}"></i>
             <i class="fa fa-caret-down" :class="{active: sortRule.cuoti.down}"></i>
@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="table-body">
-        <div class="table-row van-hairline--bottom" v-for="(stu, index) in studentInfo" :key="index" @click="linkTo(stu.status)">
+        <div class="table-row van-hairline--bottom" v-for="(stu, index) in info" :key="index" @click="linkTo(stu.status)">
           <div class="table-cell name">
             <div class="stu-name">
               <img :src="stu.avatar" alt="">
@@ -42,26 +42,25 @@
           </div>
           <div class="table-cell">
             <div class="correct-per">
-              <span v-if="stu.status == 3 || stu.status == 4">{{Math.round(stu.rate * 100)}}%</span>
+              <span v-if="stu.status == 3 || stu.status == 4">{{Math.round(stu.correct_rate * 100)}}%</span>
               <span v-else-if="stu.status == 1">未批改</span>
               <span v-else-if="stu.status == 0">未提交</span>
-              <!-- <span v-else-if="stu.status == 4">已批改</span> -->
             </div>
           </div>
-          <div class="table-cell">
+          <div class="table-cell" v-if="type!=='subjectiveqti'">
             <div class="cuoti">
-              <span v-if="stu.status == 3 || stu.status == 1 || stu.status == 4">{{stu.correct_num}}</span>
+              <span v-if="stu.status == 3 || stu.status == 1 || stu.status == 4">{{stu.score}}</span>
               <span v-if="stu.status == 0">--</span>
             </div>
           </div>
           <div class="table-cell">
             <div class="time-length">
-              <span v-if="stu.status == 3 || stu.status == 1 || stu.status == 4">{{stu.time_length | timeFormat}}</span>
+              <span v-if="stu.status == 3 || stu.status == 1 || stu.status == 4">{{stu.time_length | timeFormatSecond}}</span>
               <span v-else>--</span>
             </div>
           </div>
-          <div class="arrow" v-show="stu.status == 3 || stu.status == 1 || stu.status == 4">
-            <i class="fa fa-angle-right"></i>
+          <div class="arrow">
+            <i class="fa fa-angle-right" v-show="stu.status == 3 || stu.status == 1 || stu.status == 4"></i>
           </div>
         </div>
       </div>
@@ -72,6 +71,7 @@
 import {mapGetters} from 'vuex'
 export default {
   name: 'AccordingStudent',
+  props: ['info', 'type'],
   data() {
     return {
       'sortRule': {

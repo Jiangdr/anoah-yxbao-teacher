@@ -78,6 +78,26 @@ function getRect(el) {
     }
   }
 }
+// 判断题型：分为主观单题，客观单题，套卷（复合题，答题卡），客观组件
+function judgeQuestionType(resource) {
+  let model
+  // 主观单题
+  if ((resource.type === 'subjective' && ~['qti_question', 'qti_question_sheet'].indexOf(resource.resource_type)) || ~['InteractivePlayer', 'dms', 'GraphSplit'].indexOf(resource.icom_app_name)) {
+    model = 'subjectiveqti'
+  // 客观单题
+  } else if (resource.type === 'objective' && ~['qti_question', 'qti_question_sheet'].indexOf(resource.resource_type)) {
+    model = 'objectiveqti'
+  // 套卷，复合题,答题卡
+  } else if (~['qti_exam', 'qti_exam_sheet'].indexOf(resource.resource_type) || ~["speedread", 'readch', 'complex', 'listeningch'].indexOf(resource.alias)) {
+    model = 'combineqti'
+  // 客观组件
+  } else if (resource.type === 'objective' && resource.resource_type === 'icom') {
+    model = 'objectiveicom'
+  } else {
+    model = ''
+  }
+  return model
+}
 export default {
   encrypt,
   decrypt,
@@ -85,5 +105,6 @@ export default {
   addClass,
   removeClass,
   getData,
-  getRect
+  getRect,
+  judgeQuestionType
 }
