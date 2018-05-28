@@ -88,7 +88,7 @@
           <div class="status">
             <van-row class="item">
               <van-col span="9">
-                <i class="icon" :style="{'background-image':'url('+imgUrl('homewordDetail/unfinish')+')'}"></i>未完成</van-col>
+                <i class="icon" :style="{'background-image':'url('+imgUrl('homeworkDetail/unfinish')+')'}"></i>未完成</van-col>
               <van-col span="9">{{homeworkInfo.unfinished_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isUrge">
                 <p @click="toggleUrge" :class="{disable:finishCounter===0}">催交作业</p>
@@ -99,7 +99,7 @@
             </van-row>
             <van-row class="item">
               <van-col span="9">
-                <i class="icon" :style="{'background-image':'url('+imgUrl('homewordDetail/revising')+')'}"></i>未订正</van-col>
+                <i class="icon" :style="{'background-image':'url('+imgUrl('homeworkDetail/revising')+')'}"></i>未订正</van-col>
               <van-col span="9">{{homeworkInfo.unretyr_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isRemind">
                 <p @click="toggleRemind" :class="{disable:finishCounter===0}">提醒订正</p>

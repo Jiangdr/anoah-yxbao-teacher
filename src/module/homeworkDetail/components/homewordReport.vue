@@ -41,7 +41,7 @@ export default {
       return (this.info.student_counter - this.info.unfinished_counter) / this.info.student_counter
     },
     imgUrl() {
-      return require('@/assets/images/homewordDetail/no-data.png')
+      return require('@/assets/images/homeworkDetail/no-data.png')
     }
   },
   methods: {

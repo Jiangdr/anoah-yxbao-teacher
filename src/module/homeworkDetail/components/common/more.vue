@@ -79,7 +79,7 @@ export default {
       })
     },
     imgUrl(name) {
-      return require('@/assets/images/homewordDetail/' + name + '.png')
+      return require('@/assets/images/homeworkDetail/' + name + '.png')
     }
   }
 };
