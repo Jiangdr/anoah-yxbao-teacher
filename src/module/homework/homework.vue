@@ -82,7 +82,7 @@ export default {
     return {
       homeworkListArray: [],
       listContainerStyle: {
-        height: window.innerHeight - 90 + "px"
+        height: window.innerHeight - 130 + "px"
       },
       list: [],
       loading: false,
@@ -270,7 +270,7 @@ export default {
         from: self.chooseTime.from,
         to: self.chooseTime.to,
         page: self.currentPage,
-        per_page: 7,
+        per_page: 6,
         type: '1,2'
       };
 
