@@ -4,15 +4,21 @@
       <div class="popupWrapper">
         <div class="popupItem content" @click="content">查看作业内容</div>
         <div class="popupItem again" @click="again">再次布置</div>
-        <div class="popupItem collection" @click="collection">收藏作业</div>
+        <div class="popupItem collection" @click="collection">
+          <template v-if="favorite==0">收藏作业</template>
+          <template v-else-if="favorite==1">取消收藏</template>
+        </div>
         <div class="popupItem delete" @click="toggleDeletePopup">删除作业</div>
         <div class="popupItem cancel" @click="togglePopup">取消</div>
       </div>
     </cube-popup>
     <cube-popup type="collection-popup" v-show="showCollectionPopup">
-      <div class="wrapper">
+      <div class="wrapper" v-if="favorite==1">
         <i :style="{'background-image':'url('+imgUrl('collect')+')'}"></i>
         <span>已收藏</span>
+      </div>
+      <div class="wrapper" v-else-if="favorite==0">
+        <span>取消收藏</span>
       </div>
     </cube-popup>
      <cube-popup type="delete-popup" v-show="showDetelePopup">
@@ -27,8 +33,11 @@
   </div>
 </template>
 <script>
+import homeworkDetil from "../../axios/detail.js";
+import { Toast } from 'vant';
 export default {
   name: "more",
+  props: ['publishId', 'favorite'],
   data() {
     return {
       showPopup: true, // 更多操作列表弹窗
@@ -47,12 +56,27 @@ export default {
     content() {},
     again() {},
     collection() {
-      this.showCollectionPopup = true;
-      this.showPopup = false;
-      setTimeout(() => { this.togglePopup() }, 3000)
+      let params = {
+        'publish_id': this.publishId,
+        'type': parseInt(this.favorite) === 0 ? 1 : 0
+      }
+      homeworkDetil.favorite(params).then(r => {
+        this.showCollectionPopup = true;
+        this.showPopup = false;
+        setTimeout(() => { this.togglePopup() }, 1000)
+        this.$emit('collect', r.type)
+      })
     },
     deleteHomework() {
-
+      let params = {
+        publish_id: this.publishId
+      }
+      homeworkDetil.remove(params).then(r => {
+        Toast('删除成功！')
+        setTimeout(() => {
+          this.$emit('back')
+        }, 500)
+      })
     },
     imgUrl(name) {
       return require('@/assets/images/homewordDetail/' + name + '.png')
