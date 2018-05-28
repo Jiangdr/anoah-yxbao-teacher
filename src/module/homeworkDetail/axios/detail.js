@@ -6,8 +6,9 @@ let apis = {
   'getMiniResource': '/jwt/homework/stat/getMinResourceList',
   'sendAnswer': '/jwt/homework/correct/sendAnswer',
   'urge': '/jwt/notice/message/jiaozuoye', // 催交作业
-  'remind': '/jwt/notice/message/dingzheng',
-  'kp': '/jwt/homework/stat/getKpList' // 知识点
+  'remind': '/jwt/notice/message/dingzheng', // 订正提醒
+  'remove': '/jwt/homework/publish/remove', // 删除作业
+  'favorite': 'jwt/homework/favorite/update' //  收藏作业 1收藏 0 取消收藏
 }
 
 let homeworkinfo = new API(apis)
@@ -29,7 +30,10 @@ homeworkinfo.urge = (params) => {
 homeworkinfo.remind = (params) => {
   return homeworkinfo.fetch(homeworkinfo.apis.remind, params, 'post')
 }
-homeworkinfo.kp = (params) => {
-  return homeworkinfo.fetch(homeworkinfo.apis.kp, params, 'post')
+homeworkinfo.remove = (params) => {
+  return homeworkinfo.fetch(homeworkinfo.apis.remove, params, 'post')
+}
+homeworkinfo.favorite = (params) => {
+  return homeworkinfo.fetch(homeworkinfo.apis.favorite, params, 'post')
 }
 export default homeworkinfo

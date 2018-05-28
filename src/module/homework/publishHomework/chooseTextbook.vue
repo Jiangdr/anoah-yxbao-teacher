@@ -29,8 +29,8 @@
               <div class="text-book" v-for="(textBook, index) in textBookList" :key="index" @click="clickTextBook(textBook)"
             v-bind:class="{activerighttabclass: chooseTextbookId === textBook.edu_book_id}">{{textBook.name}}</div>
             </van-list>
-          <div v-if="textBookList.length==0" class="text-font" style="height: 200px;line-height: 200px;text-align: center;">
-            没有数据
+          <div v-if="textBookList.length==0" class="text-font">
+            暂无内容
           </div>
       </div>
     </div>
@@ -55,6 +55,7 @@ export default {
       activeTermId: 1,
       textBookList: [],
       gradeLists: [],
+      selBook: {},
       chooseTextbookId: ""
     };
   },
@@ -64,11 +65,21 @@ export default {
   },
   created: function() {
     this.userInfo = this.$store.state.account.userInfo;
+    this.selBook = this.$store.state.homework.chooseTextBookObj;
+    if (this.selBook.hasOwnProperty("term_id")) {
+      this.activeTermId = this.selBook.term_id;
+      this.activeGradeId = this.selBook.grade_id;
+      this.chooseTextbookId = this.selBook.edu_book_id;
+    }
   },
   methods: {
     goHomework() {
+      var tempStr =
+        this.$store.state.homework.chooseBackPage.length > 0
+          ? this.$store.state.homework.chooseBackPage
+          : "homework";
       this.$router.push({
-        path: "/homework"
+        path: "/" + tempStr
       });
     },
     reset() {
@@ -138,7 +149,7 @@ export default {
     },
     clickTextBook(book) {
       this.chooseTextbookId = book.edu_book_id;
-      this.$store.dispatch("chooseTextBookObj", book);
+      this.selBook = book;
     },
     goSummerHomework() {
       if (!this.chooseTextbookId) {
@@ -148,6 +159,13 @@ export default {
         });
         return;
       }
+      this.selBook.grade_id = this.activeGradeId;
+      this.selBook.term_id = this.activeTermId;
+      this.$store.dispatch("chooseTextBookObj", this.selBook);
+      if (this.$store.state.homework.publishHWBackPage.length < 1) {
+        this.$store.dispatch("publishHWBackPage", "chooseTextbook");
+      }
+      localStorage.setItem("chooseTextBookObj", JSON.stringify(this.selBook));
       this.$router.push({
         path: "/publishHomework"
       });
@@ -158,10 +176,6 @@ export default {
 
 <style scoped lang="scss">
 @import "@/assets/css/custom.scss";
-.text-font {
-  font-size: 16px;
-  color: #9c9ea1;
-}
 .list-container {
   margin-top: 1vw;
   overflow-y: scroll;
