@@ -13,9 +13,22 @@
     </div>
     <!-- 平均正确率 -->
     <div class="correct">
-      <van-icon name="info-o" @click="toggleTips"/>
-      <p class="num">{{classCorrect}}</p>
-      <p class="text">平均正确率</p>
+      <i class="icon" :style="{'background-image':'url('+imgUrl('public/help')+')'}" @click="toggleTips" v-if="!showTips"></i>
+      <i class="icon" :style="{'background-image':'url('+imgUrl('public/help-h')+')'}" @click="toggleTips" v-if="showTips"></i>
+      <div>
+        <correct-circle
+          :r="55"
+          :startColor="'#75bdff'"
+          :middleColor="'#86c2ff'"
+          :stopColor="'#3ea2ff'"
+          :stroke="14"
+          :strokeColor="'#e8ecef'"
+          :correct="correct>=0?correct*100:0"
+          :domid="'process'"
+          :text="`<div style='font-size:16px;font-weight:bold'>${classCorrect}</div><div style='font-size:12px;color:#c8c9c9;'>平均正确率</div>`"
+        >
+        </correct-circle>
+      </div>
     </div>
     <!-- 内容 -->
     <div class="content">
@@ -32,35 +45,39 @@
       </div>
       <!-- 作业作答情况内容 -->
       <div class="homework-content" v-if="activeBtn=='homework'">
-        <div class="total van-hairline--bottom">
+        <div class="total">
           <!-- <span>共{{resourceList.length}}题</span> -->
           <span>只看待批阅</span>
-          <span class="right"><van-checkbox v-model="notcorrect"></van-checkbox> </span>
+          <span class="right">
+            <i class="checkbox icon" :style="{'background-image':'url('+imgUrl('public/checkunsel')+')'}" @click="check" v-if="!notcorrect"></i>
+            <i class="checkbox icon" :style="{'background-image':'url('+imgUrl('public/checksel')+')'}" @click="check" v-if="notcorrect"></i>
+          </span>
         </div>
         <!-- 作业资源列表 -->
           <div class="lists">
             <div class="item" v-for='(ques,index) in resourceList' :key="index" v-show="!(notcorrect&&ques.pigai_status==3)">
-              <div class="iteminfo" @click="changeCollapse(index)">
+              <div class="iteminfo" @click="changeCollapse(index)" :class="{'no-border':ques.isShow}">
                 <div class="left">{{index+1}}、</div>
                 <div class="right">
                   <p>[{{ques.icom_name | questionName(ques)}}]
-                    <span class="resource-name" v-html="ques.resource_name"></span><span v-if="ques.pigai_status!=3"> 待批阅</span></p>
-                  <p>
+                    <span class="resource-name" v-html="ques.resource_name"></span>
+                    <span v-if="ques.pigai_status!=3" class="no-correct"> 待批阅</span>
+                  </p>
+                  <p style="position:relative">
                     已完成：{{ques.finished_counter}}/{{homeworkInfo.student_counter}}人 正确率：{{itemCorrect(ques.average_rate)}}
-                    <van-icon name="arrow" class="showdetail"></van-icon>
+                   <i v-if="!ques.isShow" class="icon arrow" :style="{'background-image':'url('+imgUrl('public/right')+')'}"></i>
+                   <i v-if="ques.isShow" class="icon arrow" :style="{'background-image':'url('+imgUrl('public/down')+')'}"></i>
                   </p>
                 </div>
           </div>
           <div class="itemdetail" :class="{hide:!ques.isShow}" v-if="ques.resource_type=='qti_exam'||isCompound(ques.qti_question_type_id,ques.resource_type)">
-            <p v-for="(mini,key) in miniResource[index]" :key="key" @click="goTongji(mini,index,key)">
-              <span>
-                <template v-if="mini.status===1">待批阅</template>
-                <template v-if="mini.status===0">未提交</template>
-                <template v-else-if="mini.status==3&&mini.marked==1">阅</template>
-                <template v-else>{{itemCorrect(mini.correct_rate)}}</template>
-              </span>
-              <span>{{(index+1)+'-'+(key+1)}}</span>
-              </p>
+            <p v-for="(mini,key) in miniResource[index]" :key="key" @click="goTongji(mini,index,key)" :class="{'no-margin':key>0&&(key+1)%5==0}">
+                <span v-if="mini.status===1" style="background:#ff8d13;">待批阅</span>
+                <span v-if="mini.status===0" style="background:#9c9ea1;">未提交</span>
+                <span v-else-if="mini.status==3&&mini.marked==1" style="background:#3ea2ff;">阅</span>
+                <span v-else :class="{right: mini.correct_rate>= 0.6,wrong:mini.correct_rate<0.6}">{{itemCorrect(mini.correct_rate)}}</span>
+              <span class="ques-num">{{(index+1)+'-'+(key+1)}}</span>
+            </p>
           </div>
           </div>
         </div>
@@ -138,6 +155,7 @@ import remind from "./common/remind.vue"; // 提醒订正
 import correct from "@/components/common/correctPopup.vue"; // 一键批阅
 import answer from "./common/answer.vue"; // 发送答案
 import studentList from "./common/studentList.vue"; // 学生列表
+import correctCircle from '@/components/common/correct.vue'
 
 import {mapActions} from 'vuex'
 export default {
@@ -199,6 +217,12 @@ export default {
       this.isUrge = this.homeworkInfo.notice_zuoye === 0
       // 是否提醒订正  0 未提醒 1 当日已提醒
       this.isRemind = this.homeworkInfo.notice_retry === 0
+    },
+    check() {
+      this.notcorrect = !this.notcorrect;
+    },
+    imgUrl(name) {
+      return require('@/assets/images/' + name + '.png')
     },
     goBatchEvaluate() {
       // 批量评价
@@ -355,7 +379,8 @@ export default {
     remind,
     correct,
     studentList,
-    answer
+    answer,
+    correctCircle
   }
 };
 </script>
@@ -369,7 +394,6 @@ export default {
 /* title样式 */
 
 .detail>.wrapper {
-  background: #e8ebee;;
   height: calc(100vh - 100px);
 }
 
@@ -379,31 +403,46 @@ export default {
   padding: 10px;
   line-height: 30px;
   background: #fff;
-  height: 80px;
+  height: 75px;
   box-sizing: border-box;
 }
 
 .detail>.wrapper .itemdetail {
   display: flex;
   flex-wrap: wrap;
-  border-bottom: 1px solid #e8ebee;;
+  border-bottom: 1px solid #e8ebee;
+  background: #f5f7f8;
+  padding:5px 13px 5px;
+  box-sizing: border-box
 }
 
 .detail>.wrapper .itemdetail p span:first-child {
-  border: 1px solid #333;
   text-align: center;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  color:#fff;
+  font-size: 12px;
 }
-
+.detail>.wrapper .itemdetail p span.right{
+  background: #08b783;
+}
+.detail>.wrapper .itemdetail p span.wrong{
+  background: #ff5266;
+}
+.detail>.wrapper .itemdetail p span.ques-num{
+  color:#c8c9c9;
+}
 .detail>.wrapper .itemdetail p {
   text-align: center;
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  margin: 8px 35px 8px 0px;
   font-size: 14px;
+}
+.detail>.wrapper .itemdetail p.no-margin{
+  margin-right: 0px;
 }
 
 .detail>.wrapper .itemdetail.hide {
@@ -413,30 +452,36 @@ export default {
 .detail>.wrapper>.info>.name {
   font-weight: bold;
 }
-
-.detail>.wrapper>.info>.times {
-  font-size: 12px;
+.detail>.wrapper>.info>.name>span{
+  color:#c8c9c9;
+  font-size: 14px;
 }
-
-.detail>.wrapper>.info>.times>.end-time {
-  margin: 0 5px;
+.detail>.wrapper>.info>.name>span>b{
+  color:#9c9ea1;
+}
+.detail>.wrapper>.info>.times {
+  font-size: 14px;
 }
 
 /* 班级正确率 */
 
 .detail>.wrapper>.correct {
+  height: 175px;
   padding: 10px;
   text-align: center;
-  margin: 10px 0;
-  background: #fff;
-  line-height: 30px;
-  height: 80px;
+  background: #f5f7f8;
   box-sizing: border-box;
+  position: relative;
 }
-
 .detail>.wrapper>.correct i {
   position: absolute;
-  left: 62%;
+  right: 45px;
+  top:17px;
+  color:#55a9f1;
+  z-index: 2;
+  display: inline-block;
+  width:19px;
+  height: 19px;
 }
 
 .detail>.wrapper>.correct>.num {
@@ -454,8 +499,8 @@ export default {
 
 .detail>.wrapper>.content>.btns span {
   display: inline-block;
-  height: 38px;
-  border-bottom: 1px solid transparent;
+  height: 37px;
+  border-bottom: 2px solid transparent;
 }
 
 .detail>.wrapper>.content>.btns {
@@ -467,44 +512,76 @@ export default {
 
 .detail>.wrapper>.content>.btns .active span{
   color: #08b783;
-  border-bottom:1px solid #08b783;
+  border-bottom:2px solid #08b783;
 }
 
 /* 作业作答情况content */
 
 .detail>.wrapper>.content>.homework-content,
 .detail>.wrapper>.content>.student-content {
-  height: calc(100% - 50px);
+  height: calc(100% - 50px - 68px);
 }
 
 .detail>.wrapper>.content>.homework-content>.total {
   padding: 0 10px;
-  line-height: 30px;
-  height: 30px;
+  line-height: 45px;
+  height: 45px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e8ebee;
 }
 
 .detail>.wrapper>.content>.homework-content>.total>.right {
   float: right;
 }
+.detail>.wrapper>.content>.homework-content>.total>.right .checkbox{
+  display: inline-block;
+  width:19px;
+  height: 19px;
 
+}
 .detail>.wrapper>.content>.homework-content .lists {
-  height: calc(100% - 30px);
+  height: calc(100% - 45px);
   overflow-y: scroll;
+  box-sizing: border-box;
 }
 
 .detail>.wrapper>.content>.homework-content .lists .item .iteminfo {
-  height: 60px;
-  border-bottom: 1px solid #e8ebee;;
+  height: 75px;
+  border-bottom: 1px solid #e8ebee;
   display: flex;
-  padding: 0 10px;
+  margin:0 13px;
+  box-sizing: border-box;
+  padding-top:8px;
 }
 
+.detail>.wrapper>.content>.homework-content .lists .item .iteminfo.no-border{
+  border-bottom: 1px solid transparent;
+}
 .detail>.wrapper>.content>.homework-content .lists .item .iteminfo>.right {
   width: calc(100% - 35px);
   line-height: 30px;
   font-size: 14px;
+  position: relative;
 }
+.detail>.wrapper>.content>.homework-content .lists .item .iteminfo>.right .arrow{
+  position: absolute;
+  right: 0;
+  top:3px;
+}
+.detail>.wrapper>.content>.homework-content .lists .item .iteminfo>.right .no-correct{
+  position: absolute;
+  right: 0;
+  background: #ff8d13;
+  color:#fff;
+  border-radius: 30px;
+  font-size: 12px;
+  height: 22px;
+  width:60px;
+  line-height: 22px;
+  box-sizing: border-box;
+  text-align: center;
 
+}
 .detail>.wrapper>.content>.homework-content .lists .item .iteminfo>.right p {
   display: flex;
   position: relative;
@@ -640,5 +717,13 @@ export default {
 }
 .detail .bottom-btn .btn.disable {
   opacity: 0.5;
+}
+.detail  .icon{
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  display: inline-block;
+  width:19px;
+  height: 19px;
 }
 </style>
