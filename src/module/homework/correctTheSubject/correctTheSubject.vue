@@ -1,7 +1,7 @@
 <template>
   <div class="cube-page cube-view button-view">
     <header class="header">
-      <h1>点击切换学生</h1>
+      <h1 @click="clickSwitchStudent">点击切换学生</h1>
       <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i></i>
     </header>
     <!-- <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
@@ -42,6 +42,11 @@ export default {
     goHomework() {
       this.$router.push({
         path: "/homework"
+      });
+    },
+    clickSwitchStudent() {
+      this.$router.push({
+        path: "/switchStudent"
       });
     },
     getList: function(value) {
