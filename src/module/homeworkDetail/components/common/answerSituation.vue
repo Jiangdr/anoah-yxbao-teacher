@@ -41,19 +41,14 @@ export default {
   },
   methods: {
     linkTo(qus) {
-      console.log(this.util.judgeQuestionType(qus))
+      console.log(qus)
       if (this.util.judgeQuestionType(qus)) {
-        let params = {
-          question_type: this.util.judgeQuestionType(qus),
-          course_hour_publish_id: qus.course_hour_publish_id,
-          course_resource_id: qus.course_resource_id,
-          resource_id: qus.resource_id,
-          dcom_entity_id: qus.dcom_entity_id,
-          h: 1,
-          average_time_length: qus.average_time_length,
-          average_rate: qus.average_rate
-        }
-        this.$router.push({name: 'tongji', params: params})
+        let type = 2
+        qus.resource_name = ''
+        let params = JSON.stringify(qus)
+        this.$router.push({name: 'questionDetail', params: {type: 2, params: params}})
+      } else {
+        alert('不支持题型')
       }
     }
   }

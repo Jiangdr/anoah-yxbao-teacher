@@ -7,7 +7,7 @@ let apis = {
   'sendAnswer': '/jwt/homework/correct/sendAnswer',
   'urge': '/jwt/notice/message/jiaozuoye', // 催交作业
   'remind': '/jwt/notice/message/dingzheng',
-  'kp': '	/jwt/homework/stat/getKpList' // 知识点
+  'kp': '/jwt/homework/stat/getKpList' // 知识点
 }
 
 let homeworkinfo = new API(apis)

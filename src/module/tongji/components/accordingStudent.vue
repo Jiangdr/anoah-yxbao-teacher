@@ -117,13 +117,13 @@ export default {
     },
     columnInfo() {
       let result = {}
-      for (let key in this.info.clumn) {
-        let item = this.info.clumn[key]
-        !item.counter && (item.counter = 0)
-        !item.user && (item.user = [])
-        this.sum += item.counter
-        result[key] = item
-      }
+      // for (let key in this.info.clumn) {
+      //   let item = this.info.clumn[key]
+      //   !item.counter && (item.counter = 0)
+      //   !item.user && (item.user = [])
+      //   this.sum += item.counter
+      //   result[key] = item
+      // }
       return result
     }
   },

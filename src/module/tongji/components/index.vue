@@ -103,6 +103,9 @@ export default {
           break;
         case 'combineqti':
           this.qtiexamStatistics()
+          break;
+        case 'objectiveqti':
+          this.getQuestionStatistics()
       }
     },
     // 获取单题资源
