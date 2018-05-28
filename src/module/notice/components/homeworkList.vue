@@ -5,9 +5,9 @@
         <div slot="title-name">
           <div>作业通知</div>
         </div>
-        <!-- <div slot="right-area">
-          <i>删除</i>
-        </div> -->
+        <div slot="right-area">
+          <i @click="clear" :class="{disable:this.list.length<=0}" class="clear" :style="{'background-image':'url('+imgUrl('clear')+')'}"></i>
+        </div>
       </header-bar>
   </div>
     <div class="container">
@@ -59,6 +59,19 @@ export default {
         name: 'noticeDetail'
       })
     },
+    clear() {
+      if (this.list.length <= 0) {
+        return false;
+      }
+      let params = {
+        user_id: this.params.user_id
+      }
+      notice.clearMsg(params).then(r => {
+        if (r.rs) {
+          this.list.splice(0)
+        }
+      })
+    },
     imgUrl(name) {
       return require('@/assets/images/notice/' + name + '.png')
     },
@@ -102,6 +115,15 @@ export default {
 <style scoped>
 .homeworkList{
   height: 100%;
+}
+.homeworkList .title .clear{
+  display: inline-block;
+  width:20px;
+  height: 20px;
+  background-position: center center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  vertical-align: middle;
 }
 .homeworkList .container{
   height: calc(100% - 45px);
