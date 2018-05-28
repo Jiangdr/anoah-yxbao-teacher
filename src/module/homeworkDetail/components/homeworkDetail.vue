@@ -87,7 +87,8 @@
         <!-- 完成人数大于0 显示列表 -->
           <div class="status">
             <van-row class="item">
-              <van-col span="9">未完成</van-col>
+              <van-col span="9">
+                <i class="icon" :style="{'background-image':'url('+imgUrl('homewordDetail/unfinish')+')'}"></i>未完成</van-col>
               <van-col span="9">{{homeworkInfo.unfinished_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isUrge">
                 <p @click="toggleUrge" :class="{disable:finishCounter===0}">催交作业</p>
@@ -97,7 +98,8 @@
               </van-col>
             </van-row>
             <van-row class="item">
-              <van-col span="9">未订正</van-col>
+              <van-col span="9">
+                <i class="icon" :style="{'background-image':'url('+imgUrl('homewordDetail/revising')+')'}"></i>未订正</van-col>
               <van-col span="9">{{homeworkInfo.unretyr_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isRemind">
                 <p @click="toggleRemind" :class="{disable:finishCounter===0}">提醒订正</p>
@@ -107,7 +109,6 @@
               </van-col>
             </van-row>
           </div>
-          <div class="blank"></div>
         <template v-if="finishCounter>0">
           <!-- 学生列表 -->
           <student-list :studentList="studentList"></student-list>
@@ -213,6 +214,7 @@ export default {
       // this.studentList = this.homeworkInfo.student_list;
       // 班级正确率
       this.correct = this.homeworkInfo.class_average_correct_rate;
+      this.studentList = this.homeworkInfo.student_list
       // 是否催交过作业  0 未催交 1 当日已催交
       this.isUrge = this.homeworkInfo.notice_zuoye === 0
       // 是否提醒订正  0 未提醒 1 当日已提醒
@@ -649,7 +651,11 @@ export default {
   border-bottom: 1px solid #e8ebee;
   box-sizing: border-box;
 }
-
+.detail>.wrapper>.content>.student-content .status>.item i{
+  position: relative;
+  margin-right: 5px;
+  top:4px;
+}
 .detail>.wrapper>.content>.student-content .status>.item .disable {
   opacity: 0.5;
 }
@@ -666,12 +672,6 @@ export default {
   border-radius: 8px;
   font-size: 12px;
 }
-
-.detail>.wrapper>.content>.student-content .blank {
-  height: 10px;
-  background: #e8ebee;;
-}
-
 .detail>.wrapper>.content>.student-content .student-list {
   height: calc(100% - 120px);
 }
