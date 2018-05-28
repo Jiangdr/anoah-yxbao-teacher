@@ -27,8 +27,8 @@
       共{{totalCountNum}}个作业&nbsp;&nbsp;<span style="color: red;">{{countNum}}</span>个待批改
     </div>
 
-    <div class="listContainer" v-bind:style="listContainerStyle">
-      <van-pull-refresh v-model="pullRefresIsLoading" @refresh="onRefresh">
+    <!-- <div class="listContainer" v-bind:style="listContainerStyle"> -->
+      <van-pull-refresh class="listContainer" v-bind:style="listContainerStyle" v-model="pullRefresIsLoading" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" @load="loadMore" :offset="300" :immediate-check="false">
           <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
             <div class="listContainerLeft">
@@ -40,7 +40,7 @@
             <div class="listContainerRight">
               正确率:&nbsp;
                 <span class="font-color" style="font-size:28px;color: #2ec2a9">{{item.right_rate >= 0 ? Math.round(item.right_rate*100) : '--'}}</span>
-                <span v-if="item.right_rate > 0" style="font-size:16px;color: #2ec2a9">%</span>
+                <span v-if="item.right_rate >= 0" style="font-size:16px;color: #2ec2a9">%</span>
                 <i class="fa fa-angle-right arrow-right"></i>
             </div>
             <div style="clear:both;"></div>
@@ -51,7 +51,7 @@
           没有数据
         </div>
       </van-pull-refresh>
-    </div>
+    <!-- </div> -->
 
     <van-popup v-model="showClassPopup" position="bottom" :overlay="true">
       <van-picker show-toolbar :columns="columnsOfClass" @cancel="onCancelClassPopup" @confirm="onConfirmClassPopup"/>
@@ -224,12 +224,8 @@ export default {
     onRefresh() {
       this.currentPage = 1;
       setTimeout(() => {
-        this.$toast({
-          message: "刷新成功！",
-          duration: 750
-        });
         this.pullRefresIsLoading = false;
-      }, 200);
+      }, 500);
       this.getHomeworkList();
     },
     goHomeworkDetail(item) {
@@ -245,7 +241,7 @@ export default {
     },
     loadMore() {
       console.log("loadMore......");
-      if (this.totalPage < this.currentPage) {
+      if (this.totalPage <= this.currentPage) {
         this.finished = true;
         this.loading = false;
       } else {
@@ -278,7 +274,11 @@ export default {
       };
 
       api.homeworkLists(data).then(function(r) {
-        self.homeworkListArray = self.homeworkListArray.concat(r.lists);
+        if (self.currentPage === 1) {
+          self.homeworkListArray = r.lists;
+        } else {
+          self.homeworkListArray = self.homeworkListArray.concat(r.lists);
+        }
         self.currentPage = Number(r.page);
         self.totalPage = Number(r.total_count);
         self.loading = false;
