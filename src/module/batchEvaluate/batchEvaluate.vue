@@ -10,13 +10,13 @@
 
     <div style="background-color: #fff;overflow-x: auto;">
       <div style="background-color: #fff; width: 570px;">
-        <div class="correct-rate-btn-all" v-bind:class="{activeTab:rateType === ''}" @click="clickRateTab('')">全部正确率</div>
-        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 1}" @click="clickRateTab(1)">100%</div>
-        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 0.9}" @click="clickRateTab(0.9)">90-99%</div>
-        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 0.8}" @click="clickRateTab(0.8)">80-89%</div>
-        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 0.7}" @click="clickRateTab(0.7)">70-79%</div>
-        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 0.6}" @click="clickRateTab(0.6)">60-69%</div>
-        <div class="correct-rate-btn" v-bind:class="{activeTab:rateType === 0.5}" @click="clickRateTab(0.5)">0-59%</div>
+        <div class="correct-rate-btn-all" v-bind:class="{activeTab:rateTypeMin === ''}" @click="clickRateTab('', '')">全部正确率</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateTypeMin === 1}" @click="clickRateTab(1, 1)">100%</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateTypeMin === 0.9}" @click="clickRateTab(0.9, 0.99)">90-99%</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateTypeMin === 0.8}" @click="clickRateTab(0.8, 0.89)">80-89%</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateTypeMin === 0.7}" @click="clickRateTab(0.7, 0.79)">70-79%</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateTypeMin === 0.6}" @click="clickRateTab(0.6, 0.69)">60-69%</div>
+        <div class="correct-rate-btn" v-bind:class="{activeTab:rateTypeMin === 0.5}" @click="clickRateTab(0, 0.59)">0-59%</div>
       </div>
     </div>
 
@@ -60,7 +60,7 @@
         <p @click="goReturnRewrite">退回作业</p>
       </div>
       <div class="btn">
-        <p @click="setPraise"><i style="margin-right: 6px;" class="fa fa-heart-o"></i>表扬</p>
+        <p @click="clickPraise"><i style="margin-right: 6px;" class="fa fa-heart-o"></i>表扬</p>
       </div>
       <div class="btn">
         <p @click="writeComments"><i style="margin-right: 6px;" class="fa fa-pencil-square-o"></i>写评语</p>
@@ -84,22 +84,14 @@ export default {
         'background': '#fff'
       },
       list: [],
-      loading: false,
-      finished: false,
-      pullRefresIsLoading: false,
-      currentPage: 1,
-      totalPage: 1,
-      countNum: 0,
-      totalCountNum: 0,
-      active: 0,
-      studentList: [],
       willCorrectStudentsArray: [],
       didCorrectStudents: [],
       didJudgementStudents: [],
       allStudentsArray: [],
       allStudentsArrayFormat: [],
       statusType: "",
-      rateType: "",
+      rateTypeMin: "",
+      rateTypeMax: "",
       checkBoxGroup: [],
       chooseAllStudentsShow: false
     };
@@ -163,7 +155,7 @@ export default {
         }
       });
     },
-    setPraise() {
+    clickPraise() {
       var self = this;
       if (self.checkBoxGroup.length === 0) {
         self.$toast({
@@ -205,37 +197,41 @@ export default {
 
       api.getHomeworkDetailBasic(data).then(function(response) {
         var array = response.student_list;
+        var newArray = [];
         array.forEach(item => {
-          item.status = 1;
-          item.selectState = false;
-          if (item.avatar.indexOf('http://') === -1) {
-            item.avatar = self.env + item.avatar
+          if (item.status > 0 && item.status < 4) {
+            item.selectState = false;
+            if (item.avatar.indexOf('http://') === -1) {
+              item.avatar = self.env + item.avatar
+            }
+            newArray.push(item);
           }
         });
-        self.allStudentsArray = array;
-        self.allStudentsArrayFormat = array;
+        self.allStudentsArray = newArray;
+        self.allStudentsArrayFormat = newArray;
       });
     },
     clickEvaluateTab(type) {
       this.statusType = type;
-      this.formartAllstudentsArrayFun(this.rateType);
+      this.formartAllstudentsArrayFun(this.rateTypeMin, this.rateTypeMax);
     },
-    clickRateTab(type) {
-      this.rateType = type;
-      this.formartAllstudentsArrayFun(type);
+    clickRateTab(min, max) {
+      this.rateTypeMin = min;
+      this.rateTypeMax = max;
+      this.formartAllstudentsArrayFun(min, max);
     },
-    formartAllstudentsArrayFun(rateType) {
+    formartAllstudentsArrayFun(min, max) {
       this.allStudentsArrayFormat = [];
       var array = this.allStudentsArray;
       if (this.statusType === 1) {
         array.forEach(item => {
-          if (item.status === 1 && item.rate === rateType) {
+          if (item.status === 1 && (min <= item.rate) && (item.rate <= max)) {
             this.allStudentsArrayFormat.push(item);
           }
         });
       } else if (this.statusType === 3) {
         array.forEach(item => {
-          if (item.status === 3 && item.rate === rateType) {
+          if (item.status === 3 && (min <= item.rate) && (item.rate <= max)) {
             if (item.comment === null) {
               this.allStudentsArrayFormat.push(item);
             } else {
@@ -245,7 +241,7 @@ export default {
         });
       } else if (!this.statusType) {
         array.forEach(item => {
-          if (item.rate === rateType) {
+          if ((min <= item.rate) && (item.rate <= max)) {
             this.allStudentsArrayFormat.push(item);
           }
         });
@@ -272,12 +268,6 @@ export default {
 </script>
 
 <style scoped>
-.van-checkbox--round {
-  position: absolute !important;
-  right: 19px !important;
-  bottom: 17px !important;
-  z-index: 99 !important;
-}
 .correct-rate-btn {
   display: inline-block;
   width: 64px;
