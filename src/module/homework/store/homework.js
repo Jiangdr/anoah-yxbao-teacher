@@ -5,6 +5,7 @@ export const summerHomeworkPackId = 'summerHomeworkPackId';
 export const homeworkOneListInfoObj = 'homeworkOneListInfoObj';
 export const hasChoosePagesArray = 'hasChoosePagesArray';
 export const isOldPackId = "0";
+export const directPage = "";
 
 export default {
   state: {
@@ -14,7 +15,8 @@ export default {
     chooseTextBookObj: {},
     summerHomeworkPackId: '',
     homeworkOneListInfoObj: {},
-    isOldPackId: "0"
+    isOldPackId: "0",
+    directPage: ""
   },
   actions: {
     chooseSummerHomeworkArray: function ({ commit }, result) {
@@ -37,6 +39,9 @@ export default {
     },
     isOldPackId: function ({ commit }, result) {
       commit(isOldPackId, result);
+    },
+    directPage: function ({ commit }, result) {
+      commit(directPage, result);
     }
   },
   mutations: {
@@ -64,6 +69,9 @@ export default {
     },
     [isOldPackId](state, result) {
       state.isOldPackId = result;
+    },
+    [directPage](state, result) {
+      state.directPage = result;
     }
   }
 };

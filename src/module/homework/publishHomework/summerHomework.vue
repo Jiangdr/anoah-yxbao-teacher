@@ -156,7 +156,7 @@ export default {
         user_id: self.userInfo.userid,
         pack_id: self.summerHomeworkPackId,
         page: self.page,
-        per_page: 100
+        per_page: 1000
       };
       api.getResourceLists(data).then(
         success => {
