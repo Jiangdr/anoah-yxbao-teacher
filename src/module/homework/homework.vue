@@ -256,6 +256,7 @@ export default {
       });
     },
     goChooseTextbook() {
+      this.$store.dispatch("directPage", "homework");
       this.$router.push({
         path: "/chooseTextbook"
       });

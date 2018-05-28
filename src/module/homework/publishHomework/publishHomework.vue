@@ -2,12 +2,12 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>布置作业</h1>
-      <i class="cubeic-back" @click="goChooseTextbook"><i class="fa fa-angle-left back-up-arrow"></i> </i>
+      <i class="cubeic-back" @click="goBack"><i class="fa fa-angle-left back-up-arrow"></i> </i>
     </header>
 
     <div class="header-tab">
-      <div><p v-bind:class="{activeTabClass : activeTabName == 0}" @click="clickTab(0)">推荐</p></div>
-      <div><p v-bind:class="{activeTabClass : activeTabName == 1}" @click="clickTab(1)">校本库</p></div>
+      <div><p v-bind:class="{activeTabClass : activeTabName == 0}" @click="clickTab(0)">&emsp;推荐&emsp;</p></div>
+      <div><p v-bind:class="{activeTabClass : activeTabName == 1}" @click="clickTab(1)">&emsp;校本库&emsp;</p></div>
     </div>
 
     <div class="choose-textbook" @click="goChooseTextbook">
@@ -53,7 +53,14 @@ export default {
     this.getList(0);
   },
   methods: {
+    goBack() {
+      this.$store.dispatch("directPage", "");
+      this.$router.push({
+        path: "/chooseTextbook"
+      });
+    },
     goChooseTextbook() {
+      this.$store.dispatch("directPage", "publishHomework");
       this.$router.push({
         path: "/chooseTextbook"
       });
@@ -166,13 +173,13 @@ export default {
   height: calc(100% - #{$header-height} * 3 - 10px - 3vw);
   background-color: #fff;
 }
-.list-item{
-  p{
+.list-item {
+  p {
     @extend .single-line;
     line-height: 15vw;
     padding-top: 1vw;
   }
-  div{
+  div {
     display: inline-block;
   }
   img {
@@ -187,7 +194,7 @@ export default {
     float: right;
     font-size: 7.46667vw;
   }
-  .arrow-div{
+  .arrow-div {
     width: 3%;
     float: right;
     padding-top: 5vw;
