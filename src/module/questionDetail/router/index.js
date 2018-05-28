@@ -20,7 +20,7 @@ export default
 [
   {
     name: 'questionDetail',
-    path: '/questionDetail',
+    path: '/questionDetail', // type1批改，2统计
     meta: { requiresAuth: false, keepAlive: true },
     component: questionDetail,
     children: [

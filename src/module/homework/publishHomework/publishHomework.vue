@@ -23,7 +23,7 @@
           <div class="arrow-div"><i class="fa fa-angle-right"></i></div>
         </div>
       </van-list>
-      <div v-if="lists.length==0" class="text-font" style="height: 200px;line-height: 200px;text-align: center;">
+      <div v-if="lists.length==0" class="text-font">
         暂无内容
       </div>
     </div>
@@ -54,13 +54,16 @@ export default {
   },
   methods: {
     goBack() {
-      this.$store.dispatch("directPage", "");
+      var tempStr =
+        this.$store.state.homework.publishHWBackPage.length > 0
+          ? this.$store.state.homework.publishHWBackPage
+          : "chooseTextbook";
       this.$router.push({
-        path: "/chooseTextbook"
+        path: "/" + tempStr
       });
     },
     goChooseTextbook() {
-      this.$store.dispatch("directPage", "publishHomework");
+      this.$store.state.homework.chooseBackPage = "publishHomework";
       this.$router.push({
         path: "/chooseTextbook"
       });

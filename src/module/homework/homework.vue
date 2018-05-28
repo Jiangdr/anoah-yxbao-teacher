@@ -256,10 +256,21 @@ export default {
       });
     },
     goChooseTextbook() {
-      this.$store.dispatch("directPage", "homework");
-      this.$router.push({
-        path: "/chooseTextbook"
-      });
+      let chooseTextBookObj = JSON.parse(
+        localStorage.getItem("chooseTextBookObj")
+      );
+      if (chooseTextBookObj) {
+        this.$store.dispatch("chooseTextBookObj", chooseTextBookObj);
+        this.$store.dispatch("publishHWBackPage", "homework");
+        this.$router.push({
+          path: "/publishHomework"
+        });
+      } else {
+        this.$store.state.homework.chooseBackPage = "homework";
+        this.$router.push({
+          path: "/chooseTextbook"
+        });
+      }
     },
     getHomeworkList() {
       var self = this;
@@ -344,7 +355,8 @@ export default {
   bottom: 20px;
   right: 20px;
   color: #ffffff;
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
 }
 .select-container {
   display: flex;

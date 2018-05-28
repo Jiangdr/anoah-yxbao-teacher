@@ -29,8 +29,8 @@
               <div class="text-book" v-for="(textBook, index) in textBookList" :key="index" @click="clickTextBook(textBook)"
             v-bind:class="{activerighttabclass: chooseTextbookId === textBook.edu_book_id}">{{textBook.name}}</div>
             </van-list>
-          <div v-if="textBookList.length==0" class="text-font" style="height: 200px;line-height: 200px;text-align: center;">
-            没有数据
+          <div v-if="textBookList.length==0" class="text-font">
+            暂无内容
           </div>
       </div>
     </div>
@@ -74,10 +74,9 @@ export default {
   },
   methods: {
     goHomework() {
-      debugger;
       var tempStr =
-        this.$store.state.homework.directPage.length > 0
-          ? this.$store.state.homework.directPage
+        this.$store.state.homework.chooseBackPage.length > 0
+          ? this.$store.state.homework.chooseBackPage
           : "homework";
       this.$router.push({
         path: "/" + tempStr
@@ -163,6 +162,10 @@ export default {
       this.selBook.grade_id = this.activeGradeId;
       this.selBook.term_id = this.activeTermId;
       this.$store.dispatch("chooseTextBookObj", this.selBook);
+      if (this.$store.state.homework.publishHWBackPage.length < 1) {
+        this.$store.dispatch("publishHWBackPage", "chooseTextbook");
+      }
+      localStorage.setItem("chooseTextBookObj", JSON.stringify(this.selBook));
       this.$router.push({
         path: "/publishHomework"
       });
@@ -173,10 +176,6 @@ export default {
 
 <style scoped lang="scss">
 @import "@/assets/css/custom.scss";
-.text-font {
-  font-size: 16px;
-  color: #9c9ea1;
-}
 .list-container {
   margin-top: 1vw;
   overflow-y: scroll;

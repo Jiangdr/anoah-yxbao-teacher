@@ -82,13 +82,13 @@ export default {
               {
                 value: this.info['优秀'].num,
                 itemStyle: {
-                  color: '#55a3fe'
+                  color: '#27d29e'
                 }
               },
               {
                 value: this.info['良好'].num,
                 itemStyle: {
-                  color: '#27d29e'
+                  color: '#55a3fe'
                 }
               },
               {

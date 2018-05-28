@@ -15,8 +15,8 @@
             <YxCheckBox class="checkbox" :selected="item.isSel" :ref="'cb-'+item.resource_id" @select="checkboxChange(item,$event)"></YxCheckBox>
           </div>
         </van-list>
-        <div v-if="lists.length==0" class="text-font" style="height: 200px;line-height: 200px;text-align: center;">
-          没有数据
+        <div v-if="lists.length==0" class="text-font">
+          暂无内容
         </div>
     </div>
 

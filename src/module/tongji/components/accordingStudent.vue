@@ -1,7 +1,7 @@
 <template>
   <!-- 按学生统计 -->
   <div id="according-student">
-    <div class="content">
+    <div class="content" v-show="chartType === 1 || type === 'subjectiveqti'">
       <div class="table-title van-hairline--bottom">
         <div class="table-cell name" @click="sortList(1)">
           <span>姓名</span>
@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="table-body">
-        <div class="table-row van-hairline--bottom" v-for="(stu, index) in info" :key="index" @click="linkTo(stu.status)">
+        <div class="table-row van-hairline--bottom" v-for="(stu, index) in info.user" :key="index" @click="linkTo(stu.status)">
           <div class="table-cell name">
             <div class="stu-name">
               <img :src="stu.avatar" alt="">
@@ -65,13 +65,25 @@
         </div>
       </div>
     </div>
+    <div class="content" v-show="chartType === 2">
+      <div class="column" v-for="(item, index) in columnInfo" :key="index">
+        <span>{{index}}</span>
+        <div>
+          <span class="col" @click="showStudent(index, item)" :class="{red: index === '0%-59%'}" :style="{width: columnInfo[index].counter / sum * 100 * 0.75 + '%'}"></span>
+          <span class="counter">
+            <span style="color:#1e1e1e">{{item.counter}}</span>
+            <span style="color:#7e8183">人</span>
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import {mapGetters} from 'vuex'
 export default {
   name: 'AccordingStudent',
-  props: ['info', 'type'],
+  props: ['info', 'type', 'chartType'],
   data() {
     return {
       'sortRule': {
@@ -92,7 +104,8 @@ export default {
           down: false
         }
       },
-      sortParam: 'correct_down'
+      sortParam: 'correct_down',
+      sum: 0 // 总人数
     }
   },
   computed: {
@@ -101,6 +114,17 @@ export default {
     }),
     studentInfo() {
       return this.studentList(this.sortParam)
+    },
+    columnInfo() {
+      let result = {}
+      // for (let key in this.info.clumn) {
+      //   let item = this.info.clumn[key]
+      //   !item.counter && (item.counter = 0)
+      //   !item.user && (item.user = [])
+      //   this.sum += item.counter
+      //   result[key] = item
+      // }
+      return result
     }
   },
   methods: {
@@ -159,6 +183,12 @@ export default {
         return false
       } else {
         console.log('单个学生答题页面')
+      }
+    },
+    // 显示学生列表
+    showStudent(key, info) {
+      if (info.counter) {
+        this.$emit('showStudent', key, info.user)
       }
     }
   }
@@ -225,6 +255,36 @@ export default {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+    }
+    // 图表样式
+    .column{
+      display: flex;
+      padding: 0px 13px;
+      height: 15px;
+      margin: 40px 0;
+      font-size: 15px;
+      span{
+        flex: 0 1 25%;
+      }
+      div{
+        flex: 0 1 75%;
+        .col{
+          display: inline-block;
+          min-width: 1px;
+          height: 100%;
+          background-color: #12d198;
+          &.red{
+            background-color: #ff5366;
+          }
+        }
+        .counter{
+          display: inline-block;
+          height: 100%;
+          min-width: 20%;
+          vertical-align: top;
+          padding-left: 3px;
+        }
       }
     }
   }

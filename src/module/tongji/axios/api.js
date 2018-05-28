@@ -1,7 +1,6 @@
 import API from '@/axios/_api'
 
 let apis = {
-  'getMiniResource': '/jwt/homework/stat/getMinResourceList',
   'getQuestionStatistics': '/api/?q=json/ebag/Statistics/QuestionStatistics/getQuestionStatistics&h=1&info=',
   'qtiexamStatistics': '/api/?q=json/ebag/Statistics/QtiexamStatistics/getResult'
 }

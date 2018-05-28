@@ -1,45 +1,27 @@
 <template>
 <div style="height:100%">
- <!-- <router-view style='height:100vh'></router-view> -->
-  <div class="title border-bottom-1px">
-    <van-row>
-      <van-col span="2">
-        <span
-          class="back"
-          @click="goBack"
-        >
-          <van-icon name='arrow-left'></van-icon>
-          </span>
-      </van-col>
-      <van-col span="18">
-        <span class="text">批阅作业</span>
-      </van-col>
-      <van-col span="4">
-        <span @click="linkTo">原题</span>
-      </van-col>
-    </van-row>
-  </div>
-  <slide class="tongji" @slideEnd="slideEnd" :currentPage="index">
-    <div v-for="(item, index) in mini" :key="index">
+  <header-bar @back="goBack">
+    <div slot="title-name">查看统计</div>
+    <div slot="right-area">原题</div>
+  </header-bar>
+  <swiper :options="swiperOption" ref="mySwiper" class="swiper-container">
+    <swiper-slide v-for="(item, index) in mini" :key="index">
       <answer-column :params="item" v-if="item.qti_question_type_id == 1 || item.qti_question_type_id == 2 || item.qti_question_type_id == 3 || item.qti_question_type_id == 6 || item.qti_question_type_id == 15"></answer-column>
       <choice-table :params="item" v-if="item.qti_question_type_id == 11"></choice-table>
       <correct-column :params="item" v-if="item.qti_question_type_id == 9 || item.qti_question_type_id == 21 || item.qti_question_type_id == 23 || item.qti_question_type_id == 24 || item.qti_question_type_id == 25 || item.qti_question_type_id == 26"></correct-column>
       <correct-table :params="item" v-if="item.qti_question_type_id == 4 || item.qti_question_type_id == 20"></correct-table>
-      <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
+      <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie>
       <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective>
       <render-qti :id="item.source_pk_id + ''" :icom_id="item.icom_id" :dcom_id="item.source_pk_id" user_id="0" :setting="setting"></render-qti>
-    </div>
-  </slide>
+    </swiper-slide>
+  </swiper>
 </div>
 </template>
 
 <script>
-import {
-  mapState
-} from 'vuex'
-import {
-  Toast
-} from 'vant';
+import {mapState} from 'vuex'
+import {Toast} from 'vant'
+import headerBar from '@/components/headerBar.vue'
 import answerColumn from './question/answerColumn.vue'
 import choiceTable from './question/choiceTable.vue'
 import correctColumn from './question/correctColumn.vue'
@@ -49,11 +31,16 @@ import groupDetailColumn from './question/groupDetailColumn.vue'
 import hanzitingxie from './question/hanzitingxie.vue'
 import Subjective from './question/Subjective.vue'
 import renderQti from '@/components/renderQti.vue'
-import slide from '@/components/slide'
+import 'swiper/dist/css/swiper.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
   name: 'tongji',
   data () {
-    return {}
+    return {
+      swiperOption: {
+        autoHeight: true
+      }
+    }
   },
   computed: {
     ...mapState({
@@ -77,9 +64,6 @@ export default {
       }
     }
   },
-  mounted() {
-    this.$tcplayer('http://static.dev.anoah.com/uploads/onlinedocument/20/98/89a0ce1e/9609b6a4/d8da0c2e36a7/original.mp4')
-  },
   methods: {
     goBack() {
       this.$router.go(-1)
@@ -99,7 +83,9 @@ export default {
     }
   },
   components: {
-    slide,
+    headerBar,
+    swiper,
+    swiperSlide,
     answerColumn,
     choiceTable,
     correctColumn,
@@ -113,8 +99,12 @@ export default {
 }
 </script>
 
-<style>
-.tongji {
+<style lang="scss" scoped>
+.swiper-container{
+  height: calc(100% - 45px);
+  overflow-y: scroll;
+}
+/* .tongji {
   height: calc(100% - 50px);
   overflow-y: scroll;
   width: 100%;
@@ -151,5 +141,5 @@ export default {
 
 .danxuan>.title-bar .info-right .correct {
   color: #ff4e00;
-}
+} */
 </style>
