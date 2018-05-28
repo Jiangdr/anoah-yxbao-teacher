@@ -10,6 +10,8 @@ import homeworkPublishSetting from './publishHomework/homeworkPublishSetting.vue
 import publishHomework from './publishHomework/publishHomework.vue'
 // 暑假作业内容页面
 import summerHomework from './publishHomework/summerHomework.vue'
+// 批改本题页面
+import correctTheSubject from './correctTheSubject/correctTheSubject.vue'
 
 let homeworkRoutes = [{
   path: '/homework',
@@ -29,6 +31,9 @@ let homeworkRoutes = [{
 }, {
   path: '/summerHomework',
   component: summerHomework
+}, {
+  path: '/correctTheSubject',
+  component: correctTheSubject
 }];
 
 export default homeworkRoutes;

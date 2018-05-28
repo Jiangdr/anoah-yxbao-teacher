@@ -39,7 +39,7 @@ const timeFormat = val => {
 const timeFormatSecond = val => {
   let str = ''
   let time = val
-  let s = time % 60
+  let s = Math.round(time) % 60
   let m = Math.floor(time / 60) % 60
   let h = Math.round(Math.round(time / 60) / 60)
   str = h ? `${h}'${m}''${s}'''` : m ? `${m}''${s}'''` : `${s}'''`
