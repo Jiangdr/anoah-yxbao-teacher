@@ -8,7 +8,7 @@
           <van-col span="5"><p>完成进度</p></van-col>
           <van-col span="5"><p>正确率</p></van-col>
           <van-col span="5"><p>错题订正</p></van-col>
-          <van-col span="4"><p>用时</p></van-col>
+          <!-- <van-col span="4"><p>用时</p></van-col> -->
         </van-row>
       </div>
       <div class="table-body">
@@ -22,10 +22,7 @@
           <van-col span="5">{{itemCorrect(stu.rate)}}</van-col>
           <van-col span="5">{{stu.correct_num}}</van-col>
           <van-col span="4">
-            <!-- <van-icon name="arrow"></van-icon> -->
-            <template v-if="stu.status == 3 || stu.status == 1 || stu.status == 4">{{stu.time_length | timeFormat}}</template>
-            <template v-else>--</template>
-            <!-- {{stu.time/1000 | timeFormatSecond}} -->
+            <i class="icon"></i>
           </van-col>
           </van-row>
       </div>
@@ -81,5 +78,16 @@ export default{
    overflow: hidden;
    text-overflow: ellipsis;
    white-space: nowrap;
+ }
+ .table-body .icon{
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: inline-block;
+    width:19px;
+    height: 19px;
+    background-image: url('../../../../assets/images/public/right.png');
+    position: relative;
+    top:5px;
  }
 </style>

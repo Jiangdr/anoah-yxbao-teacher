@@ -13,8 +13,7 @@
     </div>
     <!-- 平均正确率 -->
     <div class="correct">
-      <i class="icon" :style="{'background-image':'url('+imgUrl('public/help')+')'}" @click="toggleTips" v-if="!showTips"></i>
-      <i class="icon" :style="{'background-image':'url('+imgUrl('public/help-h')+')'}" @click="toggleTips" v-if="showTips"></i>
+      <i class="icon"  @click="toggleTips"></i>
       <div>
         <correct-circle
           :r="55"
@@ -49,8 +48,7 @@
           <!-- <span>共{{resourceList.length}}题</span> -->
           <span>只看待批阅</span>
           <span class="right">
-            <i class="checkbox icon" :style="{'background-image':'url('+imgUrl('public/checkunsel')+')'}" @click="check" v-if="!notcorrect"></i>
-            <i class="checkbox icon" :style="{'background-image':'url('+imgUrl('public/checksel')+')'}" @click="check" v-if="notcorrect"></i>
+            <i class="checkbox icon" :class="{'checked':notcorrect}" @click="check"></i>
           </span>
         </div>
         <!-- 作业资源列表 -->
@@ -65,8 +63,7 @@
                   </p>
                   <p style="position:relative">
                     已完成：{{ques.finished_counter}}/{{homeworkInfo.student_counter}}人 正确率：{{itemCorrect(ques.average_rate)}}
-                   <i v-if="!ques.isShow" class="icon arrow" :style="{'background-image':'url('+imgUrl('public/right')+')'}"></i>
-                   <i v-if="ques.isShow" class="icon arrow" :style="{'background-image':'url('+imgUrl('public/down')+')'}"></i>
+                   <i class="icon arrow" :class="{'down':ques.isShow}"></i>
                   </p>
                 </div>
           </div>
@@ -88,7 +85,7 @@
           <div class="status">
             <van-row class="item">
               <van-col span="9">
-                <i class="icon" :style="{'background-image':'url('+imgUrl('homeworkDetail/unfinish')+')'}"></i>未完成
+                <i class="icon unfinish"></i>未完成
               </van-col>
               <van-col span="9">{{homeworkInfo.unfinished_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isUrge">
@@ -100,7 +97,7 @@
             </van-row>
             <van-row class="item">
               <van-col span="9">
-                <i class="icon" :style="{'background-image':'url('+imgUrl('homeworkDetail/revising')+')'}"></i>未订正
+                <i class="icon revising"></i>未订正
               </van-col>
               <van-col span="9">{{homeworkInfo.unretyr_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isRemind">
@@ -190,7 +187,7 @@ export default {
       if (this.correct === "" || this.correct === -1) {
         return "--";
       } else {
-        return this.correct === 0 ? 0 : Math.round(this.correct * 100) + "%";
+        return Math.round(this.correct * 100) + "%";
       }
     },
     // 作业完成人数
@@ -224,9 +221,6 @@ export default {
     },
     check() {
       this.notcorrect = !this.notcorrect;
-    },
-    imgUrl(name) {
-      return require('@/assets/images/' + name + '.png')
     },
     goBatchEvaluate() {
       // 批量评价
@@ -353,7 +347,7 @@ export default {
       if (correct === "" || correct === -1) {
         return "--";
       } else {
-        return correct === 0 ? 0 : Math.round(correct * 100) + "%";
+        return Math.round(correct * 100) + "%";
       }
     },
     // 是否为复合题
@@ -488,8 +482,11 @@ export default {
   display: inline-block;
   width:19px;
   height: 19px;
+  background-image: url('../../../assets/images/public/help.png');
 }
-
+.detail>.wrapper>.correct i:active{
+  background-image: url('../../../assets/images/public/help-h.png');
+}
 .detail>.wrapper>.correct>.num {
   font-size: 24px;
   font-weight: bold;
@@ -505,7 +502,7 @@ export default {
 
 .detail>.wrapper>.content>.btns span {
   display: inline-block;
-  height: 43px;
+  height: 42px;
   border-bottom: 2px solid transparent;
 }
 
@@ -543,7 +540,10 @@ export default {
   display: inline-block;
   width:19px;
   height: 19px;
-
+  background-image: url('../../../assets/images/public/checkunsel.png');
+}
+.detail>.wrapper>.content>.homework-content>.total>.right .checkbox.checked{
+  background-image: url('../../../assets/images/public/checksel.png');
 }
 .detail>.wrapper>.content>.homework-content .lists {
   height: calc(100% - 45px);
@@ -574,6 +574,11 @@ export default {
   position: absolute;
   right: 0;
   top:3px;
+  background-image: url('../../../assets/images/public/right.png');
+}
+.detail>.wrapper>.content>.homework-content .lists .item .iteminfo>.right .arrow.down{
+  background-image: url('../../../assets/images/public/down.png');
+
 }
 .detail>.wrapper>.content>.homework-content .lists .item .iteminfo>.right .no-correct{
   position: absolute;
@@ -660,6 +665,11 @@ export default {
   position: relative;
   margin-right: 5px;
   top:4px;
+  background-image: url('../../../assets/images/homeworkDetail/unfinish.png');
+}
+.detail>.wrapper>.content>.student-content .status>.item i.revising{
+  background-image: url('../../../assets/images/homeworkDetail/revising.png');
+
 }
 .detail>.wrapper>.content>.student-content .status>.item .disable {
   opacity: 0.5;
