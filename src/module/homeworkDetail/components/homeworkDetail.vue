@@ -111,13 +111,13 @@
               </van-col>
             </van-row>
           </div>
+          <div class="title">学生成绩</div>
         <template v-if="finishCounter>0">
           <!-- 学生列表 -->
           <student-list :studentList="studentList"></student-list>
         </template>
         <!-- 没人完成 -->
         <template v-else>
-          <div class="title">学生成绩</div>
           <div class="noanswer-tip">还没有学生提交作业哟～</div>
         </template>
         </div>
@@ -398,7 +398,8 @@ export default {
 /* title样式 */
 
 .detail>.wrapper {
-  height: calc(100vh - 100px);
+  height: calc(100vh - 110px);
+  overflow: scroll;
 }
 
 /* 作业信息 */
@@ -442,11 +443,12 @@ export default {
   text-align: center;
   display: flex;
   flex-direction: column;
-  margin: 8px 35px 8px 0px;
+  padding: 8px 35px 8px 0px;
   font-size: 14px;
+  flex: 1 auto auto;
 }
 .detail>.wrapper .itemdetail p.no-margin{
-  margin-right: 0px;
+  padding-right: 0px;
 }
 
 .detail>.wrapper .itemdetail.hide {
@@ -495,7 +497,7 @@ export default {
 
 .detail>.wrapper>.content {
   background: #fff;
-  height: calc(100% - 160px - 20px);
+  /* height: calc(100% - 160px - 20px); */
   box-sizing: border-box;
 }
 
@@ -503,13 +505,13 @@ export default {
 
 .detail>.wrapper>.content>.btns span {
   display: inline-block;
-  height: 37px;
+  height: 43px;
   border-bottom: 2px solid transparent;
 }
 
 .detail>.wrapper>.content>.btns {
-  line-height: 39px;
-  height: 39px;
+  line-height: 44px;
+  height: 44px;
   box-sizing: border-box;
   text-align: center;
 }
@@ -523,7 +525,7 @@ export default {
 
 .detail>.wrapper>.content>.homework-content,
 .detail>.wrapper>.content>.student-content {
-  height: calc(100% - 50px - 68px);
+  height: calc(100% - 50px - 68px - 20px);
 }
 
 .detail>.wrapper>.content>.homework-content>.total {
@@ -547,6 +549,7 @@ export default {
   height: calc(100% - 45px);
   overflow-y: scroll;
   box-sizing: border-box;
+  width:100%;
 }
 
 .detail>.wrapper>.content>.homework-content .lists .item .iteminfo {
@@ -637,13 +640,13 @@ export default {
 
 .detail>.wrapper>.content>.student-content .title {
   margin-top: 20px;
-  margin-bottom: 20px;
   padding-left: 10px;
   font-weight: 500;
 }
 
 .detail>.wrapper>.content>.student-content   .noanswer-tip {
   text-align: center;
+  margin-top:20px;
 }
 
 .detail>.wrapper>.content>.student-content .status>.item {
