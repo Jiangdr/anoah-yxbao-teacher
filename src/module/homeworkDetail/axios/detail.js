@@ -1,15 +1,15 @@
 import API from '@/axios/_api'
 
 let apis = {
-  'detail': '/jwt/homework/stat/basic', // 统计
-  'resource': '/jwt/homework/stat/getResourceList',
-  'getMiniResource': '/jwt/homework/stat/getMinResourceList',
-  'sendAnswer': '/jwt/homework/correct/sendAnswer',
-  'kp': '/jwt/homework/stat/getKpList',
-  'urge': '/jwt/notice/message/jiaozuoye', // 催交作业
-  'remind': '/jwt/notice/message/dingzheng', // 订正提醒
-  'remove': '/jwt/homework/publish/remove', // 删除作业
-  'favorite': 'jwt/homework/favorite/update' //  收藏作业 1收藏 0 取消收藏
+  'detail': 'jwt/homework/stat/basic', // 统计
+  'resource': 'jwt/homework/stat/getResourceList',
+  'getMiniResource': 'jwt/homework/stat/getMinResourceList',
+  'sendAnswer': 'jwt/homework/correct/sendAnswer',
+  'urge': 'jwt/notice/message/jiaozuoye', // 催交作业
+  'remind': 'jwt/notice/message/dingzheng', // 订正提醒
+  'remove': 'jwt/homework/publish/remove', // 删除作业
+  'favorite': 'jwt/homework/favorite/update', //  收藏作业 1收藏 0 取消收藏
+  'kp': '	jwt/homework/stat/getKpList'
 }
 
 let homeworkinfo = new API(apis)

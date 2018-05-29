@@ -81,10 +81,11 @@ export default {
     },
     getinfo() {
       let param = {
-        "course_hour_publish_id": this.params.course_hour_publish_id,
+        "publish_id": this.params.course_hour_publish_id,
         "course_resource_id": this.params.course_resource_id,
-        "qti_question_id": this.params.source_pk_id,
         "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
+        'icom_id': this.params.icom_id,
+        "qti_question_id": this.params.source_pk_id,
         "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
       }
       getStatistics.getinfo(param).then((r) => {
