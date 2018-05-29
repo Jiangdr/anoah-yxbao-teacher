@@ -93,6 +93,7 @@ export default {
       showClassPopup: false,
       showStatusPopup: false,
       showTimePopup: false,
+      chooseTextBookObj: null,
       columnsOfClass: [],
       columnsOfStatus: [
         {
@@ -186,6 +187,7 @@ export default {
     this.chooseStatus = this.columnsOfStatus[0];
     this.chooseTime = this.columnsOfTime[0];
     this.getHomeworkList();
+    this.getChoosedBook();
   },
   methods: {
     clickClass() {
@@ -255,12 +257,33 @@ export default {
         path: "/"
       });
     },
-    goChooseTextbook() {
-      let chooseTextBookObj = JSON.parse(
-        localStorage.getItem("chooseTextBookObj")
+    getChoosedBook() {
+      var self = this;
+      var data = {
+        user_id: this.userInfo.userid
+      };
+      api.getLastRecord(data).then(
+        success => {
+          if (success.hasOwnProperty("grade_id")) {
+            self.chooseTextBookObj = success;
+          }
+        },
+        err => {
+          console.log(err);
+          self.$toast("网络异常");
+        }
       );
-      if (chooseTextBookObj) {
-        this.$store.dispatch("chooseTextBookObj", chooseTextBookObj);
+    },
+    goChooseTextbook() {
+      debugger;
+      if (!this.chooseTextBookObj) {
+        this.chooseTextBookObj = JSON.parse(
+          localStorage.getItem("chooseTextBookObj")
+        );
+      }
+
+      if (this.chooseTextBookObj) {
+        this.$store.dispatch("chooseTextBookObj", this.chooseTextBookObj);
         this.$store.dispatch("publishHWBackPage", "homework");
         this.$router.push({
           path: "/publishHomework"
@@ -282,7 +305,7 @@ export default {
         to: self.chooseTime.to,
         page: self.currentPage,
         per_page: 6,
-        type: '1,2,20'
+        type: "1,2,20"
       };
 
       api.homeworkLists(data).then(function(r) {

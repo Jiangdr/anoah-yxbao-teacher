@@ -6,7 +6,9 @@ let apis = {
   getResourceLists: "jwt/resource/package/get",
   getBookLists: "jwt/resource/common/getBookLists",
   getGradeLists: "jwt/resource/common/getGradeLists",
-  getLists: "jwt/resource/package/search"
+  getLists: "jwt/resource/package/search",
+  saveRecord: "jwt/user/book/saveRecord",
+  getLastRecord: "jwt/user/book/getLastRecord"
 }
 
 let publishHomeWork = new API(apis)
@@ -33,6 +35,12 @@ publishHomeWork.getGradeLists = (params) => {
 
 publishHomeWork.getLists = (params) => {
   return publishHomeWork.fetch(apis.getLists, params, 'post')
+}
+publishHomeWork.saveRecord = (params) => {
+  return publishHomeWork.fetch(apis.saveRecord, params, 'post')
+}
+publishHomeWork.getLastRecord = (params) => {
+  return publishHomeWork.fetch(apis.getLastRecord, params, 'post')
 }
 
 export default publishHomeWork
