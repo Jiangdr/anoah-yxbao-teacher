@@ -99,12 +99,11 @@ export default {
     },
     getinfo() {
       let param = {
-        "course_hour_publish_id": this.params.course_hour_publish_id,
+        "publish_id": this.params.course_hour_publish_id,
         "course_resource_id": this.params.course_resource_id,
-        "icom_id": this.params.icom_id,
-        "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0
+        'icom_id': this.params.icom_id
       }
-      getStatistics.getIcomInfo(param).then((r) => {
+      getStatistics.getinfo(param).then((r) => {
         this.allCorrect = r.all_correct;
         this.resource = r.resource;
         this.user = r.user;
