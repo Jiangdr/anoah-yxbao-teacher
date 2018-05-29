@@ -12,6 +12,8 @@ import publishHomework from './publishHomework/publishHomework.vue'
 import summerHomework from './publishHomework/summerHomework.vue'
 // 批改本题页面
 import correctTheSubject from './correctTheSubject/correctTheSubject.vue'
+// 切换学生页面
+import switchStudent from './switchStudent/switchStudent.vue'
 
 let homeworkRoutes = [{
   path: '/homework',
@@ -34,6 +36,9 @@ let homeworkRoutes = [{
 }, {
   path: '/correctTheSubject',
   component: correctTheSubject
+}, {
+  path: '/switchStudent',
+  component: switchStudent
 }];
 
 export default homeworkRoutes;

@@ -1,29 +1,41 @@
 <template>
   <div class="spa">
-    <topbar title="首页" text="" :isHome="true" >
-      <van-icon class="icon" name="sign" @click="message" />
-      <van-icon class="icon" name="search"  @click="showPopup =true"/>
-    </topbar>
-    <van-row>
-      <van-col span="12">
-        <van-button type="primary" block @click="go('iclass')">互动课堂</van-button>
-      </van-col>
-      <van-col span="12">
-        <van-button type="primary" block @click="go('homework')">作业</van-button>
-      </van-col>
-    </van-row>
-    <div class="space"></div>
-    <van-row>
-      <van-col span="8">
-        <van-button type="primary" block>错课本</van-button>
-      </van-col>
-      <van-col span="8">
-        <van-button type="primary" block>课堂记录</van-button>
-      </van-col>
-      <van-col span="8">
-        <van-button type="primary" block @click="go('qa')">问答</van-button>
-      </van-col>
-    </van-row>
+    <div class="top">
+      <div @click="message">
+        <i class="icon message"></i>
+      </div>
+      <div @click="showPopup =true">
+        <i class="icon scan"></i>
+      </div>
+    </div>
+
+    <div class="pannel">
+      <div>
+        <div @click="go('iclass')">
+          <i class="icon iclass"></i>
+          <span class="font-h1">互动课堂</span>
+        </div>
+        <div @click="go('homework')">
+          <i class="icon homework"></i>
+          <span class="font-h1">作业</span>
+        </div>
+      </div>
+      <div class="line"></div>
+      <div>
+        <div>
+          <i class="icon wrong"></i>
+           <span class="font-h4">错题本</span>
+        </div>
+        <div >
+          <i class="icon iclass-record"></i>
+           <span class="font-h4">课堂记录</span>
+        </div>
+        <div @click="go('qa')">
+          <i class="icon ask"></i>
+           <span class="font-h4">问答</span>
+        </div>
+      </div>
+    </div>
 
     <div>
       <div>待处理</div>
@@ -39,13 +51,13 @@
       <van-tabbar-item icon="chat">我的</van-tabbar-item>
     </van-tabbar>
 
-  <van-popup v-model="showPopup" position="bottom" class="run-env" :overlay="true" :lock-scroll="true">
-    <div @click="getEnv('.dev')">dev</div>
-       <div  @click="getEnv('.dt')">dt</div>
-          <div  @click="getEnv('.test')">test</div>
-             <div @click="getEnv('.t')">t</div>
-              <div  @click="getEnv('')">外网</div>
-</van-popup>
+    <van-popup v-model="showPopup" position="bottom" class="run-env" :overlay="true" :lock-scroll="true">
+      <div @click="getEnv('.dev')">dev</div>
+      <div @click="getEnv('.dt')">dt</div>
+      <div @click="getEnv('.test')">test</div>
+      <div @click="getEnv('.t')">t</div>
+      <div @click="getEnv('')">外网</div>
+    </van-popup>
 
   </div>
 </template>
@@ -53,11 +65,11 @@
 <script>
 import topbar from '@/components/common/topbar'
 import api from '@/axios/iclass'
-import {mapGetters} from 'vuex'
-import {Dialog} from 'vant'
+import { mapGetters } from 'vuex'
+import { Dialog } from 'vant'
 export default {
   name: 'Home',
-  data () {
+  data() {
     return {
       list: [],
       loading: false,
@@ -73,13 +85,13 @@ export default {
     })
   },
   methods: {
-    message () {
+    message() {
       this.$router.push({
         name: 'notice',
-        params: {role: 'teacher'}
+        params: { role: 'teacher' }
       })
     },
-    scan () {
+    scan() {
       alert('扫码')
     },
 
@@ -89,7 +101,7 @@ export default {
       this.$store.dispatch('runEnv/changeEnv', env);
     },
 
-    go (type) {
+    go(type) {
       // 代码走本地
       let href = window.location.href.split('#')[0]
       let userInfo = JSON.parse(localStorage.getItem('user'))
@@ -129,7 +141,7 @@ export default {
             window.location.href = href;
           }
         })
-      // 问答
+        // 问答
       } else if (type === 'qa') {
         param = JSON.stringify({
           userid: parseInt(this.$store.state.account.userInfo.userid),
@@ -149,13 +161,13 @@ export default {
         window.location.href = href;
       }
     },
-    onClickLeft () {
+    onClickLeft() {
 
     },
-    onClickRight () {
+    onClickRight() {
 
     },
-    onLoad () {
+    onLoad() {
       setTimeout(() => {
         for (let i = 0; i < 10; i++) {
           this.list.push(this.list.length + 1)
@@ -167,7 +179,7 @@ export default {
         }
       }, 500)
     },
-    onRefresh () {
+    onRefresh() {
       setTimeout(() => {
         this.list = []
         this.finished = false
@@ -178,7 +190,7 @@ export default {
         this.refreshLoading = false
       }, 500)
     },
-    change () {
+    change() {
       this.$router.push({ name: 'userCenter' })
     }
 
@@ -190,11 +202,77 @@ export default {
 
 }
 </script>
-<style scoped>
-.icon{
-  font-size:18px;
-  padding:10px;
+<style lang="scss" scoped>
+@import "@/style/base.scss";
+.spa {
+  background: url("../../assets/images/home/bg.jpg") no-repeat;
+  background-size: 100% auto;
 }
+.top {
+  padding-top: 3vh;
+  height: 8vh;
+  text-align: right;
+  & > div {
+    display: inline-block;
+    padding: 7px;
+  }
+
+  .icon{
+    width: 21px;
+    height: 20px;
+  }
+}
+
+.pannel{
+  background:$white;
+  width: 100%;
+ // margin: $gap-small;
+  border-radius: 8px;
+  box-shadow: 0 2px 2px rgba(0,0,0,.5);
+  box-sizing: border-box;
+
+  .line{
+    height: 0.5px;
+    width: 80%;
+    background-color:$gray5;
+    padding:0;margin:0 auto;
+    opacity: 0.8;
+  }
+
+  &>div{
+    padding:10px;
+     display: flex;
+     justify-content:center;
+     text-align:center;
+     height: 70px;
+    align-items: center;
+  }
+
+  &>div>div{
+   flex: 1 0 0 ;
+
+    span{
+      padding:5px;
+    }
+  }
+
+  .iclass,.homework{
+    width: 50px;
+    height: 50px;
+    vertical-align: middle;
+  }
+
+  .iclass-record,.wrong,.ask{
+     width: 35px;
+    height: 35px;
+    vertical-align: middle;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 10px;
+  }
+
+}
+
 .space {
   height: 20px;
 }
@@ -206,10 +284,10 @@ export default {
   overflow-y: scroll;
 }
 
-.run-env  >div{
-  text-align:center;
-  height:38px;
-  line-height:38px;
-border-bottom:1px solid #ccc;
+.run-env > div {
+  text-align: center;
+  height: 38px;
+  line-height: 38px;
+  border-bottom: 1px solid #ccc;
 }
 </style>

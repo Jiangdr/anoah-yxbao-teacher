@@ -127,6 +127,7 @@ export default {
       var self = this;
       self.page++;
       var data = {
+        user_id: self.userInfo.userid,
         page: self.page,
         per_page: 15,
         grade_id: self.activeGradeId,
@@ -166,6 +167,15 @@ export default {
         this.$store.dispatch("publishHWBackPage", "chooseTextbook");
       }
       localStorage.setItem("chooseTextBookObj", JSON.stringify(this.selBook));
+      this.selBook.user_id = this.userInfo.userid;
+      api.saveRecord(this.selBook).then(
+        success => {},
+        err => {
+          console.log(err);
+          self.$toast("网络异常");
+        }
+      );
+
       this.$router.push({
         path: "/publishHomework"
       });
