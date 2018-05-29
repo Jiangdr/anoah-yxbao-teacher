@@ -60,8 +60,8 @@ export default {
   height: 100%;
 }
 .noticeDetail .container .top{
-  height: 75px;
-  padding-top:12px;
+  /* height: 75px; */
+  padding:12px 0;
   box-sizing: border-box;
   border-bottom: 1px solid #e8ebee;
 }
@@ -70,9 +70,10 @@ export default {
   font-size: 19px;
   line-height: 30px;
   font-weight: bold;
-  overflow: hidden;
+   margin-bottom: 5px;
+  /* overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: nowrap; */
 }
 .noticeDetail .container .top .data{
   color:#c8c9c9;
@@ -82,7 +83,7 @@ export default {
   height: calc(100% - 75px);
   box-sizing: border-box;
   padding-bottom: 10px;
-  padding-top:20px;
+  padding-top:15px;
   overflow: scroll;
 }
 .noticeDetail .container .notice-content >>> img{
