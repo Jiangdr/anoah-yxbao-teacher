@@ -1,19 +1,12 @@
 import API from '@/axios/_api'
 
 let apis = {
-  'getQuestionStatistics': '/api/?q=json/ebag/Statistics/QuestionStatistics/getQuestionStatistics&h=1&info=',
-  'qtiexamStatistics': '/api/?q=json/ebag/Statistics/QtiexamStatistics/getResult'
+  'statistics': 'jwt/homework/stat/getByRid' // 单题统计
 }
 
-let tongji = new API(apis)
+let questionStatistics = new API(apis)
+questionStatistics.getinfo = (params) => {
+  return questionStatistics.fetch(questionStatistics.apis.statistics, params, 'post')
+}
 
-tongji.getMiniResource = (params) => {
-  return tongji.fetch(tongji.apis.getMiniResource, params, 'post')
-}
-tongji.getQuestionStatistics = (params) => {
-  return tongji.fetch(tongji.apis.getQuestionStatistics, params, 'get', {'api': 'old'})
-}
-tongji.qtiexamStatistics = (params) => {
-  return tongji.fetch(tongji.apis.qtiexamStatistics, params, 'get', {'api': 'old'})
-}
-export default tongji
+export default questionStatistics

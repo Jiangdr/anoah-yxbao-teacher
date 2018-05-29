@@ -2,6 +2,7 @@
   <div class="spa">
     <div class="top">
       <div @click="message">
+        <i class="red-icon"></i>
         <i class="icon message"></i>
       </div>
       <div @click="showPopup =true">
@@ -243,9 +244,21 @@ export default {
   padding-top: 3vh;
   height: 8vh;
   text-align: right;
+
   & > div {
     display: inline-block;
     padding: 7px;
+    position: relative;
+      .red-icon{
+      display: inline-block;
+      width:7px;
+      height: 7px;
+      background: url("../../assets/images/public/red-icon.png") no-repeat;
+      background-size: 100% auto;
+      position: absolute;
+      top:7px;
+      right: 7px;
+    }
   }
 
   .icon {
