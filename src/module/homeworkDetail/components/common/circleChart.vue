@@ -36,8 +36,9 @@
         <div class="per">{{Math.ceil(this.info['优秀'].num / pigaiSum * 100)}}%</div>
       </div>
     </div>
-    <div class="chart-content" v-else>
-      暂无批改的作业
+    <div class="chart-content no-data" v-else>
+      <img :src="imgUrl" alt="">
+      <span style="color:#c8c8c8;line-height:26px">暂无批改的作业~</span>
     </div>
   </div>
 </template>
@@ -53,66 +54,68 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(() => {
-      this.chart = this.$echarts.init(document.getElementById('chart'))
-      this.chart.setOption({
-        title: {
-          text: `${this.pigaiSum}人`,
-          subtext: '批改人数',
-          x: 'center',
-          top: '40%',
-          textStyle: {
-            color: '#1e1e1e',
-            fontSize: this.fontSize
-          },
-          subTextStyle: {
-            color: '#c8c8c8',
-            fontSize: this.fontSize
-          }
-        },
-        series: [
-          {
-            name: '学生作业成绩分布',
-            type: 'pie',
-            radius: ['50%', '70%'],
-            avoidLabelOverlap: false,
-            labelLine: {
-              normal: {
-                show: false
-              }
+    if (this.pigaiSum) {
+      this.$nextTick(() => {
+        this.chart = this.$echarts.init(document.getElementById('chart'))
+        this.chart.setOption({
+          title: {
+            text: `${this.pigaiSum}人`,
+            subtext: '批改人数',
+            x: 'center',
+            top: '40%',
+            textStyle: {
+              color: '#1e1e1e',
+              fontSize: this.fontSize
             },
-            data: [
-              {
-                value: this.info['优秀'].num,
-                itemStyle: {
-                  color: '#27d29e'
+            subTextStyle: {
+              color: '#c8c8c8',
+              fontSize: this.fontSize
+            }
+          },
+          series: [
+            {
+              name: '学生作业成绩分布',
+              type: 'pie',
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: false,
+              labelLine: {
+                normal: {
+                  show: false
                 }
               },
-              {
-                value: this.info['良好'].num,
-                itemStyle: {
-                  color: '#55a3fe'
+              data: [
+                {
+                  value: this.info['优秀'].num,
+                  itemStyle: {
+                    color: '#27d29e'
+                  }
+                },
+                {
+                  value: this.info['良好'].num,
+                  itemStyle: {
+                    color: '#55a3fe'
+                  }
+                },
+                {
+                  value: this.info['及格'].num,
+                  itemStyle: {
+                    color: '#9673fe'
+                  }
+                },
+                {
+                  value: this.info['待提升'].num,
+                  itemStyle: {
+                    color: '#ffa743'
+                  }
                 }
-              },
-              {
-                value: this.info['及格'].num,
-                itemStyle: {
-                  color: '#9673fe'
-                }
-              },
-              {
-                value: this.info['待提升'].num,
-                itemStyle: {
-                  color: '#ffa743'
-                }
-              }
-            ]
-          }
-        ]
+              ]
+            }
+          ]
+        })
       })
-    })
-    window.onresize = () => {
-      this.chart.resize()
+      window.onresize = () => {
+        this.chart.resize()
+      }
     }
   },
   computed: {
@@ -125,6 +128,9 @@ export default {
         sum += this.info[key].num
       }
       return sum
+    },
+    imgUrl() {
+      return require('@/assets/images/homeworkDetail/no-data.png')
     }
   }
 }
@@ -202,6 +208,20 @@ export default {
     #chart{
       width: 100%;
       height: 100%;
+    }
+    &.no-data{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      padding: 0 26px;
+      box-sizing: border-box;
+      text-align: center;
+      img{
+        width: 100px;
+        height: 130px;
+      }
     }
   }
 }

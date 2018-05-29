@@ -23,7 +23,7 @@
     </div>
     <div v-else class="no-data">
       <img :src="imgUrl" alt="">
-      <span style="color:#1e1e1e;font-weight:600;margin-bottom:10px;">无知识点正确率相关数据~</span>
+      <span style="color:#c8c8c8;font-weight:600;margin-bottom:10px;">无知识点正确率相关数据~</span>
     </div>
   </div>
 </template>
@@ -97,7 +97,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
+    font-size: 16px;
     padding: 0 26px;
     text-align: center;
     img{
