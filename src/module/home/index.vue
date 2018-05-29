@@ -46,7 +46,7 @@
         <template slot="pulldown" slot-scope="props">
           <div v-if="props.pullDownRefresh" class="cube-pulldown-wrapper" :style="props.pullDownStyle">
             <div v-if="props.beforePullDown" class="before-trigger" :style="{paddingTop: props.bubbleY + 'px'}">
-              <span :class="{rotate: props.bubbleY > 40}">↓</span>
+              <span :class="{rotate: props.bubbleY > 40}">释放刷新</span>
             </div>
             <div class="after-trigger" v-else>
               <div v-if="props.isPullingDown" class="loading">
@@ -86,15 +86,26 @@ export default {
   name: 'Home',
   data() {
     return {
-      items: [],
-      loading: false,
-      refreshLoading: false,
-      finished: false,
+      items: [
+        'I am line ',
+        'I am line ',
+        'I am line ',
+        'I am line ',
+        'I am line '
+      ],
       active: 0,
       showPopup: false,
+      itemIndex: 0,
       options: {
+        pullDownRefresh: {
+          threshold: 40,
+          txt: {
+            more: '加载更多',
+            noMore: '已经显示全部'
+          }
+        },
         pullUpLoad: {
-          threshold: 0,
+          threshold: 40,
           txt: {
             more: '加载更多',
             noMore: '已经显示全部'
@@ -193,7 +204,7 @@ export default {
     },
     onLoad() {
       setTimeout(() => {
-        if (Math.random() > 0.5) {
+        if (this.items.length < 20) {
           // If have new data, just update the data property.
           let newPage = [
             'I am line ' + ++this.itemIndex,
@@ -212,6 +223,7 @@ export default {
     onRefresh() {
       setTimeout(() => {
         this.items = [];
+        this.itemIndex = 0;
         let newPage = [
           'I am line ' + ++this.itemIndex,
           'I am line ' + ++this.itemIndex,
@@ -249,14 +261,14 @@ export default {
     display: inline-block;
     padding: 7px;
     position: relative;
-      .red-icon{
+    .red-icon {
       display: inline-block;
-      width:7px;
+      width: 7px;
       height: 7px;
       background: url("../../assets/images/public/red-icon.png") no-repeat;
       background-size: 100% auto;
       position: absolute;
-      top:7px;
+      top: 7px;
       right: 7px;
     }
   }
@@ -322,21 +334,20 @@ export default {
 
 .todo-box {
   margin-top: 18px;
+
+  div.font-h1 {
+    padding: 8px 0;
+  }
+
   span.font-h4 {
     color: $gray5;
     padding: 0 12px;
   }
-}
 
-.space {
-  height: 20px;
-}
-.van-pull-refresh {
-  height: calc(100vh - 62vw);
-}
-.van-list {
-  height: calc(100vh - 180px);
-  overflow-y: scroll;
+  .cube-scroll-wrapper {
+    margin: 0 -13px;
+    height: calc(100vh - 357px);
+  }
 }
 
 .run-env > div {

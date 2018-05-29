@@ -275,7 +275,6 @@ export default {
       );
     },
     goChooseTextbook() {
-      debugger;
       if (!this.chooseTextBookObj) {
         this.chooseTextBookObj = JSON.parse(
           localStorage.getItem("chooseTextBookObj")
