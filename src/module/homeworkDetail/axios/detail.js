@@ -8,7 +8,8 @@ let apis = {
   'urge': 'jwt/notice/message/jiaozuoye', // 催交作业
   'remind': 'jwt/notice/message/dingzheng', // 订正提醒
   'remove': 'jwt/homework/publish/remove', // 删除作业
-  'favorite': 'jwt/homework/favorite/update' //  收藏作业 1收藏 0 取消收藏
+  'favorite': 'jwt/homework/favorite/update', //  收藏作业 1收藏 0 取消收藏
+  'kp': '	jwt/homework/stat/getKpList'
 }
 
 let homeworkinfo = new API(apis)
@@ -35,5 +36,8 @@ homeworkinfo.remove = (params) => {
 }
 homeworkinfo.favorite = (params) => {
   return homeworkinfo.fetch(homeworkinfo.apis.favorite, params, 'post')
+}
+homeworkinfo.kp = params => {
+  return homeworkinfo.fetch(homeworkinfo.apis.kp, params, 'post')
 }
 export default homeworkinfo

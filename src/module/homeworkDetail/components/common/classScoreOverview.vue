@@ -3,7 +3,7 @@
     <div class="title van-hairline--bottom">全班成绩情况</div>
     <div class="content">
       <div class="score-item">
-        <span class="percent">{{Math.round(this.info.class_average_correct_rate * 100)}}%</span>
+        <span class="percent">{{this.info.class_average_correct_rate >= 0 ? Math.round(this.info.class_average_correct_rate * 100) + '%' : '--'}}</span>
         <span class="name">平均正确率</span>
       </div>
       <div class="score-item">
