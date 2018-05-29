@@ -52,7 +52,7 @@
             <div @click="clickRecordBtn">
 
               <div class="circleNoRotate" v-show="!isRecording">
-                <div style="background-color: #13d098;width: 130px;height: 130px;border-radius: 50%;display: flex;align-items: center;justify-content: center;">
+                <div class="circleNoRotate-div">
                   <img style="width: 50%;" src="@/assets/images/batchEvaluate/voiceBtn.png" alt="voiceBtn">
                 </div>
               </div>
@@ -120,6 +120,13 @@ export default {
     },
     clickRecordBtn() {
       this.isRecording = !this.isRecording;
+      if (this.isRecording) {
+        var param = [this.userInfo.account.userId, this.userInfo.account.jwt, 'http://api2.dev.anoah.com/jwt/homework/correct/upload_auth?', "['http://ox7arp73u.bkt.clouddn.com/guoge2.mp3']"];
+        window.appPlug.aliUpLoad(param, this.afteruploadsucc);
+      }
+    },
+    afteruploadsucc(msg) {
+      alert(JSON.stringify(msg))
     },
     clickVoiceChoose() {
       this.showVoicePopup = false;
@@ -250,5 +257,14 @@ $border-state: 1px solid rgb(234, 237, 240);
     -webkit-transform: scale(1.0);
     opacity: 0;
   }
+}
+.circleNoRotate-div {
+  background-color: #13d098;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
