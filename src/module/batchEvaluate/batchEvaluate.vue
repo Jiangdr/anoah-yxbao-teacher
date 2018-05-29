@@ -31,7 +31,7 @@
       <div class="list-item" style="float: left;position: relative;">
         <span style="float: left;margin-right: 10px;" class="bg-class checkboxAll" @click="clickChooseAll">
           <img src="@/assets/images/public/checkunsel.png" v-if="!chooseAllStudentsShow"/>
-          <img src="@/assets/images/public/checksel.png" v-if="chooseAllStudentsShow"/>
+          <img src="@/assets/images/batchEvaluate/chooseAvator.png" v-if="chooseAllStudentsShow"/>
         </span>
         <span style="height: 28px;line-height: 28px;">全选</span>
       </div>
@@ -47,7 +47,7 @@
               <img style="border-radius: 50%;width: 100%;height: 100%;" :src="item.avatar"/>
             </span>
             <div class="bg-class checkbox">
-              <img src="@/assets/images/public/checksel.png" v-if="item.selectState" style="width:100%;height:100%"/>
+              <img src="@/assets/images/batchEvaluate/chooseAvator.png" v-if="item.selectState" style="width:100%;height:100%"/>
             </div>
           </div>
           <div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ item.real_name }}</div>
