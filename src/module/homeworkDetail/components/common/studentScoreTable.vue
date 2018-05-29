@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="table-body">
-        <div class="table-row van-hairline--bottom" v-for="(stu, index) in studentInfo" :key="index" @click="linkTo(stu.status)">
+        <div class="table-row van-hairline--bottom" v-for="(stu, index) in studentInfo" :key="index" @click="linkTo(stu)">
           <div class="table-cell name">
             <div class="stu-name">
               <img :src="stu.avatar" alt="">
@@ -70,7 +70,7 @@
 </template>
 <script>
 // 全班成绩 ==> 学生成绩表
-import {mapGetters} from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 export default {
   name: 'StudentScoreTable',
   data() {
@@ -99,6 +99,9 @@ export default {
   computed: {
     ...mapGetters({
       studentList: 'homeworkDetail/getStudentInfo'
+    }),
+    ...mapState({
+      homeworkInfo: state => state.homeworkDetail.homeworkInfo
     }),
     studentInfo() {
       return this.studentList(this.sortParam)
@@ -155,11 +158,11 @@ export default {
       this.switchSort('time')
       this.sortParam = this.sortRule.time.up ? 'time_up' : 'time_down'
     },
-    linkTo(status) {
-      if (status === 0) {
+    linkTo(stuInfo) {
+      if (stuInfo.status === 0) {
         return false
       } else {
-        console.log('单个学生答题页面')
+        this.$router.push({path: `/studentHomework/${stuInfo.userid}/${this.homeworkInfo.course_hour_publish_id}/${stuInfo.real_name}`})
       }
     }
   }

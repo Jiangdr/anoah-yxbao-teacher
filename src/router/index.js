@@ -16,6 +16,7 @@ import home from '@/module/home/index'
 import list from '@/module/home/list'
 import test from '@/components/test'
 import homeworkRoutes from '@/module/homework/homework.route'
+import studentHomework from '@/module/studentHomework/route'
 // 批量评价
 import batchEvaluateRoutes from '@/module/batchEvaluate/batchEvaluate.route'
 Vue.use(Router)
@@ -46,7 +47,8 @@ let routes = [
   ...questionDetail,
   ...homeworkDetail,
   ...tongji,
-  ...batchEvaluateRoutes
+  ...batchEvaluateRoutes,
+  ...studentHomework
 ]
 let router = new Router({
   routes: routes

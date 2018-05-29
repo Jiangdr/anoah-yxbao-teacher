@@ -1,7 +1,7 @@
 <template>
   <div id="circle-chart">
     <div class="title van-hairline--bottom">学生作业成绩分布</div>
-    <div class="chart-content">
+    <div class="chart-content" v-if="pigaiSum">
       <div id="chart"></div>
       <div class="legend one">
         <div class="label"></div>
@@ -35,6 +35,9 @@
         <div class="label"></div>
         <div class="per">{{Math.ceil(this.info['优秀'].num / pigaiSum * 100)}}%</div>
       </div>
+    </div>
+    <div class="chart-content" v-else>
+      暂无批改的作业
     </div>
   </div>
 </template>

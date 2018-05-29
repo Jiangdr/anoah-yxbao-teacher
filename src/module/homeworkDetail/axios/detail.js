@@ -5,6 +5,7 @@ let apis = {
   'resource': '/jwt/homework/stat/getResourceList',
   'getMiniResource': '/jwt/homework/stat/getMinResourceList',
   'sendAnswer': '/jwt/homework/correct/sendAnswer',
+  'kp': '/jwt/homework/stat/getKpList',
   'urge': '/jwt/notice/message/jiaozuoye', // 催交作业
   'remind': '/jwt/notice/message/dingzheng', // 订正提醒
   'remove': '/jwt/homework/publish/remove', // 删除作业
@@ -35,5 +36,8 @@ homeworkinfo.remove = (params) => {
 }
 homeworkinfo.favorite = (params) => {
   return homeworkinfo.fetch(homeworkinfo.apis.favorite, params, 'post')
+}
+homeworkinfo.kp = params => {
+  return homeworkinfo.fetch(homeworkinfo.apis.kp, params, 'post')
 }
 export default homeworkinfo
