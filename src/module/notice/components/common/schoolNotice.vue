@@ -3,11 +3,11 @@
     <div v-for="(item, index) in list" :key="index" class="item" @click="goDetail(item.message_id)">
       <div class="date">{{item.push_time}}</div>
       <div class="container">
-        <p class="title">
+        <p class="title" :title="item.title">
             <i class="icon" :style="{'background-image':'url('+imgUrl('icon')+')'}"></i>
           {{item.title}}
         </p>
-        <div style="text-align:center">
+        <div style="text-align:center" v-if="item.thumb">
           <img :src="item.thumb" alt="">
         </div>
         <div class="notice-content" v-html="item.content"></div>
