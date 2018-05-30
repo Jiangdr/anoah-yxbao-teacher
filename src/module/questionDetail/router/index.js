@@ -1,4 +1,4 @@
-import questionDetail from '@/module/questionDetail/components/tongji.vue'
+import questionDetail from '@/module/questionDetail/components/index.vue'
 import originalQuestion from '@/module/questionDetail/components/originalQuestion.vue'
 // 正确率表格图  例：客观填空、选词填空
 // import correctTable from '@/module/tongji/components/question/correctTable.vue'
@@ -20,7 +20,7 @@ export default
 [
   {
     name: 'questionDetail',
-    path: '/questionDetail', // type1批改，2统计
+    path: '/questionDetail/:params',
     meta: { requiresAuth: false, keepAlive: true },
     component: questionDetail,
     children: [
