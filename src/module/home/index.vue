@@ -270,7 +270,7 @@ export default {
   width: 96%;
   // margin: $gap-small;
   border-radius: 15px;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   margin: 0 auto;
 
@@ -354,7 +354,7 @@ export default {
     width: 96%;
     margin: $gap-small-x auto 0;
     padding: $gap-small-x;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
 
     .flex {
       justify-content: center;
