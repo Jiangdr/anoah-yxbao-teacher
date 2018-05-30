@@ -9,7 +9,7 @@
   </div>
   <div class="classify">
     <div>
-      <span v-for="(item,index) in classify" :key="index" :class="{'checked':isChecked(item)}" @click="checkItem(item)">
+      <span v-for="(item,index) in classify" :key="index" :class="{'checked':isChecked(index)}" @click="checkItem(index)">
         {{item}}
       </span>
     </div>
@@ -29,7 +29,7 @@
         <img :src="img.src" alt="">
       </div>
       <div class="item upload" @click="togglePopup">
-        <img class="up" :src="imgUrl"/>
+        <img class="up" src="../../../assets/images/correction/up.png"/>
         <p>
           <template v-if="imgs.length===0">点击上传</template>
           <template v-else-if="imgs.length>0">继续上传</template>
@@ -45,7 +45,7 @@
 </div>
 
 </cube-popup>
-<div class="submitBtn">
+<div class="submitBtn" @click="commit">
   <!-- <van-button type="primary" bottom-action>提交</van-button> -->
   提交
 </div>
@@ -54,21 +54,22 @@
 
 <script>
 import headerBar from '@/components/headerBar.vue'
+import correction from '../axios/correction.js'
 export default {
   name: 'correction',
   data() {
     return {
       msg: '',
       imgs: [],
-      classify: [
-        '内容超纲',
-        '答案错误',
-        '题干错误',
-        '题目过时',
-        '解析错误',
-        '知识点不符',
-        '其他'
-      ],
+      classify: {
+        10: '内容超纲',
+        11: '答案错误',
+        12: '题干错误',
+        13: '题目过时',
+        14: '解析错误',
+        15: '知识点不符',
+        16: '其他'
+      },
       checked: [],
       showPopup: false,
       maxLength: 100
@@ -76,9 +77,6 @@ export default {
   },
   created() {},
   computed: {
-    imgUrl() {
-      return require('@/assets/images/correction/up.png')
-    }
   },
   methods: {
     goBack() {
@@ -87,15 +85,27 @@ export default {
     togglePopup() {
       this.showPopup = !this.showPopup
     },
-    isChecked(item) {
-      return this.checked.indexOf(item) >= 0
+    isChecked(index) {
+      return this.checked.indexOf(index) >= 0
     },
-    checkItem(item) {
-      if (this.checked.indexOf(item) < 0) {
-        this.checked.push(item)
+    checkItem(index) {
+      if (this.checked.indexOf(index) < 0) {
+        this.checked.push(index)
       } else {
-        this.checked.splice(this.checked.indexOf(item), 1)
+        this.checked.splice(this.checked.indexOf(index), 1)
       }
+    },
+    commit() {
+      let params = {
+        user_id: JSON.parse(localStorage.userinfo).userid,
+        rsid: this.$route.params.rsid,
+        type: this.checked,
+        content: this.msg,
+        images: this.imgs
+      }
+      correction.create(params).then(r => {
+        console.log(r)
+      })
     }
   },
   components: {

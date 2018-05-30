@@ -60,12 +60,7 @@
         </template>
       </cube-scroll>
     </div>
-
-    <van-tabbar v-model="active" @change="change" class="bar">
-      <van-tabbar-item icon="shop">首页</van-tabbar-item>
-      <van-tabbar-item icon="chat">我的</van-tabbar-item>
-    </van-tabbar>
-
+    <footer-bar activeType="home" @tabChange="tabChange"></footer-bar>
     <van-popup v-model="showPopup" position="bottom" class="run-env" :overlay="true" :lock-scroll="true">
       <div @click="getEnv('.dev')">dev</div>
       <div @click="getEnv('.dt')">dt</div>
@@ -78,7 +73,7 @@
 </template>
 
 <script>
-import topbar from '@/components/common/topbar'
+import footerBar from '@/components/footerBar'
 import api from '@/axios/iclass'
 import { mapGetters } from 'vuex'
 import { Dialog } from 'vant'
@@ -196,12 +191,6 @@ export default {
         window.location.href = href;
       }
     },
-    onClickLeft() {
-
-    },
-    onClickRight() {
-
-    },
     onLoad() {
       setTimeout(() => {
         if (this.items.length < 20) {
@@ -234,14 +223,16 @@ export default {
         this.items = newPage;
       }, 500)
     },
-    change() {
-      this.$router.push({ name: 'userCenter' })
+    tabChange(type) {
+      if (type === 'home') {
+        return false
+      }
+      this.$router.push({path: '/user-center'})
     }
 
   },
   components: {
-    topbar
-
+    footerBar
   }
 
 }
