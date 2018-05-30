@@ -1,6 +1,6 @@
 <template>
   <div id="test">
-    <swiper :options="swiperOption" ref="mySwiper">
+    <swiper :options="swiperOption" ref="mySwiper" class="">
       <swiper-slide>1</swiper-slide>
       <swiper-slide>2</swiper-slide>
       <swiper-slide>3</swiper-slide>
@@ -38,5 +38,9 @@ export default {
 #test{
   height: 100%;
   overflow: scroll;
+  .swiper-container{
+    background-color: #000;
+    color: #fff
+  }
 }
 </style>

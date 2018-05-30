@@ -14,6 +14,8 @@ import circleChart from './circleChart'
 import studentScoreTable from './studentScoreTable'
 export default {
   name: 'ClassScore',
+  methods: {
+  },
   components: {
     classScoreOverview,
     circleChart,
