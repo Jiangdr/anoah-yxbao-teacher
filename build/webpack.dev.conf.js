@@ -55,6 +55,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
+      version: `window.version = "${config.build.version}";`,
+      qtiUrl: `${config.build.qtiUrl}`,
       inject: true
     }),
     // copy custom static assets
