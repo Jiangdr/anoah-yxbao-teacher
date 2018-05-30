@@ -25,7 +25,7 @@
 import api from "@/module/batchEvaluate/axios/batchEvaluate.js";
 
 export default {
-  name: "comments",
+  name: "editComments",
   data() {
     return {
       listContainerStyle: {

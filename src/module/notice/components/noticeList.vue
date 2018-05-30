@@ -10,7 +10,7 @@
     <div class="wrapper">
       <div class="items">
         <router-link to="/notice/homeworkList">
-        <i class="icon" :style="{'background-image':'url('+imgUrl('homework')+')'}"></i>
+        <i class="icon homework"></i>
           <span>
             作业消息
             <b class="redIcon" v-show="isNewWorkMsg"></b>
@@ -20,7 +20,7 @@
       </div>
       <div class="items">
         <router-link to="/notice/schoolList">
-        <i class="icon" :style="{'background-image':'url('+imgUrl('school')+')'}"></i>
+        <i class="icon school"></i>
           <span>
             学校消息
             <b class="redIcon" v-show="isNewSchoolMsg"></b>
@@ -48,9 +48,6 @@ export default {
   methods: {
     goBack () {
       this.$router.go(-1)
-    },
-    imgUrl(name) {
-      return require('@/assets/images/notice/' + name + '.png')
     }
   },
   components: {
@@ -94,13 +91,21 @@ export default {
   background-position: center center;
   background-repeat: no-repeat;
 }
+.notice .items .icon.homework{
+  background-image: url('../../../assets/images/notice/homework.png')
+}
+.notice .items .icon.school{
+  background-image: url('../../../assets/images/notice/school.png')
+}
 .notice .items b.redIcon{
   display: inline-block;
   width:6px;
   height: 6px;
-  border-radius: 50%;
-  background-color: red;
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
   vertical-align: text-top;
+  background-image: url('../../../assets/images/public/red-icon.png')
 }
 .notice .items .icon-right{
   position: absolute;

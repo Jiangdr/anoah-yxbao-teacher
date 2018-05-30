@@ -1,5 +1,5 @@
 <template>
-  <div id="form-list">
+  <div id="form-list" :style="background">
     <van-cell-group>
       <van-field v-model="userAccount" label="登录账号" icon="clear" placeholder="请输入用户名" @click-icon="userAccount = ''" />
       <van-field v-model="userName" label="姓名" icon="clear" placeholder="必填,否则无法查找到你的信息" required @click-icon="userName = ''" />
@@ -8,7 +8,7 @@
       <van-field v-model="className" label="班级名称" icon="clear" placeholder="班级名称" @click-icon="className = ''" />
       <van-field v-model="phoneNum" label="联系方式" icon="clear" placeholder="必填,请输入你的手机号或邮箱" required :error-message="phoneFormatMsg" @click-icon="phoneNum = ''" />
     </van-cell-group>
-    <next-btn class="btn-next" :disabled="disable" @click="onSubmit" text="提 交"></next-btn>
+    <next-btn class="btn-next" :disabled="disable" @click="onSubmit" :loading="loading" text="提 交"></next-btn>
     <transition name="van-fade">
       <div class="model" v-show="chooseArea" @click="closeChooseArea"></div>
     </transition>
@@ -42,7 +42,13 @@ export default {
       citys: null,
       area: null,
       columns: [],
-      phoneFormatMsg: ''
+      phoneFormatMsg: '',
+      loading: false,
+      background: {
+        backgroundImage: "url(" + require("@/assets/images/account/pwd-bottom.png") + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "bottom"
+      }
     }
   },
   mounted () {
@@ -122,6 +128,7 @@ export default {
       let phoneTest = phonereg.test(this.phoneNum);
       let emailTest = emailreg.test(this.phoneNum);
       if (phoneTest || emailTest) {
+        this.loading = true
         this.phoneFormatMsg = ''
         api.contact({
           loginName: this.userAccount,
@@ -131,6 +138,7 @@ export default {
           className: this.className,
           contactInformation: this.phoneNum
         }).then(succ => {
+          this.loading = false
           Toast('信息提交成功，我们会尽快联系您');
           this.$router.back(-1)
         }, err => {
@@ -155,7 +163,6 @@ export default {
   #form-list{
     padding: 24px;
     height: 86%;
-    background: url("/static/img/account/pwd-bottom.png") no-repeat bottom;
   }
   .choose-area{
     position: fixed;

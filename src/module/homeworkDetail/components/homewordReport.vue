@@ -86,7 +86,6 @@ export default {
       width: 100px;
       height: 130px;
     }
-
   }
 }
 </style>

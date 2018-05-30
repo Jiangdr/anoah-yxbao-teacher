@@ -39,7 +39,7 @@ $gradient-right: rgb(255,179,16);
   color: #fff;
   font-weight: 500;
   font-size: 18px;
-  border-radius: 10px;
+  border-radius: 12px;
   &.disable{
     background: #c8c9c9;
   }

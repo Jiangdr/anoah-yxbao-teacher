@@ -2,10 +2,17 @@
   <div class="cube-page cube-view button-view">
 
     <header class="header">
-      <h1>批量写评语</h1>
-      <i class="cubeic-back" @click="goBatchEvaluate">
-        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
-      </i>
+      <h1>
+        <i class="cubeic-back" @click="goBatchEvaluate">
+          <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
+        </i>
+        <div>
+          批量写评语
+        </div>
+        <div style="position: absolute; right: 10px; top: 0; height: 45px;" @click="clickVoiceShow">
+          <img style="vertical-align: middle;width: 28px;" src="@/assets/images/batchEvaluate/voicePng.png" alt="">
+        </div>
+      </h1>
     </header>
 
     <van-cell-group>
@@ -33,6 +40,30 @@
     <div class="comfirmBtnContainer">
       <div class="comfirmBtn" :outline="true" @click="sureBtn">确认</div>
     </div>
+
+    <van-popup v-model="showVoicePopup" position="bottom" :overlay="true">
+      <div class="van-picker">
+        <div class="van-hairline--top-bottom van-picker__toolbar">
+          <div @click="clickVoiceChoose" class="van-picker__cancel">取消</div>
+          <div @click="clickVoiceChoose" class="van-picker__confirm">确认</div>
+        </div>
+        <div class="van-picker__columns" style="height: 220px;">
+          <div class="van-picker-column" style="height: 220px;display: flex;align-items: center;justify-content: center;">
+            <div @click="clickRecordBtn">
+
+              <div class="circleNoRotate" v-show="!isRecording">
+                <div class="circleNoRotate-div">
+                  <img style="width: 50%;" src="@/assets/images/batchEvaluate/voiceBtn.png" alt="voiceBtn">
+                </div>
+              </div>
+              <div class="spinner" v-show="isRecording"></div>
+              <div style="margin-top: 10px;" v-show="!isRecording">点击开始录音</div>
+              <div style="margin-top: 10px;" v-show="isRecording">点击停止录音</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -49,7 +80,10 @@ export default {
       rateType: "",
       comment: "",
       checkBoxGroup: [],
-      templateLists: []
+      templateLists: [],
+      showVoicePopup: false,
+      countNum: 3,
+      isRecording: false
     };
   },
   mounted: function() {
@@ -81,6 +115,22 @@ export default {
         path: "/editComments"
       });
     },
+    clickVoiceShow() {
+      this.showVoicePopup = !this.showVoicePopup;
+    },
+    clickRecordBtn() {
+      this.isRecording = !this.isRecording;
+      if (this.isRecording) {
+        var param = [this.userInfo.account.userId, this.userInfo.account.jwt, 'http://api2.dev.anoah.com/jwt/homework/correct/upload_auth?', "['http://ox7arp73u.bkt.clouddn.com/guoge2.mp3']"];
+        window.appPlug.aliUpLoad(param, this.afteruploadsucc);
+      }
+    },
+    afteruploadsucc(msg) {
+      alert(JSON.stringify(msg))
+    },
+    clickVoiceChoose() {
+      this.showVoicePopup = false;
+    },
     writeComments() {
       if (this.checkBoxGroup.length === 0) {
         this.$toast({
@@ -111,11 +161,9 @@ export default {
     clearTextArea() {
       this.comment = "";
     },
-    sureBtn() {
-
-    },
+    sureBtn() {},
     chooseTemplate(item) {
-      this.comment = item.comment
+      this.comment = item.comment;
     }
   }
 };
@@ -125,7 +173,7 @@ export default {
 $primary-color: #08b783;
 $active-color: #13d098;
 $border-state: 1px solid rgb(234, 237, 240);
- @import "@/style/variable.scss";
+@import "@/style/variable.scss";
 .activeTab {
   background-color: #2ec2a9;
   color: #fff;
@@ -146,7 +194,7 @@ $border-state: 1px solid rgb(234, 237, 240);
   padding: 5px 10px;
   border-bottom: 1px solid #ccc;
   overflow: hidden;
-  text-overflow:ellipsis;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 .listContainer {
@@ -175,5 +223,48 @@ $border-state: 1px solid rgb(234, 237, 240);
 }
 .comfirmBtn:active {
   background-color: $active-color;
+}
+.circleNoRotate {
+  border: 1px solid #13d098;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spinner {
+  width: 120px;
+  height: 120px;
+  background-color: #13d098;
+  border-radius: 100%;
+  -webkit-animation: scaleout 1.3s infinite ease-in-out;
+  animation: scaleout 1.3s infinite ease-in-out;
+}
+@-webkit-keyframes scaleout {
+  0% { -webkit-transform: scale(0.0) }
+  100% {
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
+}
+@keyframes scaleout {
+  0% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 100% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
+}
+.circleNoRotate-div {
+  background-color: #13d098;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
