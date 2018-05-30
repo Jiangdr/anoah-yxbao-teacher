@@ -1,3 +1,5 @@
+// 路由参数：班级ID，学生信息 学生答案
+import share from '../components/common/shareAnswer.vue'
 import questionDetail from '@/module/questionDetail/components/tongji.vue'
 import originalQuestion from '@/module/questionDetail/components/originalQuestion.vue'
 // 正确率表格图  例：客观填空、选词填空
@@ -42,5 +44,11 @@ export default
     path: '/originalQuestion/:userid',
     meta: { requiresAuth: false, keepAlive: true },
     component: originalQuestion
+  },
+  {
+    name: 'share',
+    path: '/share',
+    meta: { requiresAuth: false, keepAlive: true },
+    component: share
   }
 ]
