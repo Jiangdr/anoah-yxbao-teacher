@@ -19,7 +19,7 @@
           </van-col>
       </van-row>
     </div>
-    <studentAnswer v-show="activeBtn === 'studentAnswer'" :listObj="listObj"></studentAnswer>
+    <studentAnswer v-show="activeBtn === 'studentAnswer'" :answerList="answerList"></studentAnswer>
     <studentMutualComments v-show="activeBtn === 'studentMutualComments'" :listObj="listObj"></studentMutualComments>
   </div>
 </template>
@@ -40,6 +40,7 @@ export default {
     return {
       listObj: {},
       activeBtn: "studentAnswer",
+      answerList: [],
       listContainerStyle: {
         height: window.innerHeight - 50 + 'px'
       }
@@ -109,13 +110,14 @@ export default {
         course_resource_id: '9002511527228900001',
         dcom_entity_id: 0,
         source_pk_id: '9002511502880300001',
-        user_id: '1024619',
+        user_id: '1024626',
         icom_id: 4629,
         dcom_id: ''
       };
       api.getUserAnswerForMiniRs(data).then(
         response => {
-          console.log(response)
+          console.log(response);
+          self.answerList = response.answer;
         },
         err => {
           console.log(err);
