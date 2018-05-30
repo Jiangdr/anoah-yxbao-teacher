@@ -222,6 +222,7 @@ export default {
   methods: {
     chooseItem(e, type, value) {
       this.activeItem = 0;
+      this.currentPage = 1;
       switch (type) {
         case "time":
           if (value === 3) {
