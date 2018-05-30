@@ -226,11 +226,7 @@ export default {
 
   },
   components: {
-<<<<<<< HEAD
-    topbar
-=======
     footerBar
->>>>>>> 7154094916f91f38e40c15bd27b872ab8ffc6a6d
   }
 
 }
@@ -293,7 +289,7 @@ export default {
     justify-content: center;
     text-align: center;
     height: 70px;
-    align-list: center;
+    align-content: center;
   }
 
   & > div > div {
