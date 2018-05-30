@@ -1,5 +1,5 @@
 <template>
-  <div id="new-password">
+  <div id="new-password" :style="background">
     <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
     <p class="title">请设置新密码</p>
     <div class="div-cell">
@@ -68,7 +68,12 @@ export default {
       timeLen: 120,
       smsUseable: false,
       hasValidSms: false,
-      newPasswordPrompt: `<span>密码需要由</span><span style="color: #ff5266;">6-20</span><span>位英文字母、数字或符号组成</span>`
+      newPasswordPrompt: `<span>密码需要由</span><span style="color: #ff5266;">6-20</span><span>位英文字母、数字或符号组成</span>`,
+      background: {
+        backgroundImage: "url(" + require("@/assets/images/account/pwd-bottom.png") + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "bottom"
+      }
     }
   },
   computed: {
@@ -192,7 +197,6 @@ export default {
 <style lang="scss" scoped>
   #new-password{
     height: 100%;
-    background: url("/static/img/account/pwd-bottom.png") no-repeat bottom;
     padding-left: 16px;
     padding-right: 16px;
     .title{

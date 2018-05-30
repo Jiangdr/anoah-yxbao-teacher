@@ -1,5 +1,5 @@
 <template>
-  <div id="forget-password">
+  <div id="forget-password" :style="background">
     <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
     <div class="forget-pwd-title">请输入你需要找回密码的账号信息</div>
     <p class="p-username">用户名</p>
@@ -32,7 +32,12 @@ export default {
       account: '',
       errorMsg: '',
       btnUseable: true,
-      btnLoading: false
+      btnLoading: false,
+      background: {
+        backgroundImage: "url(" + require("@/assets/images/account/pwd-bottom.png") + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "bottom"
+      }
     }
   },
   watch: {
@@ -76,7 +81,6 @@ export default {
 <style lang="scss" scoped>
   #forget-password{
     height: 100%;
-    background: url("/static/img/account/pwd-bottom.png") no-repeat bottom;
     padding: 25px 0px;
     .forget-pwd-title{
       padding:20px 0 30px 30px;line-height: 50px;

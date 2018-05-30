@@ -1,6 +1,6 @@
 <template>
-  <div id="login" class="page" :class="{slideUp: slideUp}">
-    <img class="icon-box" :class="{slideUp: slideUp}" src="/static/img/account/logo.png" alt="">
+  <div id="login" class="page" :class="{slideUp: slideUp}" :style="background">
+    <img class="icon-box" :class="{slideUp: slideUp}" src="@/assets/images/account/logo.png" alt="">
     <div>
       <yx-field @focus="slideUp=true" @blur="slideUp=false" v-model.trim="username" label="用户名" label-icon="user" placeholder="请输入用户名" @click-clear="username = ''"></yx-field>
       <yx-field @focus="slideUp=true" @blur="slideUp=false" v-model.trim="password" type="password" label="密码" label-icon="password" placeholder="请输入密码" @click-clear="password = ''"></yx-field>
@@ -29,7 +29,12 @@ export default {
         username: [{ 'required': '请输入用户名' }],
         password: [{ 'required': '请输入密码' }]
       },
-      version: window.version
+      version: window.version,
+      background: {
+        backgroundImage: "url(" + require("@/assets/images/account/login-back.png") + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "100% 100%"
+      }
     }
   },
   computed: {
@@ -95,8 +100,6 @@ export default {
 </script>
 <style lang="scss" scoped>
   #login{
-    background: url("/static/img/account/login-back.png");
-    background-size:100% 100%;
     padding: 25px 35px;
     position: relative;
     top: 0;

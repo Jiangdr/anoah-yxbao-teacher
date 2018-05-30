@@ -8,7 +8,8 @@ let apis = {
   'captcha': '/user/sms/captcha', // 发送验证码
   'valid': '/user/sms/valid', // 验证验证码
   'bind': '/user/phone/bind',
-  'modifyPassword': '/jwt/users/user/password'
+  'modifyPassword': '/jwt/users/user/password',
+  'feedback': '/feedback/addFeedback' // 意见反馈
 }
 
 let usercenter = new API(apis)
@@ -44,4 +45,9 @@ usercenter.bind = (params) => {
 usercenter.modifyPassword = (params) => {
   return usercenter.fetch(usercenter.apis.modifyPassword, params, 'post')
 }
+
+usercenter.feedback = (params) => {
+  return usercenter.fetch(usercenter.apis.feedback, params, 'post', {'api': 'apis2'})
+}
+
 export default usercenter
