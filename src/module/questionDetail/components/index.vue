@@ -4,28 +4,28 @@
     <div slot="title-name">查看统计</div>
     <div slot="right-area">原题</div>
   </header-bar>
-  <div class="slide-container">
+  <!-- <div class="slide-container" v-touch:swipeleft="onSwipeLeft">
     <div class="slide-item" v-for="(item, index) in renderResource" :key="index">
       {{item}}
     </div>
-  </div>
-  <!-- <swiper :options="swiperOption" ref="mySwiper" class="swiper-container">
+  </div> -->
+  <swiper :options="swiperOption" ref="mySwiper" class="swiper-container">
     <swiper-slide v-for="(item, index) in renderResource" :key="index">
       <div class="slide-content" v-if="Object.keys(item).length">
         <answer-column :params="item" v-if="item.qti_question_type_id == 1 || item.qti_question_type_id == 2 || item.qti_question_type_id == 3 || item.qti_question_type_id == 6 || item.qti_question_type_id == 15"></answer-column>
         <choice-table :params="item" v-if="item.qti_question_type_id == 11"></choice-table>
         <correct-column :params="item" v-if="item.qti_question_type_id == 9 || item.qti_question_type_id == 21 || item.qti_question_type_id == 23 || item.qti_question_type_id == 24 || item.qti_question_type_id == 25 || item.qti_question_type_id == 26"></correct-column>
         <correct-table :params="item" v-if="item.qti_question_type_id == 4 || item.qti_question_type_id == 20"></correct-table>
-        <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie>
+        <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
         <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective>
-        <render-qti :id="item.source_pk_id + ''" :icom_id="item.icom_id" :dcom_id="item.source_pk_id" user_id="0" :setting="setting"></render-qti>
+        <render-qti :info="item" :id="item.source_pk_id + ''" :icom_id="item.icom_id" :dcom_id="item.source_pk_id" user_id="0" :setting="setting"></render-qti>
       </div>
       <div class="no-data" v-else>
         加载中...
       </div>
       <div>{{item}}</div>
     </swiper-slide>
-  </swiper> -->
+  </swiper>
 </div>
 </template>
 
@@ -88,9 +88,9 @@ export default {
         return val
       }
     },
-    // swiper() {
-    //   return this.$refs.mySwiper.swiper
-    // },
+    swiper() {
+      return this.$refs.mySwiper.swiper
+    },
     routePrams() {
       return this.$route.params.params
     }
@@ -103,6 +103,7 @@ export default {
         this.renderResource.push({})
       }
       this.renderResource[this.routePrams.index] = this.resource[this.routePrams.index]
+      this.swiper.slideTo(this.routePrams.index, 0)
     },
     goBack() {
       this.renderResource = []
@@ -113,16 +114,15 @@ export default {
     },
     slideEnd() {
       Vue.set(this.renderResource, this.swiper.activeIndex, this.resource[this.swiper.activeIndex])
-      // this.renderResource[this.swiper.activeIndex] = this.resource[this.swiper.activeIndex]
-      // this.swiper.update()
-      // this.setting = {
-      //   'smt': 'no_self_smt',
-      //   'publish_id': this.mini[index].course_hour_publish_id,
-      //   'course_resource_id': this.mini[index].course_resource_id,
-      //   'caller': 'ICLASS',
-      //   'dcom_entity_id': this.mini[index].dcom_entity_id,
-      //   'titleflag': 1
-      // }
+      this.swiper.update()
+      this.setting = {
+        'smt': 'no_self_smt',
+        'publish_id': this.resource[this.swiper.activeIndex].course_hour_publish_id,
+        'course_resource_id': this.resource[this.swiper.activeIndex].course_resource_id,
+        'caller': 'ICLASS',
+        'dcom_entity_id': this.resource[this.swiper.activeIndex].dcom_entity_id,
+        'titleflag': 1
+      }
     }
   },
   components: {
@@ -141,7 +141,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.slide-container{
+.swiper-container{
   height: calc(100% - 45px);
   overflow-y: scroll;
 }

@@ -35,9 +35,14 @@ import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import '@/style/global.scss'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+
+// require styles
+import 'swiper/dist/css/swiper.css'
 
 // 引入全局过滤器
 import * as filters from '@/filter/index'
+Vue.use(VueAwesomeSwiper)
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
