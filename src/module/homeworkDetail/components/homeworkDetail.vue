@@ -70,7 +70,7 @@
           <div class="itemdetail" :class="{hide:!ques.isShow}" v-if="ques.resource_type=='qti_exam'||isCompound(ques.qti_question_type_id,ques.resource_type)">
             <p v-for="(mini,key) in miniResource[index]" :key="key" @click="goTongji(mini,index,key)" :class="{'no-margin':key>0&&(key+1)%5==0}">
                 <span v-if="mini.status===1" style="background:#ff8d13;">待批阅</span>
-                <span v-if="mini.status===0" style="background:#9c9ea1;">未提交</span>
+                <span v-else-if="mini.status===0" style="background:#9c9ea1;">未提交</span>
                 <span v-else-if="mini.status==3&&mini.marked==1" style="background:#3ea2ff;">阅</span>
                 <span v-else :class="{right: mini.correct_rate>= 0.6,wrong:mini.correct_rate<0.6}">{{itemCorrect(mini.correct_rate)}}</span>
               <span class="ques-num">{{(index+1)+'-'+(key+1)}}</span>
