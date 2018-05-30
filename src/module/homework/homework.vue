@@ -202,6 +202,7 @@ export default {
     onConfirmClassPopup(value, index) {
       this.showClassPopup = false;
       this.chooseClass = value;
+      this.currentPage = 1;
       this.getHomeworkList();
     },
     onCancelClassPopup() {
@@ -210,6 +211,7 @@ export default {
     onConfirmStatusPopup(value, index) {
       this.showStatusPopup = false;
       this.chooseStatus = value;
+      this.currentPage = 1;
       this.getHomeworkList();
     },
     onCancelStatusPopup() {
@@ -218,6 +220,7 @@ export default {
     onConfirmTimePopup(value, index) {
       this.showTimePopup = false;
       this.chooseTime = value;
+      this.currentPage = 1;
       this.getHomeworkList();
     },
     onCancelTimePopup() {
