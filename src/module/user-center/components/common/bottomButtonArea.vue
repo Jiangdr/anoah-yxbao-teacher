@@ -1,12 +1,12 @@
 <template>
   <div class="bottombuttonarea">
     <div style="position: relative;top: 50%;transform: translateY(-50%);">
-      <yx-login-btn :disabled="disabled" @click="$emit('btnClick')" :text="buttonText" class="login-btn"></yx-login-btn>
+      <yx-next-btn :disabled="disabled" @click="$emit('click')" :text="buttonText" class="login-btn"></yx-next-btn>
     </div>
   </div>
 </template>
 <script>
-import YxLoginBtn from '@/module/account/components/yx-login-btn.vue'
+import YxNextBtn from '@/module/account/components/yx-next-btn.vue'
 export default {
   name: 'bottom-button-area',
   data () {
@@ -14,7 +14,7 @@ export default {
   },
   props: ['buttonText', 'disabled'],
   components: {
-    YxLoginBtn: YxLoginBtn
+    YxNextBtn
   }
 }
 </script>
