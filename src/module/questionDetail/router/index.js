@@ -1,7 +1,6 @@
-// 路由参数：班级ID，学生信息 学生答案
-import share from '../components/common/shareAnswer.vue'
-import questionDetail from '@/module/questionDetail/components/tongji.vue'
+import questionDetail from '@/module/questionDetail/components/index.vue'
 import originalQuestion from '@/module/questionDetail/components/originalQuestion.vue'
+import share from '@/module/questionDetail/components/common/shareAnswer.vue'
 // 正确率表格图  例：客观填空、选词填空
 // import correctTable from '@/module/tongji/components/question/correctTable.vue'
 // 答案柱状图  例：判断题、单选题、多选题、不定选项、排序题
@@ -22,7 +21,7 @@ export default
 [
   {
     name: 'questionDetail',
-    path: '/questionDetail', // type1批改，2统计
+    path: '/questionDetail/:params',
     meta: { requiresAuth: false, keepAlive: true },
     component: questionDetail,
     children: [

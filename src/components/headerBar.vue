@@ -1,12 +1,11 @@
 <template>
   <div id="header-bar" class="van-hairline--bottom">
     <div class="back-btn" @click="back">
-      <i class="fa fa-angle-left fa-1x"></i>
-      <span>返回</span>
+      <i class="icon-back"></i>
+      <!-- <span>返回</span> -->
     </div>
     <div class="title-name">
       <slot name="title-name">
-        标题
       </slot>
     </div>
     <div class="right-area">
@@ -42,6 +41,17 @@ export default {
     font-size: 15px;
     width: 50px;
     color: #4f4f50;
+    .icon-back{
+      display: inline-block;
+      width: 10px;
+      height: 17px;
+      background: url('../assets/images/public/left.png') no-repeat 0 0;
+      background-size: 100% 100%;
+      vertical-align: text-bottom;
+    }
+    span{
+      display: inline-block;
+    }
   }
   .title-name{
     font-size: 18px;

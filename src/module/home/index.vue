@@ -270,7 +270,7 @@ export default {
   width: 96%;
   // margin: $gap-small;
   border-radius: 15px;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   margin: 0 auto;
 
@@ -289,7 +289,7 @@ export default {
     justify-content: center;
     text-align: center;
     height: 70px;
-    align-content: center;
+    align-items: center;
   }
 
   & > div > div {
@@ -323,12 +323,14 @@ export default {
   margin-top: 18px;
 
   div.font-h1 {
-    padding: 8px 0;
+    width:96%;
+    margin:0 auto;
+    padding:8px 0;
   }
 
   span.font-h4 {
     color: $gray5;
-    padding: 0 12px;
+    padding: 0 6px;
   }
 
   .van-pull-refresh {
@@ -354,7 +356,7 @@ export default {
     width: 96%;
     margin: $gap-small-x auto 0;
     padding: $gap-small-x;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
 
     .flex {
       justify-content: center;
@@ -379,10 +381,15 @@ export default {
     }
 
     .btn {
-      height: 30px;
-      line-height: 30px;
-      width: 80px;
-      font-size: $font-size-normal;
+      height: 25px;
+      line-height: 25px;
+      width: 65px;
+      font-size: $font-size-small;
+      border-radius: 25px;
+    }
+
+    .font-h3{
+      color:$gray4;
     }
   }
 
