@@ -8,7 +8,7 @@ export default [
     meta: { requiresAuth: false, keepAlive: true }
   },
   {
-    path: '/knowledgePointDetail/:publishId/:kp_id/:qti_count/correct_rate',
+    path: '/knowledgePointDetail/:publishId/:kp_id/:qti_count/:correct_rate',
     name: 'knowledgePointDetail',
     component: knowledgePointDetail,
     meta: { requiresAuth: false, keepAlive: true }
