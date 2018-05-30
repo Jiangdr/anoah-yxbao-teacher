@@ -40,25 +40,31 @@
 
     <div class="todo-box">
       <div class="font-h1">待处理
-        <span class="font-h4">近一个月</span>
+        <span class="font-h4">近一个月{{version}}</span>
       </div>
-      <cube-scroll ref="scroll" :data="items" :options="options" @pulling-down="onRefresh" @pulling-up="onLoad">
-        <template slot="pulldown" slot-scope="props">
-          <div v-if="props.pullDownRefresh" class="cube-pulldown-wrapper" :style="props.pullDownStyle">
-            <div v-if="props.beforePullDown" class="before-trigger" :style="{paddingTop: props.bubbleY + 'px'}">
-              <span :class="{rotate: props.bubbleY > 40}">释放刷新</span>
+
+      <div class="scroll">
+        <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
+          <van-list v-model="loading" :finished="finished" @load="onLoad" :immediate-check="false">
+            <div v-if="list.length===0 && !refreshLoading && !loading" class="no-data">
+              <img :src="imgUrl('no-data')" alt="">
+              <p>暂无待处理事项</p>
             </div>
-            <div class="after-trigger" v-else>
-              <div v-if="props.isPullingDown" class="loading">
-                <cube-loading></cube-loading>
+
+              <div class="item" v-for="(item, index) in list" :key="index"  v-else>
+                <div class="font-h2 one">{{item.title}}</div>
+                <div class="flex">
+                  <div class=" font-h3 l ">{{item.task_prompt}}</div>
+                  <div class=" btn bg-blue btn-width r">待批改</div>
+                </div>
+
+                <div class="c font-h4 ">{{item.class_name}}</div>
+                <div class="t font-h4 ">{{item.time}}</div>
               </div>
-              <div v-else>
-                <span>刷新成功</span>
-              </div>
-            </div>
-          </div>
-        </template>
-      </cube-scroll>
+
+          </van-list>
+        </van-pull-refresh>
+      </div>
     </div>
     <footer-bar activeType="home" @tabChange="tabChange"></footer-bar>
     <van-popup v-model="showPopup" position="bottom" class="run-env" :overlay="true" :lock-scroll="true">
@@ -75,38 +81,25 @@
 <script>
 import footerBar from '@/components/footerBar'
 import api from '@/axios/iclass'
+import homeApi from '@/module/home/axios/home'
 import { mapGetters } from 'vuex'
 import { Dialog } from 'vant'
 export default {
   name: 'Home',
   data() {
     return {
-      items: [
-        'I am line ',
-        'I am line ',
-        'I am line ',
-        'I am line ',
-        'I am line '
-      ],
+      version: window.version,
       active: 0,
       showPopup: false,
-      itemIndex: 0,
-      options: {
-        pullDownRefresh: {
-          threshold: 40,
-          txt: {
-            more: '加载更多',
-            noMore: '已经显示全部'
-          }
-        },
-        pullUpLoad: {
-          threshold: 40,
-          txt: {
-            more: '加载更多',
-            noMore: '已经显示全部'
-          }
-        }
-      }
+      loading: false,
+      refreshLoading: false,
+      finished: false,
+
+      page: 1, // 页码
+      per_page: 20, // 每页显示条数
+
+      list: [],
+      totalPage: 0
     }
   },
   computed: {
@@ -114,7 +107,13 @@ export default {
       userId: 'userCenter/userId'
     })
   },
+  created() {
+    this.onRefresh();
+  },
   methods: {
+    imgUrl(name) {
+      return require('@/assets/images/homeworkDetail/' + name + '.png')
+    },
     message() {
       this.$router.push({
         name: 'notice',
@@ -192,36 +191,31 @@ export default {
       }
     },
     onLoad() {
-      setTimeout(() => {
-        if (this.items.length < 20) {
-          // If have new data, just update the data property.
-          let newPage = [
-            'I am line ' + ++this.itemIndex,
-            'I am line ' + ++this.itemIndex,
-            'I am line ' + ++this.itemIndex,
-            'I am line ' + ++this.itemIndex,
-            'I am line ' + ++this.itemIndex
-          ]
-          this.items = this.items.concat(newPage)
-        } else {
-          // If no new data, you need use the method forceUpdate to tell us the load is done.
-          this.$refs.scroll.forceUpdate()
-        }
-      }, 1000)
+      this.getItems();
     },
     onRefresh() {
-      setTimeout(() => {
-        this.items = [];
-        this.itemIndex = 0;
-        let newPage = [
-          'I am line ' + ++this.itemIndex,
-          'I am line ' + ++this.itemIndex,
-          'I am line ' + ++this.itemIndex,
-          'I am line ' + ++this.itemIndex,
-          'I am line ' + ++this.itemIndex
-        ]
-        this.items = newPage;
-      }, 500)
+      this.getItems(true);
+    },
+    getItems(isRefresh) {
+      if (isRefresh === true) {
+        this.list.splice(0, this.list.length);
+        this.page = 1;
+      }
+
+      let data = {
+        page: this.page,
+        per_page: this.per_page,
+        user_id: this.userId
+      }
+
+      homeApi.task(data).then(r => {
+        this.refreshLoading = false;
+        if (isRefresh === true) {
+          this.list = r.lists;
+        } else {
+          this.list.concat(r.lists);
+        }
+      });
     },
     tabChange(type) {
       if (type === 'home') {
@@ -240,7 +234,8 @@ export default {
 <style lang="scss" scoped>
 @import "@/style/base.scss";
 .spa {
-  background: url("../../assets/images/home/bg.jpg") no-repeat;
+  background-image: url("../../assets/images/home/bg.jpg");
+  background-repeat: no-repeat;
   background-size: 100% auto;
 }
 .top {
@@ -272,11 +267,12 @@ export default {
 
 .pannel {
   background: $white;
-  width: 100%;
+  width: 96%;
   // margin: $gap-small;
-  border-radius: 8px;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
+  margin: 0 auto;
 
   .line {
     height: 1px;
@@ -327,17 +323,78 @@ export default {
   margin-top: 18px;
 
   div.font-h1 {
-    padding: 8px 0;
+    width:96%;
+    margin:0 auto;
+    padding:8px 0;
   }
 
   span.font-h4 {
     color: $gray5;
-    padding: 0 12px;
+    padding: 0 6px;
   }
 
-  .cube-scroll-wrapper {
+  .van-pull-refresh {
+    min-height: calc(100vh - 358px);
+  }
+
+  .scroll {
+    height: calc(100vh - 358px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 0 13px;
     margin: 0 -13px;
-    height: calc(100vh - 357px);
+  }
+
+  .no-data {
+    text-align: center;
+  }
+
+  .item {
+    box-sizing: border-box;
+    background: $white;
+    border-radius: 5px;
+    width: 96%;
+    margin: $gap-small-x auto 0;
+    padding: $gap-small-x;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+
+    .flex {
+      justify-content: center;
+      height: 30px;
+      align-items: center;
+
+      .l {
+        flex: 4 2 0;
+      }
+      .r {
+        flex: 1 1 0;
+      }
+    }
+
+    .t,
+    .c {
+      display: inline-block;
+      color: $gray4;
+    }
+    .t {
+      padding-right: 10px;
+    }
+
+    .btn {
+      height: 25px;
+      line-height: 25px;
+      width: 65px;
+      font-size: $font-size-small;
+      border-radius: 25px;
+    }
+
+    .font-h3{
+      color:$gray4;
+    }
+  }
+
+  .item > div:not(:first-child) {
+    padding-top: $gap-small;
   }
 }
 

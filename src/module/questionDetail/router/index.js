@@ -42,5 +42,11 @@ export default
     path: '/originalQuestion/:userid',
     meta: { requiresAuth: false, keepAlive: true },
     component: originalQuestion
+  },
+  {
+    name: 'share',
+    path: '/share',
+    meta: { requiresAuth: false, keepAlive: true },
+    component: share
   }
 ]

@@ -18,6 +18,11 @@ export default {
     apis2: state => {
       let tmp = state.env.replace('.', '');
       return `${state.pro}://apis2.${tmp}.${state.host}:8182`
+    },
+    // 授权接口域名
+    yxp_apis2: state => {
+      let tmp = state.env.replace('.', '')
+      return `${state.pro}://${tmp}.${state.host}/yxp_apis2`
     }
   },
   mutations: {
