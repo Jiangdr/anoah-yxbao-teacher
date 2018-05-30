@@ -289,7 +289,7 @@ export default {
     justify-content: center;
     text-align: center;
     height: 70px;
-    align-list: center;
+    align-items: center;
   }
 
   & > div > div {
