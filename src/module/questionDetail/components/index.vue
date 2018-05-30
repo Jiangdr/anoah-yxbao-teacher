@@ -4,23 +4,28 @@
     <div slot="title-name">查看统计</div>
     <div slot="right-area">原题</div>
   </header-bar>
-  <swiper :options="swiperOption" ref="mySwiper" class="swiper-container">
+  <div class="slide-container">
+    <div class="slide-item" v-for="(item, index) in renderResource" :key="index">
+      {{item}}
+    </div>
+  </div>
+  <!-- <swiper :options="swiperOption" ref="mySwiper" class="swiper-container">
     <swiper-slide v-for="(item, index) in renderResource" :key="index">
       <div class="slide-content" v-if="Object.keys(item).length">
         <answer-column :params="item" v-if="item.qti_question_type_id == 1 || item.qti_question_type_id == 2 || item.qti_question_type_id == 3 || item.qti_question_type_id == 6 || item.qti_question_type_id == 15"></answer-column>
         <choice-table :params="item" v-if="item.qti_question_type_id == 11"></choice-table>
         <correct-column :params="item" v-if="item.qti_question_type_id == 9 || item.qti_question_type_id == 21 || item.qti_question_type_id == 23 || item.qti_question_type_id == 24 || item.qti_question_type_id == 25 || item.qti_question_type_id == 26"></correct-column>
         <correct-table :params="item" v-if="item.qti_question_type_id == 4 || item.qti_question_type_id == 20"></correct-table>
-        <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
+        <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie>
         <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective>
         <render-qti :id="item.source_pk_id + ''" :icom_id="item.icom_id" :dcom_id="item.source_pk_id" user_id="0" :setting="setting"></render-qti>
       </div>
       <div class="no-data" v-else>
         加载中...
       </div>
-      <!-- <div>{{item}}</div> -->
+      <div>{{item}}</div>
     </swiper-slide>
-  </swiper>
+  </swiper> -->
 </div>
 </template>
 
@@ -38,8 +43,6 @@ import groupDetailColumn from './question/groupDetailColumn.vue'
 import hanzitingxie from './question/hanzitingxie.vue'
 import Subjective from './question/Subjective.vue'
 import renderQti from '@/components/renderQti.vue'
-import 'swiper/dist/css/swiper.css'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
   name: 'tongji',
   data () {
@@ -57,6 +60,8 @@ export default {
         }
       }
     }
+  },
+  mounted() {
   },
   activated() {
     this.renderView()
@@ -83,9 +88,9 @@ export default {
         return val
       }
     },
-    swiper() {
-      return this.$refs.mySwiper.swiper
-    },
+    // swiper() {
+    //   return this.$refs.mySwiper.swiper
+    // },
     routePrams() {
       return this.$route.params.params
     }
@@ -97,9 +102,7 @@ export default {
       for (let i = 0; i < resource.length; i++) {
         this.renderResource.push({})
       }
-      this.swiper.slideTo(this.routePrams.index, 0)
       this.renderResource[this.routePrams.index] = this.resource[this.routePrams.index]
-      // this.swiper.update()
     },
     goBack() {
       this.renderResource = []
@@ -124,8 +127,6 @@ export default {
   },
   components: {
     headerBar,
-    swiper,
-    swiperSlide,
     answerColumn,
     choiceTable,
     correctColumn,
@@ -140,46 +141,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.swiper-container{
+.slide-container{
   height: calc(100% - 45px);
   overflow-y: scroll;
 }
-/* .tongji {
-  height: calc(100% - 50px);
-  overflow-y: scroll;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.title {
-  text-align: center;
-  line-height: 50px;
-  height: 50px;
-}
-
-.title .back {
-  display: inline-block;
-  float: left;
-}
-
-.title .text {
-  display: inline-block;
-  width: calc(100% - 100px);
-  font-weight: 600;
-}
-
-.title-bar {
-  padding: 0 10px;
-  line-height: 50px;
-  height: 50px;
-  box-sizing: border-box;
-}
-
-.title-bar .info-right {
-  text-align: right;
-}
-
-.danxuan>.title-bar .info-right .correct {
-  color: #ff4e00;
-} */
 </style>
