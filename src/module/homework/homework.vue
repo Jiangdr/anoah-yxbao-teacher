@@ -1,26 +1,57 @@
 <template>
-  <div class="cube-page cube-view button-view">
+  <div class="cube-page cube-view button-view" @click="activeItem = 0">
 
     <header class="header">
       <h1>作业</h1>
       <i class="cubeic-back" @click="goHome">
-        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
+        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text"></span>
       </i>
     </header>
 
     <div class="select-container">
-      <span class="select-span">
-        <div class="select-span-div" @click="clickTime">时间<i class="fa fa-angle-down"></i></div>
+      <span class="select-span" :class="{'active': activeItem === 1}">
+        <div class="select-span-div" @click.stop="clickTime">时间&thinsp;<i class="fa" :class="{'fa-angle-up':activeItem === 1,'fa-angle-down':activeItem !== 1}"></i></div>
+        <ul class="panelbar-list">
+          <li class="panelbar-item" :class="{'cur':timeActiveID===0}" @click.stop="chooseItem($event, 'time', 0)">全部时间</li>
+          <li class="panelbar-item" :class="{'cur':timeActiveID===1}" @click.stop="chooseItem($event, 'time', 1)">最近一周</li>
+          <li class="panelbar-item" :class="{'cur':timeActiveID===2}" @click.stop="chooseItem($event, 'time', 2)">最近一个月</li>
+          <li class="panelbar-item" :class="{'cur':timeActiveID===3}" @click.stop="chooseItem($event, 'time', 3)">自定义时间</li>
+           <div style="clear:both;"></div>
+        </ul>
       </span>
-      <span class="select-span">
-        <div class="select-span-div" @click="clickStatus">状态<i class="fa fa-angle-down"></i></div>
+      <span class="select-span" :class="{'active': activeItem === 2}">
+        <div class="select-span-div" @click.stop="clickStatus">状态&thinsp;<i class="fa" :class="{'fa-angle-up':activeItem === 2,'fa-angle-down':activeItem !== 2}"></i></div>
+        <ul class="panelbar-list">
+          <li class="panelbar-item" :class="{'cur':statusActiveID === 'all'}" @click.stop="chooseItem($event, 'status', 0)">全部状态</li>
+          <li class="panelbar-item" :class="{'cur':statusActiveID === 'correct'}" @click.stop="chooseItem($event, 'status', 1)">待批阅</li>
+          <li class="panelbar-item" :class="{'cur':statusActiveID === 'finish'}" @click.stop="chooseItem($event, 'status', 2)">已批阅</li>
+          <div style="clear:both;"></div>
+        </ul>
       </span>
-      <span class="select-span">
-        <div class="select-span-div" @click="clickClass">班级<i class="fa fa-angle-down"></i></div>
+      <span class="select-span" :class="{'active': activeItem === 3}">
+        <div class="select-span-div" @click.stop="clickClass">班级&thinsp;<i class="fa" :class="{'fa-angle-up':activeItem === 3,'fa-angle-down':activeItem !== 3}"></i></div>
+        <ul class="panelbar-list" :style="{height:columnsOfClass.length>13?'153.8vw':11.73333*columnsOfClass.length+'vw'}">
+          <li class="panelbar-item" v-for="(classItem, index) in columnsOfClass" :key="index" :class="{'cur':classActiveID===index}" @click.stop="chooseItem($event, 'class', index)">{{classItem.text}}</li>
+           <div style="clear:both;"></div>
+        </ul>
       </span>
-      <!-- <span class="select-span">
-        <div class="select-span-div" @click="clickMore">更多<i class="fa fa-angle-down"></i></div>
-      </span> -->
+      <span class="select-span" :class="{'active': activeItem === 4}">
+        <div class="select-span-div" @click.stop="clickMore">更多&thinsp;<i class="fa"  :class="{'fa-angle-up':activeItem === 4,'fa-angle-down':activeItem !== 4}"></i></div>
+        <div class="panelbar-list" :style="{height:teacherBooks.length>12?11.73333*13+'vw':11.73333*(teacherBooks.length+1)+'vw',overflow:'hidden'}">
+          <div class="panelbar-item" style="border-bottom: 1px solid #ededf0;">
+            <span :class="{'cur':markStatus === 0}" @click.stop="chooseItem($event, 'mark', 0)">全部</span>
+            <span :class="{'cur':markStatus === 1}" @click.stop="chooseItem($event, 'mark', 1)">已收藏</span>
+            <span :class="{'cur':markStatus === 2}" @click.stop="chooseItem($event, 'mark', 2)">未收藏</span>
+          </div>
+          <ul class="book-list" :style="{height:teacherBooks.length>12?11.73333*12+'vw':11.73333*teacherBooks.length+'vw'}">
+            <li class="panelbar-item" v-for="(bookItem, index) in teacherBooks" :key="index" :class="{'cur':bookActiveID===bookItem.edu_book_id}" @click.stop="chooseItem($event, 'book', bookItem.edu_book_id)">{{bookItem.name}}</li>
+            <div style="clear:both;"></div>
+          </ul>
+          <div style="clear:both;"></div>
+        </div>
+      </span>
+    </div>
+    <div>
     </div>
 
     <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;padding-left: 10px;">
@@ -53,16 +84,8 @@
       </van-pull-refresh>
     <!-- </div> -->
 
-    <van-popup v-model="showClassPopup" position="bottom" :overlay="true">
-      <van-picker show-toolbar :columns="columnsOfClass" @cancel="onCancelClassPopup" @confirm="onConfirmClassPopup"/>
-    </van-popup>
-
-    <van-popup v-model="showStatusPopup" position="bottom" :overlay="true">
-      <van-picker show-toolbar :columns="columnsOfStatus" @cancel="onCancelStatusPopup" @confirm="onConfirmStatusPopup"/>
-    </van-popup>
-
     <van-popup v-model="showTimePopup" position="bottom" :overlay="true">
-      <van-picker show-toolbar :columns="columnsOfTime" @cancel="onCancelTimePopup" @confirm="onConfirmTimePopup"/>
+      <van-datetime-picker type="year-month" :min-date="minDate" :max-date="currentDate" @cancel="onCancelTimePopup" @confirm="onConfirmTimePopup"/>
     </van-popup>
 
     <div class="publishHomeworkBtnDiv" @click="goChooseTextbook">
@@ -70,6 +93,7 @@
         <div>布置<br/>作业</div>
       </div>
     </div>
+    <div class="cover" :class="{'active': activeItem > 0}"></div>
   </div>
 </template>
 
@@ -88,27 +112,19 @@ export default {
       loading: false,
       finished: false,
       pullRefresIsLoading: false,
+      activeItem: 0,
+      timeActiveID: 0,
+      statusActiveID: "all",
+      markStatus: 0,
+      teacherBooks: [{ edu_book_id: "0", name: "全部教材" }],
+      bookActiveID: "0",
+      classActiveID: 0,
       currentPage: 1,
       totalPage: 1,
       showClassPopup: false,
-      showStatusPopup: false,
       showTimePopup: false,
       chooseTextBookObj: null,
       columnsOfClass: [],
-      columnsOfStatus: [
-        {
-          text: "全部",
-          value: "all"
-        },
-        {
-          text: "待批改",
-          value: "correct"
-        },
-        {
-          text: "已批改",
-          value: "finish"
-        }
-      ],
       countNum: 0,
       totalCountNum: 0
     };
@@ -133,14 +149,6 @@ export default {
     var mOneMonth = nowdate.getMonth() + 1;
     var dOneMonth = nowdate.getDate();
     var formatOneMonthdate = yOneMonth + "-" + mOneMonth + "-" + dOneMonth;
-
-    // 获取系统前三个月的时间
-    nowdate.setMonth(nowdate.getMonth() - 2);
-    var yThreeMonth = nowdate.getFullYear();
-    var mThreeMonth = nowdate.getMonth() + 1;
-    var dThreeMonth = nowdate.getDate();
-    var formatThreeMonthdate =
-      yThreeMonth + "-" + mThreeMonth + "-" + dThreeMonth;
     this.columnsOfTime = [
       {
         text: "全部",
@@ -156,19 +164,38 @@ export default {
         text: "最近一个月",
         from: formatOneMonthdate,
         to: formatnowdate
-      },
-      {
-        text: "最近三个月",
-        from: formatThreeMonthdate,
-        to: formatnowdate
       }
     ];
+
+    this.columnsOfStatus = [
+      {
+        text: "全部状态",
+        value: "all"
+      },
+      {
+        text: "待批阅",
+        value: "correct"
+      },
+      {
+        text: "已批阅",
+        value: "finish"
+      }
+    ];
+  },
+  computed: {
+    minDate: function() {
+      let d = new Date();
+      return new Date(2015, 0);
+    },
+    currentDate: function() {
+      return new Date();
+    }
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
     var array = [
       {
-        text: "全部",
+        text: "全部班级",
         class_id: ""
       }
     ];
@@ -184,40 +211,72 @@ export default {
     }
     this.columnsOfClass = array;
     this.chooseClass = this.columnsOfClass[0];
+    this.classActiveID = 0;
     this.chooseStatus = this.columnsOfStatus[0];
+    this.statusActiveID = this.chooseStatus.value;
     this.chooseTime = this.columnsOfTime[0];
     this.getHomeworkList();
     this.getChoosedBook();
+    this.getBooksByTeacher();
   },
   methods: {
+    chooseItem(e, type, value) {
+      this.activeItem = 0;
+      switch (type) {
+        case "time":
+          if (value === 3) {
+            this.showTimePopup = !this.showTimePopup;
+          } else {
+            this.timeActiveID = value;
+            this.chooseTime = this.columnsOfTime[value];
+            this.getHomeworkList();
+          }
+          break;
+
+        case "status":
+          this.chooseStatus = this.columnsOfStatus[value];
+          this.statusActiveID = this.chooseStatus.value;
+          this.getHomeworkList();
+          break;
+
+        case "class":
+          this.chooseClass = this.columnsOfClass[value];
+          this.classActiveID = value;
+          this.getHomeworkList();
+          break;
+
+        case "mark":
+          this.markStatus = value;
+          this.getHomeworkList();
+          break;
+
+        case "book":
+          this.bookActiveID = value;
+          this.getHomeworkList();
+          break;
+      }
+    },
     clickClass() {
-      this.showClassPopup = !this.showClassPopup;
+      this.activeItem = 3;
     },
     clickStatus() {
-      this.showStatusPopup = !this.showStatusPopup;
+      this.activeItem = 2;
     },
     clickTime() {
-      this.showTimePopup = !this.showTimePopup;
+      this.activeItem = 1;
     },
-    onConfirmClassPopup(value, index) {
-      this.showClassPopup = false;
-      this.chooseClass = value;
-      this.getHomeworkList();
-    },
-    onCancelClassPopup() {
-      this.showClassPopup = false;
-    },
-    onConfirmStatusPopup(value, index) {
-      this.showStatusPopup = false;
-      this.chooseStatus = value;
-      this.getHomeworkList();
-    },
-    onCancelStatusPopup() {
-      this.showStatusPopup = false;
+    clickMore() {
+      this.activeItem = 4;
     },
     onConfirmTimePopup(value, index) {
+      this.timeActiveID = 3;
       this.showTimePopup = false;
-      this.chooseTime = value;
+      let d = new Date(value);
+      this.chooseTime.from =
+        d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      let t = new Date();
+      this.chooseTime.to =
+        t.getFullYear() + "-" + (t.getMonth() + 1) + "-" + t.getDate();
       this.getHomeworkList();
     },
     onCancelTimePopup() {
@@ -256,6 +315,21 @@ export default {
       this.$router.push({
         path: "/"
       });
+    },
+    getBooksByTeacher() {
+      var self = this;
+      var data = {
+        user_id: this.userInfo.userid
+      };
+      api.getBooksByTeacher(data).then(
+        success => {
+          self.teacherBooks = self.teacherBooks.concat(success.books);
+        },
+        err => {
+          console.log(err);
+          self.$toast("网络异常");
+        }
+      );
     },
     getChoosedBook() {
       var self = this;
@@ -304,7 +378,9 @@ export default {
         to: self.chooseTime.to,
         page: self.currentPage,
         per_page: 6,
-        type: "1,2,20"
+        type: "1,2,20",
+        favorite: self.markStatus,
+        edu_subject_id: self.bookActiveID
       };
 
       api.homeworkLists(data).then(function(r) {
@@ -327,7 +403,8 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/style/variable.scss";
 .homework_list {
   margin-top: 1.33333vw;
   padding: 1.86667vw;
@@ -350,15 +427,91 @@ export default {
   transform: translate(0, -50%);
   width: 40%;
 }
+.select-container {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  border-bottom: $border-state;
+}
 .select-span {
-  width: 60px;
+  width: 80px;
   display: inline-block;
+  font-size: 16px;
+  &.active {
+    .select-span-div {
+      color: $green-active-color;
+    }
+    .panelbar-list {
+      display: inline-block;
+      height: auto;
+      overflow-y: scroll;
+    }
+  }
+  .book-list {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    text-align: left;
+    top: calc(#{$header-height} + 0.5vw);
+    display: inline-block;
+    background-color: #fff;
+    transition: all 0.2s ease-in;
+    overflow-y: scroll;
+    height: auto;
+    z-index: 50;
+    .panelbar-item {
+      line-height: #{$header-height};
+      padding-left: 10px;
+      &.cur,
+      &:hover {
+        color: $green-active-color;
+      }
+    }
+  }
+  .panelbar-list{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    text-align: left;
+    top: calc(#{$header-height}* 2 + 0.5vw);
+    display: none;
+    background-color: #fff;
+    transition: all 0.2s ease-in;
+    overflow: hidden;
+    z-index: 50;
+    .panelbar-item {
+      line-height: #{$header-height};
+      padding-left: 10px;
+      &.cur,
+      &:hover {
+        color: $green-active-color;
+      }
+      span {
+        &.cur {
+          color: $green-active-color;
+        }
+        padding-right: 8vw;
+      }
+    }
+  }
+}
+.cover {
+  position: absolute;
+  top: calc(#{$header-height}* 2 + 0.5vw);
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease-in;
+  display: none;
+  z-index: 30;
+  &.active {
+    display: block;
+  }
 }
 .select-span-div {
-  padding: 10px;
+  padding: 0 10px;
   border-radius: 2px;
-  font-size: 14px;
-  line-height: 1.429;
+  line-height: $header-height;
   position: relative;
   box-sizing: border-box;
 }
@@ -379,12 +532,6 @@ export default {
   color: #ffffff;
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
     0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
-}
-.select-container {
-  display: flex;
-  justify-content: space-between;
-  background-color: #fff;
-  border-bottom: 1px solid #ededf0;
 }
 .homework_list_inline_list {
   line-height: 25px;
