@@ -129,7 +129,7 @@ export default {
       this.showVoicePopup = false;
       if (type === 'sure') {
         var param = [this.account.userInfo.userid, this.account.jwt.jwt, 'http://api2.dev.anoah.com/jwt/homework/correct/upload_auth', "['file:///storage/emulated/0/ddmsrec.mp4']"];
-        window.appPlug.aliUpLoad(param, function() { alert('成功') }, function() { alert('失败') });
+        window.appPlug.aliUpLoad(param, function(msg) { alert(JSON.stringify(msg)) }, function(msg) { alert(msg) });
       }
     },
     writeComments() {

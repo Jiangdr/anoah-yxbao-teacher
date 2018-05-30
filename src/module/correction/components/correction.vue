@@ -45,7 +45,7 @@
 </div>
 
 </cube-popup>
-<div class="submitBtn" @click="commit">
+<div class="submitBtn" @click="commit" :class="{disable:!checked.length&& !msg.length}">
   <!-- <van-button type="primary" bottom-action>提交</van-button> -->
   提交
 </div>
@@ -96,6 +96,9 @@ export default {
       }
     },
     commit() {
+      if (!this.checked.length && !this.msg.length) {
+        return false
+      }
       let params = {
         user_id: JSON.parse(localStorage.userinfo).userid,
         rsid: this.$route.params.rsid,
@@ -104,7 +107,7 @@ export default {
         images: this.imgs
       }
       correction.create(params).then(r => {
-        console.log(r)
+        this.goBack()
       })
     }
   },
@@ -239,5 +242,8 @@ export default {
   background: #08b783;
   color:#fff;
   font-size: 17px;
+}
+.correction>.submitBtn.disable{
+  opacity: 0.5;
 }
 </style>
