@@ -49,13 +49,16 @@
         </div>
         <div class="van-picker__columns" style="height: 220px;">
           <div class="van-picker-column" style="height: 220px;display: flex;align-items: center;justify-content: center;">
-            <div>
-              <div style="border: 1px solid #13d098;width: 150px;height: 150px;border-radius: 50%;display: flex;align-items: center;justify-content: center;">
-                <div style="background-color: #13d098;width: 130px;height: 130px;border-radius: 50%;display: flex;align-items: center;justify-content: center;">
+            <div @click="clickRecordBtn">
+
+              <div class="circleNoRotate" v-show="!isRecording">
+                <div class="circleNoRotate-div">
                   <img style="width: 50%;" src="@/assets/images/batchEvaluate/voiceBtn.png" alt="voiceBtn">
                 </div>
               </div>
-              <div style="margin-top: 10px;">点击开始录音</div>
+              <div class="spinner" v-show="isRecording"></div>
+              <div style="margin-top: 10px;" v-show="!isRecording">点击开始录音</div>
+              <div style="margin-top: 10px;" v-show="isRecording">点击停止录音</div>
             </div>
           </div>
         </div>
@@ -79,7 +82,8 @@ export default {
       checkBoxGroup: [],
       templateLists: [],
       showVoicePopup: false,
-      countNum: 3
+      countNum: 3,
+      isRecording: false
     };
   },
   mounted: function() {
@@ -113,6 +117,16 @@ export default {
     },
     clickVoiceShow() {
       this.showVoicePopup = !this.showVoicePopup;
+    },
+    clickRecordBtn() {
+      this.isRecording = !this.isRecording;
+      if (this.isRecording) {
+        var param = [this.userInfo.account.userId, this.userInfo.account.jwt, 'http://api2.dev.anoah.com/jwt/homework/correct/upload_auth?', "['http://ox7arp73u.bkt.clouddn.com/guoge2.mp3']"];
+        window.appPlug.aliUpLoad(param, this.afteruploadsucc);
+      }
+    },
+    afteruploadsucc(msg) {
+      alert(JSON.stringify(msg))
     },
     clickVoiceChoose() {
       this.showVoicePopup = false;
@@ -209,5 +223,48 @@ $border-state: 1px solid rgb(234, 237, 240);
 }
 .comfirmBtn:active {
   background-color: $active-color;
+}
+.circleNoRotate {
+  border: 1px solid #13d098;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spinner {
+  width: 120px;
+  height: 120px;
+  background-color: #13d098;
+  border-radius: 100%;
+  -webkit-animation: scaleout 1.3s infinite ease-in-out;
+  animation: scaleout 1.3s infinite ease-in-out;
+}
+@-webkit-keyframes scaleout {
+  0% { -webkit-transform: scale(0.0) }
+  100% {
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
+}
+@keyframes scaleout {
+  0% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 100% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
+}
+.circleNoRotate-div {
+  background-color: #13d098;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

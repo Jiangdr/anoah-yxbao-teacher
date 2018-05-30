@@ -14,7 +14,7 @@
     </cube-popup>
     <cube-popup type="collection-popup" v-show="showCollectionPopup">
       <div class="wrapper" v-if="favorite==1">
-        <i :style="{'background-image':'url('+imgUrl('collect')+')'}"></i>
+        <i></i>
         <span>已收藏</span>
       </div>
       <div class="wrapper" v-else-if="favorite==0">
@@ -77,9 +77,6 @@ export default {
           this.$emit('back')
         }, 500)
       })
-    },
-    imgUrl(name) {
-      return require('@/assets/images/homeworkDetail/' + name + '.png')
     }
   }
 };
@@ -125,7 +122,7 @@ export default {
   display: inline-block;
   width: 24px;
   height: 24px;
-  // background: url("/assets/images/homeworkDetail/collect.png") no-repeat center;
+  background-image: url('../../../../assets/images/homeworkDetail/collect.png');
   background-repeat:no-repeat;
   background-position: center center;
   background-size: 100% 100%;
