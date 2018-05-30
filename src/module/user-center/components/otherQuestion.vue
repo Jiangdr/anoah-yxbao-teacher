@@ -4,7 +4,7 @@
     <van-field v-model="msg" type="textarea" placeholder="请简要描述你的问题和意见" rows="6" class="otherquestionta"/>
     <div style="width: 90%; margin:10px auto; ">上传问题截图<span class="graytext"> ({{selImagesNumber}}/8)</span></div>
     <van-row style="width:95%;margin: auto">
-      <van-col v-for="(item,index) in selectImages" :key="index" style="margin-bottom: 10px;" span="8"><div class="roundrectarea"><img :src="'data:image/png;base64,' + item" style="width: 100%;height:100%"/><uc-close-btn @click="deleteSelPic(index)" style="position:absolute;right: -10px;top: -10px"></uc-close-btn></div></van-col>
+      <van-col v-for="(item,index) in selectImages" :key="index" style="margin-bottom: 10px;" span="8"><div class="roundrectarea"><img :src="item" style="width: 100%;height:100%"/><uc-close-btn @click="deleteSelPic(index)" style="position:absolute;right: -10px;top: -10px"></uc-close-btn></div></van-col>
       <van-col v-show="selectImages.length < maxImageNum" span="8"><div class="roundrectarea" @click="clickSubmitImage"><div style="position: absolute;left:50%;top:50%;transform: translate(-50%,-50%)"><img src="@/assets/images/public/submitimage.png" style="position: relative;left:50%;transform: translateX(-50%)"/><br/><div style="white-space: nowrap">点击上传</div></div></div></van-col>
     </van-row>
     <bottom-button-area :disabled="disabled" @click="complete" buttonText="完 成"></bottom-button-area>
