@@ -6,15 +6,17 @@
     <router-link class="item-choice van-hairline--bottom" tag="div" :to="{path:'/feedback'}">意见反馈</router-link>
     <router-link class="item-choice van-hairline--bottom" tag="div" :to="{path:'/setting'}">设置</router-link>
     <router-link class="item-choice van-hairline--bottom" tag="div" :to="{path:'/aboutUs'}">关于我们</router-link>
-    <van-tabbar v-model="active" @change="change" class="bar">
+    <!-- <van-tabbar v-model="active" @change="change" class="bar">
       <van-tabbar-item icon="shop">首页</van-tabbar-item>
       <van-tabbar-item icon="chat">我的</van-tabbar-item>
-    </van-tabbar>
+    </van-tabbar> -->
+    <footer-bar activeType="my" @tabChange="tabChange"></footer-bar>
   </div>
 </template>
 
 <script>
 import NavBar from '@/module/user-center/components/common/navbar'
+import footerBar from '@/components/footerBar'
 // import HeaderBar from '@/components/common/header-bar'
 export default {
   name: 'UserCenter',
@@ -27,12 +29,16 @@ export default {
   created () {},
   computed: {},
   methods: {
-    change (active) {
+    tabChange (type) {
+      if (type === 'my') {
+        return false
+      }
       this.$router.back(-1)
     }
   },
   components: {
-    NavBar
+    NavBar,
+    footerBar
   }
 }
 </script>
