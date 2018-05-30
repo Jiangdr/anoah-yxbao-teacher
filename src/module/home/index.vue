@@ -2,6 +2,7 @@
   <div class="spa">
     <div class="top">
       <div @click="message">
+        <i class="red-icon"></i>
         <i class="icon message"></i>
       </div>
       <div @click="showPopup =true">
@@ -13,37 +14,51 @@
       <div>
         <div @click="go('iclass')">
           <i class="icon iclass"></i>
-          <span class="font-h1">互动课堂</span>
+          <span class="font-h2">互动课堂</span>
         </div>
         <div @click="go('homework')">
           <i class="icon homework"></i>
-          <span class="font-h1">作业</span>
+          <span class="font-h2">作业</span>
         </div>
       </div>
       <div class="line"></div>
       <div>
         <div>
           <i class="icon wrong"></i>
-           <span class="font-h4">错题本</span>
+          <span class="font-h4">错题本</span>
         </div>
-        <div >
+        <div>
           <i class="icon iclass-record"></i>
-           <span class="font-h4">课堂记录</span>
+          <span class="font-h4">课堂记录</span>
         </div>
         <div @click="go('qa')">
           <i class="icon ask"></i>
-           <span class="font-h4">问答</span>
+          <span class="font-h4">问答</span>
         </div>
       </div>
     </div>
 
-    <div>
-      <div>待处理</div>
-      <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
-        <van-list v-model="loading" :finished="finished" @load="onLoad">
-          <van-cell v-for="item in list" :key="item" :title="item + ''" />
-        </van-list>
-      </van-pull-refresh>
+    <div class="todo-box">
+      <div class="font-h1">待处理
+        <span class="font-h4">近一个月</span>
+      </div>
+      <cube-scroll ref="scroll" :data="items" :options="options" @pulling-down="onRefresh" @pulling-up="onLoad">
+        <template slot="pulldown" slot-scope="props">
+          <div v-if="props.pullDownRefresh" class="cube-pulldown-wrapper" :style="props.pullDownStyle">
+            <div v-if="props.beforePullDown" class="before-trigger" :style="{paddingTop: props.bubbleY + 'px'}">
+              <span :class="{rotate: props.bubbleY > 40}">释放刷新</span>
+            </div>
+            <div class="after-trigger" v-else>
+              <div v-if="props.isPullingDown" class="loading">
+                <cube-loading></cube-loading>
+              </div>
+              <div v-else>
+                <span>刷新成功</span>
+              </div>
+            </div>
+          </div>
+        </template>
+      </cube-scroll>
     </div>
 
     <van-tabbar v-model="active" @change="change" class="bar">
@@ -71,12 +86,32 @@ export default {
   name: 'Home',
   data() {
     return {
-      list: [],
-      loading: false,
-      refreshLoading: false,
-      finished: false,
+      items: [
+        'I am line ',
+        'I am line ',
+        'I am line ',
+        'I am line ',
+        'I am line '
+      ],
       active: 0,
-      showPopup: false
+      showPopup: false,
+      itemIndex: 0,
+      options: {
+        pullDownRefresh: {
+          threshold: 40,
+          txt: {
+            more: '加载更多',
+            noMore: '已经显示全部'
+          }
+        },
+        pullUpLoad: {
+          threshold: 40,
+          txt: {
+            more: '加载更多',
+            noMore: '已经显示全部'
+          }
+        }
+      }
     }
   },
   computed: {
@@ -169,25 +204,34 @@ export default {
     },
     onLoad() {
       setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
+        if (this.items.length < 20) {
+          // If have new data, just update the data property.
+          let newPage = [
+            'I am line ' + ++this.itemIndex,
+            'I am line ' + ++this.itemIndex,
+            'I am line ' + ++this.itemIndex,
+            'I am line ' + ++this.itemIndex,
+            'I am line ' + ++this.itemIndex
+          ]
+          this.items = this.items.concat(newPage)
+        } else {
+          // If no new data, you need use the method forceUpdate to tell us the load is done.
+          this.$refs.scroll.forceUpdate()
         }
-        this.loading = false
-
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 500)
+      }, 1000)
     },
     onRefresh() {
       setTimeout(() => {
-        this.list = []
-        this.finished = false
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-        this.$toast('刷新成功')
-        this.refreshLoading = false
+        this.items = [];
+        this.itemIndex = 0;
+        let newPage = [
+          'I am line ' + ++this.itemIndex,
+          'I am line ' + ++this.itemIndex,
+          'I am line ' + ++this.itemIndex,
+          'I am line ' + ++this.itemIndex,
+          'I am line ' + ++this.itemIndex
+        ]
+        this.items = newPage;
       }, 500)
     },
     change() {
@@ -212,76 +256,98 @@ export default {
   padding-top: 3vh;
   height: 8vh;
   text-align: right;
+
   & > div {
     display: inline-block;
     padding: 7px;
+    position: relative;
+    .red-icon {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: url("../../assets/images/public/red-icon.png") no-repeat;
+      background-size: 100% auto;
+      position: absolute;
+      top: 7px;
+      right: 7px;
+    }
   }
 
-  .icon{
+  .icon {
     width: 21px;
     height: 20px;
   }
 }
 
-.pannel{
-  background:$white;
+.pannel {
+  background: $white;
   width: 100%;
- // margin: $gap-small;
+  // margin: $gap-small;
   border-radius: 8px;
-  box-shadow: 0 2px 2px rgba(0,0,0,.5);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
 
-  .line{
-    height: 0.5px;
+  .line {
+    height: 1px;
     width: 80%;
-    background-color:$gray5;
-    padding:0;margin:0 auto;
+    background-color: $gray5;
+    padding: 0;
+    margin: 0 auto;
     opacity: 0.8;
   }
 
-  &>div{
-    padding:10px;
-     display: flex;
-     justify-content:center;
-     text-align:center;
-     height: 70px;
+  & > div {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    height: 70px;
     align-items: center;
   }
 
-  &>div>div{
-   flex: 1 0 0 ;
+  & > div > div {
+    flex: 1 0 0;
 
-    span{
-      padding:5px;
+    span {
+      padding: 5px;
     }
   }
 
-  .iclass,.homework{
+  .iclass,
+  .homework {
     width: 50px;
     height: 50px;
     vertical-align: middle;
   }
 
-  .iclass-record,.wrong,.ask{
-     width: 35px;
+  .iclass-record,
+  .wrong,
+  .ask {
+    width: 35px;
     height: 35px;
     vertical-align: middle;
     display: block;
     margin: 0 auto;
     margin-bottom: 10px;
   }
-
 }
 
-.space {
-  height: 20px;
-}
-.van-pull-refresh {
-  height: calc(100vh - 62vw);
-}
-.van-list {
-  height: calc(100vh - 180px);
-  overflow-y: scroll;
+.todo-box {
+  margin-top: 18px;
+
+  div.font-h1 {
+    padding: 8px 0;
+  }
+
+  span.font-h4 {
+    color: $gray5;
+    padding: 0 12px;
+  }
+
+  .cube-scroll-wrapper {
+    margin: 0 -13px;
+    height: calc(100vh - 357px);
+  }
 }
 
 .run-env > div {

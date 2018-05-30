@@ -58,7 +58,7 @@
 import api from "@/module/batchEvaluate/axios/batchEvaluate.js";
 
 export default {
-  name: "comments",
+  name: "returnRewrite",
   data() {
     return {
       listContainerStyle: {

@@ -6,7 +6,7 @@
           <div>作业通知</div>
         </div>
         <div slot="right-area">
-          <i @click="clear" :class="{disable:this.list.length<=0}" class="clear" :style="{'background-image':'url('+imgUrl('clear')+')'}"></i>
+          <i @click="clear" :class="{disable:this.list.length<=0}" class="clear"></i>
         </div>
       </header-bar>
   </div>
@@ -15,7 +15,7 @@
       <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" @load="onLoad" :immediate-check="false">
           <div v-if="list.length===0" class="no-data">
-            <img :src="imgUrl('nodata')" alt="">
+            <img src="../../../assets/images/notice/nodata.png" alt="">
             <p>暂时还没有通知哦～</p>
           </div>
           <homework-notice-list :list="list" v-else></homework-notice-list>
@@ -72,9 +72,6 @@ export default {
         }
       })
     },
-    imgUrl(name) {
-      return require('@/assets/images/notice/' + name + '.png')
-    },
     getNoticelist () {
       notice.getList(this.params).then((r) => {
         this.totalPage = r.totalPage
@@ -124,6 +121,7 @@ export default {
   background-size: 100% 100%;
   background-repeat: no-repeat;
   vertical-align: middle;
+  background-image: url('../../../assets/images/notice/clear.png')
 }
 .homeworkList .container{
   height: calc(100% - 45px);
