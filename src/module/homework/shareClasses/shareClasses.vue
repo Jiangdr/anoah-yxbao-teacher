@@ -74,9 +74,18 @@ export default {
     },
     clickShareBtn() {
       var self = this;
+      var classIds = "";
+      var classIdArray = self.account.userInfo.classes;
+      for (let i = 0; i < classIdArray.length; i++) {
+        if (i + 1 === classIdArray.length) {
+          classIds += classIdArray[i].class_id;
+        } else {
+          classIds += classIdArray[i].class_id + ",";
+        }
+      }
       var data = {
         user_id: self.account.userInfo.userid,
-        class_id: '',
+        class_id: classIds,
         title: '',
         content: '',
         share_param: ''

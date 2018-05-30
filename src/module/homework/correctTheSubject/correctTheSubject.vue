@@ -1,28 +1,45 @@
 <template>
   <div class="cube-page cube-view button-view">
     <header class="header">
-      <h1 @click="clickSwitchStudent">点击切换学生</h1>
+      <h1 @click="clickSwitchStudent">火锅（1/2）</h1>
       <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i></i>
     </header>
     <!-- <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
       <div v-for="(value,key) in setting" :key="key">
       </div>
     </div> -->
-      <studentMutualComments :listObj="listObj"></studentMutualComments>
+    <!-- 学生答案 学生互评tab -->
+    <div class="btns van-hairline--surround">
+      <van-row>
+        <van-col span="12" :class="{'active':activeBtn=='studentAnswer'}">
+          <span @click="toggleContent('studentAnswer')">学生答案</span>
+          </van-col>
+          <van-col span="12" class="student" :class="{'active':activeBtn=='studentMutualComments'}">
+            <span @click="toggleContent('studentMutualComments')">学生互评</span>
+          </van-col>
+      </van-row>
+    </div>
+    <studentAnswer v-show="activeBtn === 'studentAnswer'" :listObj="listObj"></studentAnswer>
+    <studentMutualComments v-show="activeBtn === 'studentMutualComments'" :listObj="listObj"></studentMutualComments>
   </div>
 </template>
 
 <script>
 import api from "@/module/homework/axios/correctTheSubject.js";
+import studentAnswer from "@/components/common/studentAnswer.vue";
 import studentMutualComments from "@/components/common/studentMutualComments.vue";
 import {mapGetters} from 'vuex'
 
 export default {
   name: "correctTheSubject",
-  components: { studentMutualComments },
+  components: {
+    studentMutualComments,
+    studentAnswer
+  },
   data() {
     return {
       listObj: {},
+      activeBtn: "studentAnswer",
       listContainerStyle: {
         height: window.innerHeight - 50 + 'px'
       }
@@ -36,7 +53,8 @@ export default {
   created: function() {
     this.userInfo = this.$store.state.account.userInfo;
     this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
-    this.getList();
+    this.getStudentAnswerList();
+    this.getStudentMutualCommentsList();
   },
   methods: {
     goHomework() {
@@ -49,7 +67,10 @@ export default {
         path: "/switchStudent"
       });
     },
-    getList: function(value) {
+    toggleContent(items) {
+      this.activeBtn = items;
+    },
+    getStudentMutualCommentsList: function() {
       var self = this;
       var data = {
         publish_id: '309002511527229000001f',
@@ -80,6 +101,27 @@ export default {
           self.$toast("网络异常");
         }
       );
+    },
+    getStudentAnswerList: function(value) {
+      var self = this;
+      var data = {
+        publish_id: '309002511527229000001f',
+        course_resource_id: '9002511527228900001',
+        dcom_entity_id: 0,
+        source_pk_id: '9002511502880300001',
+        user_id: '1024619',
+        icom_id: 4629,
+        dcom_id: ''
+      };
+      api.getUserAnswerForMiniRs(data).then(
+        response => {
+          console.log(response)
+        },
+        err => {
+          console.log(err);
+          self.$toast("网络异常");
+        }
+      );
     }
   }
 };
@@ -88,5 +130,20 @@ export default {
 <style scoped>
 .activeTabClass {
   color: #2ec2a9;
+}
+.btns {
+  line-height: 44px;
+  height: 44px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.btns .active span{
+  color: #08b783;
+  border-bottom:2px solid #08b783;
+}
+.btns span {
+  display: inline-block;
+  height: 42px;
+  border-bottom: 2px solid transparent;
 }
 </style>
