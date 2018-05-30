@@ -461,6 +461,9 @@ export default {
     height: auto;
     z-index: 50;
     .panelbar-item {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       line-height: #{$header-height};
       padding-left: 10px;
       &.cur,
@@ -469,7 +472,7 @@ export default {
       }
     }
   }
-  .panelbar-list{
+  .panelbar-list {
     position: absolute;
     left: 0px;
     right: 0px;
