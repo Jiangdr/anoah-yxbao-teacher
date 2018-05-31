@@ -27,7 +27,7 @@
     <div class="container">
       <div class="item" v-for="(img,index) in imgs" :key="index">
         <span class="close" @click="remove(index)"></span>
-        <img :src="img" alt="" width="100%" height="100%">
+        <img src="../../../assets/images/correction/up.png" alt="" width="100%" height="100%">
       </div>
       <div class="item upload" @click="togglePopup">
         <img class="up" src="../../../assets/images/correction/up.png"/>
@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       msg: '',
-      imgs: [],
+      imgs: ['../../../assets/images/correction/up.png'],
       classify: {
         10: '内容超纲',
         11: '答案错误',
@@ -230,7 +230,7 @@ export default {
   position: absolute;
   right: 0;
   top:0;
-  transform: translate(50%,-50%);
+  transform: translate(30%,-30%);
 }
 .correction .upload>.container>.item.upload p{
   color:#c8c9c9;
