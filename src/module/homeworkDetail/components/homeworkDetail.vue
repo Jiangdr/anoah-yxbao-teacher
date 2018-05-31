@@ -103,7 +103,7 @@
           <div class="title">学生成绩</div>
         <template v-if="finishCounter>0">
           <!-- 学生列表 -->
-          <student-list :studentList="studentList"></student-list>
+          <student-list :studentList="studentList" :publishId="homeworkInfo.course_hour_publish_id"></student-list>
         </template>
         <!-- 没人完成 -->
         <template v-else>

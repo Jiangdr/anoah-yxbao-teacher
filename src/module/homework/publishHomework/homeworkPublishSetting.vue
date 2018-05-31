@@ -63,9 +63,10 @@ export default {
   },
   methods: {
     goSummerHomework() {
-      this.$router.push({
-        path: "/summerHomework"
-      });
+      // this.$router.push({
+      //   path: "/summerHomework"
+      // });
+      this.$router.back(-1);
     },
     clickShowPupUpDatePickerFun(type) {
       this.publishDatePickerShow = true;
