@@ -53,6 +53,7 @@ export default {
     };
   },
   created: function() {
+    console.log(this.$route.params)
     this.userInfo = this.$store.state.account.userInfo;
   },
   mounted: function() {
@@ -63,9 +64,10 @@ export default {
   },
   methods: {
     goSummerHomework() {
-      this.$router.push({
-        path: "/summerHomework"
-      });
+      // this.$router.push({
+      //   path: "/summerHomework"
+      // });
+      this.$router.back(-1);
     },
     clickShowPupUpDatePickerFun(type) {
       this.publishDatePickerShow = true;

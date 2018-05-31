@@ -2,7 +2,7 @@
 <div id="question-detail" style="height:100%">
   <header-bar @back="goBack">
     <div slot="title-name">{{routePrams && routePrams.title || '标题需要传入'}}({{currectIndex}}/{{qtiCount}})</div>
-    <div slot="right-area">原题</div>
+    <div slot="right-area" v-if="routePrams && routePrams.type === 2">原题</div>
   </header-bar>
   <div class="swiper-container">
     <div class="swiper-wrapper">
@@ -153,7 +153,12 @@ export default {
     },
     // 主观题批改
     subjectiveQtiPigai(item) {
-      console.log(item)
+      this.$router.push({
+        name: "correctTheSubject",
+        params: {
+          detailData: item
+        }
+      })
     }
   },
   components: {

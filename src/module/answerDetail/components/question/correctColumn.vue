@@ -21,13 +21,11 @@
         </van-row>
       </div>
     </div>
-    <student-list :title="popupTitle" :list="popupList" @toggleAllCorrec="toggleAllCorrec" v-if="showAllCorrec"></student-list>
   </div>
 </template>
 
 <script>
 import getStatistics from '../../axios/getQuestionStatistics.js'
-import studentList from '../common/studentList.vue'
 import {mapState} from 'vuex'
 
 export default {
@@ -73,9 +71,7 @@ export default {
   },
   methods: {
     toggleAllCorrec(title, list) {
-      this.showAllCorrec = !this.showAllCorrec
-      this.popupTitle = title
-      this.popupList = list
+      window.bus.$emit('showStudentList', title, list)
     },
     itemName(key) {
       if (this.alias === 'wordorder') {
@@ -105,7 +101,6 @@ export default {
     }
   },
   components: {
-    studentList
   }
 }
 </script>

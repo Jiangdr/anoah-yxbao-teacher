@@ -28,7 +28,6 @@
 
 <script>
 import getStatistics from '../../axios/getQuestionStatistics.js'
-import studentList from '@/components/studentList'
 // import {mapState} from 'vuex'
 
 export default {
@@ -96,7 +95,6 @@ export default {
     }
   },
   components: {
-    studentList
   }
 }
 </script>

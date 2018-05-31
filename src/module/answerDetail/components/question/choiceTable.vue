@@ -22,7 +22,6 @@
         </span>
       </div>
     </div>
-    <!-- <student-list :title="popupTitle" :list="popupList" @toggleAllCorrec="toggleAllCorrec" v-if="showAllCorrec"></student-list> -->
   </div>
 </template>
 
@@ -65,9 +64,7 @@ export default {
   },
   methods: {
     toggleAllCorrec(title, list) {
-      this.showAllCorrec = !this.showAllCorrec
-      this.popupTitle = title
-      this.popupList = list
+      window.bus.$emit('showStudentList', title, list)
     },
     getinfo() {
       let param = {
