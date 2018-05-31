@@ -12,19 +12,17 @@
         </van-row>
       </div>
       <div class="table-body">
-        <van-row
-          v-for="(stu, index) in studentList"
-          :key='index'
-          class="stu"
-        >
-          <van-col span="5" class="lf">{{stu.real_name}}</van-col>
-          <van-col span="5">{{stu.completed_num}}</van-col>
-          <van-col span="5">{{itemCorrect(stu.rate)}}</van-col>
-          <van-col span="5">{{stu.correct_num}}</van-col>
-          <van-col span="4">
-            <i class="icon"></i>
-          </van-col>
+        <div @click="studentHomework(stu)"  v-for="(stu, index) in studentList" :key='index'>
+          <van-row class="stu">
+            <van-col span="5" class="lf">{{stu.real_name}}</van-col>
+            <van-col span="5">{{stu.completed_num}}</van-col>
+            <van-col span="5">{{itemCorrect(stu.rate)}}</van-col>
+            <van-col span="5">{{stu.correct_num}}</van-col>
+            <van-col span="4">
+              <i class="icon"></i>
+            </van-col>
           </van-row>
+        </div>
       </div>
     </div>
   </div>
@@ -32,7 +30,7 @@
 <script>
 export default{
   name: 'studentList',
-  props: ['studentList'],
+  props: ['studentList', 'publishId'],
   data() {
     return {
 
@@ -46,6 +44,9 @@ export default{
       } else {
         return correct === 0 ? 0 : Math.round(correct * 100) + "%";
       }
+    },
+    studentHomework(stuInfo) {
+      this.$router.push({path: `/studentHomework/${stuInfo.userid}/${this.publishId}/${stuInfo.real_name}`})
     }
   }
 }
