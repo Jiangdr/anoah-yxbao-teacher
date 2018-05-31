@@ -38,7 +38,9 @@ export default {
           this.$router.push({
             name: "examExercise",
             params: {
-              rids: r
+              title: this.list[index].resource_name,
+              rids: r,
+              ischeck: false
             }
           })
         })
