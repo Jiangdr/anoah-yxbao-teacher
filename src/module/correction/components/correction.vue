@@ -27,7 +27,7 @@
     <div class="container">
       <div class="item" v-for="(img,index) in imgs" :key="index">
         <span class="close" @click="remove(index)"></span>
-        <img src="../../../assets/images/correction/up.png" alt="" width="100%" height="100%">
+        <img src="" alt="" width="100%" height="100%">
       </div>
       <div class="item upload" @click="togglePopup">
         <img class="up" src="../../../assets/images/correction/up.png"/>
@@ -50,7 +50,13 @@
 </cube-popup>
   <div class="submitBtn" @click="commit" :class="{disable:!checked.length&& !msg.length}">
     <!-- <van-button type="primary" bottom-action>提交</van-button> -->
-    提交
+    <template v-if="loading">
+      <van-loading type="spinner" color="black" class="loading"/>
+      提交中
+    </template>
+    <template v-else>
+      提交
+    </template>
   </div>
 </div>
 </template>
@@ -58,12 +64,13 @@
 <script>
 import headerBar from '@/components/headerBar.vue'
 import correction from '../axios/correction.js'
+import { Toast } from 'vant';
 export default {
   name: 'correction',
   data() {
     return {
       msg: '',
-      imgs: ['../../../assets/images/correction/up.png'],
+      imgs: [],
       classify: {
         10: '内容超纲',
         11: '答案错误',
@@ -73,6 +80,7 @@ export default {
         15: '知识点不符',
         16: '其他'
       },
+      loading: false,
       checked: [],
       showPopup: false,
       maxLength: 100
@@ -105,6 +113,7 @@ export default {
       if (!this.checked.length && !this.msg.length) {
         return false
       }
+      this.loading = true;
       let params = {
         user_id: JSON.parse(localStorage.userinfo).userid,
         rsid: this.$route.params.rsid,
@@ -113,7 +122,11 @@ export default {
         images: this.imgs
       }
       correction.create(params).then(r => {
-        this.goBack()
+        this.loading = false;
+        Toast('提交成功！感谢您的参与，我们会尽快审核')
+        setTimeout(() => {
+          this.goBack()
+        }, 2000)
       })
     }
   },
@@ -277,5 +290,12 @@ export default {
 }
 .correction>.submitBtn.disable{
   opacity: 0.5;
+}
+.loading{
+  display: inline-block;
+  width:20px;
+  height: 20px;
+  position: relative;
+  top:-3px;
 }
 </style>
