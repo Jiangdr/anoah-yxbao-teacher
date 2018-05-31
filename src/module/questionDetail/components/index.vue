@@ -6,8 +6,14 @@
   </header-bar>
   <div class="swiper-container">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" v-for="(item, index) in 3" :key="index">
-        {{item}}
+      <div class="swiper-slide" v-for="(item, index) in renderResource" :key="index">
+        <answer-column :params="item" v-if="item.qti_question_type_id == 1 || item.qti_question_type_id == 2 || item.qti_question_type_id == 3 || item.qti_question_type_id == 6 || item.qti_question_type_id == 15"></answer-column>
+        <choice-table :params="item" v-if="item.qti_question_type_id == 11"></choice-table>
+        <correct-column :params="item" v-if="item.qti_question_type_id == 9 || item.qti_question_type_id == 21 || item.qti_question_type_id == 23 || item.qti_question_type_id == 24 || item.qti_question_type_id == 25 || item.qti_question_type_id == 26"></correct-column>
+        <correct-table :params="item" v-if="item.qti_question_type_id == 4 || item.qti_question_type_id == 20"></correct-table>
+        <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
+        <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective>
+        <render-qti :info="item" :id="item.source_pk_id + ''" :icom_id="item.icom_id" :dcom_id="item.source_pk_id" user_id="0" :setting="setting"></render-qti>
       </div>
     </div>
   </div>
@@ -71,13 +77,6 @@ export default {
   },
   activated() {
     this.renderView()
-    // this.$nextTick(() => {
-    //   this.mySwiper = new this.Swiper('.swiper-container', {
-    //     autoHeight: true,
-    //     observer: true, // 修改swiper自己或子元素时，自动初始化swiper
-    //     observeParents: true // 修改swiper的父元素时，自动初始化swiper
-    //   })
-    // })
   },
   computed: {
     ...mapState({
@@ -90,19 +89,16 @@ export default {
       get() {
         return {
           'smt': 'no_self_smt',
-          'publish_id': this.params.course_hour_publish_id,
-          'course_resource_id': this.params.course_resource_id,
+          'publish_id': this.resource[this.routePrams.index].course_hour_publish_id,
+          'course_resource_id': this.resource[this.routePrams.index].course_resource_id,
           'caller': 'ICLASS',
-          'dcom_entity_id': this.params.dcom_entity_id,
+          'dcom_entity_id': this.resource[this.routePrams.index].dcom_entity_id,
           'titleflag': 1
         }
       },
       set(val) {
         return val
       }
-    },
-    swiper() {
-      return this.$refs.mySwiper.swiper
     },
     routePrams() {
       return this.$route.params.params
@@ -114,7 +110,6 @@ export default {
     }),
     // 根据资源创建所需数据结构和swiper视图
     renderView() {
-      
       let resource = this.resource
       for (let i = 0; i < resource.length; i++) {
         this.renderResource.push({})
@@ -122,11 +117,15 @@ export default {
       this.renderResource[this.routePrams.index] = this.resource[this.routePrams.index]
       this.$nextTick(() => {
         this.mySwiper = new this.Swiper('.swiper-container', {
-          autoplay: true,
           init: false,
           autoHeight: true,
           observer: true, // 修改swiper自己或子元素时，自动初始化swiper
-          observeParents: true // 修改swiper的父元素时，自动初始化swiper
+          observeParents: true, // 修改swiper的父元素时，自动初始化swiper
+          on: {
+            slideChange: () => {
+              this.slideEnd()
+            }
+          }
         })
         this.mySwiper.touchEvents = {
           end: 'touchend',
@@ -134,28 +133,26 @@ export default {
           start: 'touchstart'
         }
         this.mySwiper.init()
-        this.mySwiper.enableTouchControl()
         this.mySwiper.slideTo(this.routePrams.index, 0)
       })
-      // this.swiper.update()
     },
     goBack() {
       this.renderResource = []
       this.clearResource()
+      this.mySwiper.destroy()
       this.$router.go(-1)
     },
     linkTo() {
       this.$router.push({path: '/originalQuestion/0'})
     },
     slideEnd() {
-      Vue.set(this.renderResource, this.swiper.activeIndex, this.resource[this.swiper.activeIndex])
-      this.swiper.update()
+      Vue.set(this.renderResource, this.mySwiper.activeIndex, this.resource[this.mySwiper.activeIndex])
       this.setting = {
         'smt': 'no_self_smt',
-        'publish_id': this.resource[this.swiper.activeIndex].course_hour_publish_id,
-        'course_resource_id': this.resource[this.swiper.activeIndex].course_resource_id,
+        'publish_id': this.resource[this.mySwiper.activeIndex].course_hour_publish_id,
+        'course_resource_id': this.resource[this.mySwiper.activeIndex].course_resource_id,
         'caller': 'ICLASS',
-        'dcom_entity_id': this.resource[this.swiper.activeIndex].dcom_entity_id,
+        'dcom_entity_id': this.resource[this.mySwiper.activeIndex].dcom_entity_id,
         'titleflag': 1
       }
     }
@@ -178,6 +175,6 @@ export default {
 <style lang="scss" scoped>
 .swiper-container{
   height: calc(100% - 45px);
-  overflow-y: scroll;
+  // overflow-y: scroll;
 }
 </style>
