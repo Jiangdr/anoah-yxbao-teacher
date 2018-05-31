@@ -58,12 +58,10 @@
         <van-col span="12"><p :class="{disable:index==record.length-1}" @click="index==record.length-1?'':change(index+1)">下一题</p></van-col>
       </van-row>
     </div>
-    <student-list :title="popupTitle" :list="popupList" @toggleAllCorrec="toggleAllCorrec" v-if="showAllCorrec"></student-list>
   </div>
 </template>
 
 <script>
-import studentList from '../common/studentList.vue'
 export default {
   name: 'groupColumn',
   data() {
@@ -102,9 +100,7 @@ export default {
       this.$router.go(-1)
     },
     toggleAllCorrec(title, list) {
-      this.showAllCorrec = !this.showAllCorrec
-      this.popupTitle = title
-      this.popupList = list
+      window.bus.$emit('showStudentList', title, list)
     },
     change(num) {
       console.log(num)
@@ -121,7 +117,6 @@ export default {
     }
   },
   components: {
-    studentList
   }
 }
 </script>

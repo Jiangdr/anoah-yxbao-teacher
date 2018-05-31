@@ -1,18 +1,5 @@
 <template>
   <div class="tiankong">
-    <!-- <div class="title border-bottom-1px">
-      <van-row>
-        <van-col span="2">
-          <span class="back" @click="goBack">
-                <van-icon name='arrow-left'></van-icon>
-                </span>
-        </van-col>
-        <van-col span="20">
-          <span class="text">查看统计</span>
-        </van-col>
-        <van-col span="2"></van-col>
-      </van-row>
-    </div> -->
     <div class="title-bar">
       <van-row>
         <van-col span="8">

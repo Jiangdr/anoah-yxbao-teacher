@@ -317,6 +317,7 @@ export default {
           name: 'answerDetail',
           params: {
             params: {
+              type: 1,
               index: index,
               title: '批阅作业'
             }
@@ -342,6 +343,7 @@ export default {
         name: "answerDetail",
         params: {
           params: {
+            type: 1,
             index: key,
             title: '批阅作业'
           }
