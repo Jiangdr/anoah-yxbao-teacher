@@ -1,5 +1,5 @@
 <template>
-<div class="schoolList">
+<div class="schoolList" id="schoolList">
   <div class="title">
    <header-bar @back="goBack">
         <div slot="title-name">
@@ -12,7 +12,7 @@
       <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" @load="onLoad" :immediate-check="false">
           <div v-if="list.length===0" class="no-data">
-            <img src="../../../assets/images/notice/nodata.png" alt="">
+            <img :src="imgUrl('nodata')" alt="">
             <p>暂时还没有通知哦～</p>
           </div>
           <school-notice-list :list="list" v-else></school-notice-list>
@@ -44,8 +44,8 @@ export default {
       totalPage: 0
     }
   },
-  activated() {
-    this.getNoticelist();
+  created () {
+    this.getNoticelist()
   },
   methods: {
     goBack () {
@@ -55,6 +55,9 @@ export default {
       this.$router.push({
         name: 'noticeDetail'
       })
+    },
+    imgUrl (name) {
+      return require('@/assets/images/notice/' + name + '.png')
     },
     getNoticelist () {
       notice.getList(this.params).then((r) => {
@@ -66,7 +69,7 @@ export default {
             this.list.push(r.list[i])
           }
         }
-        this.loading = false;
+        this.loading = false
       })
     },
     onRefresh () {
@@ -82,7 +85,7 @@ export default {
         this.finished = true
       } else {
         this.params.page++
-        this.getNoticelist();
+        this.getNoticelist()
       }
     }
   },
@@ -96,8 +99,9 @@ export default {
 <style scoped>
 .schoolList{
   height: 100%;
+  overflow: hidden;
 }
-.schoolList .container{
+#schoolList.schoolList .container{
   height: calc(100% - 45px);
 }
 .schoolList .container>.wrapper {

@@ -159,6 +159,7 @@ export default {
           this.msgs[i].isChecked = false
         }
         this.userLink = ''
+        this.other = '请添加问题描述或问题截图'
         Toast({position: 'bottom', message: '感谢您的反馈，我们会做得更好'})
 
         let len = this.$router.options.routes.length

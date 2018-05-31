@@ -6,13 +6,13 @@
           <div>作业通知</div>
         </div>
         <div slot="right-area">
-          <i @click="clear" :class="{disable:this.list.length<=0}" class="clear"></i>
+          <i @click="togglePopup" :class="{disable:this.list.length<=0}" class=" clear"></i>
         </div>
       </header-bar>
   </div>
     <div class="container">
       <div class="wrapper">
-      <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
+      <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh" class="box">
         <van-list v-model="loading" :finished="finished" @load="onLoad" :immediate-check="false">
           <div v-if="list.length===0" class="no-data">
             <img src="../../../assets/images/notice/nodata.png" alt="">
@@ -23,6 +23,15 @@
       </van-pull-refresh>
       </div>
     </div>
+    <cube-popup type="delete-popup" v-show="showDetelePopup">
+      <div class="delete-wrapper">
+        <p>是否清空所有消息？</p>
+        <div class="btn-group">
+          <span @click="togglePopup">取消</span>
+          <span @click="clear">确认</span>
+        </div>
+      </div>
+    </cube-popup>
 </div>
 </template>
 
@@ -37,6 +46,7 @@ export default {
       loading: false,
       refreshLoading: false,
       finished: false,
+      showDetelePopup: false,
       params: {
         type: 2, //  作业列表
         page: 1, // 页码
@@ -47,8 +57,8 @@ export default {
       totalPage: 0
     }
   },
-  activated() {
-    this.getNoticelist();
+  created () {
+    this.getNoticelist()
   },
   methods: {
     goBack () {
@@ -59,9 +69,15 @@ export default {
         name: 'noticeDetail'
       })
     },
-    clear() {
+    togglePopup () {
+      if (!this.list.length) {
+        return
+      }
+      this.showDetelePopup = !this.showDetelePopup
+    },
+    clear () {
       if (this.list.length <= 0) {
-        return false;
+        return false
       }
       let params = {
         user_id: this.params.user_id
@@ -70,6 +86,7 @@ export default {
         if (r.rs) {
           this.list.splice(0)
         }
+        this.showDetelePopup = false
       })
     },
     getNoticelist () {
@@ -82,7 +99,7 @@ export default {
             this.list.push(r.list[i])
           }
         }
-        this.loading = false;
+        this.loading = false
       })
     },
     onRefresh () {
@@ -98,7 +115,7 @@ export default {
         this.finished = true
       } else {
         this.params.page++
-        this.getNoticelist();
+        this.getNoticelist()
       }
     }
   },
@@ -123,7 +140,7 @@ export default {
   vertical-align: middle;
   background-image: url('../../../assets/images/notice/clear.png')
 }
-.homeworkList .container{
+.homeworkList>.container{
   height: calc(100% - 45px);
 }
 .homeworkList .container>.wrapper {
@@ -135,9 +152,43 @@ export default {
 }
 .homeworkList .container .no-data{
   text-align: center;
-  margin-top:25vh;
+  padding-top:25vh;
+  padding-bottom: 20vh;
 }
 .homeworkList .container .no-data img{
   width:100px;
+}
+.delete-wrapper{
+  width:calc(100vw - 26px);
+  margin:0 13px;
+  background: #fff;
+  padding:20px;
+  border-radius: 13px;
+  box-sizing: border-box;
+}
+.delete-wrapper>p{
+  line-height: 50px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.delete-wrapper>.btn-group{
+  display: flex;
+}
+.delete-wrapper>.btn-group span{
+  flex:1 auto auto;
+  width:150px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 13px;
+  font-size: 17px;
+  text-align: center;
+  background: #08b783;
+  color:#fff;
+}
+.delete-wrapper>.btn-group span:first-child{
+  margin-right: 15px;
+  background: #fff;
+  border:1px solid #08b783;
+  color:#08b783;
 }
 </style>

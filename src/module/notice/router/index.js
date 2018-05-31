@@ -17,7 +17,7 @@ export default [{
   component: homeworkList,
   meta: {
     requiresAuth: false,
-    keepAlive: true
+    keepAlive: false
   }
 },
 {
@@ -26,7 +26,7 @@ export default [{
   component: schoolList,
   meta: {
     requiresAuth: false,
-    keepAlive: true
+    keepAlive: false
   }
 }, {
   path: '/notice/noticeDetail',
