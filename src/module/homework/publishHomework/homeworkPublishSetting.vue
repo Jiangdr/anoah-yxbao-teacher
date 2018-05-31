@@ -55,6 +55,8 @@ export default {
     this.userInfo = this.$store.state.account.userInfo;
   },
   mounted: function() {
+    this.publishDateFormat = this.$dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+    this.answerDateFormat = this.$dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
     this.chooseSummerHomeworkArray = this.$store.state.homework.chooseSummerHomeworkArray;
   },
   methods: {
