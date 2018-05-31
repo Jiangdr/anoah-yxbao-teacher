@@ -7,7 +7,7 @@
 
     <div>
         <van-cell-group>
-          <van-field v-model="homeworkName" placeholder="请填写作业名称" label="作业名称：" />
+          <van-field v-model="homeworkName" placeholder="请填写作业名称" label="作业名称：" icon="clear" @click-icon="homeworkName = ''" />
           <van-cell title="开始时间" is-link :value="publishDateFormat" @click="clickShowPupUpDatePickerFun('开始时间')"/>
           <van-cell title="截止时间" is-link :value="endDateFormat" @click="clickShowPupUpDatePickerFun('截止时间')"/>
         </van-cell-group>
