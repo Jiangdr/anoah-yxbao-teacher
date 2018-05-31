@@ -2,15 +2,7 @@
 <div class="detail">
   <div class="wrapper">
     <!-- 作业名称 开始时间 结束时间 -->
-    <div class="info">
-      <p class="name">
-        {{homeworkInfo.title}}
-        <span style="float:right">共<b>{{resourceList.length}}</b>份</span>
-      </p>
-      <p class="times">
-        截止时间：{{homeworkInfo.deadline}}
-      </p>
-    </div>
+    <info :title="homeworkInfo.title" :endTime="homeworkInfo.deadline" :total="resourceList.length"></info>
     <!-- 平均正确率 -->
     <div class="correct">
       <i class="icon"  @click="toggleTips"></i>
@@ -89,7 +81,7 @@
               </van-col>
               <van-col span="9">{{homeworkInfo.unfinished_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isUrge">
-                <p @click="toggleUrge" :class="{disable:finishCounter===0 || homeworkInfo.unfinished_counter===0}">催交作业</p>
+                <p @click="toggleUrge" :class="{disable:homeworkInfo.unfinished_counter===0}">催交作业</p>
               </van-col>
               <van-col span="6" class="btn" v-if="!isUrge">
                 <p class="disable">今日已提醒</p>
@@ -101,7 +93,7 @@
               </van-col>
               <van-col span="9">{{homeworkInfo.unretyr_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isRemind">
-                <p @click="toggleRemind" :class="{disable:finishCounter===0 || homeworkInfo.unretyr_counter===0}">提醒订正</p>
+                <p @click="toggleRemind" :class="{disable:homeworkInfo.unretyr_counter===0}">提醒订正</p>
               </van-col>
               <van-col span="6" class="btn" v-if="!isRemind">
                 <p class="disable">今日已提醒</p>
@@ -156,6 +148,7 @@ import correct from "@/components/common/correctPopup.vue"; // 一键批阅
 import answer from "./common/answer.vue"; // 发送答案
 import studentList from "./common/studentList.vue"; // 学生列表
 import correctCircle from '@/components/common/correct.vue'
+import info from './common/info.vue'
 
 import {mapMutations, mapActions} from 'vuex'
 export default {
@@ -355,6 +348,7 @@ export default {
         }
       });
     },
+
     // 资源正确率计算方法
     itemCorrect(correct) {
       if (correct === "" || correct === -1) {
@@ -385,7 +379,8 @@ export default {
     correct,
     studentList,
     answer,
-    correctCircle
+    correctCircle,
+    info
   }
 };
 </script>
@@ -404,15 +399,6 @@ export default {
 }
 
 /* 作业信息 */
-
-.detail>.wrapper>.info {
-  padding: 10px;
-  line-height: 30px;
-  background: #fff;
-  height: 75px;
-  box-sizing: border-box;
-}
-
 .detail>.wrapper .itemdetail {
   display: flex;
   flex-wrap: wrap;
@@ -454,20 +440,6 @@ export default {
 
 .detail>.wrapper .itemdetail.hide {
   display: none;
-}
-
-.detail>.wrapper>.info>.name {
-  font-weight: bold;
-}
-.detail>.wrapper>.info>.name>span{
-  color:#c8c9c9;
-  font-size: 14px;
-}
-.detail>.wrapper>.info>.name>span>b{
-  color:#9c9ea1;
-}
-.detail>.wrapper>.info>.times {
-  font-size: 14px;
 }
 
 /* 班级正确率 */

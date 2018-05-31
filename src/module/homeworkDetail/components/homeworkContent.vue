@@ -1,0 +1,98 @@
+<template>
+  <div id="homeworkContent">
+    <header-bar @back="back">
+      <div slot="title-name" >
+        作业内容
+      </div>
+    </header-bar>
+    <info :title="info.title" :endTime="info.deadline" :total="list.length"></info>
+    <div class="wrapper">
+      <div v-for="(item,index) in list" :key="index" class="list" @click="examExercise(index)">
+        <p :class="{last:index===list.length-1}">
+          <span>{{index+1}}.【{{item.icom_name | questionName(item)}}】{{item.resource_name}}</span>
+          <i class="icon"></i>
+        </p>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import headerBar from '@/components/headerBar.vue'
+import info from './common/info.vue'
+export default {
+  name: "homeworkContent",
+  data() {
+    return {
+      info: this.$route.params.info,
+      list: this.$route.params.list
+    }
+  },
+  methods: {
+    back() {
+      this.$router.back(-1)
+    },
+    examExercise(index) {
+      if (this.isCompound(this.list[index])) {
+
+      }
+    },
+    isCompound(resource) {
+      let result = true
+      let type = this.util.judgeQuestionType(resource)
+      if (type === 'combineqti') {
+        result = true
+      } else if (type === 'subjectiveqti' || type === 'objectiveqti' || type === 'objectiveicom') {
+        result = false
+      }
+      return result
+    }
+  },
+  components: {
+    headerBar, info
+  }
+};
+</script>
+<style lang="scss" scoped>
+  #homeworkContent{
+    height: 100%;
+    .wrapper{
+      height: calc(100% - 120px);
+      padding:10px 0px;
+      background: #f5f7f8;
+      .list{
+        padding:0 13px;
+        height: 48px;
+        line-height: 47px;
+        box-sizing: border-box;
+        background: #fff;
+        p{
+          border-bottom: 1px solid #e8ebee;
+          position: relative;
+          height:100%;
+          .icon{
+            display: inline-block;
+            position: absolute;
+            right:0;
+            top:15px;
+            width:19px;
+            height: 19px;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-image: url('../../../assets/images/public/right.png')
+          }
+          span{
+            display: inline-block;
+            width:calc(100% - 19px);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          &.last{
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
+</style>

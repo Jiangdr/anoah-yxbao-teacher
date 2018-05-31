@@ -53,7 +53,10 @@ export default {
       this.showPopup = false;
       this.showDetelePopup = !this.showDetelePopup
     },
-    content() {},
+    content() {
+      this.$emit('content');
+      this.togglePopup();
+    },
     again() {},
     collection() {
       let params = {

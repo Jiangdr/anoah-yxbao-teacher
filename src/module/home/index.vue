@@ -294,7 +294,7 @@ export default {
     background-color: $gray5;
     padding: 0;
     margin: 0 auto;
-    opacity: 0.8;
+    opacity: 0.4;
   }
 
   & > div {

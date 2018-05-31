@@ -5,11 +5,11 @@ export default {
   namespaced: true,
   state: {
     isLogin: false,
-    username: 'zh1234',
-    password: '111111',
+    username: 'haixia',
+    password: '123456',
     userInfo: stroage['persistent'].get('userinfo'),
     jwt: stroage['persistent'].get('jwt'),
-    userid: 33737
+    userid: 32731
   },
   getters: {
   },
