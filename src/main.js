@@ -7,7 +7,7 @@ import store from './store/index.js'
 import router from './router'
 import 'es6-promise/auto'
 
-import Vuetouch from 'vue-touch'
+// import Vuetouch from 'vue-touch'
 
 import '@/assets/css/base.css'
 import '@/assets/css/global.css'
@@ -35,14 +35,17 @@ import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import '@/style/global.scss'
-import VueAwesomeSwiper from 'vue-awesome-swiper'
+import '@/../lib/swiper.min.css'
+import Swiper from '@/../lib/swiper.min.js'
+// import VueAwesomeSwiper from 'vue-awesome-swiper'
 
 // require styles
-import 'swiper/dist/css/swiper.css'
+// import 'swiper/dist/css/swiper.css'
 
 // 引入全局过滤器
 import * as filters from '@/filter/index'
-Vue.use(VueAwesomeSwiper)
+// Vue.use(VueAwesomeSwiper)
+Vue.prototype.Swiper = Swiper
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
@@ -62,9 +65,7 @@ Vue.use(window.tcplayer.default)
 Vue.use(Vant)
 
 Vue.use(Cube)
-
-Vue.use(Vuetouch, {name: 'v-touch'})
-
+// Vue.use(Vuetouch, {name: 'v-touch'})
 Vue.prototype.util = util
 Vue.config.productionTip = false
 
