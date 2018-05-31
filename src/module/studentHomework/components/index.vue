@@ -181,7 +181,7 @@ export default {
     },
     linkTo(item) {
       if (item.is_finish === 1) {
-        this.$router.push({path: '/questionDetail'})
+        this.$router.push({path: '/answerDetail'})
       }
     }
   },
