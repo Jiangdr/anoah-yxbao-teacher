@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     ...mapState({
-      'resource': state => state.questionDetail.resource
+      'resource': state => state.answerDetail.resource
     }),
     setting: {
       get() {
@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      clearResource: 'questionDetail/clearResource'
+      clearResource: 'answerDetail/clearResource'
     }),
     // 根据资源创建所需数据结构和swiper视图
     renderView() {

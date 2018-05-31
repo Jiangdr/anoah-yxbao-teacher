@@ -7,7 +7,7 @@ import userCenterStore from '@/module/user-center/store/userCenter.js'
 import homeworkStore from '@/module/homework/store/homework.js'
 import batchEvaluateStore from '@/module/batchEvaluate/store/batchEvaluate.js'
 import homeworkDetailStore from '@/module/homeworkDetail/store/detail.js'
-import questionDetailStore from '@/module/questionDetail/store/index'
+import answerDetailStore from '@/module/answerDetail/store/index'
 
 Vue.use(Vuex)
 
@@ -19,6 +19,6 @@ export default new Vuex.Store({
     homework: homeworkStore,
     batchEvaluate: batchEvaluateStore,
     homeworkDetail: homeworkDetailStore, // 作业详情
-    questionDetail: questionDetailStore // 批改、查看统计
+    answerDetail: answerDetailStore // 批改、查看统计
   }
 })

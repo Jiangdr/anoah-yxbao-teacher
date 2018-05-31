@@ -9,8 +9,8 @@
       <h1 v-show="isSearching" style="margin:0 auto;width: 80%;">
         <van-field icon="clear" @click-icon="inputValue = ''" v-model="inputValue" autofocus v-on:keypress.enter="getHomeworkList" placeholder="请输入..." />
       </h1>
-      <div style="position: absolute; right: 10px; top: 0; height: 45px;" @click="clickSearchBtn" :class="{'active': activeItem === 9}">
-        <i class="fa fa-search" v-show="!isSearching"></i>
+      <div class="search-btn-div" @click="clickSearchBtn" :class="{'active': activeItem === 9}">
+        <img src="@/assets/images/homework/search.png" class="search-icon" v-show="!isSearching"/>
         <span v-show="isSearching">取消</span>
       </div>
     </header>
@@ -61,28 +61,36 @@
     <div>
     </div>
 
-    <div style="height: 40px;line-height: 40px;background-color: #fff;border-bottom: 1px solid #ededf0;padding-left: 10px;">
+    <div class="status-div">
       共{{totalCountNum}}个作业&nbsp;&nbsp;<span style="color: red;">{{countNum}}</span>个待批改
     </div>
 
-    <!-- <div class="listContainer" v-bind:style="listContainerStyle"> -->
-      <van-pull-refresh class="listContainer" v-bind:style="listContainerStyle" v-model="pullRefresIsLoading" @refresh="onRefresh">
+    <!-- <div class="list-container" v-bind:style="listContainerStyle"> -->
+      <van-pull-refresh class="list-container" v-model="pullRefresIsLoading" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" @load="loadMore" :offset="300" :immediate-check="false">
-          <div @click="goHomeworkDetail(item)" class="homework_list" v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
-            <div class="listContainerLeft">
-              <div class="homework_list_inline_list"><span style="font-size:18px;font-weight:700;">{{item.title}}</span>&nbsp;&nbsp;<span class="font-color">{{item.resource_count}}份</span></div>
-              <div class="homework_list_inline_list font-color">{{item.edu_subject_name}}&nbsp;&nbsp;&nbsp;{{item.class_name}}</div>
-              <div class="homework_list_inline_list"><span class="font-color">完成：</span><span style="color:#2ec2a9;font-size:22px;">{{item.finished_counter}}</span><span class="font-color">/{{item.student_counter}}人</span></div>
-              <div class="homework_list_inline_list font-color" style="font-size: 14px;"><span class="font-color">截止：</span>{{item.deadline}}</div>
+          <div v-for="(item, index) in homeworkListArray" :key="index" v-if="homeworkListArray.length > 0">
+            <div class="time-classify" v-if="item.create_time.length>0" v-html="item.create_time"></div>
+            <div @click="goHomeworkDetail(item)" class="homework_list">
+              <div class="homework_list_inline_list">
+                  <p class="homework-list-tile single-line">{{item.title}}</p>&nbsp;&nbsp;<p class="font-color single-line">{{item.resource_count}}份</p>
+                </div>
+              <div class="list-container-left">
+                <div class="homework_list_inline_list font-color">{{item.edu_subject_name}}&nbsp;&nbsp;&nbsp;{{item.class_name}}</div>
+                <div class="homework_list_inline_list">
+                  <span class="font-color">完成：</span><span class="homework-list-finish">{{item.finished_counter}}</span>
+                  <span class="font-color">/{{item.student_counter}}人</span>
+                </div>
+              </div>
+              <div class="mark-icon" v-if="item.correcting_counter!=='0'">待批阅</div>
+              <div class="list-container-right">
+                <p>正确率:&nbsp;</p>
+                  <span class="right-rate">{{item.right_rate >= 0 ? Math.round(item.right_rate*100) : '--'}}</span>
+                  <span v-if="item.right_rate >= 0" style="font-size:16px;color: #2ec2a9">%</span>
+                  <i class="fa fa-angle-right arrow-right"></i>
+              </div>
+              <div class="homework_list_inline_list end-time"><span>截止：</span>{{item.deadline}}</div>
+              <div style="clear:both;"></div>
             </div>
-            <div class="mark-icon" v-if="item.correcting_counter!=='0'">待批阅</div>
-            <div class="list-container-right">
-              正确率:&nbsp;
-                <span class="font-color" style="font-size:28px;color: #2ec2a9">{{item.right_rate >= 0 ? Math.round(item.right_rate*100) : '--'}}</span>
-                <span v-if="item.right_rate >= 0" style="font-size:16px;color: #2ec2a9">%</span>
-                <i class="fa fa-angle-right arrow-right"></i>
-            </div>
-            <div style="clear:both;"></div>
           </div>
         </van-list>
 
@@ -113,9 +121,6 @@ export default {
   data() {
     return {
       homeworkListArray: [],
-      listContainerStyle: {
-        height: window.innerHeight - 130 + "px"
-      },
       list: [],
       loading: false,
       finished: false,
@@ -128,14 +133,15 @@ export default {
       bookActiveID: "0",
       classActiveID: 0,
       currentPage: 1,
-      totalPage: 1,
+      noMore: false,
       showClassPopup: false,
       showTimePopup: false,
       chooseTextBookObj: null,
+      pullRefresh: false,
       columnsOfClass: [],
       countNum: 0,
       totalCountNum: 0,
-      inputValue: '',
+      inputValue: "",
       isSearching: false
     };
   },
@@ -225,47 +231,54 @@ export default {
     this.chooseStatus = this.columnsOfStatus[0];
     this.statusActiveID = this.chooseStatus.value;
     this.chooseTime = this.columnsOfTime[0];
+    this.timeClassify = [];
+    this.weekday = new Array(7);
+    this.weekday[0] = "周日";
+    this.weekday[1] = "周一";
+    this.weekday[2] = "周二";
+    this.weekday[3] = "周三";
+    this.weekday[4] = "周四";
+    this.weekday[5] = "周五";
+    this.weekday[6] = "周六";
     this.getHomeworkList();
     this.getChoosedBook();
     this.getBooksByTeacher();
   },
   methods: {
     chooseItem(e, type, value) {
+      this.activeItem = 0;
       this.currentPage = 1;
       switch (type) {
         case "time":
-          this.activeItem = 0;
           if (value === 3) {
             this.showTimePopup = !this.showTimePopup;
           } else {
             this.timeActiveID = value;
             this.chooseTime = this.columnsOfTime[value];
-            this.getHomeworkList();
+            this.onRefresh();
           }
           break;
 
         case "status":
-          this.activeItem = 0;
           this.chooseStatus = this.columnsOfStatus[value];
           this.statusActiveID = this.chooseStatus.value;
-          this.getHomeworkList();
+          this.onRefresh();
           break;
 
         case "class":
-          this.activeItem = 0;
           this.chooseClass = this.columnsOfClass[value];
           this.classActiveID = value;
-          this.getHomeworkList();
+          this.onRefresh();
           break;
 
         case "mark":
           this.markStatus = value;
-          this.getHomeworkList();
+          this.onRefresh();
           break;
 
         case "book":
           this.bookActiveID = value;
-          this.getHomeworkList();
+          this.onRefresh();
           break;
       }
     },
@@ -284,7 +297,7 @@ export default {
     clickSearchBtn() {
       this.isSearching = !this.isSearching;
       if (this.isSearching) {
-        this.activeItem = 9
+        this.activeItem = 9;
       }
     },
     onConfirmTimePopup(value, index) {
@@ -296,13 +309,17 @@ export default {
       let t = new Date();
       this.chooseTime.to =
         t.getFullYear() + "-" + (t.getMonth() + 1) + "-" + t.getDate();
-      this.getHomeworkList();
+      this.onRefresh();
     },
     onCancelTimePopup() {
       this.showTimePopup = false;
     },
     onRefresh() {
       this.currentPage = 1;
+      this.pullRefresh = true;
+      this.homeworkListArray.length = 0;
+      this.finished = false;
+      this.timeClassify = [];
       setTimeout(() => {
         this.pullRefresIsLoading = false;
       }, 500);
@@ -321,8 +338,7 @@ export default {
     },
     loadMore() {
       console.log("loadMore......");
-      if (this.totalPage <= this.currentPage) {
-        this.finished = true;
+      if (this.noMore) {
         this.loading = false;
       } else {
         // this.loading = false;
@@ -404,21 +420,92 @@ export default {
         keyword: self.inputValue
       };
 
-      api.homeworkLists(data).then(function(r) {
-        if (self.currentPage === 1) {
-          self.homeworkListArray = r.lists;
-        } else {
-          self.homeworkListArray = self.homeworkListArray.concat(r.lists);
+      api.homeworkLists(data).then(
+        success => {
+          if (self.pullRefresh) {
+            self.homeworkListArray.length = 0;
+          }
+          self.pullRefresh = false;
+          if (success.lists.length < 1) {
+            self.noMore = true;
+          } else {
+            self.noMore = false;
+            var nowD = new Date();
+            var yesterday = new Date();
+            yesterday.setTime(nowD.getTime() - 24 * 60 * 60 * 1000);
+            success.lists.forEach(element => {
+              let d = new Date(element.create_time);
+              if (
+                self.timeClassify.indexOf(
+                  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+                ) > -1
+              ) {
+                element.create_time = "";
+                return;
+              }
+              self.timeClassify.push(
+                d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+              );
+              if (d.getFullYear() === nowD.getFullYear()) {
+                if (d.getMonth() === nowD.getMonth()) {
+                  if (d.getDate() === nowD.getDate()) {
+                    element.create_time =
+                      "今天&nbsp;&nbsp;&nbsp;&nbsp;" + self.weekday[d.getDay()];
+                  } else {
+                    element.create_time =
+                      d.getMonth() +
+                      1 +
+                      "-" +
+                      d.getDate() +
+                      "&nbsp;&nbsp;&nbsp;&nbsp;" +
+                      self.weekday[d.getDay()];
+                  }
+                } else {
+                  element.create_time =
+                    d.getMonth() +
+                    1 +
+                    "-" +
+                    d.getDate() +
+                    "&nbsp;&nbsp;&nbsp;&nbsp;" +
+                    self.weekday[d.getDay()];
+                }
+              } else {
+                element.create_time =
+                  d.getFullYear() +
+                  "-" +
+                  (d.getMonth() + 1) +
+                  "-" +
+                  d.getDate() +
+                  "&nbsp;&nbsp;&nbsp;&nbsp;" +
+                  self.weekday[d.getDay()];
+              }
+              if (
+                d.getFullYear() === yesterday.getFullYear() &&
+                d.getMonth() === yesterday.getMonth() &&
+                d.getDate() === yesterday.getDate()
+              ) {
+                element.create_time =
+                  "昨天&nbsp;&nbsp;&nbsp;&nbsp;" + self.weekday[d.getDay()];
+              }
+            });
+            self.homeworkListArray = self.homeworkListArray.concat(
+              success.lists
+            );
+          }
+          // self.currentPage = Number(success.page);
+          self.loading = false;
+          self.countNum = success.count;
+          self.totalCountNum = success.total_count;
+          //  self.$nextTick(_ => {
+          // self.loading = false
+          // })
+        },
+        err => {
+          console.log(err);
+          self.loading = false;
+          self.$toast("网络异常");
         }
-        self.currentPage = Number(r.page);
-        self.totalPage = Number(r.total_count);
-        self.loading = false;
-        self.countNum = r.count;
-        self.totalCountNum = r.total_count;
-        //  self.$nextTick(_ => {
-        // self.loading = false
-        // })
-      });
+      );
     }
   }
 };
@@ -437,6 +524,20 @@ export default {
   border-radius: 8px;
   position: relative;
 }
+.time-classify {
+  text-align: center;
+  font-size: 16px;
+  padding-top: 10px;
+}
+.search-btn-div{
+  position: absolute; right: 10px; top: 0; height: 45px;
+  line-height: 45px;
+}
+.search-icon{
+  width: calc(#{$header-height}/2);
+  height: calc(#{$header-height}/2);
+  padding-top: 3vw;
+}
 .mark-icon {
   background-color: $orange-primary-color;
   border-radius: 8px;
@@ -451,8 +552,18 @@ export default {
   top: 20%;
   transform: translate(0, -50%);
 }
-.listContainerLeft {
-  width: 58%;
+.homework-list-tile {
+  font-size: 18px;
+  font-weight: 700;
+  display: inline-block;
+  max-width: 80%;
+}
+.homework-list-finish {
+  color: $green-primary-color;
+  font-size: 22px;
+}
+.list-container-left {
+  width: 52%;
   display: inline-block;
 }
 .list-container-right {
@@ -460,13 +571,32 @@ export default {
   position: absolute;
   top: 50%;
   transform: translate(0, -50%);
-  width: 40%;
+  width: 45%;
+  font-size: 16px;
+  line-height: 10vw;
+  p {
+    display: inline;
+    position: relative;
+    top: -0.2vw;
+  }
 }
 .select-container {
   display: flex;
   justify-content: space-between;
   background-color: #fff;
   border-bottom: $border-state;
+}
+.status-div {
+  height: 40px;
+  line-height: 40px;
+  background-color: #fff;
+  border-bottom: 1px solid #ededf0;
+  padding-left: 10px;
+  font-size: 16px;
+}
+.right-rate {
+  font-size: 28px;
+  color: $green-primary-color;
 }
 .select-span {
   width: 80px;
@@ -572,11 +702,26 @@ export default {
 .homework_list_inline_list {
   line-height: 25px;
 }
-.listContainer {
+.single-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+.list-container {
   overflow-y: auto;
+  height: calc(100% - #{$header-height} - #{$header-height} - 40px);
 }
 .font-color {
   color: #989ca0;
+  font-size: 16px;
+}
+.end-time {
+  color: #989ca0;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .arrow-right {
   font-size: 36px;

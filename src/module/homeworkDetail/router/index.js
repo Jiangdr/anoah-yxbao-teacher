@@ -18,6 +18,6 @@ export default [
     path: '/homeworkContent',
     name: 'homeworkContent',
     component: homeworkContent,
-    meta: { requiresAuth: false, keepAlive: true }
+    meta: { requiresAuth: false, keepAlive: false }
   }
 ]

@@ -2,8 +2,8 @@
   <div class="more">
     <cube-popup type="my-popup" :center="false"  v-show="showPopup" @mask-click="togglePopup">
       <div class="popupWrapper">
-        <div class="popupItem content" @click="content">查看作业内容</div>
-        <div class="popupItem again" @click="again">再次布置</div>
+        <div class="popupItem content" @click="content" v-if="info.hour_section_type_id==20">查看作业内容</div>
+        <div class="popupItem again" @click="again" v-if="info.hour_section_type_id==20">再次布置</div>
         <div class="popupItem collection" @click="collection">
           <template v-if="favorite==0">收藏作业</template>
           <template v-else-if="favorite==1">取消收藏</template>
@@ -37,7 +37,7 @@ import homeworkDetil from "../../axios/detail.js";
 import { Toast } from 'vant';
 export default {
   name: "more",
-  props: ['publishId', 'favorite'],
+  props: ['info', 'favorite', 'list'],
   data() {
     return {
       showPopup: true, // 更多操作列表弹窗
@@ -54,13 +54,30 @@ export default {
       this.showDetelePopup = !this.showDetelePopup
     },
     content() {
-      this.$emit('content');
+      this.$router.push({
+        name: 'homeworkContent',
+        params: {'info': this.info, 'list': this.list}
+      })
       this.togglePopup();
     },
-    again() {},
+    again() {
+      var resourceId = [];
+      for (let i = 0; i < this.list.length; i++) {
+        let item = {
+          'title': this.list[i].resource_name,
+          'rids': [this.list[i].resource_id]
+        }
+        resourceId.push(item)
+      }
+      this.$router.push({
+        name: 'homeworkPublishSetting',
+        params: resourceId
+      })
+      this.togglePopup();
+    },
     collection() {
       let params = {
-        'publish_id': this.publishId,
+        'publish_id': this.info.course_hour_publish_id,
         'type': parseInt(this.favorite) === 0 ? 1 : 0
       }
       homeworkDetil.favorite(params).then(r => {
@@ -99,7 +116,7 @@ export default {
   text-align: center;
   border-bottom: 1px solid #e8ebee;
 }
-.popupItem.content {
+.popupItem:first-child {
   border-top-left-radius: 13px;
   border-top-right-radius: 13px;
 }

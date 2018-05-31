@@ -46,7 +46,7 @@ export default {
         let type = 2
         qus.resource_name = ''
         let params = JSON.stringify(qus)
-        this.$router.push({name: 'questionDetail', params: {type: 2, params: params}})
+        this.$router.push({name: 'answerDetail', params: {type: 2, params: params}})
       } else {
         alert('不支持题型')
       }
