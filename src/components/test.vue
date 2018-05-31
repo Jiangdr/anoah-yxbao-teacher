@@ -1,17 +1,17 @@
 <template>
   <div id="test">
-    <swiper :options="swiperOption" ref="mySwiper" class="">
+    <!-- <swiper :options="swiperOption" ref="mySwiper" class="">
       <swiper-slide>1</swiper-slide>
       <swiper-slide>2</swiper-slide>
       <swiper-slide>3</swiper-slide>
       <swiper-slide>4</swiper-slide>
       <swiper-slide>5</swiper-slide>
-    </swiper>
+    </swiper> -->
   </div>
 </template>
 <script>
-import 'swiper/dist/css/swiper.css'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
+// import 'swiper/dist/css/swiper.css'
+// import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
   data() {
     return {
@@ -29,8 +29,8 @@ export default {
     }
   },
   components: {
-    swiper,
-    swiperSlide
+    // swiper,
+    // swiperSlide
   }
 }
 </script>

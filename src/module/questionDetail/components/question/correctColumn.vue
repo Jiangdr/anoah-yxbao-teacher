@@ -90,7 +90,7 @@ export default {
         "dcom_entity_id": this.params.dcom_entity_id ? this.params.dcom_entity_id : 0,
         'icom_id': this.params.icom_id,
         "qti_question_id": this.params.source_pk_id,
-        "qti_question_sheet": this.params.qti_question_sheet ? this.params.qti_question_sheet : 0
+        "qti_question_sheet": this.params.icom_id === 5019 ? 1 : 0
       }
       getStatistics.getinfo(param).then((r) => {
       // r.all_correct ===>   连线题、竖式题

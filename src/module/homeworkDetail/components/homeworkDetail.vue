@@ -59,7 +59,7 @@
                 <div class="right">
                   <p>[{{ques.icom_name | questionName(ques)}}]
                     <span class="resource-name" v-html="ques.resource_name"></span>
-                    <span v-if="ques.pigai_status!=3" class="no-correct"> 待批阅</span>
+                    <span v-if="ques.pigai_status===1" class="no-correct"> 待批阅</span>
                   </p>
                   <p style="position:relative">
                     已完成：{{ques.finished_counter}}/{{homeworkInfo.student_counter}}人 正确率：{{itemCorrect(ques.average_rate)}}

@@ -4,19 +4,26 @@
     <div slot="title-name">查看统计</div>
     <div slot="right-area">原题</div>
   </header-bar>
-  <!-- <div class="slide-container" v-touch:swipeleft="onSwipeLeft">
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" v-for="(item, index) in 3" :key="index">
+        {{item}}
+      </div>
+    </div>
+  </div>
+  <!-- <v-touch class="slide-container" @swipeleft="onSwipeLeft">
     <div class="slide-item" v-for="(item, index) in renderResource" :key="index">
       {{item}}
     </div>
-  </div> -->
-  <swiper :options="swiperOption" ref="mySwiper" class="swiper-container">
+  </v-touch> -->
+  <!-- <swiper :options="swiperOption" ref="mySwiper" class="swiper-container">
     <swiper-slide v-for="(item, index) in renderResource" :key="index">
       <div class="slide-content" v-if="Object.keys(item).length">
         <answer-column :params="item" v-if="item.qti_question_type_id == 1 || item.qti_question_type_id == 2 || item.qti_question_type_id == 3 || item.qti_question_type_id == 6 || item.qti_question_type_id == 15"></answer-column>
         <choice-table :params="item" v-if="item.qti_question_type_id == 11"></choice-table>
         <correct-column :params="item" v-if="item.qti_question_type_id == 9 || item.qti_question_type_id == 21 || item.qti_question_type_id == 23 || item.qti_question_type_id == 24 || item.qti_question_type_id == 25 || item.qti_question_type_id == 26"></correct-column>
         <correct-table :params="item" v-if="item.qti_question_type_id == 4 || item.qti_question_type_id == 20"></correct-table>
-        <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
+        <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie>
         <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective>
         <render-qti :info="item" :id="item.source_pk_id + ''" :icom_id="item.icom_id" :dcom_id="item.source_pk_id" user_id="0" :setting="setting"></render-qti>
       </div>
@@ -25,13 +32,13 @@
       </div>
       <div>{{item}}</div>
     </swiper-slide>
-  </swiper>
+  </swiper> -->
 </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import {mapState} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 import {Toast} from 'vant'
 import headerBar from '@/components/headerBar.vue'
 import answerColumn from './question/answerColumn.vue'
@@ -49,6 +56,7 @@ export default {
     return {
       renderResource: [], // 渲染所需的资源数据
       // swiper参数
+      mySwiper: null,
       swiperOption: {
         autoHeight: true,
         observer: true, // 修改swiper自己或子元素时，自动初始化swiper
@@ -61,10 +69,15 @@ export default {
       }
     }
   },
-  mounted() {
-  },
   activated() {
     this.renderView()
+    // this.$nextTick(() => {
+    //   this.mySwiper = new this.Swiper('.swiper-container', {
+    //     autoHeight: true,
+    //     observer: true, // 修改swiper自己或子元素时，自动初始化swiper
+    //     observeParents: true // 修改swiper的父元素时，自动初始化swiper
+    //   })
+    // })
   },
   computed: {
     ...mapState({
@@ -96,17 +109,39 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      clearResource: 'questionDetail/clearResource'
+    }),
     // 根据资源创建所需数据结构和swiper视图
     renderView() {
+      
       let resource = this.resource
       for (let i = 0; i < resource.length; i++) {
         this.renderResource.push({})
       }
       this.renderResource[this.routePrams.index] = this.resource[this.routePrams.index]
-      this.swiper.slideTo(this.routePrams.index, 0)
+      this.$nextTick(() => {
+        this.mySwiper = new this.Swiper('.swiper-container', {
+          autoplay: true,
+          init: false,
+          autoHeight: true,
+          observer: true, // 修改swiper自己或子元素时，自动初始化swiper
+          observeParents: true // 修改swiper的父元素时，自动初始化swiper
+        })
+        this.mySwiper.touchEvents = {
+          end: 'touchend',
+          move: 'touchmove',
+          start: 'touchstart'
+        }
+        this.mySwiper.init()
+        this.mySwiper.enableTouchControl()
+        this.mySwiper.slideTo(this.routePrams.index, 0)
+      })
+      // this.swiper.update()
     },
     goBack() {
       this.renderResource = []
+      this.clearResource()
       this.$router.go(-1)
     },
     linkTo() {
