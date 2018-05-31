@@ -6,7 +6,7 @@
         <img src="@/assets/images/public/checksel.png" slot="right-icon" v-if="item.isChecked" class="halfscaleelement"/>
         <img src="@/assets/images/public/checkunsel.png" slot="right-icon" v-if="!item.isChecked" class="halfscaleelement"/>
       </van-cell>
-      <van-field v-model="userLink" placeholder="留下您的电话号码/QQ/邮箱" label="联系方式(选填)" class="feedbackuserLink"/>
+      <van-field v-model="userLink" placeholder="留下您的电话号码/QQ/邮箱" label="联系方式(选填)" class="feedbackuserLink" :error-message="phoneFormatMsg"/>
       <van-cell title="其他问题" :value="other" is-link @click="addQuestion" class="feedbackotherquestion">
         <van-icon slot="right-icon" name="arrow" class="van-cell__right-icon"></van-icon>
       </van-cell>
@@ -21,6 +21,8 @@ import NavBar from '@/module/user-center/components/common/navbar'
 import YxLoginBtn from '@/module/account/components/yx-login-btn.vue'
 import BottomButtonArea from '@/module/user-center/components/common/bottomButtonArea'
 import {Toast} from 'vant'
+const phonereg = /^[1][3,4,5,7,8,9][0-9]{9}$/
+const emailreg = /^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/
 export default {
   name: 'Feedback',
   data () {
@@ -86,6 +88,15 @@ export default {
         return false
       }
       return true
+    },
+    phoneFormatMsg() {
+      if (this.userLink !== '') {
+        if (phonereg.test(this.userLink) || emailreg.test(this.userLink)) {
+          return ''
+        }
+        return '请输入正确的手机号或邮箱'
+      }
+      return ''
     }
   },
   methods: {
@@ -115,6 +126,10 @@ export default {
       })
     },
     post () {
+      if (this.phoneFormatMsg !== '') {
+        Toast({position: 'bottom', message: '请输入正确的手机号或邮箱'})
+        return
+      }
       this.feedbackOptions = []
       for (let i = 0; i < this.msgs.length; i++) {
         if (this.msgs[i].isChecked) {
