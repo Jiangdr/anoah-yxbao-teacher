@@ -1,7 +1,7 @@
 <template>
 <div id="question-detail" style="height:100%">
   <header-bar @back="goBack">
-    <div slot="title-name">{{routePrams && routePrams.title || '标题需要传入'}}</div>
+    <div slot="title-name">{{routePrams && routePrams.title || '标题需要传入'}}({{currectIndex}}/{{qtiCount}})</div>
     <div slot="right-area">原题</div>
   </header-bar>
   <div class="swiper-container">
@@ -14,13 +14,13 @@
         <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
         <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective>
         <render-qti v-if="Object.keys(item).length" :info="item" :id="item.source_pk_id + ''" :icom_id="item.icom_id" :dcom_id="item.source_pk_id" user_id="0" :setting="setting"></render-qti>
+        <div class="subjective-button van-hairline--top" v-if="judgeQtiType(item)">
+          <span @click="subjectiveQtiPigai(item)">查看详情</span>
+        </div>
       </div>
     </div>
   </div>
   <student-list v-if="showStudentList" :title="studentListTitle" :studentList="studentList"></student-list>
-  <div class="subjective-button">
-    <button>查看详情</button>
-  </div>
 </div>
 </template>
 
@@ -47,6 +47,8 @@ export default {
       showStudentList: false,
       studentListTitle: '',
       studentList: [],
+      currectIndex: 0,
+      qtiCount: 0,
       // swiper参数
       mySwiper: null
     }
@@ -95,6 +97,8 @@ export default {
       for (let i = 0; i < resource.length; i++) {
         this.renderResource.push({})
       }
+      this.qtiCount = this.renderResource.length
+      this.currectIndex = this.routePrams.index + 1
       this.renderResource[this.routePrams.index] = this.resource[this.routePrams.index]
       this.$nextTick(() => {
         this.mySwiper = new this.Swiper('.swiper-container', {
@@ -128,6 +132,7 @@ export default {
     },
     slideEnd() {
       Vue.set(this.renderResource, this.mySwiper.activeIndex, this.resource[this.mySwiper.activeIndex])
+      this.currectIndex = this.mySwiper.activeIndex + 1
       this.setting = {
         'smt': 'no_self_smt',
         'publish_id': this.resource[this.mySwiper.activeIndex].course_hour_publish_id,
@@ -137,6 +142,18 @@ export default {
         'titleflag': 1
       }
       this.$el.querySelector('.swiper-container').scrollTop = 0 + 'px'
+    },
+    judgeQtiType() {
+      let type = this.util.judgeQuestionType(this.resource[this.currectIndex - 1])
+      if (type === 'subjectiveqti') {
+        return true
+      } else {
+        return false
+      }
+    },
+    // 主观题批改
+    subjectiveQtiPigai(item) {
+      console.log(item)
     }
   },
   components: {
@@ -164,15 +181,24 @@ export default {
     .swiper-slide{
       height: 100%;
       overflow-y: scroll;
+      .subjective-button{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        width: 100%;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        background-color: #fff;
+        span{
+          padding: 8px 50px;
+          background-color: #34c988;
+          color: #fff;
+          border-radius: 10px;
+        }
+      }
     }
-  }
-  .subjective-button{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    width: 100%;
-    height: 40px;
   }
 }
 </style>
