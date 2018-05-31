@@ -76,6 +76,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
       version: `window.version = "${config.build.version}";`,
+      qtiUrl: `${config.build.qtiUrl}`,
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
@@ -93,6 +94,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
       version: `window.version = "${config.build.version}";`,
+      qtiUrl: `${config.build.qtiUrl}`,
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
@@ -110,6 +112,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
       version: `window.version = "${config.build.version}";`,
+      qtiUrl: `${config.build.qtiUrl}`,
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),

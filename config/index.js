@@ -8,54 +8,12 @@ let basePath = '../dist/HW';
 
 module.exports = {
   dev: {
-
+    qtiUrl: 'http://192.168.41.130/vue/qti/qtivue/',
+    version: new Date().toLocaleString(),
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      //   '/user': {
-      //     target: 'http://api2.dev.anoah.com',
-      //     changeOrigin: true, // 解决跨域问题
-      //     pathRewrite: {
-      //       '^/user': '/user'
-      //     }
-      //   },
-      //   '/jwt': {
-      //     target: 'http://api2.dev.anoah.com',
-      //     changeOrigin: true, // 解决跨域问题
-      //     pathRewrite: {
-      //       '^/jwt': '/jwt'
-      //     }
-      //   },
-      //   '/': {
-      //     target: 'http://e.dev.anoah.com'
-      //   },
-      //   '/api': {
-      //     target: 'http://e.dev.anoah.com',
-      //     pathRewrite: {
-      //       '^/api': '/api'
-      //     }
-      //   },
-      //   '/homeworkDetail': {
-      //     target: 'http://api2.dev.anoah.com',
-      //     changeOrigin: true, // 解决跨域问题
-      //     pathRewrite: {
-      //       '^/homeworkDetail': '/homeworkDetail'
-      //     }
-      //   },
-      //   '/api_cache': {
-      //     target: 'http://e.dev.anoah.com',
-      //     changeOrigin: true,
-      //     pathRewrite: {
-      //       '^/api_cache': '/api_cache'
-      //     }
-      //   }
-      //   // '/api_dist': {
-      //   //   target: 'http://e.dev.anoah.com',
-      //   //   pathRewrite: {
-      //   //     '^/api_dist': '/api_dist'
-      //   //   }
-      //   //   },
     },
 
     // Various Dev Server settings
@@ -90,6 +48,7 @@ module.exports = {
   },
 
   build: {
+    qtiUrl: '../lib/qti/',
     version: new Date().toLocaleString(),
     // Template for index.html
     index: path.resolve(__dirname, basePath + '/index.html'),

@@ -7,7 +7,8 @@
         </div>
       </header-bar>
   </div>
-  <div class="classify">
+  <div class="wrapper">
+     <div class="classify">
     <div>
       <span v-for="(item,index) in classify" :key="index" :class="{'checked':isChecked(index)}" @click="checkItem(index)">
         {{item}}
@@ -25,8 +26,8 @@
     </div>
     <div class="container">
       <div class="item" v-for="(img,index) in imgs" :key="index">
-        <span class="close"></span>
-        <img :src="img.src" alt="">
+        <span class="close" @click="remove(index)"></span>
+        <img :src="img" alt="" width="100%" height="100%">
       </div>
       <div class="item upload" @click="togglePopup">
         <img class="up" src="../../../assets/images/correction/up.png"/>
@@ -37,6 +38,8 @@
       </div>
     </div>
   </div>
+  </div>
+
   <cube-popup type="my-popup" :center="false" ref="myPopup" v-show="this.showPopup" @mask-click="togglePopup" >
     <div class="popupWrapper">
       <div class="popupItem">拍照</div>
@@ -45,10 +48,10 @@
 </div>
 
 </cube-popup>
-<div class="submitBtn" @click="commit">
-  <!-- <van-button type="primary" bottom-action>提交</van-button> -->
-  提交
-</div>
+  <div class="submitBtn" @click="commit" :class="{disable:!checked.length&& !msg.length}">
+    <!-- <van-button type="primary" bottom-action>提交</van-button> -->
+    提交
+  </div>
 </div>
 </template>
 
@@ -95,7 +98,13 @@ export default {
         this.checked.splice(this.checked.indexOf(index), 1)
       }
     },
+    remove(index) {
+      this.imgs.splice(index, 1)
+    },
     commit() {
+      if (!this.checked.length && !this.msg.length) {
+        return false
+      }
       let params = {
         user_id: JSON.parse(localStorage.userinfo).userid,
         rsid: this.$route.params.rsid,
@@ -104,7 +113,7 @@ export default {
         images: this.imgs
       }
       correction.create(params).then(r => {
-        console.log(r)
+        this.goBack()
       })
     }
   },
@@ -118,16 +127,21 @@ export default {
 .correction {
   height: 100vh;
 }
-.correction>.classify {
+.wrapper{
+  height: calc(100% - 112px);
+  overflow-y: auto;
+  border-bottom: 1px solid #e8ebee;
+}
+.correction .classify {
   text-align: center;
   padding: 20px 13px 0px;
 }
 
-.correction>.classify>div{
+.correction .classify>div{
   display: flex;
   flex-wrap: wrap;
 }
-.correction>.classify>div>span{
+.correction .classify>div>span{
   display: inline-block;
   width:110px;
   height: 40px;
@@ -139,19 +153,19 @@ export default {
   margin-right: 9.5px;
   margin-bottom: 10px;
 }
-.correction>.classify>div>span:nth-child(3),
-.correction>.classify>div>span:nth-child(6){
+.correction .classify>div>span:nth-child(3),
+.correction .classify>div>span:nth-child(6){
   margin-right: 0px;
 }
-.correction>.classify>div>span.checked{
+.correction .classify>div>span.checked{
   background: #08b783;
   color:#fff;
 }
-.correction>.describe{
+.correction .describe{
   padding:0 13px;
   margin-bottom: 10px;
 }
-.correction>.describe textarea {
+.correction .describe textarea {
   width: 100%;
   height: 148px;
   resize: none;
@@ -161,45 +175,66 @@ export default {
   border:1px solid #e8ebee;
 }
 
-.correction>.describe ::placeholder {
+.correction .describe ::placeholder {
   color: #ccc;
 }
-.correction>.upload{
+.correction .upload{
   padding:0 13px;
   box-sizing: border-box;
-  height: calc(100% - 45px - 170px - 150px - 10px - 50px - 10px - 8px);
-  border-bottom: 1px solid #e8ebee;
   margin-bottom: 7px;
 }
-.correction>.upload>.total {
+.correction .upload>.total {
   margin: 8px 0;
 }
 
-.correction>.upload>.total b {
+.correction .upload>.total b {
   font-weight: normal;
 }
-.correction>.upload>.total span.num{
+.correction .upload>.total span.num{
   color:rgb(128,129,131);
 }
-.correction>.upload>.container{
+.correction .upload>.container{
   display: flex;
+  flex-wrap: wrap;
 }
-.correction>.upload>.container>.item{
+.correction .upload>.container>.item{
   flex:0 1 auto;
-  width:110px;
-  height: 110px;
+  width:100px;
+  height: 100px;
   text-align: center;
   vertical-align: middle;
   background: #f5f7f8;
   padding:15px;
   box-sizing: border-box;
+  margin-right: 18px;
+  margin-top:15px;
+  position: relative;
 }
-.correction>.upload>.container>.item>img.up{
+.correction .upload>.container>.item:nth-child(3),
+.correction .upload>.container>.item:nth-child(6),
+.correction .upload>.container>.item:nth-child(9){
+  margin-right: 0;
+}
+.correction .upload>.container>.item>img.up{
   margin-top:5px;
   margin-bottom: 10px;
 }
-.correction>.upload>.container>.item.upload p{
+.correction .upload>.container>.item span.close{
+  display: inline-block;
+  width:18px;
+  height: 18px;
+  background-image: url('../../../assets/images/public/deleteselectedimage.png');
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  position: absolute;
+  right: 0;
+  top:0;
+  transform: translate(50%,-50%);
+}
+.correction .upload>.container>.item.upload p{
   color:#c8c9c9;
+  font-size: 14px;
 }
 .correction .popupWrapper {
   margin: 0 13px 8px;
@@ -226,7 +261,7 @@ export default {
   margin-top:15px;
   border-radius: 13px;
 }
-.correction>.submitBtn {
+.correction .submitBtn {
   position: fixed;
   bottom: 8px;
   left: 50%;
@@ -239,5 +274,8 @@ export default {
   background: #08b783;
   color:#fff;
   font-size: 17px;
+}
+.correction>.submitBtn.disable{
+  opacity: 0.5;
 }
 </style>

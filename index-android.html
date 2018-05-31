@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0">
     <script type="text/javascript" src="../lib/android/cordova-8.0.0.js"></script>
     <script src="../lib/app_plug.js"></script>
-    <script src="http://192.168.41.130/vue/qti/qtivue/qtivue.js"></script>
-    <link rel="stylesheet" href="http://192.168.41.130/vue/qti/qtivue/qtivue.css">
-    <script src="http://192.168.41.130/vue/qti/qtivue/anoahim.js"></script>
-    <script src="http://192.168.41.130/vue/qti/qtivue/mp3player.js"></script>
-    <script src="http://192.168.41.130/vue/qti/qtivue/tcplayer.js"></script>
+    <script src="<%= htmlWebpackPlugin.options.qtiUrl %>qtivue.js"></script>
+    <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.qtiUrl%>qtivue.css">
+    <script src= "<%= htmlWebpackPlugin.options.qtiUrl %>anoahim.js"></script>
+    <script src= "<%= htmlWebpackPlugin.options.qtiUrl %>mp3player.js"></script>
+    <script src= "<%= htmlWebpackPlugin.options.qtiUrl %>tcplayer.js"></script>
     
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://*  cdvfile://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' 'unsafe-eval'; media-src *; img-src 'self' http://* data: content:;"> -->
     <title>教师端</title>

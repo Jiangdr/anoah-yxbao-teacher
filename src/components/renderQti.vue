@@ -54,6 +54,9 @@ export default {
     appclass: {
       type: String,
       default: 'qti'
+    },
+    info: {
+      type: Object
     }
   },
   mounted () {

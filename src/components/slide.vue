@@ -149,9 +149,9 @@ export default {
     _initSlide() {
       this.slide = new BScroll(this.$refs.slide, {
         scrollX: true,
-        scrollY: true,
+        scrollY: false,
         momentum: false,
-        // eventPassthrough: 'vertical',
+        eventPassthrough: 'vertical',
         snap: {
           loop: this.loop,
           threshold: this.threshold,

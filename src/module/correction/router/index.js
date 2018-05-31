@@ -4,5 +4,5 @@ export default [{
   path: '/correction/:rsid', // 资源ID
   name: 'correction',
   component: correction,
-  meta: { requiresAuth: false, keepAlive: true }
+  meta: { requiresAuth: false, keepAlive: false }
 }]

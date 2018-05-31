@@ -38,11 +38,11 @@ export default {
   name: "publishHomework",
   data() {
     return {
-      homeworkName: "",
+      homeworkName: "暑假作业",
       result: [],
       publishDate: new Date(),
       publishDateFormat: "",
-      endDateFormat: "",
+      endDateFormat: "无限制",
       answerDateFormat: "",
       minDate: new Date(2016, 1, 1),
       maxDate: new Date(2019, 12, 30),
@@ -108,13 +108,13 @@ export default {
         user_id: this.userInfo.userid,
         title: self.homeworkName,
         publish_time: self.publishDateFormat,
-        deal_time: self.endDateFormat,
+        deal_time: self.endDateFormat === '无限制' ? '' : self.endDateFormat,
         class_ids: classIds,
         resource_id: JSON.stringify(resourceId),
         view_answer_time: self.answerDateFormat
       };
 
-      if (data.deal_time && data.title && data.view_answer_time) {
+      if (data.title && data.view_answer_time) {
         self.$toast.loading({
           mask: true,
           message: '加载中...'

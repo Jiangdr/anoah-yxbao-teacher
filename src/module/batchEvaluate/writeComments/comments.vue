@@ -9,9 +9,9 @@
         <div>
           批量写评语
         </div>
-        <div style="position: absolute; right: 10px; top: 0; height: 45px;" @click="clickVoiceShow">
+        <!-- <div style="position: absolute; right: 10px; top: 0; height: 45px;" @click="clickVoiceShow">
           <img style="vertical-align: middle;width: 28px;" src="@/assets/images/batchEvaluate/voicePng.png" alt="">
-        </div>
+        </div> -->
       </h1>
     </header>
 
@@ -44,8 +44,8 @@
     <van-popup v-model="showVoicePopup" position="bottom" :overlay="true">
       <div class="van-picker">
         <div class="van-hairline--top-bottom van-picker__toolbar">
-          <div @click="clickVoiceChoose" class="van-picker__cancel">取消</div>
-          <div @click="clickVoiceChoose" class="van-picker__confirm">确认</div>
+          <div @click="clickVoiceChoose('cancel')" class="van-picker__cancel">取消</div>
+          <div @click="clickVoiceChoose('sure')" class="van-picker__confirm">确认</div>
         </div>
         <div class="van-picker__columns" style="height: 220px;">
           <div class="van-picker-column" style="height: 220px;display: flex;align-items: center;justify-content: center;">
@@ -58,7 +58,7 @@
               </div>
               <div class="spinner" v-show="isRecording"></div>
               <div style="margin-top: 10px;" v-show="!isRecording">点击开始录音</div>
-              <div style="margin-top: 10px;" v-show="isRecording">点击停止录音</div>
+              <div style="margin-top: 10px;" v-show="isRecording">正在录音...</div>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default {
     };
   },
   mounted: function() {
-    this.userInfo = this.$store.state.account.userInfo;
+    this.account = this.$store.state.account;
     this.getTemplateList();
   },
   watch: {
@@ -116,20 +116,21 @@ export default {
       });
     },
     clickVoiceShow() {
-      this.showVoicePopup = !this.showVoicePopup;
+      this.isRecording = false;
+      this.showVoicePopup = true;
     },
     clickRecordBtn() {
-      this.isRecording = !this.isRecording;
-      if (this.isRecording) {
-        var param = [this.userInfo.account.userId, this.userInfo.account.jwt, 'http://api2.dev.anoah.com/jwt/homework/correct/upload_auth?', "['http://ox7arp73u.bkt.clouddn.com/guoge2.mp3']"];
-        window.appPlug.aliUpLoad(param, this.afteruploadsucc);
-      }
+      this.isRecording = true;
     },
     afteruploadsucc(msg) {
       alert(JSON.stringify(msg))
     },
-    clickVoiceChoose() {
+    clickVoiceChoose(type) {
       this.showVoicePopup = false;
+      if (type === 'sure') {
+        var param = [this.account.userInfo.userid, this.account.jwt.jwt, 'http://api2.dev.anoah.com/jwt/homework/correct/upload_auth', "['file:///storage/emulated/0/ddmsrec.mp4']"];
+        window.appPlug.aliUpLoad(param, function(msg) { alert(JSON.stringify(msg)) }, function(msg) { alert(msg) });
+      }
     },
     writeComments() {
       if (this.checkBoxGroup.length === 0) {
@@ -150,7 +151,7 @@ export default {
     getTemplateList() {
       var self = this;
       var data = {
-        user_id: self.userInfo.userid,
+        user_id: self.account.userInfo.userid,
         type: 1
       };
 

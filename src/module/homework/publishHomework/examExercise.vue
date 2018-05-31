@@ -39,7 +39,6 @@ export default {
           resource_type: "qti_question"
         };
       }
-      console.log(this.setting)
     },
     goSummerHomework() {
       this.$router.push({

@@ -14,7 +14,7 @@
     <!-- 平均正确率 -->
     <div class="correct">
       <i class="icon"  @click="toggleTips"></i>
-      <div>
+      <div style="margin-top:10px;">
         <correct-circle
           :r="55"
           :startColor="'#75bdff'"
@@ -59,7 +59,7 @@
                 <div class="right">
                   <p>[{{ques.icom_name | questionName(ques)}}]
                     <span class="resource-name" v-html="ques.resource_name"></span>
-                    <span v-if="ques.pigai_status!=3" class="no-correct"> 待批阅</span>
+                    <span v-if="ques.pigai_status===1" class="no-correct"> 待批阅</span>
                   </p>
                   <p style="position:relative">
                     已完成：{{ques.finished_counter}}/{{homeworkInfo.student_counter}}人 正确率：{{itemCorrect(ques.average_rate)}}
@@ -67,7 +67,7 @@
                   </p>
                 </div>
           </div>
-          <div class="itemdetail" :class="{hide:!ques.isShow}" v-if="ques.resource_type=='qti_exam'||isCompound(ques.qti_question_type_id,ques.resource_type)">
+          <div class="itemdetail" :class="{hide:!ques.isShow}" v-if="ques.resource_type=='qti_exam'||isCompound(ques)">
             <p v-for="(mini,key) in miniResource[index]" :key="key" @click="goTongji(mini,index,key)" :class="{'no-margin':key>0&&(key+1)%5==0}">
                 <span v-if="mini.status===1" style="background:#ff8d13;">待批阅</span>
                 <span v-else-if="mini.status===0" style="background:#9c9ea1;">未提交</span>
@@ -157,7 +157,7 @@ import answer from "./common/answer.vue"; // 发送答案
 import studentList from "./common/studentList.vue"; // 学生列表
 import correctCircle from '@/components/common/correct.vue'
 
-import {mapActions} from 'vuex'
+import {mapMutations, mapActions} from 'vuex'
 export default {
   name: "detail",
   props: ['homeworkInfo', 'resourceList', 'homeworkStatus'],
@@ -202,6 +202,9 @@ export default {
   methods: {
     ...mapActions({
     }),
+    ...mapMutations({
+      setResource: 'questionDetail/setResource'
+    }),
     getResource() {
       this.$emit('getresource');
       this.getinfo();
@@ -224,7 +227,6 @@ export default {
     },
     goBatchEvaluate() {
       // 批量评价
-      console.log("a");
       this.$router.push({
         path: "/batchEvaluate"
       });
@@ -305,11 +307,7 @@ export default {
         course_resource_id: curr.course_resource_id,
         dcom_entity_id: curr.dcom_entity_id
       };
-      if (
-        // 判断是否为试卷或复合题
-        curr.resource_type === "qti_exam" ||
-        this.isCompound(curr.qti_question_type_id, curr.resource_type)
-      ) {
+      if (this.isCompound(curr)) {
         if (curr.isShow) {
           // 小资源加载过则不再走接口
           if (this.miniResource[index]) {
@@ -321,7 +319,15 @@ export default {
           });
         }
       } else {
-        this.goTongji(curr);
+        this.setResource([curr])
+        this.$router.push({
+          name: 'questionDetail',
+          params: {
+            params: {
+              index: index
+            }
+          }
+        })
       }
     },
     // 查看单题统计
@@ -337,9 +343,14 @@ export default {
       }
       // 当前资源在小资源中的index
       this.$store.commit("homeworkDetail/changIndex", key);
-      // 单选题、判断题统计页面
+      this.setResource(this.miniResource[index])
       this.$router.push({
-        name: "questionDetail"
+        name: "questionDetail",
+        params: {
+          params: {
+            index: key
+          }
+        }
       });
     },
     // 资源正确率计算方法
@@ -351,24 +362,18 @@ export default {
       }
     },
     // 是否为复合题
-    isCompound(typeId, resourceType) {
-      if (resourceType === "qti_question") {
-        if (
-          typeId === 12 ||
-          typeId === 16 ||
-          typeId === 17 ||
-          typeId === 35 ||
-          typeId === 37
-        ) {
-          return true;
-        }
-        return false;
+    isCompound(resource) {
+      let result = true
+      let type = this.util.judgeQuestionType(resource)
+      if (type === 'combineqti') {
+        result = true
+      } else if (type === 'subjectiveqti' || type === 'objectiveqti' || type === 'objectiveicom') {
+        result = false
       }
-      return false;
+      return result
     },
     // 顶部tab切换
     tabChange(type) {
-      console.log(type);
     }
   },
   components: {
