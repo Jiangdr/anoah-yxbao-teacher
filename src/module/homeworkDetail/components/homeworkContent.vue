@@ -20,12 +20,13 @@
 import headerBar from '@/components/headerBar.vue'
 import info from './common/info.vue'
 import axios from '../axios/detail.js'
+import stroage from '@/store/stroage.js'
 export default {
   name: "homeworkContent",
   data() {
     return {
-      info: this.$route.query.info,
-      list: this.$route.query.list
+      info: stroage['session'].get('contentinfo').info,
+      list: stroage['session'].get('contentinfo').list
     }
   },
   methods: {

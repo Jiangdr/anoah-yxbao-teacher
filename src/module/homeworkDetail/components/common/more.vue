@@ -35,6 +35,7 @@
 <script>
 import homeworkDetil from "../../axios/detail.js";
 import { Toast } from 'vant';
+import stroage from '@/store/stroage.js'
 export default {
   name: "more",
   props: ['info', 'favorite', 'list'],
@@ -54,9 +55,10 @@ export default {
       this.showDetelePopup = !this.showDetelePopup
     },
     content() {
+      let params = {'info': this.info, 'list': this.list}
+      stroage['session'].set('contentinfo', params)
       this.$router.push({
-        path: '/homeworkContent',
-        query: {'info': this.info, 'list': this.list}
+        path: '/homeworkContent'
       })
       this.togglePopup();
     },
