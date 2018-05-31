@@ -20,12 +20,13 @@ export default {
       setting: [],
       listContainerStyle: {
         height: window.innerHeight - 50 + 'px'
-      }
+      },
+      rids: this.$route.params.rids
     };
   },
   computed: {},
   created: function() {
-    this.qti_ids = this.$store.state.homework.chooseExamExerciseQtiIdsArray;
+    this.qti_ids = this.rids ? this.rids : this.$store.state.homework.chooseExamExerciseQtiIdsArray;
     this.qtiFun();
   },
   methods: {
@@ -41,9 +42,7 @@ export default {
       }
     },
     goSummerHomework() {
-      this.$router.push({
-        path: "/summerHomework"
-      });
+      this.$router.back(-1);
     },
     clickPublish() {
       if (this.hasChoosePagesNum === 0) {
@@ -57,12 +56,6 @@ export default {
       this.$router.push({
         path: "/homeworkPublishSetting"
       });
-    },
-    clickCell() {
-      console.log("click cell");
-      // this.$router.push({
-      //   path: "/chooseTextbook"
-      // });
     }
   }
 };
