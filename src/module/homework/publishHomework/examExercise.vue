@@ -42,7 +42,7 @@ export default {
       }
     },
     goSummerHomework() {
-      this.$router.back(-1);
+      this.$router.go(-1);
     },
     clickPublish() {
       if (this.hasChoosePagesNum === 0) {
