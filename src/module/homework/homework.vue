@@ -2,10 +2,17 @@
   <div class="cube-page cube-view button-view" @click="activeItem = 0">
 
     <header class="header">
-      <h1>作业</h1>
       <i class="cubeic-back" @click="goHome">
         <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text"></span>
       </i>
+      <h1 v-show="!isSearching">作业</h1>
+      <h1 v-show="isSearching" style="margin:0 auto;width: 80%;">
+        <van-field icon="clear" @click-icon="inputValue = ''" v-model="inputValue" autofocus v-on:keypress.enter="getHomeworkList" placeholder="请输入..." />
+      </h1>
+      <div style="position: absolute; right: 10px; top: 0; height: 45px;" @click="clickSearchBtn" :class="{'active': activeItem === 9}">
+        <i class="fa fa-search" v-show="!isSearching"></i>
+        <span v-show="isSearching">取消</span>
+      </div>
     </header>
 
     <div class="select-container">
@@ -127,7 +134,9 @@ export default {
       chooseTextBookObj: null,
       columnsOfClass: [],
       countNum: 0,
-      totalCountNum: 0
+      totalCountNum: 0,
+      inputValue: '',
+      isSearching: false
     };
   },
   created: function() {
@@ -272,6 +281,12 @@ export default {
     clickMore() {
       this.activeItem = 4;
     },
+    clickSearchBtn() {
+      this.isSearching = !this.isSearching;
+      if (this.isSearching) {
+        this.activeItem = 9
+      }
+    },
     onConfirmTimePopup(value, index) {
       this.timeActiveID = 3;
       this.showTimePopup = false;
@@ -385,7 +400,8 @@ export default {
         type: "1,2,20",
         favorite: self.markStatus,
         edu_subject_id: self.bookActiveID,
-        asc: 1
+        asc: 1,
+        keyword: self.inputValue
       };
 
       api.homeworkLists(data).then(function(r) {
