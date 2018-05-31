@@ -14,7 +14,7 @@
     <!-- 平均正确率 -->
     <div class="correct">
       <i class="icon"  @click="toggleTips"></i>
-      <div>
+      <div style="margin-top:10px;">
         <correct-circle
           :r="55"
           :startColor="'#75bdff'"

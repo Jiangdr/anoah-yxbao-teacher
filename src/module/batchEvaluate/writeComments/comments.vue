@@ -9,9 +9,9 @@
         <div>
           批量写评语
         </div>
-        <div style="position: absolute; right: 10px; top: 0; height: 45px;" @click="clickVoiceShow">
+        <!-- <div style="position: absolute; right: 10px; top: 0; height: 45px;" @click="clickVoiceShow">
           <img style="vertical-align: middle;width: 28px;" src="@/assets/images/batchEvaluate/voicePng.png" alt="">
-        </div>
+        </div> -->
       </h1>
     </header>
 
