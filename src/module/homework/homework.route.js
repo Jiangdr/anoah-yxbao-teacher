@@ -28,6 +28,7 @@ let homeworkRoutes = [{
   component: examExercise
 }, {
   path: '/homeworkPublishSetting',
+  name: 'homeworkPublishSetting',
   component: homeworkPublishSetting
 }, {
   path: '/publishHomework',
