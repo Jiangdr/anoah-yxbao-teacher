@@ -108,9 +108,7 @@ export default {
   },
   methods: {
     goHomework() {
-      this.$router.push({
-        path: "/homework"
-      });
+      this.$router.go(-1);
     },
     goReturnRewrite() {
       if (this.checkBoxGroup.length === 0) {
