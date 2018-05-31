@@ -42,7 +42,6 @@ export default {
       citys: null,
       area: null,
       columns: [],
-      phoneFormatMsg: '',
       loading: false,
       background: {
         backgroundImage: "url(" + require("@/assets/images/account/pwd-bottom.png") + ")",
@@ -59,10 +58,17 @@ export default {
   computed: {
     disable() {
       let bool = true
-      if (this.userName !== '' && this.schoolArea !== '' && this.schoolName !== '' && this.phoneNum !== '') {
+      if (this.userName !== '' && this.schoolArea !== '' && this.schoolName !== '' &&
+        this.phoneFormatMsg === '') {
         bool = false
       }
       return bool
+    },
+    phoneFormatMsg() {
+      if (phonereg.test(this.phoneNum) || emailreg.test(this.phoneNum)) {
+        return ''
+      }
+      return '请输入正确的手机号或邮箱'
     }
   },
   methods: {
@@ -125,28 +131,21 @@ export default {
       this.chooseArea = false
     },
     onSubmit() {
-      let phoneTest = phonereg.test(this.phoneNum);
-      let emailTest = emailreg.test(this.phoneNum);
-      if (phoneTest || emailTest) {
-        this.loading = true
-        this.phoneFormatMsg = ''
-        api.contact({
-          loginName: this.userAccount,
-          name: this.userName,
-          schoolAddress: this.schoolArea,
-          schoolName: this.schoolName,
-          className: this.className,
-          contactInformation: this.phoneNum
-        }).then(succ => {
-          this.loading = false
-          Toast('信息提交成功，我们会尽快联系您');
-          this.$router.back(-1)
-        }, err => {
-          console.log(err)
-        })
-      } else {
-        this.phoneFormatMsg = '请输入正确的手机号或邮箱'
-      }
+      this.loading = true
+      api.contact({
+        loginName: this.userAccount,
+        name: this.userName,
+        schoolAddress: this.schoolArea,
+        schoolName: this.schoolName,
+        className: this.className,
+        contactInformation: this.phoneNum
+      }).then(succ => {
+        this.loading = false
+        Toast('信息提交成功，我们会尽快联系您');
+        this.$router.back(-1)
+      }, err => {
+        console.log(err)
+      })
     }
   },
   beforeRouteLeave (to, from, next) {
