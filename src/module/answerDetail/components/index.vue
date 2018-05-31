@@ -153,7 +153,12 @@ export default {
     },
     // 主观题批改
     subjectiveQtiPigai(item) {
-      console.log(item)
+      this.$router.push({
+        name: "correctTheSubject",
+        params: {
+          detailData: item
+        }
+      })
     }
   },
   components: {
