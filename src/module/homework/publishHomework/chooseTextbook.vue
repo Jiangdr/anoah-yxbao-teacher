@@ -104,12 +104,12 @@ export default {
     },
     onRefresh() {
       this.page = 0;
+      this.finished = false;
       this.pullRefresh = true;
       this.getTextBookLists();
     },
     loadMore() {
       if (this.noMore) {
-        this.finished = true;
         this.loading = false;
       } else {
         this.getTextBookLists();

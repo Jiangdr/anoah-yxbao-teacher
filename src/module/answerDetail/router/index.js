@@ -1,6 +1,6 @@
-import questionDetail from '@/module/questionDetail/components/index.vue'
-import originalQuestion from '@/module/questionDetail/components/originalQuestion.vue'
-import share from '@/module/questionDetail/components/common/shareAnswer.vue'
+import answerDetail from '@/module/answerDetail/components/index.vue'
+import originalQuestion from '@/module/answerDetail/components/originalQuestion.vue'
+import share from '@/module/answerDetail/components/common/shareAnswer.vue'
 // 正确率表格图  例：客观填空、选词填空
 // import correctTable from '@/module/tongji/components/question/correctTable.vue'
 // 答案柱状图  例：判断题、单选题、多选题、不定选项、排序题
@@ -14,16 +14,16 @@ import share from '@/module/questionDetail/components/common/shareAnswer.vue'
 // 主观题  例：主观填空
 // import correctColumn from '@/module/tongji/components/question/correctColumn.vue'
 // 组件详情---选词填空  一般组件
-import groupDetail from '@/module/questionDetail/components/question/groupDetail.vue'
+import groupDetail from '@/module/answerDetail/components/question/groupDetail.vue'
 // 组件详情   口算训练
-import groupDetailColumn from '@/module/questionDetail/components/question/groupDetailColumn.vue'
+import groupDetailColumn from '@/module/answerDetail/components/question/groupDetailColumn.vue'
 export default
 [
   {
-    name: 'questionDetail',
-    path: '/questionDetail/:params',
+    name: 'answerDetail',
+    path: '/answerDetail/:params',
     meta: { requiresAuth: false, keepAlive: true },
-    component: questionDetail,
+    component: answerDetail,
     children: [
       {
         path: '/groupDetail',

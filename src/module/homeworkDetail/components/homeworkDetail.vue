@@ -196,7 +196,7 @@ export default {
     ...mapActions({
     }),
     ...mapMutations({
-      setResource: 'questionDetail/setResource'
+      setResource: 'answerDetail/setResource'
     }),
     getResource() {
       this.$emit('getresource');
@@ -314,7 +314,7 @@ export default {
       } else {
         this.setResource([curr])
         this.$router.push({
-          name: 'questionDetail',
+          name: 'answerDetail',
           params: {
             params: {
               index: index,
@@ -339,7 +339,7 @@ export default {
       this.$store.commit("homeworkDetail/changIndex", key);
       this.setResource(this.miniResource[index])
       this.$router.push({
-        name: "questionDetail",
+        name: "answerDetail",
         params: {
           params: {
             index: key,

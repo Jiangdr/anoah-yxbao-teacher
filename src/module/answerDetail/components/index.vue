@@ -1,5 +1,5 @@
 <template>
-<div style="height:100%">
+<div id="question-detail" style="height:100%">
   <header-bar @back="goBack">
     <div slot="title-name">{{routePrams && routePrams.title || '标题需要传入'}}</div>
     <div slot="right-area">原题</div>
@@ -13,11 +13,14 @@
         <correct-table :params="item" v-if="item.qti_question_type_id == 4 || item.qti_question_type_id == 20"></correct-table>
         <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
         <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective>
-        <render-qti :info="item" :id="item.source_pk_id + ''" :icom_id="item.icom_id" :dcom_id="item.source_pk_id" user_id="0" :setting="setting"></render-qti>
+        <render-qti v-if="Object.keys(item).length" :info="item" :id="item.source_pk_id + ''" :icom_id="item.icom_id" :dcom_id="item.source_pk_id" user_id="0" :setting="setting"></render-qti>
       </div>
     </div>
   </div>
   <student-list v-if="showStudentList" :title="studentListTitle" :studentList="studentList"></student-list>
+  <div class="subjective-button">
+    <button>查看详情</button>
+  </div>
 </div>
 </template>
 
@@ -61,7 +64,7 @@ export default {
   },
   computed: {
     ...mapState({
-      'resource': state => state.questionDetail.resource
+      'resource': state => state.answerDetail.resource
     }),
     setting: {
       get() {
@@ -84,7 +87,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      clearResource: 'questionDetail/clearResource'
+      clearResource: 'answerDetail/clearResource'
     }),
     // 根据资源创建所需数据结构和swiper视图
     renderView() {
@@ -153,8 +156,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.swiper-container{
-  height: calc(100% - 45px);
-  overflow-y: scroll;
+#question-detail{
+  position: relative;
+  .swiper-container{
+    height: calc(100% - 45px);
+    overflow: hidden;
+    .swiper-slide{
+      height: 100%;
+      overflow-y: scroll;
+    }
+  }
+  .subjective-button{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 40px;
+  }
 }
 </style>
