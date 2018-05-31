@@ -45,7 +45,7 @@ export default {
       pullRefresh: false,
       hasChoosePagesNumArray: [],
       loading: false,
-      finished: true,
+      finished: false,
       noMore: true,
       page: 0
     };
@@ -145,6 +145,7 @@ export default {
     },
     onRefresh() {
       this.page = 0;
+      this.finished = false;
       this.pullRefresh = true;
       this.$store.dispatch("hasChoosePagesArray", this.hasChoosePagesNumArray);
       this.$store.dispatch("isOldPackId", "1");
@@ -152,7 +153,6 @@ export default {
     },
     loadMore() {
       if (this.noMore) {
-        this.finished = true;
         this.loading = false;
       } else {
         this.getList();
