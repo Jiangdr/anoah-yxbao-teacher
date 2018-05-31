@@ -24,6 +24,7 @@ let homeworkRoutes = [{
   path: '/chooseTextbook',
   component: chooseTextbook
 }, {
+  name: 'examExercise',
   path: '/examExercise',
   component: examExercise
 }, {

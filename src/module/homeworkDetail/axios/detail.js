@@ -10,7 +10,8 @@ let apis = {
   'remove': 'jwt/homework/publish/remove', // 删除作业
   'favorite': 'jwt/homework/favorite/update', //  收藏作业 1收藏 0 取消收藏
   'kp': 'jwt/homework/stat/getKpList',
-  'getQtiListByKp': 'jwt/homework/stat/getQtiListByKp'
+  'getQtiListByKp': 'jwt/homework/stat/getQtiListByKp',
+  'getQtiExamids': 'jwt/resource/exam/getQtiExamids'
 }
 
 let homeworkinfo = new API(apis)
@@ -43,5 +44,8 @@ homeworkinfo.kp = params => {
 }
 homeworkinfo.getQtiListByKp = params => {
   return homeworkinfo.fetch(homeworkinfo.apis.getQtiListByKp, params, 'post')
+}
+homeworkinfo.getQtiExamids = params => {
+  return homeworkinfo.fetch(homeworkinfo.apis.getQtiExamids, params, 'post')
 }
 export default homeworkinfo

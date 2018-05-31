@@ -19,6 +19,7 @@
 <script>
 import headerBar from '@/components/headerBar.vue'
 import info from './common/info.vue'
+import axios from '../axios/detail.js'
 export default {
   name: "homeworkContent",
   data() {
@@ -33,7 +34,14 @@ export default {
     },
     examExercise(index) {
       if (this.isCompound(this.list[index])) {
-
+        axios.getQtiExamids({'source_pk_id': this.list[index].source_pk_id}).then(r => {
+          this.$router.push({
+            name: "examExercise",
+            params: {
+              rids: r
+            }
+          })
+        })
       }
     },
     isCompound(resource) {
