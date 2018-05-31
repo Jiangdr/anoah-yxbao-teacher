@@ -7,8 +7,8 @@
 
     <div>
         <van-cell-group>
-          <van-field v-model="homeworkName" placeholder="请填写作业名称" label="作业名称：" />
-          <van-cell title="发布时间" is-link :value="publishDateFormat" @click="clickShowPupUpDatePickerFun('发布时间')"/>
+          <van-field v-model="homeworkName" placeholder="请填写作业名称" label="作业名称：" icon="clear" @click-icon="homeworkName = ''" />
+          <van-cell title="开始时间" is-link :value="publishDateFormat" @click="clickShowPupUpDatePickerFun('开始时间')"/>
           <van-cell title="截止时间" is-link :value="endDateFormat" @click="clickShowPupUpDatePickerFun('截止时间')"/>
         </van-cell-group>
 
@@ -27,7 +27,8 @@
       <van-datetime-picker v-model="currentDate" type="datetime" :min-date="minDate" :max-date="maxDate" @cancel="clickCancelTimeFun" @confirm="clickConfirmTimeFun"/>
     </van-popup>
 
-    <cube-button style="position:absolute;bottom:0px;" :outline="true" @click="surePublishFun">确认布置</cube-button>
+    <div class="footer-container div-center"><div outline="true" class="yx-green-btn"  @click="surePublishFun">确认布置</div></div>
+
   </div>
 
 </template>
@@ -42,7 +43,7 @@ export default {
       result: [],
       publishDate: new Date(),
       publishDateFormat: "",
-      endDateFormat: "无限制",
+      endDateFormat: "",
       answerDateFormat: "",
       minDate: new Date(2016, 1, 1),
       maxDate: new Date(2019, 12, 30),
@@ -57,6 +58,7 @@ export default {
   mounted: function() {
     this.publishDateFormat = this.$dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
     this.answerDateFormat = this.$dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+    this.endDateFormat = this.$dayjs(new Date(2018, 7, 31)).format("YYYY-MM-DD HH:mm:ss");
     this.chooseSummerHomeworkArray = this.$store.state.homework.chooseSummerHomeworkArray;
   },
   methods: {
@@ -71,7 +73,7 @@ export default {
     },
     clickConfirmTimeFun(date) {
       var formatTime = this.$dayjs(date).format("YYYY-MM-DD HH:mm:ss");
-      if (this.popUpType === "发布时间") {
+      if (this.popUpType === "开始时间") {
         this.publishDateFormat = formatTime;
       }
       if (this.popUpType === "截止时间") {
@@ -110,7 +112,7 @@ export default {
         user_id: this.userInfo.userid,
         title: self.homeworkName,
         publish_time: self.publishDateFormat,
-        deal_time: self.endDateFormat === '无限制' ? '' : self.endDateFormat,
+        deal_time: self.endDateFormat,
         class_ids: classIds,
         resource_id: JSON.stringify(resourceId),
         view_answer_time: self.answerDateFormat
@@ -144,7 +146,8 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/css/custom.scss";
 .activeTabClass {
   color: #2ec2a9;
 }

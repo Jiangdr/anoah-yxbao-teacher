@@ -1,13 +1,9 @@
 <template>
   <div class="cube-page cube-view button-view">
     <header class="header">
-      <h1 @click="clickSwitchStudent">火锅（1/2）<i class="fa fa-sort-down"></i></h1>
+      <h1 @click="clickSwitchStudent">{{studentListArray.length > 0 ? '有学生' : '无学生'}}（1/{{studentListArray.length}}）<i class="fa fa-sort-down"></i></h1>
       <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i></i>
     </header>
-    <!-- <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
-      <div v-for="(value,key) in setting" :key="key">
-      </div>
-    </div> -->
     <!-- 学生答案 学生互评tab -->
     <div class="btns van-hairline--surround">
       <van-row>
@@ -43,7 +39,8 @@ export default {
       answerList: [],
       listContainerStyle: {
         height: window.innerHeight - 50 + 'px'
-      }
+      },
+      studentListArray: []
     };
   },
   computed: {
@@ -54,8 +51,10 @@ export default {
   created: function() {
     this.userInfo = this.$store.state.account.userInfo;
     this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
+    this.studentList = this.$store.state.homeworkDetail.homeworkInfo.student_list;
     this.getStudentAnswerList();
     this.getStudentMutualCommentsList();
+    this.formatStudentList();
   },
   methods: {
     goHomework() {
@@ -70,6 +69,15 @@ export default {
     },
     toggleContent(items) {
       this.activeBtn = items;
+    },
+    formatStudentList() {
+      const array = this.studentList;
+      this.studentListArray = [];
+      for (let i = 0; i < array.length; i++) {
+        if (array[i].status > 0) {
+          this.studentListArray.push(array[i]);
+        }
+      }
     },
     getStudentMutualCommentsList: function() {
       var self = this;

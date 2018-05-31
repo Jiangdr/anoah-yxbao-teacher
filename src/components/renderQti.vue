@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div v-if="info.qti_question_type_id !== '33' && info.version === 0"
     :id="id"
     :caller="caller"
     class="qti"
@@ -12,6 +12,9 @@
     :type="type"
     :appclass="appclass"
   ></div>
+  <div v-else>
+    <Qti :setting="newSetting"></Qti>
+  </div>
 </template>
 <script>
 export default {
@@ -59,6 +62,25 @@ export default {
       type: Object
     }
   },
+  computed: {
+    newSetting() {
+      return {
+        caller: 'PREVIEWOR',
+        course_resource_id: this.setting.course_resource_id,
+        dcom_entity: '',
+        dcom_entity_id: this.setting.dcom_entity_id,
+        domain: window.bus.$store.getters['runEnv/old'],
+        in_class: 0,
+        num: -1,
+        publish_id: this.setting.publish_id,
+        qid: this.info.source_pk_id,
+        show_answer: 0,
+        user_id: this.user_id,
+        view_id: '',
+        resource_type: this.info.resource_type
+      }
+    }
+  },
   mounted () {
     this.$nextTick(() => {
       $i(this.id, '', () => {});
@@ -71,6 +93,9 @@ export default {
           $i(this.id, '', () => {});
         })
       }
+    },
+    newSetting(newVal, oldVal) {
+      console.log(11111, newVal, oldVal)
     }
   }
 }

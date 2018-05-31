@@ -317,7 +317,8 @@ export default {
           name: 'questionDetail',
           params: {
             params: {
-              index: index
+              index: index,
+              title: '批阅作业'
             }
           }
         })
@@ -341,7 +342,8 @@ export default {
         name: "questionDetail",
         params: {
           params: {
-            index: key
+            index: key,
+            title: '批阅作业'
           }
         }
       });
