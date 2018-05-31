@@ -5,7 +5,7 @@
       <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
       <p class="select-all-p" @click="selectAll">{{hasChoosePagesNumArray.length==lists.length?'取消全选':'全选'}}</p>
     </header>
-    <div :class="{listdiv:this.hasChoosePagesNumArray.length === 0,listfooterdiv:this.hasChoosePagesNumArray.length !== 0}" style="overflow-y: auto;">
+      <van-pull-refresh :class="{listdiv:this.hasChoosePagesNumArray.length === 0,listfooterdiv:this.hasChoosePagesNumArray.length !== 0}" style="overflow-y: auto;" v-model="pullRefresIsLoading" @refresh="onRefresh">
         <van-list v-model="loading" loading-text="加载中。。。" :finished="finished" @load="loadMore" :offset="100" :immediate-check="false">
           <div class="list-item" v-for="(item, index) in lists" :key="index">
             <div style="float:left;margin-top: 3vw;" @click="clickTiltleName(item)">
@@ -18,7 +18,7 @@
         <div v-if="lists.length==0" class="text-font">
           暂无内容
         </div>
-    </div>
+       </van-pull-refresh>
 
     <div v-if="this.hasChoosePagesNumArray.length !== 0" class="footer-container">
       <p class="footer-p">已选试卷<span>{{hasChoosePagesNumArray.length}}</span>份，共<span>{{hasChooseProblemsNum}}</span>道题</p>
@@ -41,6 +41,8 @@ export default {
       result: [],
       hasChooseProblemsNum: 0,
       olded: false,
+      pullRefresIsLoading: false,
+      pullRefresh: false,
       hasChoosePagesNumArray: [],
       loading: false,
       finished: true,
@@ -141,6 +143,13 @@ export default {
         this.checkList.push(array[i].value);
       }
     },
+    onRefresh() {
+      this.page = 0;
+      this.pullRefresh = true;
+      this.$store.dispatch("hasChoosePagesArray", this.hasChoosePagesNumArray);
+      this.$store.dispatch("isOldPackId", "1");
+      this.getList();
+    },
     loadMore() {
       if (this.noMore) {
         this.finished = true;
@@ -161,18 +170,45 @@ export default {
       api.getResourceLists(data).then(
         success => {
           self.loading = false;
+          self.pullRefresIsLoading = false;
+          if (self.pullRefresh) {
+            self.hasChooseProblemsNum = 0;
+            this.olded = this.$store.state.homework.isOldPackId === "1";
+            if (self.$store.state.homework.hasChoosePagesArray.length > 0) {
+              self.hasChoosePagesNumArray = JSON.parse(
+                JSON.stringify(self.$store.state.homework.hasChoosePagesArray)
+              );
+              self.hasChoosePagesNumArray.forEach(elementnum => {
+                self.hasChooseProblemsNum =
+                  parseInt(self.hasChooseProblemsNum) +
+                  parseInt(elementnum.qti_num);
+              });
+            } else {
+              self.hasChoosePagesNumArray = [];
+            }
+            self.lists.length = 0;
+          }
+          self.pullRefresh = false;
           if (success.lists.length < 1) {
             self.noMore = true;
           } else {
             success.lists.forEach(element => {
               if (self.olded && self.isSelect(element)) {
                 element.isSel = true;
+                let arr = self.$refs["cb-" + element.resource_id];
+                if (arr && arr.length > 0) {
+                  arr[0].selecteState = true;
+                }
               } else if (!self.olded) {
                 self.hasChoosePagesNumArray.push(element);
                 self.hasChooseProblemsNum =
                   parseInt(self.hasChooseProblemsNum) +
                   parseInt(element.qti_num);
                 element.isSel = true;
+                let arr = self.$refs["cb-" + element.resource_id];
+                if (arr && arr.length > 0) {
+                  arr[0].selecteState = true;
+                }
               }
               self.lists.push(element);
             });
@@ -180,6 +216,9 @@ export default {
         },
         err => {
           console.log(err);
+          self.loading = false;
+          self.pullRefresIsLoading = false;
+          self.pullRefresh = false;
           self.$toast("网络异常");
         }
       );

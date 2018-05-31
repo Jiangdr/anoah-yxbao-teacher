@@ -16,7 +16,7 @@
        <i class="fa fa-angle-right"></i>
     </div>
 
-    <div class="list-container">
+   <van-pull-refresh class="list-container" v-model="pullRefresIsLoading" @refresh="onRefresh">
       <van-list v-model="loading" loading-text="加载中。。。" :finished="finished" @load="loadMore" :offset="100" :immediate-check="false">
         <div class="list-item" v-for="(list, index) in lists" :key="index" @click="goSummerHomework(list)">
           <div style="width:95%;"><img src="@/assets/images/homework/summer-work-icon.png"/><p>{{list.NAME}}</p></div>
@@ -26,7 +26,7 @@
       <div v-if="lists.length==0" class="text-font">
         暂无内容
       </div>
-    </div>
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -40,6 +40,8 @@ export default {
       activeTabName: 0,
       loading: false,
       finished: false,
+      pullRefresIsLoading: false,
+      pullRefresh: false,
       page: 0,
       noMore: false,
       lists: []
@@ -50,7 +52,7 @@ export default {
     this.chooseTextBookObj = this.$store.state.homework.chooseTextBookObj;
   },
   mounted: function() {
-    this.getList(0);
+    this.getList();
   },
   methods: {
     goBack() {
@@ -74,6 +76,11 @@ export default {
         path: "/summerHomework"
       });
     },
+    onRefresh() {
+      this.page = 0;
+      this.pullRefresh = true;
+      this.getList();
+    },
     loadMore() {
       if (this.noMore) {
         this.finished = true;
@@ -82,7 +89,7 @@ export default {
         this.getList();
       }
     },
-    getList: function(type) {
+    getList: function() {
       var self = this;
       self.loading = true;
       self.page++;
@@ -91,19 +98,28 @@ export default {
         per_page: 15,
         user_id: self.userInfo.userid,
         edu_book_id: self.chooseTextBookObj.edu_book_id,
-        type: type
+        type: self.activeTabName
       };
       api.getLists(data).then(
         success => {
+          self.pullRefresIsLoading = false;
           self.loading = false;
+          if (self.pullRefresh) {
+            self.lists.length = 0;
+          }
           if (success.lists.length < 1) {
             self.noMore = true;
           } else {
             self.lists = self.lists.concat(success.lists);
+            self.noMore = false;
           }
+          self.pullRefresh = false;
         },
         err => {
           console.log(err);
+          self.pullRefresh = false;
+          self.pullRefresIsLoading = false;
+          self.loading = false;
           self.$toast("网络异常");
         }
       );
@@ -115,7 +131,7 @@ export default {
       this.page = 0;
       this.lists.length = 0;
       this.activeTabName = type;
-      this.getList(type);
+      this.getList();
     }
   }
 };

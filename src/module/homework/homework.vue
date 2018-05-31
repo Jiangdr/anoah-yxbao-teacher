@@ -37,7 +37,7 @@
       </span>
       <span class="select-span" :class="{'active': activeItem === 4}">
         <div class="select-span-div" @click.stop="clickMore">更多&thinsp;<i class="fa"  :class="{'fa-angle-up':activeItem === 4,'fa-angle-down':activeItem !== 4}"></i></div>
-        <div class="panelbar-list" :style="{height:teacherBooks.length>12?11.73333*13+'vw':11.73333*(teacherBooks.length+1)+'vw',overflow:'hidden'}">
+        <div class="panelbar-list" :style="{height:teacherBooks.length>7?'83vw':11.73333*(teacherBooks.length+1)+'vw',overflow:'hidden'}">
           <div class="panelbar-item" style="border-bottom: 1px solid #ededf0;">
             <span :class="{'cur':markStatus === 0}" @click.stop="chooseItem($event, 'mark', 0)">全部</span>
             <span :class="{'cur':markStatus === 1}" @click.stop="chooseItem($event, 'mark', 1)">已收藏</span>
@@ -68,7 +68,8 @@
               <div class="homework_list_inline_list"><span class="font-color">完成：</span><span style="color:#2ec2a9;font-size:22px;">{{item.finished_counter}}</span><span class="font-color">/{{item.student_counter}}人</span></div>
               <div class="homework_list_inline_list font-color" style="font-size: 14px;"><span class="font-color">截止：</span>{{item.deadline}}</div>
             </div>
-            <div class="listContainerRight">
+            <div class="mark-icon" v-if="item.correcting_counter!=='0'">待批阅</div>
+            <div class="list-container-right">
               正确率:&nbsp;
                 <span class="font-color" style="font-size:28px;color: #2ec2a9">{{item.right_rate >= 0 ? Math.round(item.right_rate*100) : '--'}}</span>
                 <span v-if="item.right_rate >= 0" style="font-size:16px;color: #2ec2a9">%</span>
@@ -221,10 +222,10 @@ export default {
   },
   methods: {
     chooseItem(e, type, value) {
-      this.activeItem = 0;
       this.currentPage = 1;
       switch (type) {
         case "time":
+          this.activeItem = 0;
           if (value === 3) {
             this.showTimePopup = !this.showTimePopup;
           } else {
@@ -235,12 +236,14 @@ export default {
           break;
 
         case "status":
+          this.activeItem = 0;
           this.chooseStatus = this.columnsOfStatus[value];
           this.statusActiveID = this.chooseStatus.value;
           this.getHomeworkList();
           break;
 
         case "class":
+          this.activeItem = 0;
           this.chooseClass = this.columnsOfClass[value];
           this.classActiveID = value;
           this.getHomeworkList();
@@ -381,7 +384,8 @@ export default {
         per_page: 6,
         type: "1,2,20",
         favorite: self.markStatus,
-        edu_subject_id: self.bookActiveID
+        edu_subject_id: self.bookActiveID,
+        asc: 1
       };
 
       api.homeworkLists(data).then(function(r) {
@@ -417,11 +421,25 @@ export default {
   border-radius: 8px;
   position: relative;
 }
+.mark-icon {
+  background-color: $orange-primary-color;
+  border-radius: 8px;
+  width: 65px;
+  height: 25px;
+  line-height: 25px;
+  color: #fff;
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+  right: 2vw;
+  top: 20%;
+  transform: translate(0, -50%);
+}
 .listContainerLeft {
   width: 58%;
   display: inline-block;
 }
-.listContainerRight {
+.list-container-right {
   display: inline-block;
   position: absolute;
   top: 50%;
@@ -466,8 +484,7 @@ export default {
       white-space: nowrap;
       line-height: #{$header-height};
       padding-left: 10px;
-      &.cur,
-      &:hover {
+      &.cur {
         color: $green-active-color;
       }
     }
@@ -486,8 +503,7 @@ export default {
     .panelbar-item {
       line-height: #{$header-height};
       padding-left: 10px;
-      &.cur,
-      &:hover {
+      &.cur {
         color: $green-active-color;
       }
       span {
