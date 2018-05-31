@@ -20,7 +20,7 @@
         </homework-detail>
     </div>
     <div v-if="loading" class="place-holder">加载中</div>
-    <more v-if="morePopup" @toggle="toggleMorePopup" :publishId="$route.params.publishId" @back="back" :favorite="homeworkInfo.favorite" @collect="collect"></more>
+    <more v-if="morePopup" @toggle="toggleMorePopup" :publishId="$route.params.publishId" @back="back" :favorite="homeworkInfo.favorite" @collect="collect" @content="homeworkContent"></more>
   </div>
 </template>
 <script>
@@ -95,6 +95,12 @@ export default {
     },
     collect(num) {
       this.homeworkInfo.favorite = num
+    },
+    homeworkContent() {
+      this.$router.push({
+        name: 'homeworkContent',
+        params: {'info': this.homeworkInfo, 'list': this.resourceList}
+      })
     }
   },
   components: {
