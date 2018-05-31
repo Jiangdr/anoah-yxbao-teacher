@@ -45,7 +45,7 @@
 
       <div class="scroll">
         <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
-          <van-list v-model="loading" :finished="finished" @load="onLoad" :immediate-check="false">
+          <van-list v-model="loading" :finished="finished" @load="onLoad" :offset="offset" :immediate-check="false" >
             <div v-if="list.length===0 && !refreshLoading && !loading" class="no-data">
               <img :src="imgUrl('no-data')" alt="">
               <p>暂无待处理事项</p>
@@ -61,6 +61,7 @@
                 <div class="c font-h4 ">{{item.class_name}}</div>
                 <div class="t font-h4 ">{{item.time}}</div>
               </div>
+              <div style="height:20px;"></div>
 
           </van-list>
         </van-pull-refresh>
@@ -94,6 +95,7 @@ export default {
       loading: false,
       refreshLoading: false,
       finished: false,
+      offset: 0,
 
       page: 1, // 页码
       per_page: 20, // 每页显示条数
@@ -191,14 +193,17 @@ export default {
       }
     },
     onLoad() {
+      console.log('onload');
       this.getItems();
     },
     onRefresh() {
+      console.log('onRefresh');
       this.getItems(true);
     },
     getItems(isRefresh) {
       if (isRefresh === true) {
-        this.list.splice(0, this.list.length);
+        this.finished = true;
+        // this.list.splice(0, this.list.length);
         this.page = 1;
       }
 
@@ -209,11 +214,20 @@ export default {
       }
 
       homeApi.task(data).then(r => {
-        this.refreshLoading = false;
+        this.page++;
         if (isRefresh === true) {
+          this.refreshLoading = false;
           this.list = r.lists;
         } else {
-          this.list.concat(r.lists);
+          for (var i = 0; i < r.lists.length; i++) {
+            this.list.push(r.lists[i]);
+          }
+          this.loading = false;
+        }
+        if (r.lists.length === 0) {
+          this.finished = true;
+        } else {
+          this.finished = false;
         }
       });
     },
@@ -333,8 +347,8 @@ export default {
     padding: 0 6px;
   }
 
-  .van-pull-refresh {
-    min-height: calc(100vh - 358px);
+  .van-list,.van-pull-refresh {
+     min-height: calc(100vh - 358px);
   }
 
   .scroll {
