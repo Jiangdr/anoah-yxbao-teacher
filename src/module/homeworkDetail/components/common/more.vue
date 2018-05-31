@@ -55,8 +55,8 @@ export default {
     },
     content() {
       this.$router.push({
-        name: 'homeworkContent',
-        params: {'info': this.info, 'list': this.list}
+        path: '/homeworkContent',
+        query: {'info': this.info, 'list': this.list}
       })
       this.togglePopup();
     },

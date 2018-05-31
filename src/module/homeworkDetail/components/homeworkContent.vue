@@ -24,8 +24,8 @@ export default {
   name: "homeworkContent",
   data() {
     return {
-      info: this.$route.params.info,
-      list: this.$route.params.list
+      info: this.$route.query.info,
+      list: this.$route.query.list
     }
   },
   methods: {
