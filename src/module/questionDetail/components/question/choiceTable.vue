@@ -22,13 +22,12 @@
         </span>
       </div>
     </div>
-    <student-list :title="popupTitle" :list="popupList" @toggleAllCorrec="toggleAllCorrec" v-if="showAllCorrec"></student-list>
+    <!-- <student-list :title="popupTitle" :list="popupList" @toggleAllCorrec="toggleAllCorrec" v-if="showAllCorrec"></student-list> -->
   </div>
 </template>
 
 <script>
 import getStatistics from '../../axios/getQuestionStatistics.js'
-import studentList from '../common/studentList.vue'
 // import {mapState} from 'vuex'
 export default {
   name: 'wanxing',
@@ -88,7 +87,6 @@ export default {
     }
   },
   components: {
-    studentList
   }
 }
 </script>
