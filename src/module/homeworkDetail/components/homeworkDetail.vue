@@ -89,7 +89,7 @@
               </van-col>
               <van-col span="9">{{homeworkInfo.unfinished_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isUrge">
-                <p @click="toggleUrge" :class="{disable:finishCounter===0}">催交作业</p>
+                <p @click="toggleUrge" :class="{disable:finishCounter===0 || homeworkInfo.unfinished_counter===0}">催交作业</p>
               </van-col>
               <van-col span="6" class="btn" v-if="!isUrge">
                 <p class="disable">今日已提醒</p>
@@ -101,7 +101,7 @@
               </van-col>
               <van-col span="9">{{homeworkInfo.unretyr_counter}}人</van-col>
               <van-col span="6" class="btn" v-if="isRemind">
-                <p @click="toggleRemind" :class="{disable:finishCounter===0}">提醒订正</p>
+                <p @click="toggleRemind" :class="{disable:finishCounter===0 || homeworkInfo.unretyr_counter===0}">提醒订正</p>
               </van-col>
               <van-col span="6" class="btn" v-if="!isRemind">
                 <p class="disable">今日已提醒</p>
