@@ -24,7 +24,7 @@
         <div class="unit-tab-class" @click="clickTerm(3)" v-bind:class="{cubebtnactive: activeTermId === 3}">全册</div>
       </div>
 
-      <div class="list-container">
+          <van-pull-refresh class="list-container" v-model="pullRefresIsLoading" @refresh="onRefresh">
             <van-list v-model="loading" loading-text="加载中。。。" :finished="finished" @load="loadMore" :offset="100" :immediate-check="false">
               <div class="text-book" v-for="(textBook, index) in textBookList" :key="index" @click="clickTextBook(textBook)"
             v-bind:class="{activerighttabclass: chooseTextbookId === textBook.edu_book_id}">{{textBook.name}}</div>
@@ -32,7 +32,7 @@
           <div v-if="textBookList.length==0" class="text-font">
             暂无内容
           </div>
-      </div>
+          </van-pull-refresh>
     </div>
     <div class="footer-container div-center">
       <div class="yx-green-btn" :outline="true" @click="goSummerHomework">确认</div>
@@ -52,6 +52,8 @@ export default {
       loading: false,
       finished: false,
       noMore: false,
+      pullRefresIsLoading: false,
+      pullRefresh: false,
       activeTermId: 1,
       textBookList: [],
       gradeLists: [],
@@ -100,6 +102,11 @@ export default {
       this.reset();
       this.getTextBookLists();
     },
+    onRefresh() {
+      this.page = 0;
+      this.pullRefresh = true;
+      this.getTextBookLists();
+    },
     loadMore() {
       if (this.noMore) {
         this.finished = true;
@@ -135,15 +142,24 @@ export default {
       };
       api.getBookLists(data).then(
         success => {
+          self.pullRefresIsLoading = false;
           self.loading = false;
+          if (self.pullRefresh) {
+            self.textBookList.length = 0;
+          }
           if (success.lists.length < 1) {
             self.noMore = true;
           } else {
             self.textBookList = self.textBookList.concat(success.lists);
+            self.noMore = false;
           }
+          self.pullRefresh = false;
         },
         err => {
           console.log(err);
+          self.pullRefresh = false;
+          self.pullRefresIsLoading = false;
+          self.loading = false;
           self.$toast("网络异常");
         }
       );
