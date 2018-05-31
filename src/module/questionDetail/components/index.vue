@@ -114,7 +114,6 @@ export default {
     }),
     // 根据资源创建所需数据结构和swiper视图
     renderView() {
-      
       let resource = this.resource
       for (let i = 0; i < resource.length; i++) {
         this.renderResource.push({})
