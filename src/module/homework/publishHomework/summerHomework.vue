@@ -232,7 +232,7 @@ export default {
       return isContain;
     },
     clickTiltleName(item) {
-      this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.qti_ids);
+      this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.rids);
       this.$router.push({
         path: "/examExercise"
       });
