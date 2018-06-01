@@ -6,14 +6,19 @@
   </header-bar>
   <div class="swiper-container" :class="{scroll: params && judgeQtiType(resource[currentIndex - 1])}">
     <div class="swiper-wrapper" style="100%">
-      <div class="swiper-slide" v-for="(item, index) in renderResource" :key="index">
+      <!-- 批改 -->
+      <div class="swiper-slide" v-if="params.type === 1" v-for="(item, index) in renderResource" :key="index">
         <answer-column :params="item" v-if="item.qti_question_type_id == 1 || item.qti_question_type_id == 2 || item.qti_question_type_id == 3 || item.qti_question_type_id == 6 || item.qti_question_type_id == 15"></answer-column>
         <choice-table :params="item" v-if="item.qti_question_type_id == 11"></choice-table>
         <correct-column :params="item" v-if="item.qti_question_type_id == 9 || item.qti_question_type_id == 21 || item.qti_question_type_id == 23 || item.qti_question_type_id == 24 || item.qti_question_type_id == 25 || item.qti_question_type_id == 26 || item.qti_question_type_id == 33"></correct-column>
         <correct-table :params="item" v-if="item.qti_question_type_id == 4 || item.qti_question_type_id == 20 || item.qti_question_type_id == 38"></correct-table>
         <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
         <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective>
-        <render-qti v-if="Object.keys(item).length" :info="item" user_id="0"></render-qti>
+        <render-qti v-if="Object.keys(item).length" :info="item"></render-qti>
+      </div>
+      <!-- 统计 -->
+      <div class="swiper-slide" v-if="params.type === 2" v-for="(item, index) in renderResource" :key="index">
+        <render-qti v-if="Object.keys(item).length" :info="item" :user_id="params.user_id"></render-qti>
       </div>
     </div>
   </div>

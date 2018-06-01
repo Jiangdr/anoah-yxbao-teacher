@@ -40,6 +40,8 @@
 <script>
 import api from '../api'
 import headerBar from '@/components/headerBar'
+import {mapMutations} from 'vuex'
+import { Toast } from 'vant'
 export default {
   name: 'StudentHomework',
   data() {
@@ -68,6 +70,10 @@ export default {
     this.getResource()
   },
   methods: {
+    ...mapMutations({
+      setAnswerParams: 'answerDetail/setParams',
+      setAnswerResource: 'answerDetail/setResource'
+    }),
     getResource() {
       this.loading = true
       api.studentHomeworkInfo({
@@ -181,7 +187,39 @@ export default {
     },
     linkTo(item) {
       if (item.is_finish === 1) {
-        this.$router.push({path: '/answerDetail'})
+        let type = this.util.judgeQuestionType(item)
+        if (type) {
+          this.setAnswerParams({
+            index: 0,
+            title: `${this.$route.params.user_name}的作业`,
+            type: 2,
+            user_id: this.$route.params.user_id
+          })
+          if (type === 'combineqti') {
+            // 套题
+            let toast = Toast.loading({
+              duration: 0,
+              forbidClick: true,
+              loadingType: 'circular',
+              message: '加载中'
+            })
+            api.getMiniResource({
+              publish_id: item.course_hour_publish_id,
+              course_resource_id: item.course_resource_id,
+              dcom_entity_id: item.dcom_entity_id
+            }).then(succ => {
+              toast.clear()
+              this.setAnswerResource(succ)
+              this.$router.push({path: '/answerDetail'})
+            })
+          } else {
+            // 单题
+            this.setAnswerResource([item])
+            this.$router.push({path: '/answerDetail'})
+          }
+        } else {
+          Toast.fail('暂不支持该类型组件查看');
+        }
       }
     }
   },
