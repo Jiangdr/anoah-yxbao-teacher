@@ -2,17 +2,22 @@
   <div class="cube-page cube-view button-view" @click="activeItem = 0">
 
     <header class="header">
-      <i class="cubeic-back" @click="goHome">
+      <i class="cubeic-back" @click="goHome" v-show="!isSearching">
         <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text"></span>
       </i>
       <h1 v-show="!isSearching">作业</h1>
-      <h1 v-show="isSearching" style="margin:0 auto;width: 80%;">
-        <van-field icon="clear" @click-icon="inputValue = ''" v-model="inputValue" autofocus v-on:keypress.enter="getHomeworkList" placeholder="请输入..." />
-      </h1>
-      <div class="search-btn-div" @click="clickSearchBtn" :class="{'active': activeItem === 9}">
-        <img src="@/assets/images/homework/search.png" class="search-icon" v-show="!isSearching"/>
-        <span v-show="isSearching">取消</span>
+      <div v-show="!isSearching" class="search-btn-div" @click="clickSearchBtn" :class="{'active': activeItem === 9}">
+        <img src="@/assets/images/homework/search.png" class="search-icon"/>
       </div>
+      <h1 v-show="isSearching" style="text-align: left;">
+        <div class="search-input-div">
+          <van-field type="search" @click-icon="inputValue = ''" v-model="inputValue" autofocus v-on:keypress.enter="getHomeworkList" placeholder="请输入..." />
+        </div>
+        <img src="@/assets/images/homework/search.png" class="search-little-icon"/>
+        <div class="search-hr"></div>
+        <span class="search-btn">搜索</span>
+        <span class="cancel-btn">取消</span>
+      </h1>
     </header>
 
     <div class="select-container">
@@ -44,13 +49,13 @@
       </span>
       <span class="select-span" :class="{'active': activeItem === 4}">
         <div class="select-span-div" @click.stop="clickMore">更多&thinsp;<i class="fa"  :class="{'fa-angle-up':activeItem === 4,'fa-angle-down':activeItem !== 4}"></i></div>
-        <div class="panelbar-list" :style="{height:teacherBooks.length>7?'83vw':11.73333*(teacherBooks.length+1)+'vw',overflow:'hidden'}">
+        <div class="panelbar-list" :style="{height:teacherBooks.length>7?(12*8)+'vw':(12*(teacherBooks.length+1))+'vw',overflow:'hidden'}">
           <div class="panelbar-item" style="border-bottom: 1px solid #ededf0;">
             <span :class="{'cur':markStatus === 0}" @click.stop="chooseItem($event, 'mark', 0)">全部</span>
             <span :class="{'cur':markStatus === 1}" @click.stop="chooseItem($event, 'mark', 1)">已收藏</span>
             <span :class="{'cur':markStatus === 2}" @click.stop="chooseItem($event, 'mark', 2)">未收藏</span>
           </div>
-          <ul class="book-list" :style="{height:teacherBooks.length>12?11.73333*12+'vw':11.73333*teacherBooks.length+'vw'}">
+          <ul class="book-list" :style="{height:teacherBooks.length>7?(12*7)+'vw':(12*teacherBooks.length)+'vw'}">
             <li class="panelbar-item" v-for="(bookItem, index) in teacherBooks" :key="index" :class="{'cur':bookActiveID===bookItem.edu_book_id}" @click.stop="chooseItem($event, 'book', bookItem.edu_book_id)">{{bookItem.name}}</li>
             <div style="clear:both;"></div>
           </ul>
@@ -150,21 +155,22 @@ export default {
     var yNow = nowdate.getFullYear();
     var mNow = nowdate.getMonth() + 1;
     var dNow = nowdate.getDate();
-    var formatnowdate = yNow + "-" + mNow + "-" + dNow;
+    var formatnowdate = yNow + "-" + mNow + "-" + dNow + " 24:00:00";
 
     // 获取系统前一周的时间
     var oneweekdate = new Date(nowdate - 7 * 24 * 3600 * 1000);
     var yWeek = oneweekdate.getFullYear();
     var mWeek = oneweekdate.getMonth() + 1;
     var dWeek = oneweekdate.getDate();
-    var formatWeekdate = yWeek + "-" + mWeek + "-" + dWeek;
+    var formatWeekdate = yWeek + "-" + mWeek + "-" + dWeek + " 00:00:00";
 
     // 获取系统前一个月的时间
     nowdate.setMonth(nowdate.getMonth() - 1);
     var yOneMonth = nowdate.getFullYear();
     var mOneMonth = nowdate.getMonth() + 1;
     var dOneMonth = nowdate.getDate();
-    var formatOneMonthdate = yOneMonth + "-" + mOneMonth + "-" + dOneMonth;
+    var formatOneMonthdate =
+      yOneMonth + "-" + mOneMonth + "-" + dOneMonth + " 00:00:00";
     this.columnsOfTime = [
       {
         text: "全部",
@@ -296,19 +302,26 @@ export default {
     },
     clickSearchBtn() {
       this.isSearching = !this.isSearching;
-      if (this.isSearching) {
-        this.activeItem = 9;
-      }
     },
     onConfirmTimePopup(value, index) {
       this.timeActiveID = 3;
       this.showTimePopup = false;
       let d = new Date(value);
       this.chooseTime.from =
-        d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+        d.getFullYear() +
+        "-" +
+        (d.getMonth() + 1) +
+        "-" +
+        d.getDate() +
+        " 00:00:00";
       let t = new Date();
       this.chooseTime.to =
-        t.getFullYear() + "-" + (t.getMonth() + 1) + "-" + t.getDate();
+        t.getFullYear() +
+        "-" +
+        (t.getMonth() + 1) +
+        "-" +
+        t.getDate() +
+        " 24:00:00";
       this.onRefresh();
     },
     onCancelTimePopup() {
@@ -529,13 +542,58 @@ export default {
   font-size: 16px;
   padding-top: 10px;
 }
-.search-btn-div{
-  position: absolute; right: 10px; top: 0; height: 45px;
+.search-btn-div {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  height: 45px;
   line-height: 45px;
 }
-.search-icon{
-  width: calc(#{$header-height}/2);
-  height: calc(#{$header-height}/2);
+.search-input-div {
+  border: $border-state;
+  border-radius: 10px;
+  display: inline-block;
+  padding: 1vw 12vw 1vw 7vw;
+  position: relative;
+  left: 2.66667vw;
+  width: 65%;
+  top: -0.5vw;
+  input[type="search"]::-webkit-search-cancel-button {
+    display: none;
+  }
+  .van-cell {
+    padding: 0vw;
+  }
+}
+.search-hr {
+  height: calc(#{$header-height} - 3.3vw);
+  position: absolute;
+  right: 25%;
+  top: 1.65vw;
+  margin: 0px;
+  border-left: 1px solid #ededf0;
+}
+.search-btn {
+  font-size: 16px;
+  position: absolute;
+  right: 15%;
+  padding-left: 1%;
+}
+.cancel-btn {
+  font-size: 16px;
+  float: right;
+  padding-right: 2.66667vw;
+}
+.search-little-icon {
+  width: calc(#{$header-height}/ 3);
+  height: calc(#{$header-height}/ 3);
+  position: absolute;
+  left: 4vw;
+  top: 3.5vw;
+}
+.search-icon {
+  width: calc(#{$header-height}/ 2);
+  height: calc(#{$header-height}/ 2);
   padding-top: 3vw;
 }
 .mark-icon {

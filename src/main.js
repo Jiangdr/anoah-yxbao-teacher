@@ -26,7 +26,7 @@ import util from '@/utils/index.js'
 import dayjs from 'dayjs';
 
 import Axios from 'axios';
-import mqtt from '../lib/mqttws31.js'
+import '../lib/mqttws31.js'
 
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts'

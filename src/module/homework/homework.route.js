@@ -15,8 +15,6 @@ import correctTheSubject from './correctTheSubject/correctTheSubject.vue'
 // 切换学生页面
 import switchStudent from './switchStudent/switchStudent.vue'
 
-import shareClasses from './shareClasses/shareClasses.vue'
-
 let homeworkRoutes = [{
   path: '/homework',
   component: homework
@@ -44,9 +42,6 @@ let homeworkRoutes = [{
 }, {
   path: '/switchStudent',
   component: switchStudent
-}, {
-  path: '/shareClasses',
-  component: shareClasses
 }];
 
 export default homeworkRoutes;
