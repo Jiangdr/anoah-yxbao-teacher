@@ -1,13 +1,22 @@
 export default {
   namespaced: true,
   state: {
-    resource: []
+    resource: [],
+    params: null
   },
   getters: {
   },
   mutations: {
+    setParams: (state, payload) => {
+      state.params = payload
+    },
+    clearParams: state => {
+      state.params = null
+    },
+    setParamsIndex: (state, payload) => {
+      state.params.index = payload
+    },
     setResource: (state, payload) => {
-      console.log('payload', payload)
       state.resource = payload
     },
     clearResource: state => {

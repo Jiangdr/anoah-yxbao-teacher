@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="avatar-wrapper">
-        <div class="avatar-item" v-for="(item, index) in list" :key="index">
+        <div class="avatar-item" v-for="(item, index) in list" :key="index" @click="chooseStu(item)">
           <img class="avatar" :src="item.avatar" alt="">
           <div class="user-name ellipsis">{{item.real_name}}</div>
         </div>
@@ -44,6 +44,9 @@ export default {
   methods: {
     close() {
       window.bus.$emit('closeStudentList')
+    },
+    chooseStu(item) {
+      window.bus.$emit('chooseStu', item)
     }
   }
 }

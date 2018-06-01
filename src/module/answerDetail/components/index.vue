@@ -1,24 +1,24 @@
 <template>
 <div id="question-detail" style="height:100%">
   <header-bar @back="goBack">
-    <div slot="title-name">{{routePrams && routePrams.title || '标题需要传入'}}({{currectIndex}}/{{qtiCount}})</div>
-    <div slot="right-area" v-if="routePrams && routePrams.type === 2">原题</div>
+    <div slot="title-name">{{params && params.title || '标题需要传入'}}({{currectIndex}}/{{qtiCount}})</div>
+    <div slot="right-area" v-if="params && params.type === 2">原题</div>
   </header-bar>
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
+  <div class="swiper-container" :class="{scroll: params && judgeQtiType(resource[currentIndex - 1])}">
+    <div class="swiper-wrapper" style="100%">
       <div class="swiper-slide" v-for="(item, index) in renderResource" :key="index">
         <answer-column :params="item" v-if="item.qti_question_type_id == 1 || item.qti_question_type_id == 2 || item.qti_question_type_id == 3 || item.qti_question_type_id == 6 || item.qti_question_type_id == 15"></answer-column>
         <choice-table :params="item" v-if="item.qti_question_type_id == 11"></choice-table>
-        <correct-column :params="item" v-if="item.qti_question_type_id == 9 || item.qti_question_type_id == 21 || item.qti_question_type_id == 23 || item.qti_question_type_id == 24 || item.qti_question_type_id == 25 || item.qti_question_type_id == 26"></correct-column>
-        <correct-table :params="item" v-if="item.qti_question_type_id == 4 || item.qti_question_type_id == 20"></correct-table>
+        <correct-column :params="item" v-if="item.qti_question_type_id == 9 || item.qti_question_type_id == 21 || item.qti_question_type_id == 23 || item.qti_question_type_id == 24 || item.qti_question_type_id == 25 || item.qti_question_type_id == 26 || item.qti_question_type_id == 33"></correct-column>
+        <correct-table :params="item" v-if="item.qti_question_type_id == 4 || item.qti_question_type_id == 20 || item.qti_question_type_id == 38"></correct-table>
         <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
         <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective>
-        <render-qti v-if="Object.keys(item).length" :info="item" :id="item.source_pk_id + ''" :icom_id="item.icom_id" :dcom_id="item.source_pk_id" user_id="0" :setting="setting"></render-qti>
-        <div class="subjective-button van-hairline--top" v-if="judgeQtiType(item)">
-          <span @click="subjectiveQtiPigai(item)">查看详情</span>
-        </div>
+        <render-qti v-if="Object.keys(item).length" :info="item" user_id="0"></render-qti>
       </div>
     </div>
+  </div>
+  <div class="subjective-button van-hairline--top" v-if="params && judgeQtiType(resource[currentIndex - 1])">
+    <span @click="subjectiveQtiPigai(resource[currentIndex - 1])">查看详情</span>
   </div>
   <student-list v-if="showStudentList" :title="studentListTitle" :studentList="studentList"></student-list>
 </div>
@@ -47,9 +47,7 @@ export default {
       showStudentList: false,
       studentListTitle: '',
       studentList: [],
-      currectIndex: 0,
       qtiCount: 0,
-      // swiper参数
       mySwiper: null
     }
   },
@@ -62,48 +60,46 @@ export default {
     window.bus.$on('closeStudentList', () => {
       this.showStudentList = false
     })
+    window.bus.$on('chooseStu', (info) => {
+      this.goToStuAnswer(info)
+    })
     this.renderView()
   },
   computed: {
     ...mapState({
-      'resource': state => state.answerDetail.resource
+      'resource': state => state.answerDetail.resource,
+      'params': state => state.answerDetail.params
     }),
-    setting: {
+    currentIndex: {
       get() {
-        return {
-          'smt': 'no_self_smt',
-          'publish_id': this.resource[this.routePrams.index].course_hour_publish_id,
-          'course_resource_id': this.resource[this.routePrams.index].course_resource_id,
-          'caller': 'ICLASS',
-          'dcom_entity_id': this.resource[this.routePrams.index].dcom_entity_id,
-          'titleflag': 1
-        }
+        return this.params.index + 1
       },
       set(val) {
-        return val
+        this.setParamsIndex(val)
       }
-    },
-    routePrams() {
-      return this.$route.params.params
     }
   },
   methods: {
     ...mapMutations({
-      clearResource: 'answerDetail/clearResource'
+      clearResource: 'answerDetail/clearResource',
+      clearParams: 'answerDetail/clearParams',
+      setParamsIndex: 'answerDetail/setParamsIndex'
     }),
     // 根据资源创建所需数据结构和swiper视图
     renderView() {
+      if (this.mySwiper) {
+        return false
+      }
       let resource = this.resource
       for (let i = 0; i < resource.length; i++) {
         this.renderResource.push({})
       }
       this.qtiCount = this.renderResource.length
-      this.currectIndex = this.routePrams.index + 1
-      this.renderResource[this.routePrams.index] = this.resource[this.routePrams.index]
+      this.currectIndex = this.params.index + 1
+      this.renderResource[this.params.index] = this.resource[this.params.index]
       this.$nextTick(() => {
         this.mySwiper = new this.Swiper('.swiper-container', {
           init: false,
-          autoHeight: true,
           observer: true, // 修改swiper自己或子元素时，自动初始化swiper
           observeParents: true, // 修改swiper的父元素时，自动初始化swiper
           on: {
@@ -118,14 +114,16 @@ export default {
           start: 'touchstart'
         }
         this.mySwiper.init()
-        this.mySwiper.slideTo(this.routePrams.index, 0)
+        this.mySwiper.slideTo(this.params.index, 0)
       })
     },
     goBack() {
       this.renderResource = []
       this.clearResource()
+      this.clearParams()
       this.mySwiper.destroy()
-      this.$router.go(-1)
+      this.mySwiper = null
+      this.$router.back(-1)
     },
     linkTo() {
       this.$router.push({path: '/originalQuestion/0'})
@@ -133,15 +131,11 @@ export default {
     slideEnd() {
       Vue.set(this.renderResource, this.mySwiper.activeIndex, this.resource[this.mySwiper.activeIndex])
       this.currectIndex = this.mySwiper.activeIndex + 1
-      this.setting = {
-        'smt': 'no_self_smt',
-        'publish_id': this.resource[this.mySwiper.activeIndex].course_hour_publish_id,
-        'course_resource_id': this.resource[this.mySwiper.activeIndex].course_resource_id,
-        'caller': 'ICLASS',
-        'dcom_entity_id': this.resource[this.mySwiper.activeIndex].dcom_entity_id,
-        'titleflag': 1
+      if (this.mySwiper.swipeDirection === 'prev') {
+        this.$el.querySelectorAll('.swiper-slide')[this.mySwiper.activeIndex + 1].scrollTop = 0 + 'px'
+      } else {
+        this.$el.querySelectorAll('.swiper-slide')[this.mySwiper.activeIndex - 1].scrollTop = 0 + 'px'
       }
-      this.$el.querySelector('.swiper-container').scrollTop = 0 + 'px'
     },
     judgeQtiType() {
       let type = this.util.judgeQuestionType(this.resource[this.currectIndex - 1])
@@ -157,6 +151,19 @@ export default {
         name: "correctTheSubject",
         params: {
           detailData: item
+        }
+      })
+    },
+    // 跳转学生答案情况
+    goToStuAnswer(info) {
+      let questionInfo = this.renderResource[this.mySwiper.activeIndex]
+      questionInfo.resource_name = ''
+      this.$router.push({
+        path: `/originalQuestion`,
+        query: {
+          user_id: info.userid,
+          question_info: JSON.stringify(questionInfo),
+          title: info.real_name
         }
       })
     }
@@ -183,26 +190,35 @@ export default {
   .swiper-container{
     height: calc(100% - 45px);
     overflow: hidden;
-    .swiper-slide{
+    &.scroll{
+      height: calc(100% - 45px - 50px);
+    }
+    .swiper-wrapper{
       height: 100%;
-      overflow-y: scroll;
-      .subjective-button{
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        z-index: 1;
-        width: 100%;
-        height: 50px;
-        text-align: center;
-        line-height: 50px;
-        background-color: #fff;
-        span{
-          padding: 8px 50px;
-          background-color: #34c988;
-          color: #fff;
-          border-radius: 10px;
+      .swiper-slide{
+        height: 100%;
+        overflow-y: scroll;
+        &.scroll{
+          height: calc(100% - 50px);
         }
       }
+    }
+  }
+  .subjective-button{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    background-color: #fff;
+    span{
+      padding: 8px 50px;
+      background-color: #34c988;
+      color: #fff;
+      border-radius: 10px;
     }
   }
 }
