@@ -215,6 +215,7 @@ export default {
           } else {
             // 单题
             this.setAnswerResource([item])
+            this.$router.push({path: '/answerDetail'})
           }
         } else {
           Toast.fail('暂不支持该类型组件查看');
