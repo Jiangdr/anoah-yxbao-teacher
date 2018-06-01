@@ -1,12 +1,12 @@
 <template>
 <div id="question-detail" style="height:100%">
   <header-bar @back="goBack">
-    <div slot="title-name">{{routePrams && routePrams.title || '标题需要传入'}}({{currectIndex}}/{{qtiCount}})</div>
-    <div slot="right-area" v-if="routePrams && routePrams.type === 2">原题</div>
+    <div slot="title-name">{{params && params.title || '标题需要传入'}}({{currectIndex}}/{{qtiCount}})</div>
+    <div slot="right-area" v-if="params && params.type === 2">原题</div>
   </header-bar>
   <div class="swiper-container">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" v-for="(item, index) in renderResource" :key="index">
+      <div class="swiper-slide" v-for="(item, index) in renderResource" :key="index" @scroll="slideScroll">
         <answer-column :params="item" v-if="item.qti_question_type_id == 1 || item.qti_question_type_id == 2 || item.qti_question_type_id == 3 || item.qti_question_type_id == 6 || item.qti_question_type_id == 15"></answer-column>
         <choice-table :params="item" v-if="item.qti_question_type_id == 11"></choice-table>
         <correct-column :params="item" v-if="item.qti_question_type_id == 9 || item.qti_question_type_id == 21 || item.qti_question_type_id == 23 || item.qti_question_type_id == 24 || item.qti_question_type_id == 25 || item.qti_question_type_id == 26"></correct-column>
@@ -14,11 +14,11 @@
         <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
         <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective>
         <render-qti v-if="Object.keys(item).length" :info="item" :id="item.source_pk_id + ''" :icom_id="item.icom_id" :dcom_id="item.source_pk_id" user_id="0" :setting="setting"></render-qti>
-        <div class="subjective-button van-hairline--top" v-if="judgeQtiType(item)">
-          <span @click="subjectiveQtiPigai(item)">查看详情</span>
-        </div>
       </div>
     </div>
+  </div>
+  <div class="subjective-button van-hairline--top" v-if="params && judgeQtiType(resource[currentIndex - 1])">
+    <span @click="subjectiveQtiPigai(resource[currentIndex - 1])">查看详情</span>
   </div>
   <student-list v-if="showStudentList" :title="studentListTitle" :studentList="studentList"></student-list>
 </div>
@@ -47,9 +47,7 @@ export default {
       showStudentList: false,
       studentListTitle: '',
       studentList: [],
-      currectIndex: 0,
       qtiCount: 0,
-      // swiper参数
       mySwiper: null
     }
   },
@@ -66,30 +64,38 @@ export default {
   },
   computed: {
     ...mapState({
-      'resource': state => state.answerDetail.resource
+      'resource': state => state.answerDetail.resource,
+      'params': state => state.answerDetail.params
     }),
+    currentIndex: {
+      get() {
+        return this.params.index + 1
+      },
+      set(val) {
+        this.setParamsIndex(val)
+      }
+    },
     setting: {
       get() {
         return {
           'smt': 'no_self_smt',
-          'publish_id': this.resource[this.routePrams.index].course_hour_publish_id,
-          'course_resource_id': this.resource[this.routePrams.index].course_resource_id,
+          'publish_id': this.resource[this.params.index].course_hour_publish_id,
+          'course_resource_id': this.resource[this.params.index].course_resource_id,
           'caller': 'ICLASS',
-          'dcom_entity_id': this.resource[this.routePrams.index].dcom_entity_id,
+          'dcom_entity_id': this.resource[this.params.index].dcom_entity_id,
           'titleflag': 1
         }
       },
       set(val) {
         return val
       }
-    },
-    routePrams() {
-      return this.$route.params.params
     }
   },
   methods: {
     ...mapMutations({
-      clearResource: 'answerDetail/clearResource'
+      clearResource: 'answerDetail/clearResource',
+      clearParams: 'answerDetail/clearParams',
+      setParamsIndex: 'answerDetail/setParamsIndex'
     }),
     // 根据资源创建所需数据结构和swiper视图
     renderView() {
@@ -98,8 +104,8 @@ export default {
         this.renderResource.push({})
       }
       this.qtiCount = this.renderResource.length
-      this.currectIndex = this.routePrams.index + 1
-      this.renderResource[this.routePrams.index] = this.resource[this.routePrams.index]
+      this.currectIndex = this.params.index + 1
+      this.renderResource[this.params.index] = this.resource[this.params.index]
       this.$nextTick(() => {
         this.mySwiper = new this.Swiper('.swiper-container', {
           init: false,
@@ -118,14 +124,15 @@ export default {
           start: 'touchstart'
         }
         this.mySwiper.init()
-        this.mySwiper.slideTo(this.routePrams.index, 0)
+        this.mySwiper.slideTo(this.params.index, 0)
       })
     },
     goBack() {
       this.renderResource = []
       this.clearResource()
+      this.clearParams()
       this.mySwiper.destroy()
-      this.$router.go(-1)
+      this.$router.back(-1)
     },
     linkTo() {
       this.$router.push({path: '/originalQuestion/0'})
@@ -154,6 +161,9 @@ export default {
     // 主观题批改
     subjectiveQtiPigai(item) {
       console.log(item)
+    },
+    slideScroll(e) {
+      // console.log(e)
     }
   },
   components: {
@@ -181,23 +191,23 @@ export default {
     .swiper-slide{
       height: 100%;
       overflow-y: scroll;
-      .subjective-button{
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        z-index: 1;
-        width: 100%;
-        height: 50px;
-        text-align: center;
-        line-height: 50px;
-        background-color: #fff;
-        span{
-          padding: 8px 50px;
-          background-color: #34c988;
-          color: #fff;
-          border-radius: 10px;
-        }
-      }
+    }
+  }
+  .subjective-button{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    background-color: #fff;
+    span{
+      padding: 8px 50px;
+      background-color: #34c988;
+      color: #fff;
+      border-radius: 10px;
     }
   }
 }

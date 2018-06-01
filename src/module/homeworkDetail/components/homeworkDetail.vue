@@ -196,7 +196,8 @@ export default {
     ...mapActions({
     }),
     ...mapMutations({
-      setResource: 'answerDetail/setResource'
+      setResource: 'answerDetail/setResource',
+      setParams: 'answerDetail/setParams'
     }),
     getResource() {
       this.$emit('getresource');
@@ -313,15 +314,13 @@ export default {
         }
       } else {
         this.setResource([curr])
+        this.setParams({
+          type: 1,
+          index: index,
+          title: '批阅作业'
+        })
         this.$router.push({
-          name: 'answerDetail',
-          params: {
-            params: {
-              type: 1,
-              index: index,
-              title: '批阅作业'
-            }
-          }
+          name: 'answerDetail'
         })
       }
     },
@@ -339,15 +338,13 @@ export default {
       // 当前资源在小资源中的index
       this.$store.commit("homeworkDetail/changIndex", key);
       this.setResource(this.miniResource[index])
+      this.setParams({
+        type: 1,
+        index: key,
+        title: '批阅作业'
+      })
       this.$router.push({
-        name: "answerDetail",
-        params: {
-          params: {
-            type: 1,
-            index: key,
-            title: '批阅作业'
-          }
-        }
+        name: "answerDetail"
       });
     },
 

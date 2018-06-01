@@ -21,7 +21,7 @@ export default
 [
   {
     name: 'answerDetail',
-    path: '/answerDetail/:params',
+    path: '/answerDetail',
     meta: { requiresAuth: false, keepAlive: true },
     component: answerDetail,
     children: [
