@@ -8,6 +8,7 @@ import homeworkStore from '@/module/homework/store/homework.js'
 import batchEvaluateStore from '@/module/batchEvaluate/store/batchEvaluate.js'
 import homeworkDetailStore from '@/module/homeworkDetail/store/detail.js'
 import answerDetailStore from '@/module/answerDetail/store/index'
+import noticeStore from '@/module/notice/store/notice.js'
 
 Vue.use(Vuex)
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     homework: homeworkStore,
     batchEvaluate: batchEvaluateStore,
     homeworkDetail: homeworkDetailStore, // 作业详情
-    answerDetail: answerDetailStore // 批改、查看统计
+    answerDetail: answerDetailStore, // 批改、查看统计
+    notice: noticeStore
   }
 })

@@ -31,6 +31,8 @@ export default {
   },
   methods: {
     back() {
+      // 返回后清除session
+      stroage['session'].remove('contentinfo')
       this.$router.back(-1)
     },
     examExercise(index) {
@@ -40,7 +42,7 @@ export default {
             name: "examExercise",
             params: {
               title: this.list[index].resource_name,
-              rids: r,
+              rids: r.list,
               ischeck: false
             }
           })

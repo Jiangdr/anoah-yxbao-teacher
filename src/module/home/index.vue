@@ -2,7 +2,7 @@
   <div class="spa">
     <div class="top">
       <div @click="message">
-        <i class="red-icon"></i>
+        <i class="red-icon" v-if="newMsg"></i>
         <i class="icon message"></i>
       </div>
       <div @click="showPopup =true">
@@ -83,8 +83,9 @@
 import footerBar from '@/components/footerBar'
 import api from '@/axios/iclass'
 import homeApi from '@/module/home/axios/home'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { Dialog } from 'vant'
+import mqtt from '@/utils/LMQqtt.js'
 export default {
   name: 'Home',
   data() {
@@ -107,16 +108,22 @@ export default {
   computed: {
     ...mapGetters({
       userId: 'userCenter/userId'
+    }),
+    ...mapState({
+      'newMsg': state => state.notice.newMsg
     })
   },
   created() {
+    console.log(mqtt)
     this.onRefresh();
+    mqtt.connect();
   },
   methods: {
     imgUrl(name) {
       return require('@/assets/images/homeworkDetail/' + name + '.png')
     },
     message() {
+      this.$store.commit('notice/setMsg', false)
       this.$router.push({
         name: 'notice',
         params: { role: 'teacher' }

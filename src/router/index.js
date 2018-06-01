@@ -31,7 +31,7 @@ let routes = [
     path: '/',
     name: 'Home',
     component: home,
-    meta: { requiresAuth: true, keepAlive: false }
+    meta: { requiresAuth: true, keepAlive: true }
   },
   {
     path: '/list',
