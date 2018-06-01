@@ -122,6 +122,7 @@ export default {
       this.clearResource()
       this.clearParams()
       this.mySwiper.destroy()
+      this.mySwiper = null
       this.$router.back(-1)
     },
     linkTo() {
