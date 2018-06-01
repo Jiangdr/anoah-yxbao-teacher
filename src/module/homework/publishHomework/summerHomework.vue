@@ -213,6 +213,7 @@ export default {
               }
               self.lists.push(element);
             });
+            console.log(self.lists)
           }
         },
         err => {
@@ -232,7 +233,7 @@ export default {
       return isContain;
     },
     clickTiltleName(item) {
-      this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.rids);
+      this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.qti_ids);
       this.$router.push({
         path: "/examExercise"
       });
