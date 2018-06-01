@@ -11,12 +11,15 @@
       </div>
       <h1 v-show="isSearching" style="text-align: left;">
         <div class="search-input-div">
-          <van-field type="search" @click-icon="inputValue = ''" v-model="inputValue" autofocus v-on:keypress.enter="getHomeworkList" placeholder="请输入..." />
+          <form method="post" @submit.prevent="searchAction" action="javascript:return true;">
+              <van-field type="search" v-model="inputValue" v-to-focus="isSearching" v-on:keypress.enter="searchAction" placeholder="请输入..." />
+          </form>
+
         </div>
         <img src="@/assets/images/homework/search.png" class="search-little-icon"/>
         <div class="search-hr"></div>
-        <span class="search-btn">搜索</span>
-        <span class="cancel-btn">取消</span>
+        <span class="search-btn" @click="searchAction">搜索</span>
+        <span class="cancel-btn" @click="cancelAction">取消</span>
       </h1>
     </header>
 
@@ -99,8 +102,9 @@
           </div>
         </van-list>
 
-        <div v-if="homeworkListArray.length === 0" style="height: 200px;line-height: 200px;text-align: center;">
-          没有数据
+        <div v-if="homeworkListArray.length === 0" class="tip-div">
+          <img src="@/assets/images/homework/tip-head.png"/>
+          <div><p class="tip-bold-p">暂无作业~</p><p>快去布置作业吧</p><p>布置后您可以在这里看到实时统计</p></div>
         </div>
       </van-pull-refresh>
     <!-- </div> -->
@@ -109,8 +113,8 @@
       <van-datetime-picker type="year-month" :min-date="minDate" :max-date="currentDate" @cancel="onCancelTimePopup" @confirm="onConfirmTimePopup"/>
     </van-popup>
 
-    <div class="publishHomeworkBtnDiv" @click="goChooseTextbook">
-      <div class="publishHomeworkBtn">
+    <div class="publish-homework-btn-div" @click="goChooseTextbook">
+      <div class="publish-homework-btn">
         <div>布置<br/>作业</div>
       </div>
     </div>
@@ -147,8 +151,14 @@ export default {
       countNum: 0,
       totalCountNum: 0,
       inputValue: "",
+      searchKeyword: "",
       isSearching: false
     };
+  },
+  directives: {
+    "to-focus": function(el, binding) {
+      console.log(binding);
+    }
   },
   created: function() {
     var nowdate = new Date();
@@ -300,8 +310,19 @@ export default {
     clickMore() {
       this.activeItem = 4;
     },
+    searchAction() {
+      this.searchKeyword = this.inputValue;
+      this.isSearching = false;
+      this.onRefresh();
+    },
+    cancelAction() {
+      this.searchKeyword = "";
+      this.isSearching = false;
+      this.onRefresh();
+    },
     clickSearchBtn() {
-      this.isSearching = !this.isSearching;
+      this.inputValue = "";
+      this.isSearching = true;
     },
     onConfirmTimePopup(value, index) {
       this.timeActiveID = 3;
@@ -430,7 +451,7 @@ export default {
         favorite: self.markStatus,
         edu_subject_id: self.bookActiveID,
         asc: 1,
-        keyword: self.inputValue
+        keyword: self.searchKeyword
       };
 
       api.homeworkLists(data).then(
@@ -447,6 +468,7 @@ export default {
             var yesterday = new Date();
             yesterday.setTime(nowD.getTime() - 24 * 60 * 60 * 1000);
             success.lists.forEach(element => {
+              element.create_time = element.create_time.split(" ")[0];
               let d = new Date(element.create_time);
               if (
                 self.timeClassify.indexOf(
@@ -553,16 +575,33 @@ export default {
   border: $border-state;
   border-radius: 10px;
   display: inline-block;
-  padding: 1vw 12vw 1vw 7vw;
+  padding: 1vw 13vw 1vw 7vw;
   position: relative;
   left: 2.66667vw;
-  width: 65%;
+  width: 64%;
   top: -0.5vw;
   input[type="search"]::-webkit-search-cancel-button {
     display: none;
   }
   .van-cell {
     padding: 0vw;
+  }
+}
+.tip-div {
+  font-size: 16px;
+  color: #9c9ea1;
+  text-align: center;
+  img {
+    width: 236px;
+    height: 246px;
+  }
+  .tip-bold-p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+  }
+  p {
+    margin-bottom: 10px;
   }
 }
 .search-hr {
@@ -578,23 +617,30 @@ export default {
   position: absolute;
   right: 15%;
   padding-left: 1%;
+  cursor: pointer;
+}
+.search-btn:active,
+.cancel-btn:active {
+  color: $green-active-color;
 }
 .cancel-btn {
   font-size: 16px;
   float: right;
   padding-right: 2.66667vw;
+  cursor: pointer;
 }
 .search-little-icon {
   width: calc(#{$header-height}/ 3);
   height: calc(#{$header-height}/ 3);
   position: absolute;
   left: 4vw;
-  top: 3.5vw;
+  top: 4vw;
 }
 .search-icon {
   width: calc(#{$header-height}/ 2);
   height: calc(#{$header-height}/ 2);
   padding-top: 3vw;
+  cursor: pointer;
 }
 .mark-icon {
   background-color: $orange-primary-color;
@@ -739,13 +785,14 @@ export default {
   position: relative;
   box-sizing: border-box;
 }
-.publishHomeworkBtn {
+.publish-homework-btn {
+  font-size: 18px;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.publishHomeworkBtnDiv {
+.publish-homework-btn-div {
   width: 60px;
   height: 60px;
   background-color: #2ec2a9;
