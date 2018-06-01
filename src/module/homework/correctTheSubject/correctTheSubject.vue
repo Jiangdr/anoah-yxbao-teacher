@@ -49,6 +49,7 @@ export default {
     })
   },
   created: function() {
+    console.log(this.$route.params)
     this.userInfo = this.$store.state.account.userInfo;
     this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
     this.studentList = this.$store.state.homeworkDetail.homeworkInfo.student_list;
@@ -58,9 +59,7 @@ export default {
   },
   methods: {
     goHomework() {
-      this.$router.push({
-        path: "/homework"
-      });
+      this.$router.go(-1);
     },
     clickSwitchStudent() {
       this.$router.push({

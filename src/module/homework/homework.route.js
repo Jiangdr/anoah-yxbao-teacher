@@ -39,6 +39,7 @@ let homeworkRoutes = [{
   component: summerHomework
 }, {
   path: '/correctTheSubject',
+  name: "correctTheSubject",
   component: correctTheSubject
 }, {
   path: '/switchStudent',

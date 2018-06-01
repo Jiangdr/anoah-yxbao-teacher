@@ -53,6 +53,7 @@ export default {
     };
   },
   created: function() {
+    console.log(this.$route.params)
     this.userInfo = this.$store.state.account.userInfo;
   },
   mounted: function() {

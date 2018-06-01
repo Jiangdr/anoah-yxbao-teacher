@@ -1,5 +1,4 @@
 import answerDetail from '@/module/answerDetail/components/index.vue'
-import originalQuestion from '@/module/answerDetail/components/originalQuestion.vue'
 import share from '@/module/answerDetail/components/common/shareAnswer.vue'
 // 正确率表格图  例：客观填空、选词填空
 // import correctTable from '@/module/tongji/components/question/correctTable.vue'
@@ -37,12 +36,6 @@ export default
         meta: { requiresAuth: false, keepAlive: false }
       }
     ]
-  },
-  {
-    name: 'originalQuestion',
-    path: '/originalQuestion/:userid',
-    meta: { requiresAuth: false, keepAlive: true },
-    component: originalQuestion
   },
   {
     name: 'share',

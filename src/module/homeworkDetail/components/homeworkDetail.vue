@@ -235,7 +235,7 @@ export default {
     },
     // 催交作业弹出框
     toggleUrge() {
-      if (this.finishCounter === 0 || !this.isUrge) {
+      if (this.homeworkInfo.unfinished_counter === 0 || !this.isUrge) {
         return false
       }
       let params = {
@@ -254,7 +254,7 @@ export default {
     },
     // 提醒订正弹出框
     toggleRemind() {
-      if (this.finishCounter === 0 || !this.isRemind) {
+      if (this.homeworkInfo.unretyr_counter === 0 || !this.isRemind) {
         return false
       }
       let params = {
