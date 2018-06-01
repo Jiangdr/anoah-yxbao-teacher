@@ -11,9 +11,11 @@
       </div>
       <h1 v-show="isSearching" style="text-align: left;">
         <div class="search-input-div">
-          <van-field icon="clear" type="search" @click-icon="inputValue = ''" v-model="inputValue" autofocus v-on:keypress.enter="getHomeworkList" placeholder="请输入..." />
+          <van-field type="search" @click-icon="inputValue = ''" v-model="inputValue" autofocus v-on:keypress.enter="getHomeworkList" placeholder="请输入..." />
         </div>
         <img src="@/assets/images/homework/search.png" class="search-little-icon"/>
+        <div class="search-hr"></div>
+        <span class="search-btn">搜索</span>
         <span class="cancel-btn">取消</span>
       </h1>
     </header>
@@ -47,13 +49,13 @@
       </span>
       <span class="select-span" :class="{'active': activeItem === 4}">
         <div class="select-span-div" @click.stop="clickMore">更多&thinsp;<i class="fa"  :class="{'fa-angle-up':activeItem === 4,'fa-angle-down':activeItem !== 4}"></i></div>
-        <div class="panelbar-list" :style="{height:teacherBooks.length>7?'83vw':11.73333*(teacherBooks.length+1)+'vw',overflow:'hidden'}">
+        <div class="panelbar-list" :style="{height:teacherBooks.length>7?(12*8)+'vw':(12*(teacherBooks.length+1))+'vw',overflow:'hidden'}">
           <div class="panelbar-item" style="border-bottom: 1px solid #ededf0;">
             <span :class="{'cur':markStatus === 0}" @click.stop="chooseItem($event, 'mark', 0)">全部</span>
             <span :class="{'cur':markStatus === 1}" @click.stop="chooseItem($event, 'mark', 1)">已收藏</span>
             <span :class="{'cur':markStatus === 2}" @click.stop="chooseItem($event, 'mark', 2)">未收藏</span>
           </div>
-          <ul class="book-list" :style="{height:teacherBooks.length>12?11.73333*12+'vw':11.73333*teacherBooks.length+'vw'}">
+          <ul class="book-list" :style="{height:teacherBooks.length>7?(12*7)+'vw':(12*teacherBooks.length)+'vw'}">
             <li class="panelbar-item" v-for="(bookItem, index) in teacherBooks" :key="index" :class="{'cur':bookActiveID===bookItem.edu_book_id}" @click.stop="chooseItem($event, 'book', bookItem.edu_book_id)">{{bookItem.name}}</li>
             <div style="clear:both;"></div>
           </ul>
@@ -551,11 +553,31 @@ export default {
   border: $border-state;
   border-radius: 10px;
   display: inline-block;
-  padding: 1vw;
+  padding: 1vw 12vw 1vw 7vw;
   position: relative;
   left: 2.66667vw;
-  width: 82%;
+  width: 65%;
   top: -0.5vw;
+  input[type="search"]::-webkit-search-cancel-button {
+    display: none;
+  }
+  .van-cell {
+    padding: 0vw;
+  }
+}
+.search-hr {
+  height: calc(#{$header-height} - 3.3vw);
+  position: absolute;
+  right: 25%;
+  top: 1.65vw;
+  margin: 0px;
+  border-left: 1px solid #ededf0;
+}
+.search-btn {
+  font-size: 16px;
+  position: absolute;
+  right: 15%;
+  padding-left: 1%;
 }
 .cancel-btn {
   font-size: 16px;
@@ -565,7 +587,9 @@ export default {
 .search-little-icon {
   width: calc(#{$header-height}/ 3);
   height: calc(#{$header-height}/ 3);
-  padding-top: 3vw;
+  position: absolute;
+  left: 4vw;
+  top: 3.5vw;
 }
 .search-icon {
   width: calc(#{$header-height}/ 2);
