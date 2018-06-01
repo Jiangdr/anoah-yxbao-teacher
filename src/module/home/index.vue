@@ -82,10 +82,10 @@
 <script>
 import footerBar from '@/components/footerBar'
 import api from '@/axios/iclass'
+import storage from '@/store/stroage'
 import homeApi from '@/module/home/axios/home'
 import { mapGetters, mapState } from 'vuex'
 import { Dialog } from 'vant'
-import mqtt from '@/utils/LMQqtt.js'
 export default {
   name: 'Home',
   data() {
@@ -114,9 +114,22 @@ export default {
     })
   },
   created() {
-    console.log(mqtt)
     this.onRefresh();
-    mqtt.connect();
+    if (!storage['session'].get('mqttConnect')) {
+      window.bus.mqtt.connect();
+      homeApi.getMsg({user_id: this.userId}).then(r => {
+        if (r.notice > 0 || r.homework > 0) {
+          this.$store.commit('notice/setMsg', true)
+          if (r.notice > 0) {
+            this.$store.commit('notice/setSchoolMsg', true)
+          }
+          if (r.homework > 0) {
+            this.$store.commit('notice/setHomeworkMsg', true)
+          }
+        }
+      })
+    }
+    window.bus.mqtt.connect();
   },
   methods: {
     imgUrl(name) {

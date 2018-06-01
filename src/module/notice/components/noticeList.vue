@@ -13,7 +13,7 @@
         <i class="icon homework"></i>
           <span>
             作业消息
-            <b class="redIcon" v-show="isNewWorkMsg"></b>
+            <b class="redIcon" v-show="newHomeworkMsg"></b>
           </span>
           <van-icon name="arrow" class="icon-right"></van-icon>
         </router-link>
@@ -23,7 +23,7 @@
         <i class="icon school"></i>
           <span>
             学校消息
-            <b class="redIcon" v-show="isNewSchoolMsg"></b>
+            <b class="redIcon" v-show="newSchoolMsg"></b>
           </span>
           <van-icon name="arrow" class="icon-right"></van-icon>
         </router-link>
@@ -35,16 +35,20 @@
 
 <script>
 import headerBar from '@/components/headerBar.vue'
+import { mapState } from 'vuex'
 export default {
   name: 'noticeList',
   data () {
     return {
-      isNewWorkMsg: true,
-      isNewSchoolMsg: true
     }
   },
   created () {},
-  computed: {},
+  computed: {
+    ...mapState({
+      'newSchoolMsg': state => state.notice.newSchoolMsg,
+      'newHomeworkMsg': state => state.notice.newHomeworkMsg
+    })
+  },
   methods: {
     goBack () {
       this.$router.go(-1)
