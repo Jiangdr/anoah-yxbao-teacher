@@ -6,8 +6,8 @@
     </header>
 
     <div class="gradelist">
-        <div v-for="items in gradeLists" :key="items.grade_name">
-            <p class="section-div">{{items.grade_name}}</p>
+        <div v-for="items in gradeLists" :key="items.period_name">
+            <p class="section-div">{{items.period_name}}</p>
            <div v-for='item in items.grade_list' :key="item.name" class="grade-div" v-bind:class="{activegradeselclass:activeGradeId === item.id}"  @click="clickGrade(item.id)">
              <p class="grade-p" v-bind:class="{activetxtclass:activeGradeId === item.id}">
                {{item.name}}
