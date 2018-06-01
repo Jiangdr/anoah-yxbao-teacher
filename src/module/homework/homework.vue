@@ -647,6 +647,7 @@ export default {
   border-radius: 8px;
   width: 65px;
   height: 25px;
+  font-size: 16px;
   line-height: 25px;
   color: #fff;
   display: inline-block;
