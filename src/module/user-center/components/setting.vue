@@ -14,6 +14,7 @@
 
 <script>
 import NavBar from '@/module/user-center/components/common/navbar'
+import storage from '@/store/stroage'
 export default {
   name: 'Setting',
   data () {
@@ -43,7 +44,9 @@ export default {
     },
     loginOut () {
       this.showActionSheet = false
-      localStorage.clear()
+      localStorage.clear();
+      storage['session'].remove('mqttConnect');
+      window.bus.mqtt.client.disconnect()
       this.$router.push({path: '/login?redirect=/'})
     }
   },
