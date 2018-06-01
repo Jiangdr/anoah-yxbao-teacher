@@ -38,7 +38,7 @@ export default {
         domain: window.bus.$store.getters['runEnv/old'],
         in_class: 0,
         num: -1,
-        publish_id: this.info.publish_id,
+        publish_id: this.info.course_hour_publish_id,
         qid: this.info.source_pk_id,
         show_answer: 0,
         user_id: this.user_id,
