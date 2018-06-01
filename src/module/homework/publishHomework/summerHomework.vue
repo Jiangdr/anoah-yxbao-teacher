@@ -89,7 +89,8 @@ export default {
       for (var i = 0; i < this.hasChoosePagesNumArray.length; i++) {
         result.push({
           name: this.hasChoosePagesNumArray[i].name,
-          resource_id: this.hasChoosePagesNumArray[i].qti_ids
+          qti_ids: this.hasChoosePagesNumArray[i].qti_ids,
+          resource_id: this.hasChoosePagesNumArray[i].resource_id
         });
       }
       this.$store.dispatch("hasChoosePagesArray", []);

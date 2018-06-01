@@ -53,7 +53,6 @@ export default {
     };
   },
   created: function() {
-    console.log(this.$route.params)
     this.userInfo = this.$store.state.account.userInfo;
   },
   mounted: function() {
@@ -106,7 +105,9 @@ export default {
       for (let i = 0; i < array2.length; i++) {
         resourceId.push({
           title: array2[i].name,
-          rids: array2[i].resource_id
+          selected_all: true,
+          rids: array2[i].qti_ids,
+          exam_resource_id: array2[i].resource_id
         });
       }
 
