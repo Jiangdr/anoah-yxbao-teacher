@@ -46,6 +46,7 @@ export default {
   },
   created () {
     this.getNoticelist()
+    this.$store.commit('notice/setSchoolMsg', false)
   },
   methods: {
     goBack () {
@@ -114,6 +115,8 @@ export default {
 .schoolList .container .no-data{
   text-align: center;
   margin-top:25vh;
+  min-height:calc(100vh - 100px);
+  box-sizing: border-box;
 }
 .schoolList .container .no-data img{
   width:100px;

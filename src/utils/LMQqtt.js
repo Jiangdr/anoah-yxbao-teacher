@@ -1,4 +1,4 @@
-
+import storage from '@/store/stroage'
 const LMqtt = {
   client: null,
   cfg: {
@@ -9,6 +9,7 @@ const LMqtt = {
     client_id: "c_"
   },
   onConnect () {
+    // client_id随机生成
     for (let i = 0; i < 13; i++) {
       let num = Math.floor(Math.random() * 9 + 1);
       this.cfg.client_id += num;
@@ -22,10 +23,21 @@ const LMqtt = {
     if (response.errorCode !== 0) {
       console.log(response.errorMessage)
     }
-    console.log('连接断开')
+    console.log('连接断开');
   },
   onMessageArrived (message) {
-    console.log(message)
+    let type = JSON.parse(message.payloadString).type
+    console.log(type)
+    if (type) {
+      window.bus.$store.commit('notice/setMsg', true);
+      // 学校消息
+      if (type === 203) {
+        window.bus.$store.commit('notice/setSchoolMsg', true)
+      } else if (type === 201) {
+        // 作业消息
+        window.bus.$store.commit('notice/setHomeworkMsg', true)
+      }
+    }
     console.log('收到消息')
   },
   connect(succ) {
@@ -37,7 +49,7 @@ const LMqtt = {
       cleanSession: true,
       keepAliveInterval: 10,
       onSuccess: function(e) {
-        console.log(1)
+        console.log('连接成功')
         let userinfo = JSON.parse(localStorage.userinfo);
         // 个人
         me.client.subscribe(`user_${userinfo.userid}`);
@@ -48,8 +60,10 @@ const LMqtt = {
         }
         // 学校
         me.client.subscribe(`school_${userinfo.school_id}`);
+        storage['session'].set('mqttConnect', true)
       },
       onFailure: function(e) {
+        console.log('连接失败')
         console.log(e)
         this.onConnect();
         this.client.connect(options);
