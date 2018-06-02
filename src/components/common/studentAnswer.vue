@@ -1,8 +1,29 @@
 <template>
   <div>
-    <div v-for="(item, index) in answerList" :key="index">
+    <!-- <div v-bind:style="listContainerStyle"> -->
+    <div class="containerHeight">
       <div style="height: 28px;line-height: 28px;background-color: #fff;padding: 5px 10px;">
-        {{item.answer_detail.characters}}
+        {{answerInfo.characters}}
+      </div>
+
+      <div v-for="item in answerInfo.video" :key="item">
+        <div>
+          <video width="320" height="240" controls>
+            <source :src="item"  type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div v-for="item in answerInfo.images" :key="item">
+        <div style="width: 100%;">
+          <img style="width: 50%;" :src="item" alt="">
+        </div>
+      </div>
+
+      <div v-for="item in answerInfo.audio" :key="item">
+        <div>
+          <audio width="320" height="240" controls :src="item"></audio>
+        </div>
       </div>
     </div>
   </div>
@@ -11,14 +32,22 @@
 
 export default {
   name: "studentAnswer",
-  props: ['answerList'],
+  props: ['answerInfo'],
   data() {
     return {
-      peopleNum: 0
+      peopleNum: 0,
+      listContainerStyle: {
+        'height': window.innerHeight - 110 + "px",
+        // 'overflow-y': 'auto',
+        'background': '#fff'
+      }
     };
   },
   methods: {}
 };
 </script>
 <style lang="scss" scoped>
+.containerHeight {
+  height: calc(100% - 130px);
+}
 </style>
