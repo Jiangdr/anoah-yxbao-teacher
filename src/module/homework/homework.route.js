@@ -12,36 +12,38 @@ import publishHomework from './publishHomework/publishHomework.vue'
 import summerHomework from './publishHomework/summerHomework.vue'
 // 批改本题页面
 import correctTheSubject from './correctTheSubject/correctTheSubject.vue'
-// 切换学生页面
-import switchStudent from './switchStudent/switchStudent.vue'
 
 let homeworkRoutes = [{
   path: '/homework',
+  meta: { requiresAuth: false, keepAlive: true },
   component: homework
 }, {
   path: '/chooseTextbook',
+  meta: { requiresAuth: false, keepAlive: true },
   component: chooseTextbook
 }, {
   name: 'examExercise',
   path: '/examExercise',
+  meta: { requiresAuth: false, keepAlive: true },
   component: examExercise
 }, {
   path: '/homeworkPublishSetting',
+  meta: { requiresAuth: false, keepAlive: true },
   name: 'homeworkPublishSetting',
   component: homeworkPublishSetting
 }, {
   path: '/publishHomework',
+  meta: { requiresAuth: false, keepAlive: true },
   component: publishHomework
 }, {
   path: '/summerHomework',
+  meta: { requiresAuth: false, keepAlive: true },
   component: summerHomework
 }, {
   path: '/correctTheSubject',
+  meta: { requiresAuth: false, keepAlive: true },
   name: "correctTheSubject",
   component: correctTheSubject
-}, {
-  path: '/switchStudent',
-  component: switchStudent
 }];
 
 export default homeworkRoutes;
