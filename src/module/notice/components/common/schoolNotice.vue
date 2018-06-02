@@ -4,7 +4,7 @@
       <div class="date">{{item.push_time}}</div>
       <div class="container">
         <p class="title" :title="item.title">
-            <i class="icon" :style="{'background-image':'url('+imgUrl('icon')+')'}"></i>
+            <i class="icon"></i>
           {{item.title}}
         </p>
         <div style="text-align:center" v-if="item.thumb">
@@ -20,9 +20,6 @@ export default {
   name: 'schoolNoticeList',
   props: ['list'],
   methods: {
-    imgUrl(name) {
-      return require("@/assets/images/notice/" + name + ".png");
-    },
     goDetail (id) {
       this.$router.push({
         name: 'noticeDetail',
@@ -36,6 +33,9 @@ export default {
 };
 </script>
 <style scoped>
+.school-list{
+  min-height:calc(100vh - 100px)
+}
 .item .date {
   margin: 19px auto 10px;
   text-align: center;
@@ -64,6 +64,7 @@ export default {
   background-size: 100% 100%;
   margin-bottom: -3px;
   margin-right: 5px;
+  background-image: url('../../../../assets/images/notice/icon.png')
 }
 .item .notice-content{
   color: #4e4e50;

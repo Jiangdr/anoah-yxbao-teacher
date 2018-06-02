@@ -58,7 +58,8 @@ export default {
     }
   },
   created () {
-    this.getNoticelist()
+    this.getNoticelist();
+    this.$store.commit('notice/setHomeworkMsg', false)
   },
   methods: {
     goBack () {
@@ -153,7 +154,8 @@ export default {
 .homeworkList .container .no-data{
   text-align: center;
   padding-top:25vh;
-  padding-bottom: 20vh;
+  min-height:calc(100vh - 100px);
+  box-sizing: border-box;
 }
 .homeworkList .container .no-data img{
   width:100px;

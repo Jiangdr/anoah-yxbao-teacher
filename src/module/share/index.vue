@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import axios from '../../axios/getQuestionStatistics.js'
+import axios from './axios/share.js'
 import headerBar from '@/components/headerBar.vue'
 export default {
   name: "share",

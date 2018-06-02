@@ -1,15 +1,10 @@
 <template>
   <div class="teacher-list">
-    <div v-for="(item, index) in list" :key="index" class="item">
+    <div v-for="(item, index) in list" :key="index" class="item" @click="goHomeworkDetail(item.params.publish_id,item.params.class_id)">
       <div class="date">{{item.push_time}}</div>
       <div class="container">
         <p class="title">
-          <template v-if="item.feeds_type==='xinzuoye'">
-            <i class="icon" :style="{'background-image':'url('+imgUrl('icon1')+')'}"></i>
-          </template>
-           <template v-else>
-            <i class="icon" :style="{'background-image':'url('+imgUrl('icon')+')'}"></i>
-          </template>
+            <i class="icon"></i>
           {{item.title}}</p>
         <div class="notice-content" v-html="item.content"></div>
       </div>
@@ -21,13 +16,22 @@ export default {
   name: "teacherList",
   props: ["list"],
   methods: {
-    imgUrl(name) {
-      return require("@/assets/images/notice/" + name + ".png");
+    goHomeworkDetail(publishId, classId) {
+      this.$router.push({
+        name: 'homeworkDetail',
+        params: {
+          publishId: publishId,
+          classId: classId
+        }
+      })
     }
   }
 };
 </script>
 <style scoped>
+.teacher-list{
+   min-height:calc(100vh - 100px)
+}
 .item .date {
   margin: 19px auto 10px;
   text-align: center;
@@ -53,6 +57,7 @@ export default {
   background-size: 100% 100%;
   margin-bottom: -3px;
   margin-right: 5px;
+  background-image: url('../../../../assets/images/notice/icon.png');
 }
 .item .notice-content >>> p {
   color: #4e4e50;
