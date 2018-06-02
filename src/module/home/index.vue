@@ -249,6 +249,9 @@ export default {
         } else {
           this.finished = false;
         }
+      }, j => {
+        this.refreshLoading = false;
+        this.loading = false;
       });
     },
     tabChange(type) {
