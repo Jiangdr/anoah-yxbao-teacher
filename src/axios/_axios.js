@@ -39,8 +39,8 @@ function responseFormat (response) {
 }
 
 export default {
-  post (url, data) {
-    return axios({
+  post (url, data, options) {
+    let send = {
       method: 'post',
       url,
       data: data,
@@ -48,14 +48,17 @@ export default {
         // 'X-Requested-With': 'XMLHttpRequest',
         // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
-    }).then(
+    };
+    Object.assign(send.headers, options.headers);
+
+    return axios(send).then(
       (response) => {
         return responseFormat(response)
       }
     )
   },
-  get (url, params) {
-    return axios({
+  get (url, params, options) {
+    let send = {
       method: 'get',
       url,
       params: params,
@@ -63,7 +66,9 @@ export default {
         // 'X-Requested-With': 'XMLHttpRequest',
         // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
-    }).then(
+    };
+    Object.assign(send.headers, options.headers);
+    return axios(send).then(
       (response) => {
         return responseFormat(response)
       }

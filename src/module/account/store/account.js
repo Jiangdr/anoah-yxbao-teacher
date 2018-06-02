@@ -12,6 +12,9 @@ export default {
     userid: 32731
   },
   getters: {
+    loginInfo: state => {
+      return state
+    }
   },
   mutations: {
     setIsLogin (state, isLogin) {

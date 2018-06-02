@@ -8,6 +8,10 @@ export default {
     pro: 'http'
   },
   getters: {
+    env: state => {
+      let tmp = state.env.replace('.', '');
+      return `${tmp}`
+    },
     api2: state => {
       let tmp = state.env.replace('.', '');
       return `${state.pro}://${tmp}.${state.host}/yxp_api2/`
