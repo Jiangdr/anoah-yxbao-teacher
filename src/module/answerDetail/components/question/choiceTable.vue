@@ -126,10 +126,10 @@ export default {
   }
 
   .wanxing>.statlist {
-    height: calc(100vh - 100px);
+    /* height: calc(100vh - 100px); */
     line-height: 40px;
     text-align: center;
-    overflow: scroll;
+    /* overflow: scroll; */
   }
 .wanxing>.statlist .quelist{
   display: flex;
