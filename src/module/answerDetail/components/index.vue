@@ -13,7 +13,7 @@
         <correct-column :params="item" v-if="item.qti_question_type_id == 9 || item.qti_question_type_id == 21 || item.qti_question_type_id == 23 || item.qti_question_type_id == 24 || item.qti_question_type_id == 25 || item.qti_question_type_id == 26 || item.qti_question_type_id == 33"></correct-column>
         <correct-table :params="item" v-if="item.qti_question_type_id == 4 || item.qti_question_type_id == 20 || item.qti_question_type_id == 38"></correct-table>
         <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
-        <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective>
+        <!-- <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective> -->
         <render-qti v-if="Object.keys(item).length" :info="item"></render-qti>
       </div>
       <!-- 统计 -->
@@ -23,7 +23,9 @@
     </div>
   </div>
   <div class="subjective-button van-hairline--top" v-if="params && judgeQtiType(resource[currentIndex - 1])">
-    <span @click="subjectiveQtiPigai(resource[currentIndex - 1])">查看详情</span>
+    <span @click="subjectiveQtiPigai(resource[currentIndex - 1])" v-if="resource[currentIndex - 1].status === 3 || resource[currentIndex - 1].status === 4">查看详情</span>
+    <span v-if="resource[currentIndex - 1].status === 1">一键批阅</span>
+    <span v-if="resource[currentIndex - 1].status === 1">批改本题</span>
   </div>
   <student-list v-if="showStudentList" :title="studentListTitle" :studentList="studentList"></student-list>
 </div>
@@ -219,8 +221,14 @@ export default {
     text-align: center;
     line-height: 50px;
     background-color: #fff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     span{
-      padding: 8px 50px;
+      flex:0 0 120px;
+      height: 40px;
+      line-height: 40px;
+      // padding: 8px 50px;
       background-color: #34c988;
       color: #fff;
       border-radius: 10px;

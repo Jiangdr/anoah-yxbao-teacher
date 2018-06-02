@@ -19,7 +19,9 @@
         >
         </homework-detail>
     </div>
-    <div v-if="loading" class="place-holder">加载中</div>
+    <div v-if="loading" class="place-holder">
+      加载中...
+    </div>
     <more v-if="morePopup" @toggle="toggleMorePopup" :info="homeworkInfo" @back="back" :favorite="homeworkInfo.favorite" @collect="collect" :list="resourceList"></more>
   </div>
 </template>
