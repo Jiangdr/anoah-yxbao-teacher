@@ -1,5 +1,4 @@
 import answerDetail from '@/module/answerDetail/components/index.vue'
-import share from '@/module/answerDetail/components/common/shareAnswer.vue'
 // 正确率表格图  例：客观填空、选词填空
 // import correctTable from '@/module/tongji/components/question/correctTable.vue'
 // 答案柱状图  例：判断题、单选题、多选题、不定选项、排序题
@@ -36,11 +35,5 @@ export default
         meta: { requiresAuth: false, keepAlive: false }
       }
     ]
-  },
-  {
-    name: 'share',
-    path: '/share',
-    meta: { requiresAuth: false, keepAlive: true },
-    component: share
   }
 ]
