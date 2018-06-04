@@ -42,19 +42,25 @@ export default {
       finished: false,
       pullRefresIsLoading: false,
       pullRefresh: false,
+      chooseTextBookObj: {},
       page: 0,
       noMore: false,
       lists: []
     };
   },
+  activated: function() {
+    this.init();
+  },
   created: function() {
-    this.userInfo = this.$store.state.account.userInfo;
-    this.chooseTextBookObj = this.$store.state.homework.chooseTextBookObj;
   },
   mounted: function() {
-    this.getList();
   },
   methods: {
+    init() {
+      this.userInfo = this.$store.state.account.userInfo;
+      this.chooseTextBookObj = this.$store.state.homework.chooseTextBookObj;
+      this.onRefresh();
+    },
     goBack() {
       var tempStr =
         this.$store.state.homework.publishHWBackPage.length > 0

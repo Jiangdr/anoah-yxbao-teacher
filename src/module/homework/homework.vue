@@ -113,7 +113,7 @@
       <van-datetime-picker type="year-month" :min-date="minDate" :max-date="currentDate" @cancel="onCancelTimePopup" @confirm="onConfirmTimePopup"/>
     </van-popup>
 
-    <div class="publish-homework-btn-div" @click="goChooseTextbook">
+    <div class="publish-homework-btn-div" @click="goChooseTextbook" v-show="homeworkState=='0'">
       <div class="publish-homework-btn">
         <div>布置<br/>作业</div>
       </div>
@@ -152,13 +152,16 @@ export default {
       totalCountNum: 0,
       inputValue: "",
       searchKeyword: "",
+      homeworkState: "0",
       isSearching: false
     };
   },
   directives: {
-    "to-focus": function(el, binding) {
-      console.log(binding);
-    }
+    "to-focus": function(el, binding) {}
+  },
+  activated: function() {
+    this.homeworkState = this.$store.state.homework.homeworkState;
+    this.onRefresh();
   },
   created: function() {
     var nowdate = new Date();
@@ -256,7 +259,6 @@ export default {
     this.weekday[4] = "周四";
     this.weekday[5] = "周五";
     this.weekday[6] = "周六";
-    this.getHomeworkList();
     this.getChoosedBook();
     this.getBooksByTeacher();
   },
@@ -447,7 +449,7 @@ export default {
         to: self.chooseTime.to,
         page: self.currentPage,
         per_page: 6,
-        type: "1,2,20",
+        type: self.homeworkState === "0" ? "1,2,20" : "5",
         favorite: self.markStatus,
         edu_subject_id: self.bookActiveID,
         asc: 1,

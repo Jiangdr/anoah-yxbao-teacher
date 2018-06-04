@@ -62,8 +62,20 @@ export default {
     };
   },
   mounted: function() {
-    this.getTextBookLists();
+    // this.getTextBookLists();
     this.getGradeLists();
+  },
+  activated: function() {
+    this.selBook = this.$store.state.homework.chooseTextBookObj;
+    if (this.selBook.hasOwnProperty("term_id")) {
+      this.activeTermId = this.selBook.term_id;
+      this.activeGradeId = this.selBook.grade_id;
+      this.oldBookId = this.chooseTextbookId = this.selBook.edu_book_id;
+    } else {
+      this.oldBookId = "";
+    }
+    this.textBookList.length = 0;
+    this.onRefresh();
   },
   created: function() {
     this.userInfo = this.$store.state.account.userInfo;
@@ -71,7 +83,9 @@ export default {
     if (this.selBook.hasOwnProperty("term_id")) {
       this.activeTermId = this.selBook.term_id;
       this.activeGradeId = this.selBook.grade_id;
-      this.chooseTextbookId = this.selBook.edu_book_id;
+      this.oldBookId = this.chooseTextbookId = this.selBook.edu_book_id;
+    } else {
+      this.oldBookId = "";
     }
   },
   methods: {
@@ -89,7 +103,7 @@ export default {
       this.finished = false;
       this.loading = false;
       this.page = 0;
-      this.chooseTextbookId = "";
+      this.chooseTextbookId = this.oldBookId;
       this.textBookList.length = 0;
     },
     clickGrade(id) {

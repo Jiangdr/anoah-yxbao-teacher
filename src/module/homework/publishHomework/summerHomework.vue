@@ -1,5 +1,5 @@
 <template>
-  <div class="cube-page cube-view button-view" style="background-color: #fff;">
+  <div class="cube-page cube-view button-view" style="background-color: #fff;height:100%">
     <div v-show="!examExerciseShow">
       <header class="header">
         <h1>暑假作业</h1>
@@ -14,7 +14,7 @@
                 <p>{{(index+1)+"."+item.name}}</p>
                 <p class="des-item">共<span>{{item.qti_num}}</span>道题</p>
             </div>
-            <YxCheckBox class="checkbox" :selected="item.isSel" :ref="'cb-'+item.resource_id" @select="checkboxChange(item,$event)"></YxCheckBox>
+            <YxCheckBox class="checkbox" :selected="item.isSel" :ref="'cb-'+index" @select="checkboxChange(item,$event)"></YxCheckBox>
           </div>
         </van-list>
         <div v-if="lists.length==0" class="text-font">
@@ -72,11 +72,12 @@ export default {
         height: window.innerHeight - 115 + "px"
       },
       setting: [],
-      currentResourceId: ''
+      currentResourceId: ""
     };
   },
   computed: {},
-  created: function() {
+  activated: function() {
+    this.lists.length = 0;
     this.userInfo = this.$store.state.account.userInfo;
     this.chooseTextBookObj = this.$store.state.homework.chooseTextBookObj;
     this.summerHomeworkPackId = this.$store.state.homework.summerHomeworkPackId;
@@ -87,16 +88,21 @@ export default {
       );
     }
     this.qti_ids = this.$store.state.homework.chooseExamExerciseQtiIdsArray;
-  },
-  mounted: function() {
+
+    this.page = 0;
+    this.finished = false;
+    this.pullRefresh = true;
     this.getList();
     this.hasChoosePagesNumArray.forEach(element => {
       this.hasChooseProblemsNum =
         parseInt(this.hasChooseProblemsNum) + parseInt(element.qti_num);
     });
   },
+  created: function() {},
+  mounted: function() {},
   methods: {
     goPublishHomework() {
+      this.lists.length = 0;
       this.$store.dispatch("hasChoosePagesArray", this.hasChoosePagesNumArray);
       this.$store.dispatch("isOldPackId", "1");
       this.$router.push({
@@ -114,6 +120,7 @@ export default {
       }
     },
     clickPublish() {
+      this.lists.length = 0;
       if (this.hasChoosePagesNumArray.length === 0) {
         this.$toast({
           message: "请选择试卷！",
@@ -162,7 +169,8 @@ export default {
       if (event.selecteState) {
         item.qti_ids = item.allExcerciseArr;
         this.hasChoosePagesNumArray.push(item);
-        this.hasChooseProblemsNum = parseInt(this.hasChooseProblemsNum) + parseInt(item.qti_num);
+        this.hasChooseProblemsNum =
+          parseInt(this.hasChooseProblemsNum) + parseInt(item.qti_num);
 
         // for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
         //   const element = this.hasChoosePagesNumArray[i];
@@ -185,15 +193,13 @@ export default {
         if (array[i].resource_id === this.currentResourceId) {
           if (event.selecteState) {
             this.hasChoosePagesNumArray[i].qti_ids.push(item.qid);
-            this.hasChooseProblemsNum =
-            parseInt(this.hasChooseProblemsNum) + 1;
+            this.hasChooseProblemsNum = parseInt(this.hasChooseProblemsNum) + 1;
           } else {
             this.hasChoosePagesNumArray[i].qti_ids.splice(
               this.hasChoosePagesNumArray[i].qti_ids.indexOf(item.qid),
               1
             );
-            this.hasChooseProblemsNum =
-            parseInt(this.hasChooseProblemsNum) - 1;
+            this.hasChooseProblemsNum = parseInt(this.hasChooseProblemsNum) - 1;
           }
         }
       }
@@ -261,18 +267,20 @@ export default {
             success.lists.forEach(element => {
               if (self.olded && self.isSelect(element)) {
                 element.isSel = true;
-                let arr = self.$refs["cb-" + element.resource_id];
+                let arr = self.$refs["cb-" + self.lists.length];
                 if (arr && arr.length > 0) {
                   arr[0].selecteState = true;
                 }
               } else if (!self.olded) {
-                element.allExcerciseArr = JSON.parse(JSON.stringify(element.qti_ids));
+                element.allExcerciseArr = JSON.parse(
+                  JSON.stringify(element.qti_ids)
+                );
                 self.hasChoosePagesNumArray.push(element);
                 self.hasChooseProblemsNum =
                   parseInt(self.hasChooseProblemsNum) +
                   parseInt(element.qti_num);
                 element.isSel = true;
-                let arr = self.$refs["cb-" + element.resource_id];
+                let arr = self.$refs["cb-" + self.lists.length];
                 if (arr && arr.length > 0) {
                   arr[0].selecteState = true;
                 }
