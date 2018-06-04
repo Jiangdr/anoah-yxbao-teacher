@@ -4,7 +4,7 @@
     <div class="split-line"></div>
     <circle-chart></circle-chart>
     <div class="split-line"></div>
-    <student-score-table></student-score-table>
+    <student-score-table from="classScore"></student-score-table>
   </div>
 </template>
 <script>

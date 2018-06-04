@@ -1,11 +1,18 @@
 import homeworkDetail from '@/module/homeworkDetail/components/index.vue'
 import knowledgePointDetail from '@/module/homeworkDetail/components/knowledgePointDetail.vue'
 import homeworkContent from '@/module/homeworkDetail/components/homeworkContent.vue'
+import personalized from '@/module/homeworkDetail/components/personalized'
 export default [
   {
     path: '/homeworkDetail/:publishId/:classId',
     name: 'homeworkDetail',
     component: homeworkDetail,
+    meta: { requiresAuth: false, keepAlive: true }
+  },
+  {
+    path: '/personalized/:publishId/:classId',
+    name: 'Personalized',
+    component: personalized,
     meta: { requiresAuth: false, keepAlive: true }
   },
   {

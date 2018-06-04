@@ -1,6 +1,6 @@
 <template>
   <div id="student-score-table">
-    <div class="title van-hairline--bottom">学生成绩表</div>
+    <div v-show="from === 'classScore'" class="title van-hairline--bottom">学生成绩表</div>
     <div class="content">
       <div class="table-title van-hairline--bottom">
         <div class="table-cell name" @click="sortList(1)">
@@ -73,6 +73,7 @@
 import {mapGetters, mapState} from 'vuex'
 export default {
   name: 'StudentScoreTable',
+  props: ['from'],
   data() {
     return {
       'sortRule': {
@@ -162,6 +163,13 @@ export default {
       if (stuInfo.status === 0) {
         return false
       } else {
+        if (this.from === 'personalized') {
+          this.$emit('personalizedLink', {
+            userid: stuInfo.userid,
+            username: stuInfo.real_name
+          })
+          return false
+        }
         this.$router.push({path: `/studentHomework/${stuInfo.userid}/${this.homeworkInfo.course_hour_publish_id}/${stuInfo.real_name}`})
       }
     }
