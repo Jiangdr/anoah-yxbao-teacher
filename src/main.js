@@ -59,7 +59,7 @@ Vue.prototype.$echarts = echarts
 // Axios.defaults.withCredentials = true;
 
 Vue.use(window.qtivue.default)
-Vue.use(window.anoahim.default)
+Vue.use(window.anoahim)
 Vue.use(window.mp3player.default)
 Vue.use(window.tcplayer.default)
 
