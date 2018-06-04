@@ -13,15 +13,21 @@
 </template>
 <script>
 import homeworkDetil from '../axios/detail.js'
+import studentDetail from '@/module/studentHomework/api'
 import {mapGetters, mapMutations} from 'vuex'
 import headerBar from '@/components/headerBar'
+import { Toast } from 'vant'
 import studentScoreTable from '@/module/homeworkDetail/components/common/studentScoreTable'
 export default {
   name: 'Personalized',
+  data() {
+    return {
+      studentResourceList: []
+    }
+  },
   computed: {
     ...mapGetters({
-      env: 'runEnv/old',
-      resourceList: 'homeworkDetail/getHomeworkQuestionInfo'
+      env: 'runEnv/old'
     })
   },
   created() {
@@ -54,42 +60,59 @@ export default {
         });
         this.saveHomeworkInfo(succ)
       })
-      // 获取作业资源
-      homeworkDetil.getResourceList(params).then(d => {
-        this.saveHomeworkQuestionInfo(d)
-      })
     },
     // 跳转批改界面
     personalizedLink(info) {
-      console.log(info)
-      let resourceList = this.resourceList
-      let miniResource = []
-      resourceList.forEach((ele, index) => {
-        let type = this.util.judgeQuestionType(ele)
-        if (type) {
-          if (type === 'combineqti') {
-            homeworkDetil.getMiniResource({
-              publish_id: ele.course_hour_publish_id,
-              course_resource_id: ele.course_resource_id,
-              dcom_entity_id: ele.dcom_entity_id
-            }).then(succ => {
-              miniResource.push(...succ)
-              if (index === resourceList.length - 1) {
-                callback()
-              }
-            })
-          } else {
-            miniResource.push(ele)
+      let _self = this
+      let toast = Toast.loading({
+        duration: 0,
+        forbidClick: true,
+        loadingType: 'circular',
+        message: '加载中'
+      })
+      // this.$router.push({path: `/studentHomework/${info.userid}/${this.$route.params.publishId}/${info.username}`})
+      studentDetail.studentHomeworkInfo({
+        user_id: info.userid,
+        publish_id: this.$route.params.publishId
+      }).then(succ => {
+        // console.log(succ)
+        this.studentResourceList = succ.course_resource_list
+      }).then(() => {
+        let resourceList = this.studentResourceList
+        let miniResource = []
+        resourceList.forEach((ele, index) => {
+          let type = this.util.judgeQuestionType(ele)
+          if (type) {
+            if (type === 'combineqti') {
+              homeworkDetil.getMiniResource({
+                publish_id: ele.course_hour_publish_id,
+                course_resource_id: ele.course_resource_id,
+                dcom_entity_id: ele.dcom_entity_id
+              }).then(succ => {
+                toast.clear()
+                miniResource.push(...succ)
+                if (index === resourceList.length - 1) {
+                  callback()
+                }
+              })
+            } else {
+              miniResource.push(ele)
+            }
           }
+        })
+        function callback() {
+          if (miniResource.length) {
+            _self.setAnswerParams({
+              index: 0,
+              title: `${info.username}的作业`,
+              type: 2,
+              user_id: info.userid
+            })
+          }
+          _self.setAnswerResource(miniResource)
+          _self.$router.push({path: '/answerDetail'})
         }
       })
-      function callback() {
-        let val = []
-        miniResource.forEach(ele => {
-          val.push(JSON.stringify(ele))
-        })
-        console.log([...new Set(val)])
-      }
     }
   },
   components: {

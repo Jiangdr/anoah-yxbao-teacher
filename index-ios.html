@@ -3,11 +3,16 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0">
+    <script>
+      window.platform = 'ios';
+   <%= htmlWebpackPlugin.options.version %>
+   </script>
+     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script type="text/javascript" src="../lib/ios/cordova.js"></script>
     <script src="../lib/app_plug.js"></script>
     <script src="<%= htmlWebpackPlugin.options.qtiUrl %>qtivue.js"></script>
     <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.qtiUrl%>qtivue.css">
-    <script src= "<%= htmlWebpackPlugin.options.qtiUrl %>anoahim.js"></script>
+    <script src= "<%= htmlWebpackPlugin.options.himUrl %>anoahim.js"></script>
     <script src= "<%= htmlWebpackPlugin.options.qtiUrl %>mp3player.js"></script>
     <script src= "<%= htmlWebpackPlugin.options.qtiUrl %>tcplayer.js"></script>
     <script src="../lib/app_plug.js"></script>
@@ -17,9 +22,5 @@
   <body ontouchstart>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-    <script>
-       window.platform = 'ios';
-    <%= htmlWebpackPlugin.options.version %>
-    </script>
   </body>
 </html>

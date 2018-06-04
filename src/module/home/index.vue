@@ -16,7 +16,7 @@
           <i class="icon iclass"></i>
           <span class="font-h2">互动课堂</span>
         </div>
-        <div @click="go('homework')">
+        <div @click="go('homework1')">
           <i class="icon homework"></i>
           <span class="font-h2">作业</span>
         </div>
@@ -27,7 +27,7 @@
           <i class="icon wrong"></i>
           <span class="font-h4">错题本</span>
         </div>
-        <div>
+        <div  @click="go('homework2')">
           <i class="icon iclass-record"></i>
           <span class="font-h4">课堂记录</span>
         </div>
@@ -80,14 +80,14 @@
 </template>
 
 <script>
-import footerBar from '@/components/footerBar'
-import api from '@/axios/iclass'
-import storage from '@/store/stroage'
-import homeApi from '@/module/home/axios/home'
-import { mapGetters, mapState } from 'vuex'
-import { Dialog } from 'vant'
+import footerBar from "@/components/footerBar";
+import api from "@/axios/iclass";
+import storage from "@/store/stroage";
+import homeApi from "@/module/home/axios/home";
+import { mapGetters, mapState } from "vuex";
+import { Dialog } from "vant";
 export default {
-  name: 'Home',
+  name: "Home",
   data() {
     return {
       version: window.version,
@@ -103,108 +103,123 @@ export default {
 
       list: [],
       totalPage: 0
-    }
+    };
   },
   computed: {
     ...mapGetters({
-      userId: 'userCenter/userId'
+      userId: "userCenter/userId"
     }),
     ...mapState({
-      'newMsg': state => state.notice.newMsg
+      newMsg: state => state.notice.newMsg
     })
   },
   created() {
     this.onRefresh();
-    if (!storage['session'].get('mqttConnect')) {
+    if (!storage["session"].get("mqttConnect")) {
       window.bus.mqtt.connect();
-      homeApi.getMsg({user_id: this.userId}).then(r => {
+      homeApi.getMsg({ user_id: this.userId }).then(r => {
         if (r.notice > 0 || r.homework > 0) {
-          this.$store.commit('notice/setMsg', true)
+          this.$store.commit("notice/setMsg", true);
           if (r.notice > 0) {
-            this.$store.commit('notice/setSchoolMsg', true)
+            this.$store.commit("notice/setSchoolMsg", true);
           }
           if (r.homework > 0) {
-            this.$store.commit('notice/setHomeworkMsg', true)
+            this.$store.commit("notice/setHomeworkMsg", true);
           }
         }
-      })
+      });
     }
     window.bus.mqtt.connect();
   },
   methods: {
     imgUrl(name) {
-      return require('@/assets/images/homeworkDetail/' + name + '.png')
+      return require("@/assets/images/homeworkDetail/" + name + ".png");
     },
     message() {
-      this.$store.commit('notice/setMsg', false)
+      this.$store.commit("notice/setMsg", false);
       this.$router.push({
-        name: 'notice',
-        params: { role: 'teacher' }
-      })
+        name: "notice",
+        params: { role: "teacher" }
+      });
     },
     scan() {
-      alert('扫码')
+      alert("扫码");
     },
 
     getEnv(env) {
       // window.runEnv = env;
       this.showPopup = false;
-      this.$store.dispatch('runEnv/changeEnv', env);
+      this.$store.dispatch("runEnv/changeEnv", env);
     },
 
     go(type) {
       // 代码走本地
-      let href = window.location.href.split('#')[0]
-      let userInfo = JSON.parse(localStorage.getItem('user'))
-      let baseUrl = ''
-      let param = {}
+      let href = window.location.href.split("#")[0];
+      let userInfo = JSON.parse(localStorage.getItem("user"));
+      let baseUrl = "";
+      let param = {};
       // 作业
-      if (type === 'homework') {
+      if (type === "homework1") {
+        this.$store.state.homework.homeworkState = "0";
         this.$router.push({
-          path: '/homework'
-        })
-
+          path: "/homework"
+        });
         // 互动课堂
-      } else if (type === 'iclass') {
-        api.judgeIclassLive({
-          teacher_id: this.userId
-        }).then(succ => {
-          if (!succ.length) {
-            Dialog.alert({
-              message: '请确认电脑端已“开始上课”'
-            }).then(() => {
-              // on close
-            });
-          } else {
-            param = JSON.stringify({
-              apiDomain: window.bus.$store.getters['runEnv/old'], // api地址
-              jsDomain: '', // js地址
-              userInfo: userInfo, // 用户信息
-              referer: window.location.href, // 回跳地址
-              time: new Date().getTime()
-            });
-            baseUrl = href + "/../../TP/index" + (window.platform ? '-' + window.platform : '') + ".html";
-            href = baseUrl + "?param=" + encodeURIComponent(param)
-            if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
-              window.TeacherUtil.loadUrl(href);
-              return;
+      } else if (type === "homework2") {
+        this.$store.state.homework.homeworkState = "1";
+        this.$router.push({
+          path: "/homework"
+        });
+      } else if (type === "iclass") {
+        api
+          .judgeIclassLive({
+            teacher_id: this.userId
+          })
+          .then(succ => {
+            if (!succ.length) {
+              Dialog.alert({
+                message: "请确认电脑端已“开始上课”"
+              }).then(() => {
+                // on close
+              });
+            } else {
+              param = JSON.stringify({
+                apiDomain: window.bus.$store.getters["runEnv/old"], // api地址
+                jsDomain: "", // js地址
+                userInfo: userInfo, // 用户信息
+                referer: window.location.href, // 回跳地址
+                time: new Date().getTime()
+              });
+              baseUrl =
+                href +
+                "/../../TP/index" +
+                (window.platform ? "-" + window.platform : "") +
+                ".html";
+              href = baseUrl + "?param=" + encodeURIComponent(param);
+              if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
+                window.TeacherUtil.loadUrl(href);
+                return;
+              }
+              window.location.href = href;
             }
-            window.location.href = href;
-          }
-        })
+          });
         // 问答
-      } else if (type === 'qa') {
+      } else if (type === "qa") {
         param = JSON.stringify({
           userid: parseInt(this.$store.state.account.userInfo.userid),
-          domain: window.bus.$store.getters['runEnv/old'],
+          domain: window.bus.$store.getters["runEnv/old"],
           domain_icom: href + "/../../QA",
           status: 1,
           lasthref: window.location.href,
           time: new Date().getTime()
         });
-        baseUrl = href + "/../../QA/index" + (window.platform ? '-' + window.platform : '') + ".html";
+        baseUrl =
+          href +
+          "/../../QA/index" +
+          (window.platform ? "-" + window.platform : "") +
+          ".html";
         // cordova.exec(null, null, "HaleyPlugin", "startNewHtmlWithURL", [href]);
-        href = baseUrl + "?param=" + encodeURIComponent(param)
+        href = baseUrl + "?param=" + encodeURIComponent(param);
         if (window.TeacherUtil && window.TeacherUtil.loadUrl) {
           window.TeacherUtil.loadUrl(href);
           return;
@@ -213,11 +228,11 @@ export default {
       }
     },
     onLoad() {
-      console.log('onload');
+      console.log("onload");
       this.getItems();
     },
     onRefresh() {
-      console.log('onRefresh');
+      console.log("onRefresh");
       this.getItems(true);
     },
     getItems(isRefresh) {
@@ -231,42 +246,43 @@ export default {
         page: this.page,
         per_page: this.per_page,
         user_id: this.userId
-      }
+      };
 
-      homeApi.task(data).then(r => {
-        this.page++;
-        if (isRefresh === true) {
-          this.refreshLoading = false;
-          this.list = r.lists;
-        } else {
-          for (var i = 0; i < r.lists.length; i++) {
-            this.list.push(r.lists[i]);
+      homeApi.task(data).then(
+        r => {
+          this.page++;
+          if (isRefresh === true) {
+            this.refreshLoading = false;
+            this.list = r.lists;
+          } else {
+            for (var i = 0; i < r.lists.length; i++) {
+              this.list.push(r.lists[i]);
+            }
+            this.loading = false;
           }
+          if (r.lists.length === 0) {
+            this.finished = true;
+          } else {
+            this.finished = false;
+          }
+        },
+        j => {
+          this.refreshLoading = false;
           this.loading = false;
         }
-        if (r.lists.length === 0) {
-          this.finished = true;
-        } else {
-          this.finished = false;
-        }
-      }, j => {
-        this.refreshLoading = false;
-        this.loading = false;
-      });
+      );
     },
     tabChange(type) {
-      if (type === 'home') {
-        return false
+      if (type === "home") {
+        return false;
       }
-      this.$router.push({path: '/user-center'})
+      this.$router.push({ path: "/user-center" });
     }
-
   },
   components: {
     footerBar
   }
-
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "@/style/base.scss";
@@ -360,9 +376,9 @@ export default {
   margin-top: 18px;
 
   div.font-h1 {
-    width:96%;
-    margin:0 auto;
-    padding:8px 0;
+    width: 96%;
+    margin: 0 auto;
+    padding: 8px 0;
   }
 
   span.font-h4 {
@@ -370,8 +386,9 @@ export default {
     padding: 0 6px;
   }
 
-  .van-list,.van-pull-refresh {
-     min-height: calc(100vh - 358px);
+  .van-list,
+  .van-pull-refresh {
+    min-height: calc(100vh - 358px);
   }
 
   .scroll {
@@ -425,8 +442,8 @@ export default {
       border-radius: 25px;
     }
 
-    .font-h3{
-      color:$gray4;
+    .font-h3 {
+      color: $gray4;
     }
   }
 

@@ -4,11 +4,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0">
+  <script>
+    window.platform = '';
+   <%= htmlWebpackPlugin.options.version %>
+ </script>
+   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script src="<%= htmlWebpackPlugin.options.qtiUrl %>qtivue.js"></script>
   <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.qtiUrl%>qtivue.css">
   <!-- <script src= "<%= htmlWebpackPlugin.options.qtiUrl %>anoahim.js"></script> -->
   <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
   <script src= "http://e.dev.anoah.com/hot_code/youxuebao/teacher/www/lib/qti/anoahim.js"></script>
+  <!-- <script src= "<%= htmlWebpackPlugin.options.himUrl %>anoahim.js"></script> -->
   <script src= "<%= htmlWebpackPlugin.options.qtiUrl %>mp3player.js"></script>
   <script src= "<%= htmlWebpackPlugin.options.qtiUrl %>tcplayer.js"></script>
   <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://*  cdvfile://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' 'unsafe-eval'; media-src *; img-src 'self' http://* data: content:;"> -->
@@ -18,10 +24,6 @@
 <body ontouchstart caller="mobile">
   <div id="app"></div>
   <!-- built files will be auto injected -->
-  <script>
-     window.platform = '';
-    <%= htmlWebpackPlugin.options.version %>
-  </script>
 </body>
 
 </html>

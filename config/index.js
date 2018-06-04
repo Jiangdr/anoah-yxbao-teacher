@@ -8,6 +8,7 @@ let basePath = '../dist/HW';
 
 module.exports = {
   dev: {
+    himUrl: 'http://192.168.45.124:8066/',
     qtiUrl: 'http://192.168.41.130/vue/qti/qtivue/',
     version: new Date().toLocaleString(),
     // Paths
@@ -48,6 +49,7 @@ module.exports = {
   },
 
   build: {
+    himUrl: '../lib/qti/',
     qtiUrl: '../lib/qti/',
     version: new Date().toLocaleString(),
     // Template for index.html
