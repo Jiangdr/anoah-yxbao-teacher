@@ -157,7 +157,7 @@ export default {
   },
   directives: {
     "to-focus": function(el, binding) {
-      console.log(binding);
+
     }
   },
   created: function() {

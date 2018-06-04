@@ -7,6 +7,7 @@ export const hasChoosePagesArray = 'hasChoosePagesArray';
 export const isOldPackId = "0";
 export const chooseBackPage = "";
 export const publishHWBackPage = "";
+export const homeworkState = "0";
 
 export default {
   state: {
@@ -18,6 +19,7 @@ export default {
     homeworkOneListInfoObj: {},
     chooseBackPage: "",
     isOldPackId: "0",
+    homeworkState: "0",
     publishHWBackPage: ""
   },
   actions: {
