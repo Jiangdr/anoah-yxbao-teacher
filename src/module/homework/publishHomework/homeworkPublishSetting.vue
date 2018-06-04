@@ -91,7 +91,7 @@ export default {
     surePublishFun() {
       var self = this;
       var classIds = "";
-      var array = self.result;
+      var array = self.userInfo.classes;
       for (let i = 0; i < array.length; i++) {
         if (i + 1 === array.length) {
           classIds += array[i].class_id;
