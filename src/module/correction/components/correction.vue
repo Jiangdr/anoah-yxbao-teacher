@@ -150,7 +150,7 @@ export default {
       window.appPlug.getImage(this.getImagesSuc, this.getImagesFail, true, false)
     },
     getImagesSuc (v) {
-      // this.imgs.unshift('data:image/png;base64,' + v)
+      this.imgs.unshift('data:image/png;base64,' + v)
       let param = {
         user_id: JSON.parse(localStorage.userinfo).userid,
         mo_authority_token: this.upToken,
@@ -162,7 +162,7 @@ export default {
       // }
       correction.upload(param).then(r => {
         console.log(r)
-        this.imgs.unshift(r.host_static + r.path_physical)
+        // this.imgs.unshift(r.host_static + r.path_physical)
         this.imgUrl.unshift(r.path_physical)
         if (this.imgs.length >= this.maxImageNum) {
           this.togglePopup()
