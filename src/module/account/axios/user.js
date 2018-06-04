@@ -15,11 +15,11 @@ let apis = {
 let user = new API(apis)
 
 user.doLogin = (params) => {
-  return user.fetch(user.apis.login, params, 'post')
+  return user.fetch(user.apis.login, params, 'post', {"auth": false})
 }
 
 user.doLoginOld = (params) => {
-  return user.fetch(user.apis.loginOld, params, 'get', {'api': 'old'})
+  return user.fetch(user.apis.loginOld, params, 'get', {'api': 'old', "auth": false})
 }
 
 user.exists = (params) => {
