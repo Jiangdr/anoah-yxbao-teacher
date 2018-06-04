@@ -1,6 +1,6 @@
 <template>
   <div class="more">
-    <cube-popup type="my-popup" :center="false"  v-show="showPopup" @mask-click="togglePopup">
+    <van-popup type="my-popup" position="bottom"  v-model="showPopup" class="popup" @click-overlay="togglePopup">
       <div class="popupWrapper">
         <div class="popupItem content" @click="content" v-if="info.hour_section_type_id==20">查看作业内容</div>
         <div class="popupItem again" @click="again" v-if="info.hour_section_type_id==20">再次布置</div>
@@ -11,8 +11,8 @@
         <div class="popupItem delete" @click="toggleDeletePopup">删除作业</div>
         <div class="popupItem cancel" @click="togglePopup">取消</div>
       </div>
-    </cube-popup>
-    <cube-popup type="collection-popup" v-show="showCollectionPopup">
+    </van-popup>
+    <van-popup type="collection-popup" v-model="showCollectionPopup" :close-on-click-overlay="false">
       <div class="wrapper" v-if="favorite==1">
         <i></i>
         <span>已收藏</span>
@@ -20,8 +20,8 @@
       <div class="wrapper" v-else-if="favorite==0">
         <span>取消收藏</span>
       </div>
-    </cube-popup>
-     <cube-popup type="delete-popup" v-show="showDetelePopup">
+    </van-popup>
+     <van-popup type="delete-popup" v-model="showDetelePopup" class="popup" :close-on-click-overlay="false">
       <div class="delete-wrapper">
         <p>作业删除后，将清除作业相关数据<br/>请谨慎操作</p>
         <div class="btn-group">
@@ -29,7 +29,7 @@
           <span @click="deleteHomework">确认</span>
         </div>
       </div>
-    </cube-popup>
+    </van-popup>
   </div>
 </template>
 <script>
@@ -105,6 +105,9 @@ export default {
 </script>
 <style scoped lang="scss">
 /* 操作列表样式 */
+.more .popup{
+  background: transparent;
+}
 .popupWrapper {
   margin: 0 13px 13px;
   font-size: 17px;

@@ -27,6 +27,7 @@ class API_ABSTRACT {
 
   // 获取数据通用方法
   fetch (url, data, type = 'post', options = {'errorTips': true, 'api': 'api2'}) {
+    options = Object.assign({ 'errorTips': true, 'api': 'api2', 'auth': true }, options);
     const apiDomain = window.bus.$store.getters['runEnv/' + options.api] ? window.bus.$store.getters['runEnv/' + options.api] : window.bus.$store.getters['runEnv/' + options.api]
     url = !~url.indexOf('http') ? apiDomain + url : url
     if (type === 'post') {
