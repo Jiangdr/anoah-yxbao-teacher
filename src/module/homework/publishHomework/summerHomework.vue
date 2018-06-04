@@ -1,16 +1,18 @@
 <template>
   <div class="cube-page cube-view button-view" style="background-color: #fff;">
-    <header class="header">
-      <h1>暑假作业</h1>
-      <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
-      <p class="select-all-p" @click="selectAll">{{hasChoosePagesNumArray.length==lists.length?'取消全选':'全选'}}</p>
-    </header>
+    <div v-show="!examExerciseShow">
+      <header class="header">
+        <h1>暑假作业</h1>
+        <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
+        <p class="select-all-p" @click="selectAll">{{hasChoosePagesNumArray.length==lists.length?'取消全选':'全选'}}</p>
+      </header>
+
       <van-pull-refresh :class="{listdiv:this.hasChoosePagesNumArray.length === 0,listfooterdiv:this.hasChoosePagesNumArray.length !== 0}" style="overflow-y: auto;" v-model="pullRefresIsLoading" @refresh="onRefresh">
         <van-list v-model="loading" loading-text="加载中。。。" :finished="finished" @load="loadMore" :offset="100" :immediate-check="false">
           <div class="list-item" v-for="(item, index) in lists" :key="index">
             <div style="float:left;margin-top: 3vw;" @click="clickTiltleName(item)">
-               <p>{{(index+1)+"."+item.name}}</p>
-               <p class="des-item">共<span>{{item.qti_num}}</span>道题</p>
+                <p>{{(index+1)+"."+item.name}}</p>
+                <p class="des-item">共<span>{{item.qti_num}}</span>道题</p>
             </div>
             <YxCheckBox class="checkbox" :selected="item.isSel" :ref="'cb-'+item.resource_id" @select="checkboxChange(item,$event)"></YxCheckBox>
           </div>
@@ -18,10 +20,25 @@
         <div v-if="lists.length==0" class="text-font">
           暂无内容
         </div>
-       </van-pull-refresh>
+      </van-pull-refresh>
+    </div>
+
+    <div v-show="examExerciseShow">
+      <header class="header">
+        <h1>试卷</h1>
+        <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i> 返回</i>
+      </header>
+      <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
+        <div style="padding: 5px 10px;height: 25px; line-height: 25px;">全部题目（{{setting.length}}）</div>
+        <div v-for="(item, index) in setting" :key="index" style="position: relative;">
+          <Qti :setting="item"></Qti>
+          <exerciseCheckBox style="position: absolute;right:10px;bottom:10px;width: 25px;height: 25px;" class="checkbox" :selected="item.isSel" :ref="'cb-'+item.qid" @select="exerciseCheckboxChange(item,$event)"></exerciseCheckBox>
+        </div>
+      </div>
+    </div>
 
     <div v-if="this.hasChoosePagesNumArray.length !== 0" class="footer-container">
-      <p class="footer-p">已选试卷<span>{{hasChoosePagesNumArray.length}}</span>份，共<span>{{hasChooseProblemsNum}}</span>道题</p>
+      <p class="footer-p">已选试卷<span>{{hasChoosePagesNumArray.length}}</span>份，共<span>{{hasChooseProblemsNumAtlast}}</span>道题</p>
       <div class="yx-green-btn buzhi-div"  @click="clickPublish">布&nbsp;&nbsp;&nbsp;&nbsp;置</div>
     </div>
   </div>
@@ -30,16 +47,18 @@
 <script>
 import api from "@/module/homework/axios/publishHomeWork.js";
 import YxCheckBox from "@/components/common/yx-check-box.vue";
+import exerciseCheckBox from "@/components/common/exercise-check-box.vue";
 
 export default {
   name: "publishHomework",
-  components: { YxCheckBox },
+  components: { YxCheckBox, exerciseCheckBox },
   data() {
     return {
       checkList: [],
       lists: [],
       result: [],
       hasChooseProblemsNum: 0,
+      hasChooseProblemsNumAtlast: 0,
       olded: false,
       pullRefresIsLoading: false,
       pullRefresh: false,
@@ -47,7 +66,13 @@ export default {
       loading: false,
       finished: false,
       noMore: true,
-      page: 0
+      page: 0,
+      examExerciseShow: false,
+      listContainerStyle: {
+        height: window.innerHeight - 115 + "px"
+      },
+      setting: [],
+      currentResourceId: ''
     };
   },
   computed: {},
@@ -61,6 +86,7 @@ export default {
         JSON.stringify(this.$store.state.homework.hasChoosePagesArray)
       );
     }
+    this.qti_ids = this.$store.state.homework.chooseExamExerciseQtiIdsArray;
   },
   mounted: function() {
     this.getList();
@@ -76,6 +102,16 @@ export default {
       this.$router.push({
         path: "/publishHomework"
       });
+    },
+    goSummerHomework() {
+      this.examExerciseShow = false;
+    },
+    getHasChooseExerciseNum() {
+      this.hasChooseProblemsNumAtlast = 0;
+      var array = this.hasChoosePagesNumArray;
+      for (let i = 0; i < array.length; i++) {
+        this.hasChooseProblemsNumAtlast += array[i].qti_ids.length;
+      }
     },
     clickPublish() {
       if (this.hasChoosePagesNumArray.length === 0) {
@@ -97,6 +133,7 @@ export default {
       this.$store.dispatch("isOldPackId", "0");
       this.result = result;
       this.$store.dispatch("chooseSummerHomeworkArray", this.result);
+      // debugger
       this.$router.push({
         path: "/homeworkPublishSetting"
       });
@@ -121,10 +158,17 @@ export default {
       }
     },
     checkboxChange(item, event) {
+      // this.currentResourceId = item.resource_id;
       if (event.selecteState) {
+        item.qti_ids = item.allExcerciseArr;
         this.hasChoosePagesNumArray.push(item);
-        this.hasChooseProblemsNum =
-          parseInt(this.hasChooseProblemsNum) + parseInt(item.qti_num);
+        this.hasChooseProblemsNum = parseInt(this.hasChooseProblemsNum) + parseInt(item.qti_num);
+
+        // for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
+        //   const element = this.hasChoosePagesNumArray[i];
+        //   this.setting = [];
+        //   this.qtiFun();
+        // }
       } else {
         this.hasChoosePagesNumArray.splice(
           this.hasChoosePagesNumArray.indexOf(item),
@@ -133,6 +177,27 @@ export default {
         this.hasChooseProblemsNum =
           parseInt(this.hasChooseProblemsNum) - parseInt(item.qti_num);
       }
+      this.getHasChooseExerciseNum();
+    },
+    exerciseCheckboxChange(item, event) {
+      var array = this.hasChoosePagesNumArray;
+      for (let i = 0; i < array.length; i++) {
+        if (array[i].resource_id === this.currentResourceId) {
+          if (event.selecteState) {
+            this.hasChoosePagesNumArray[i].qti_ids.push(item.qid);
+            this.hasChooseProblemsNum =
+            parseInt(this.hasChooseProblemsNum) + 1;
+          } else {
+            this.hasChoosePagesNumArray[i].qti_ids.splice(
+              this.hasChoosePagesNumArray[i].qti_ids.indexOf(item.qid),
+              1
+            );
+            this.hasChooseProblemsNum =
+            parseInt(this.hasChooseProblemsNum) - 1;
+          }
+        }
+      }
+      this.getHasChooseExerciseNum();
     },
     clickTab(name) {
       this.activeTabName = name;
@@ -201,6 +266,7 @@ export default {
                   arr[0].selecteState = true;
                 }
               } else if (!self.olded) {
+                element.allExcerciseArr = JSON.parse(JSON.stringify(element.qti_ids));
                 self.hasChoosePagesNumArray.push(element);
                 self.hasChooseProblemsNum =
                   parseInt(self.hasChooseProblemsNum) +
@@ -213,8 +279,9 @@ export default {
               }
               self.lists.push(element);
             });
-            console.log(self.lists)
+            console.log(self.lists);
           }
+          self.getHasChooseExerciseNum();
         },
         err => {
           console.log(err);
@@ -232,11 +299,25 @@ export default {
       });
       return isContain;
     },
+    qtiFun() {
+      for (var i = 0; i < this.qti_ids.length; i++) {
+        this.setting[i] = {
+          domain: "e.dev.anoah.com",
+          qid: this.qti_ids[i],
+          num: i + 1,
+          caller: "PREVIEWOR",
+          resource_type: "qti_question",
+          isSel: true
+        };
+      }
+    },
     clickTiltleName(item) {
+      this.setting = [];
+      this.examExerciseShow = true;
       this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.qti_ids);
-      this.$router.push({
-        path: "/examExercise"
-      });
+      this.qti_ids = item.allExcerciseArr;
+      this.currentResourceId = item.resource_id;
+      this.qtiFun();
     }
   }
 };
