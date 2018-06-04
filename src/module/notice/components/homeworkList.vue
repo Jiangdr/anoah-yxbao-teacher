@@ -23,7 +23,7 @@
       </van-pull-refresh>
       </div>
     </div>
-    <cube-popup type="delete-popup" v-show="showDetelePopup">
+    <van-popup type="delete-popup" v-model="showDetelePopup">
       <div class="delete-wrapper">
         <p>是否清空所有消息？</p>
         <div class="btn-group">
@@ -31,7 +31,7 @@
           <span @click="clear">确认</span>
         </div>
       </div>
-    </cube-popup>
+    </van-popup>
 </div>
 </template>
 
