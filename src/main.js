@@ -83,29 +83,6 @@ window.ICOM_EVN_VAR = {
   api_address_router: `${store.getters['runEnv/old']}/api_router/`,
   api_cache: true
 }
-addQti(`${store.getters['runEnv/old']}/icoms/qtidiv/jquery.js`)
-addQti(`${store.getters['runEnv/old']}/icoms/qtidiv/icombase.js`)
-let app = {
-  initialize: function () {
-    // android壳子里
-    if (navigator.userAgent.match(/CrossWalk/i)) {
-      document.addEventListener('deviceready', this.onDeviceReady.bind(this), false)
-    }
-    let APP = new Vue({
-      el: '#app',
-      router,
-      store,
-      components: { App },
-      template: '<App/>'
-    })
-    Vue.use({
-      APP
-    })
-  },
-  onDeviceReady: function () {
-  }
-}
-
 function addQti (src) {
   let head = document.getElementsByTagName('head')[0]
   let script = document.createElement('script')
@@ -113,6 +90,13 @@ function addQti (src) {
   script.src = src
   head.appendChild(script)
 }
+addQti(`${store.getters['runEnv/old']}/icoms/qtidiv/jquery.js`)
+addQti(`${store.getters['runEnv/old']}/icoms/qtidiv/icombase.js`)
 
-app.initialize()
-app.onDeviceReady()
+window.HW = new Vue({
+  el: '#app',
+  router,
+  store,
+  components: { App },
+  template: '<App/>'
+})
