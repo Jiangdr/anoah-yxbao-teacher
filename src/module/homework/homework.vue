@@ -96,7 +96,7 @@
                   <span v-if="item.right_rate >= 0" style="font-size:16px;color: #2ec2a9">%</span>
                   <i class="fa fa-angle-right arrow-right"></i>
               </div>
-              <div class="homework_list_inline_list end-time"><span>截止：</span>{{item.deadline}}</div>
+              <div class="homework_list_inline_list end-time"><span>作业时间：</span>{{item.start_time + "-" + item.deadline}}</div>
               <div style="clear:both;"></div>
             </div>
           </div>
