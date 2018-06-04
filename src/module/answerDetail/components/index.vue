@@ -25,7 +25,7 @@
   <div class="subjective-button van-hairline--top" v-if="params && judgeQtiType(resource[currentIndex - 1])">
     <span @click="subjectiveQtiPigai(resource[currentIndex - 1])" v-if="resource[currentIndex - 1].status === 3 || resource[currentIndex - 1].status === 4">查看详情</span>
     <span v-if="resource[currentIndex - 1].status === 1">一键批阅</span>
-    <span v-if="resource[currentIndex - 1].status === 1">批改本题</span>
+    <span v-if="resource[currentIndex - 1].status === 1" @click="subjectiveQtiPigai(resource[currentIndex - 1])">批改本题</span>
   </div>
   <student-list v-if="showStudentList" :title="studentListTitle" :studentList="studentList"></student-list>
 </div>
