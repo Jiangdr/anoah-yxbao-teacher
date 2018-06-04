@@ -5,11 +5,14 @@
       <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i> 返回</i>
     </header>
     <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
+      <div style="padding: 5px 10px;height: 25px; line-height: 25px;">全部题目（{{setting.length}}）</div>
       <div v-for="(item, index) in setting" :key="index" style="position: relative;">
         <Qti :setting="item"></Qti>
-        <!-- <exerciseCheckBox style="position: absolute;right:0;bottom:10px;width: 25px;height: 25px;" class="checkbox" :selected="item.isSel" :ref="'cb-'+item.qid" @select="checkboxChange(item,$event)"></exerciseCheckBox> -->
+        <exerciseCheckBox style="position: absolute;right:10px;bottom:10px;width: 25px;height: 25px;" class="checkbox" :selected="item.isSel" :ref="'cb-'+item.qid" @select="checkboxChange(item,$event)"></exerciseCheckBox>
       </div>
     </div>
+
+    <div class="footer-container div-center"><div outline="true" class="yx-green-btn"  @click="clickPublish">确认布置</div></div>
   </div>
 </template>
 
@@ -32,6 +35,7 @@ export default {
   computed: {},
   created: function() {
     this.qti_ids = this.rids ? this.rids : this.$store.state.homework.chooseExamExerciseQtiIdsArray;
+    console.log(this.$store.state.homework.chooseExamExerciseQtiIdsArray)
     this.qtiFun();
   },
   methods: {
@@ -51,6 +55,7 @@ export default {
       this.$router.go(-1);
     },
     checkboxChange(item, event) {
+      debugger
       if (event.selecteState) {
         this.hasChoosePagesNumArray.push(item);
         this.hasChooseProblemsNum =
@@ -65,23 +70,37 @@ export default {
       }
     },
     clickPublish() {
-      if (this.hasChoosePagesNum === 0) {
-        this.$toast({
-          message: "请选择试卷！",
-          duration: 1000
-        });
-        return;
-      }
-      this.$store.dispatch("chooseSummerHomeworkArray", this.result);
-      this.$router.push({
-        path: "/homeworkPublishSetting"
-      });
+      // if (this.hasChoosePagesNum === 0) {
+      //   this.$toast({
+      //     message: "请选择试卷！",
+      //     duration: 1000
+      //   });
+      //   return;
+      // }
+      // this.$store.dispatch("chooseSummerHomeworkArray", this.result);
+      // this.$router.push({
+      //   path: "/homeworkPublishSetting"
+      // });
+
+      // var result = [];
+      // for (var i = 0; i < this.hasChoosePagesNumArray.length; i++) {
+      //   result.push({
+      //     name: this.hasChoosePagesNumArray[i].name,
+      //     qti_ids: this.hasChoosePagesNumArray[i].qti_ids,
+      //     resource_id: this.hasChoosePagesNumArray[i].resource_id
+      //   });
+      // }
+      // this.$store.dispatch("hasChoosePagesArray", []);
+      // this.$store.dispatch("isOldPackId", "0");
+      // this.result = result;
+      // this.$store.dispatch("chooseSummerHomeworkArray", this.result);
     }
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/css/custom.scss";
 .activeTabClass {
   color: #2ec2a9;
 }

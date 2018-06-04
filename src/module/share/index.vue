@@ -13,8 +13,8 @@
     <div class="info">
       {{student}}的答案
     </div>
-    <div class="answer">
-      {{answer}}
+    <div class="answer" v-for="(item,index) in answer" :key="index">
+      {{item}}
     </div>
   </div>
 </div>

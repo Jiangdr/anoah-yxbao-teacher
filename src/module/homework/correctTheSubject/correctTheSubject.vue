@@ -1,22 +1,47 @@
 <template>
   <div class="cube-page cube-view button-view">
-    <header class="header">
-      <h1 @click="clickSwitchStudent">{{studentListArray.length > 0 ? '有学生' : '无学生'}}（1/{{studentListArray.length}}）<i class="fa fa-sort-down"></i></h1>
-      <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i></i>
-    </header>
-    <!-- 学生答案 学生互评tab -->
-    <div class="btns van-hairline--surround">
-      <van-row>
-        <van-col span="12" :class="{'active':activeBtn=='studentAnswer'}">
-          <span @click="toggleContent('studentAnswer')">学生答案</span>
-          </van-col>
-          <van-col span="12" class="student" :class="{'active':activeBtn=='studentMutualComments'}">
-            <span @click="toggleContent('studentMutualComments')">学生互评</span>
-          </van-col>
-      </van-row>
+
+    <div v-show="!switchStudentShow">
+      <header class="header">
+        <h1 @click="clickSwitchStudent">{{studentOneDetail.real_name}}（{{studentOneDetail.num}}/{{studentListArray.length}}）<i class="fa fa-sort-down"></i></h1>
+        <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i></i>
+      </header>
+      <!-- 学生答案 学生互评tab -->
+      <div class="btns van-hairline--surround">
+        <van-row>
+          <van-col span="12" :class="{'active':activeBtn=='studentAnswer'}">
+            <span @click="toggleContent('studentAnswer')">学生答案</span>
+            </van-col>
+            <van-col span="12" class="student" :class="{'active':activeBtn=='studentMutualComments'}">
+              <span @click="toggleContent('studentMutualComments')">学生互评</span>
+            </van-col>
+        </van-row>
+      </div>
+      <studentAnswer v-show="activeBtn === 'studentAnswer'" :answerInfo="answerInfo"></studentAnswer>
+      <studentMutualComments v-show="activeBtn === 'studentMutualComments'" :listObj="listObj"></studentMutualComments>
     </div>
-    <studentAnswer v-show="activeBtn === 'studentAnswer'" :answerList="answerList"></studentAnswer>
-    <studentMutualComments v-show="activeBtn === 'studentMutualComments'" :listObj="listObj"></studentMutualComments>
+
+    <div v-show="switchStudentShow">
+      <header class="header">
+        <h1>切换学生</h1>
+        <i class="cubeic-back" @click="goCorrectTheSubject"><i class="fa fa-angle-left"></i></i>
+      </header>
+      <div>
+        <ul>
+          <li class="list-item" v-for="(item, index) in studentListArray" :key="index" @click="clickStudent(item)">
+            <div style="position: relative;margin-bottom:8px;">
+              <span style="width: 60px;height: 60px;display: inline-block;position: relative;">
+                <img style="border-radius: 50%;width: 100%;height: 100%;" :src="item.avatar"/>
+              </span>
+              <div class="bg-class checkbox">
+                <img src="@/assets/images/batchEvaluate/chooseAvator.png" v-if="item.selectState" style="width:100%;height:100%"/>
+              </div>
+            </div>
+            <div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ item.real_name }}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,11 +61,12 @@ export default {
     return {
       listObj: {},
       activeBtn: "studentAnswer",
-      answerList: [],
+      answerInfo: {},
       listContainerStyle: {
         height: window.innerHeight - 50 + 'px'
       },
-      studentListArray: []
+      studentListArray: [],
+      switchStudentShow: false
     };
   },
   computed: {
@@ -49,22 +75,21 @@ export default {
     })
   },
   created: function() {
-    console.log(this.$route.params)
+    console.log(this.$route.params.detailData)
+    this.paramsDetailData = this.$route.params.detailData;
     this.userInfo = this.$store.state.account.userInfo;
     this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
     this.studentList = this.$store.state.homeworkDetail.homeworkInfo.student_list;
+    this.formatStudentList();
     this.getStudentAnswerList();
     this.getStudentMutualCommentsList();
-    this.formatStudentList();
   },
   methods: {
     goHomework() {
       this.$router.go(-1);
     },
     clickSwitchStudent() {
-      this.$router.push({
-        path: "/switchStudent"
-      });
+      this.switchStudentShow = !this.switchStudentShow;
     },
     toggleContent(items) {
       this.activeBtn = items;
@@ -77,22 +102,26 @@ export default {
           this.studentListArray.push(array[i]);
         }
       }
+      for (let i = 0; i < this.studentListArray.length; i++) {
+        this.studentListArray[i].num = i + 1;
+      }
+      this.studentOneDetail = this.studentListArray[0];
     },
     getStudentMutualCommentsList: function() {
       var self = this;
       var data = {
-        publish_id: '309002511527229000001f',
+        publish_id: self.paramsDetailData.course_hour_publish_id,
         view_userid: self.userInfo.userid,
-        course_resource_id: '9002511527228900001',
+        course_resource_id: self.paramsDetailData.course_resource_id,
         qti_question_id: '9002511502880300001',
-        user_id: '1024625',
+        user_id: self.studentOneDetail.userid,
         page: '1',
         perpage: '5'
       };
       api.studentMutualCommentsGetLists(data).then(
         response => {
           const listObj = response;
-          var array = response.lists;
+          var array = listObj.lists;
           array.forEach(element => {
             element.rank = Number(element.rank);
             if (element.avatar.indexOf('http://') === -1) {
@@ -110,20 +139,79 @@ export default {
         }
       );
     },
+    clear_arr_trim: function(array) {
+      // for (var i = 0; i < array.length; i++) {
+      //   if (array[i] === "" || typeof (array[i]) === "undefined") {
+      //     array.splice(i, 1);
+      //     i = i - 1;
+      //   }
+      // }
+      // return array;
+      // return array.filter(item => item);
+    },
+    goCorrectTheSubject() {
+      this.switchStudentShow = false;
+    },
+    clickStudent(item) {
+      this.switchStudentShow = false;
+      this.studentOneDetail = item;
+      this.getStudentAnswerList();
+      this.getStudentMutualCommentsList();
+    },
     getStudentAnswerList: function(value) {
       var self = this;
       var data = {
-        publish_id: '309002511527229000001f',
-        course_resource_id: '9002511527228900001',
-        dcom_entity_id: 0,
-        source_pk_id: '9002511502880300001',
-        user_id: '1024626',
-        icom_id: 4629,
-        dcom_id: ''
+        publish_id: self.paramsDetailData.course_hour_publish_id,
+        course_resource_id: self.paramsDetailData.course_resource_id,
+        dcom_entity_id: self.paramsDetailData.dcom_entity_id,
+        source_pk_id: self.paramsDetailData.source_pk_id,
+        user_id: self.studentOneDetail.userid,
+        icom_id: self.paramsDetailData.icom_id,
+        dcom_id: self.paramsDetailData.dcom_id
       };
       api.getUserAnswerForMiniRs(data).then(
         response => {
-          self.answerList = response.answer;
+          var answerObj = response.answer[0].answer_detail;
+          if (answerObj.images.length > 0) {
+            var arrayImages = [];
+            var array = answerObj.images;
+            for (let i = 0; i < answerObj.images.length; i++) {
+              var element = answerObj.images[i];
+              if (element.indexOf('http://') === -1) {
+                element = self.env + element
+                arrayImages.push(element);
+              }
+            }
+            answerObj.images = arrayImages;
+          };
+
+          if (answerObj.video[0] && answerObj.video[0].length > 0) {
+            var arrayVideo = [];
+            var array2 = answerObj.video[0];
+            for (let i = 0; i < array2.length; i++) {
+              var element2 = array2[i];
+              if (element2 && element2.indexOf('http://') === -1) {
+                element2 = self.env + element2
+                arrayVideo.push(element2);
+              }
+            }
+            answerObj.video = arrayVideo;
+          };
+
+          if (answerObj.audio[0] && answerObj.audio[0].length > 0) {
+            var arrayAudio = [];
+            var array3 = answerObj.audio[0];
+            for (let i = 0; i < array3.length; i++) {
+              var element3 = array3[i];
+              if (element3 && element3.indexOf('http://') === -1) {
+                element3 = self.env + element3
+                arrayAudio.push(element3);
+              }
+            }
+            answerObj.audio = arrayAudio;
+          };
+          self.answerInfo = answerObj;
+          // console.log(self.answerInfo);
         },
         err => {
           console.log(err);
@@ -153,5 +241,37 @@ export default {
   display: inline-block;
   height: 42px;
   border-bottom: 2px solid transparent;
+}
+li {
+  display: inline-block;
+  width: 20%;
+  box-sizing: border-box;
+  text-align: center;
+  margin-top: 1rem;
+  position: relative;
+}
+.list-item .checkbox {
+  width: 25px;
+  height: 25px;
+  right: 3px;
+  top: 42px;
+  border-radius: 20px;
+  position: absolute;
+}
+.list-item .checkboxAll {
+  width: 25px;
+  height: 25px;
+  border-radius: 20px;
+}
+.checkboxAll img {
+  width:100%;
+  height:100%
+}
+.bg-class {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

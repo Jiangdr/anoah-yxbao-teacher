@@ -1,45 +1,38 @@
 'use strict'
-import http from './_axios'
-import qs from 'qs'
-import { Toast } from 'vant'
-import store from '@/store/index'
+import API_ABSTRACT from '@/axios/_api.abstract'
+import jwt from '@/axios/jwt'
+import stroage from '@/store/stroage'
+// import router from '@/router/index'
 
-class API {
-  // 为对象添加属性
-  constructor (apis = []) {
-    this.apis = apis
-  }
-
-  // 检查返回数据，status非1时，默认弹出轻提示
-  checkStatus (data, opt) {
-    if (data.status === 1) {
-      return data.recordset
+class API extends API_ABSTRACT {
+  fetch(url, data, type = 'post', options = { 'errorTips': true, 'api': 'api2' }) {
+    let jwtToken = stroage['persistent'].get('jwt.jwt');
+    // 有jwt
+    if (jwtToken) {
+      options['headers'] = {};
+      options['headers']['authorization'] = jwtToken;
+      return super.fetch(url, data, type, options).then(r => {
+        return r;
+      },
+        // jwt失效
+      j => {
+        return jwt.apiAuth().then(r => {
+          // 再调一次接口
+          return super.fetch(url, data, type, options);
+        }, j => {
+          alert('去登录');
+          return Promise.reject(j);
+        });
+      });
     } else {
-      if (opt.errorTips) {
-        if (data.msg === 'OK' && typeof data.recordset === 'string') {
-          data.msg = data.recordset
-        }
-        Toast({position: 'bottom', message: data.msg + '(' + data.status + ')'})
-      }
-      return Promise.reject(data)
-    }
-  }
-
-  // 获取数据通用方法
-  // 获取数据通用方法
-  fetch (url, data, type = 'post', options = {'errorTips': true, 'api': 'api2'}) {
-    const apiDomain = window.bus.$store.getters['runEnv/' + options.api] ? window.bus.$store.getters['runEnv/' + options.api] : window.bus.$store.getters['runEnv/' + options.api]
-    url = !~url.indexOf('http') ? apiDomain + url : url
-    if (type === 'post') {
-      data = qs.stringify(data)
-      return http.post(url, data).then(r => {
-        return this.checkStatus(r, options)
-      })
-    } else if (type === 'get') {
-      data = options.api === 'old' ? { 'info': JSON.stringify(data) } : JSON.stringify(data)
-      return http.get(url, data).then(r => {
-        return this.checkStatus(r, options)
-      })
+      // 没有jwt
+      return jwt.apiAuth().then(r => {
+        // 再调一次接口
+        return super.fetch(url, data, type, options);
+      }, j => {
+        alert('去登录');
+        return Promise.reject(j);
+      });
     }
   }
 }
