@@ -57,6 +57,7 @@ Vue.prototype.$http = Axios;
 
 Vue.prototype.$echarts = echarts
 // Axios.defaults.withCredentials = true;
+window.Vue.prototype.$http = Axios;
 
 Vue.use(window.qtivue.default)
 Vue.use(window.anoahim)
