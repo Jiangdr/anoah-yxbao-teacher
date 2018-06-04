@@ -80,7 +80,7 @@
             <div class="time-classify" v-if="item.create_time.length>0" v-html="item.create_time"></div>
             <div @click="goHomeworkDetail(item)" class="homework_list">
               <div class="homework_list_inline_list">
-                  <p class="homework-list-tile single-line">{{item.title}}</p>&nbsp;&nbsp;<p class="font-color single-line">{{item.resource_count}}份</p>
+                  <p class="tag" v-show="item.hour_section_type_id === '9'">订正</p><p class="tag" v-show="item.hour_section_type_id === '10'">个性化</p><p class="homework-list-tile single-line">{{item.title}}</p>&nbsp;&nbsp;<p class="font-color single-line">{{item.resource_count}}份</p>
                 </div>
               <div class="list-container-left">
                 <div class="homework_list_inline_list font-color">{{item.edu_subject_name}}&nbsp;&nbsp;&nbsp;{{item.class_name}}</div>
@@ -362,6 +362,17 @@ export default {
       this.getHomeworkList();
     },
     goHomeworkDetail(item) {
+      // 错题订正和个性化作业跳转persnalized模块
+      if (item.hour_section_type_id === '9' || item.hour_section_type_id === '10') {
+        this.$router.push({
+          name: "Personalized",
+          params: {
+            publishId: item.course_hour_publish_id,
+            classId: item.class_id
+          }
+        });
+        return false
+      }
       this.$store.dispatch("homeworkOneListInfoObj", item);
       this.$router.push({
         path: "/homeworkDetail/:publishId/:classId",
@@ -835,5 +846,14 @@ export default {
   font-size: 36px;
   float: right;
   color: #989ca0;
+}
+.tag{
+  display: inline-block;
+  vertical-align: top;
+  background-color: $orange-primary-color;
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 3px;
+  margin-right: 6px;
 }
 </style>

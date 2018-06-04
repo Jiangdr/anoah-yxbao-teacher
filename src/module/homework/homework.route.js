@@ -15,7 +15,7 @@ import correctTheSubject from './correctTheSubject/correctTheSubject.vue'
 
 let homeworkRoutes = [{
   path: '/homework',
-  meta: { requiresAuth: false, keepAlive: true },
+  meta: { requiresAuth: false, keepAlive: false },
   component: homework
 }, {
   path: '/chooseTextbook',

@@ -16,7 +16,7 @@
         <van-checkbox-group v-model="result">
           <van-cell-group>
             <van-cell v-for="item in userInfo.classes" :title="`${item.class_name}`" :key="item.class_id">
-              <van-checkbox :name="item" />
+              <van-checkbox :name="item"/>
             </van-cell>
           </van-cell-group>
         </van-checkbox-group>
@@ -59,7 +59,7 @@ export default {
     this.publishDateFormat = this.$dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
     this.answerDateFormat = this.$dayjs(new Date((new Date()).getTime() + 24 * 60 * 60 * 1000)).format("YYYY-MM-DD HH:mm:ss");
     this.endDateFormat = this.$dayjs(new Date(2018, 7, 31)).format("YYYY-MM-DD HH:mm:ss");
-    this.chooseSummerHomeworkArray = this.$store.state.homework.chooseSummerHomeworkArray;
+    this.chooseSummerHomeworkArray = this.$store.state.homework.chooseSummerHomeworkArray
   },
   methods: {
     goSummerHomework() {
