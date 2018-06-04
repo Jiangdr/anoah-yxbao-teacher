@@ -72,6 +72,7 @@ export default {
       maxImageNum: 8,
       msg: '',
       imgs: [],
+      imgUrl: [],
       classify: {
         10: '内容超纲',
         11: '答案错误',
@@ -87,8 +88,9 @@ export default {
       maxLength: 100
     }
   },
-  activated () {
+  created () {
     this.imgs = []
+    this.imgUrl = []
     this.getAuthority()
     this.checked = []
   },
@@ -131,7 +133,7 @@ export default {
         rsid: this.$route.params.rsid,
         type: this.checked,
         content: this.msg,
-        images: this.imgs
+        images: this.imgUrl
       }
       correction.create(params).then(r => {
         this.loading = false
@@ -148,18 +150,20 @@ export default {
       window.appPlug.getImage(this.getImagesSuc, this.getImagesFail, true, false)
     },
     getImagesSuc (v) {
+      this.imgs.unshift(v)
       let param = {
         user_id: JSON.parse(localStorage.userinfo).userid,
         mo_authority_token: this.upToken,
         image: 'data:image/png;base64,' + v
       }
-      this.imgs.unshift('data:image/png;base64,' + v)
-      if (this.imgs.length >= this.maxImageNum) {
-        this.togglePopup()
-      }
+      // this.imgs.unshift('data:image/png;base64,' + v)
+      // if (this.imgs.length >= this.maxImageNum) {
+      //   this.togglePopup()
+      // }
       correction.upload(param).then(r => {
         console.log(r)
-        this.imgs.unshift(r.path_virtual)
+        // this.imgs.unshift(r.host_static + r.path_physical)
+        this.imgUrl.unshift(r.path_physical)
         if (this.imgs.length >= this.maxImageNum) {
           this.togglePopup()
         }
