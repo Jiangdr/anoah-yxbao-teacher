@@ -101,7 +101,7 @@
             </van-row>
           </div>
           <div class="title">学生成绩</div>
-        <template v-if="finishCounter>0">
+        <template v-if="homeworkInfo.has_submit_record>0">
           <!-- 学生列表 -->
           <student-list :studentList="studentList" :publishId="homeworkInfo.course_hour_publish_id"></student-list>
         </template>
@@ -182,15 +182,15 @@ export default {
       } else {
         return Math.round(this.correct * 100) + "%";
       }
-    },
-    // 作业完成人数
-    finishCounter() {
-      return (
-        // 学生总人数-未完成人数
-        this.homeworkInfo.student_counter - this.homeworkInfo.unfinished_counter
-      );
-      // return 0
     }
+    // 作业完成人数
+    // finishCounter() {
+    //   return (
+    //     // 学生总人数-未完成人数
+    //     this.homeworkInfo.student_counter - this.homeworkInfo.unfinished_counter
+    //   );
+    //   // return 0
+    // }
   },
   methods: {
     ...mapActions({
