@@ -6,7 +6,7 @@
 </template>
 <script>
 export default {
-  name: "yx-check-box",
+  name: "exercise-check-box",
   props: {
     selected: {
       type: Boolean,
