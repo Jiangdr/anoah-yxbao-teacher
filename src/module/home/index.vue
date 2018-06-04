@@ -160,12 +160,13 @@ export default {
       let param = {};
       // 作业
       if (type === "homework1") {
+        this.$store.state.homework.homeworkState = "0";
         this.$router.push({
           path: "/homework"
         });
-
         // 互动课堂
       } else if (type === "homework2") {
+        this.$store.state.homework.homeworkState = "1";
         this.$router.push({
           path: "/homework"
         });
