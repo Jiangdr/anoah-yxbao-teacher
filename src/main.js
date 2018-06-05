@@ -26,8 +26,6 @@ import util from '@/utils/index.js'
 import dayjs from 'dayjs';
 
 import Axios from 'axios';
-import '../lib/mqttws31.js'
-import mqtt from '@/utils/LMQqtt.js'
 
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts'
@@ -74,7 +72,7 @@ Vue.config.productionTip = false
 
 window.bus = new Vue()
 window.bus.$store = store;
-window.bus.mqtt = mqtt;
+
 // 初始化老版本qti参数，和动态引入需要icombase
 window.ICOM_EVN_VAR = {
   debug: true,
