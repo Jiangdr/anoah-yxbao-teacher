@@ -1,7 +1,7 @@
 <template>
   <div class="cube-page cube-view button-view">
 
-    <div v-show="!switchStudentShow">
+    <div v-if="!switchStudentShow">
       <header class="header">
         <h1 @click="clickSwitchStudent">{{studentOneDetail.real_name}}（{{studentOneDetail.num}}/{{studentListArray.length}}）<i class="fa fa-sort-down"></i></h1>
         <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i></i>
@@ -17,11 +17,11 @@
             </van-col>
         </van-row>
       </div>
-      <studentAnswer v-show="activeBtn === 'studentAnswer'" :answerInfo="answerInfo"></studentAnswer>
-      <studentMutualComments v-show="activeBtn === 'studentMutualComments'" :listObj="listObj"></studentMutualComments>
+      <studentAnswer v-if="activeBtn === 'studentAnswer'" :answerInfo="answerInfo"></studentAnswer>
+      <studentMutualComments v-if="activeBtn === 'studentMutualComments'" :listObj="listObj"></studentMutualComments>
     </div>
 
-    <div v-show="switchStudentShow">
+    <div v-if="switchStudentShow">
       <header class="header">
         <h1>切换学生</h1>
         <i class="cubeic-back" @click="goCorrectTheSubject"><i class="fa fa-angle-left"></i></i>
@@ -42,17 +42,23 @@
         </ul>
       </div>
     </div>
+
+    <div class="publish-homework-btn-div" @click="shareClassBtn">
+      <div class="publish-homework-btn">
+        <div>分享<br/>班级</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import api from "@/module/homework/axios/correctTheSubject.js";
+import api from "@/module/answerDetail/axios/checkAnswerDetai.js";
 import studentAnswer from "@/components/common/studentAnswer.vue";
 import studentMutualComments from "@/components/common/studentMutualComments.vue";
 import {mapGetters} from 'vuex'
 
 export default {
-  name: "correctTheSubject",
+  name: "checkAnswerDetai",
   components: {
     studentMutualComments,
     studentAnswer
@@ -66,6 +72,7 @@ export default {
         height: window.innerHeight - 50 + 'px'
       },
       studentListArray: [],
+      studentAllInfo: {},
       switchStudentShow: false
     };
   },
@@ -139,16 +146,6 @@ export default {
         }
       );
     },
-    clear_arr_trim: function(array) {
-      // for (var i = 0; i < array.length; i++) {
-      //   if (array[i] === "" || typeof (array[i]) === "undefined") {
-      //     array.splice(i, 1);
-      //     i = i - 1;
-      //   }
-      // }
-      // return array;
-      // return array.filter(item => item);
-    },
     goCorrectTheSubject() {
       this.switchStudentShow = false;
     },
@@ -171,6 +168,7 @@ export default {
       };
       api.getUserAnswerForMiniRs(data).then(
         response => {
+          self.studentAllInfo = response;
           var answerObj = response.answer[0].answer_detail;
           if (answerObj.images[0] && answerObj.images.length > 0) {
             var arrayImages = [];
@@ -211,13 +209,22 @@ export default {
             answerObj.audio = arrayAudio;
           };
           self.answerInfo = answerObj;
-          // console.log(self.answerInfo);
         },
         err => {
           console.log(err);
           self.$toast("网络异常");
         }
       );
+    },
+    shareClassBtn() {
+      this.$router.push({
+        name: "share",
+        params: {
+          classId: this.studentAllInfo.class_id,
+          answer: this.studentAllInfo.answer,
+          studentInfo: this.studentAllInfo
+        }
+      });
     }
   }
 };
@@ -270,6 +277,25 @@ li {
 .bg-class {
   width: 50px;
   height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.publish-homework-btn-div {
+  width: 60px;
+  height: 60px;
+  background-color: #2ec2a9;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  color: #ffffff;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+}
+.publish-homework-btn {
+  font-size: 18px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -80,7 +80,9 @@
             <div class="time-classify" v-if="item.create_time.length>0" v-html="item.create_time"></div>
             <div @click="goHomeworkDetail(item)" class="homework_list">
               <div class="homework_list_inline_list">
-                  <p class="tag" v-show="item.hour_section_type_id === '9'">订正</p><p class="tag" v-show="item.hour_section_type_id === '10'">个性化</p><p class="homework-list-tile single-line">{{item.title}}</p>&nbsp;&nbsp;<p class="font-color single-line">{{item.resource_count}}份</p>
+                  <p class="tag" v-show="item.hour_section_type_id === '9'">订正</p><p class="tag" v-show="item.hour_section_type_id === '10'">个性化</p>
+                  <p :style="titleWidth(item)" class="homework-list-tile single-line">{{item.title}}</p>
+                  &nbsp;&nbsp;<p class="font-color single-line">{{item.resource_count}}份</p>
                 </div>
               <div class="list-container-left">
                 <div class="homework_list_inline_list font-color">{{item.edu_subject_name}}&nbsp;&nbsp;&nbsp;{{item.class_name}}</div>
@@ -102,7 +104,7 @@
           </div>
         </van-list>
 
-        <div v-if="homeworkListArray.length === 0" class="tip-div">
+        <div v-if="homeworkListArray.length === 0 && !pullRefresh" class="tip-div">
           <img src="@/assets/images/homework/tip-head.png"/>
           <div><p class="tip-bold-p">暂无作业~</p><p>快去布置作业吧</p><p>布置后您可以在这里看到实时统计</p></div>
         </div>
@@ -263,6 +265,14 @@ export default {
     this.getBooksByTeacher();
   },
   methods: {
+    titleWidth(item) {
+      let tamp =
+        80 -
+        (item.hour_section_type_id === "9" ? 13 : 0) -
+        (item.hour_section_type_id === "10" ? 18 : 0) -
+        (item.correcting_counter !== "0" ? 15 : 0);
+      return "max-width:" + tamp + "%";
+    },
     chooseItem(e, type, value) {
       this.activeItem = 0;
       this.currentPage = 1;
@@ -363,7 +373,10 @@ export default {
     },
     goHomeworkDetail(item) {
       // 错题订正和个性化作业跳转persnalized模块
-      if (item.hour_section_type_id === '9' || item.hour_section_type_id === '10') {
+      if (
+        item.hour_section_type_id === "9" ||
+        item.hour_section_type_id === "10"
+      ) {
         this.$router.push({
           name: "Personalized",
           params: {
@@ -371,7 +384,7 @@ export default {
             classId: item.class_id
           }
         });
-        return false
+        return false;
       }
       this.$store.dispatch("homeworkOneListInfoObj", item);
       this.$router.push({
@@ -550,6 +563,7 @@ export default {
         },
         err => {
           console.log(err);
+          self.pullRefresh = false;
           self.loading = false;
           self.$toast("网络异常");
         }
@@ -655,6 +669,18 @@ export default {
   padding-top: 3vw;
   cursor: pointer;
 }
+.tag {
+  display: inline-block;
+  vertical-align: top;
+  background-color: $orange-primary-color;
+  color: #fff;
+  padding: 0px 8px;
+  border-radius: 8px;
+  margin-right: 6px;
+  height: 25px;
+  font-size: 16px;
+  line-height: 25px;
+}
 .mark-icon {
   background-color: $orange-primary-color;
   border-radius: 8px;
@@ -674,7 +700,6 @@ export default {
   font-size: 18px;
   font-weight: 700;
   display: inline-block;
-  max-width: 80%;
 }
 .homework-list-finish {
   color: $green-primary-color;
@@ -846,14 +871,5 @@ export default {
   font-size: 36px;
   float: right;
   color: #989ca0;
-}
-.tag{
-  display: inline-block;
-  vertical-align: top;
-  background-color: $orange-primary-color;
-  color: #fff;
-  padding: 2px 10px;
-  border-radius: 3px;
-  margin-right: 6px;
 }
 </style>

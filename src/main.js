@@ -16,9 +16,6 @@ import Vant from 'vant'
 import 'vant/lib/vant-css/index.css'
 import 'vant/lib/vant-css/icon-local.css'
 
-import '../lib/cube.min.css'
-import Cube from '../lib/cube.min.js'
-
 import 'font-awesome/css/font-awesome.css'
 
 import util from '@/utils/index.js'
@@ -26,8 +23,6 @@ import util from '@/utils/index.js'
 import dayjs from 'dayjs';
 
 import Axios from 'axios';
-import '../lib/mqttws31.js'
-import mqtt from '@/utils/LMQqtt.js'
 
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts'
@@ -66,15 +61,16 @@ Vue.use(window.mp3player.default)
 Vue.use(window.tcplayer.default)
 
 Vue.use(Vant)
-
-Vue.use(Cube)
 // Vue.use(Vuetouch, {name: 'v-touch'})
 Vue.prototype.util = util
 Vue.config.productionTip = false
 
+// 注册键盘
+Vue.use(AnoahIM)
+
 window.bus = new Vue()
 window.bus.$store = store;
-window.bus.mqtt = mqtt;
+
 // 初始化老版本qti参数，和动态引入需要icombase
 window.ICOM_EVN_VAR = {
   debug: true,

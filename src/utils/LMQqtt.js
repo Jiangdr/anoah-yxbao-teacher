@@ -20,8 +20,10 @@ const LMqtt = {
     this.client.onMessageArrived = this.onMessageArrived;
   },
   onConnectionLost (response) {
+    console.log(response)
     if (response.errorCode !== 0) {
       console.log(response.errorMessage)
+      this.connect()
     }
     console.log('连接断开');
   },

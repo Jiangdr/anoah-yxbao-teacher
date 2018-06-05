@@ -86,6 +86,8 @@ import storage from "@/store/stroage";
 import homeApi from "@/module/home/axios/home";
 import { mapGetters, mapState } from "vuex";
 import { Dialog } from "vant";
+import '../../../lib/mqttws31.js'
+import mqtt from '@/utils/LMQqtt.js'
 export default {
   name: "Home",
   data() {
@@ -115,21 +117,11 @@ export default {
   },
   created() {
     this.onRefresh();
-    if (!storage["session"].get("mqttConnect")) {
-      window.bus.mqtt.connect();
-      homeApi.getMsg({ user_id: this.userId }).then(r => {
-        if (r.notice > 0 || r.homework > 0) {
-          this.$store.commit("notice/setMsg", true);
-          if (r.notice > 0) {
-            this.$store.commit("notice/setSchoolMsg", true);
-          }
-          if (r.homework > 0) {
-            this.$store.commit("notice/setHomeworkMsg", true);
-          }
-        }
-      });
-    }
+    window.bus.mqtt = mqtt;
     // window.bus.mqtt.connect();
+  },
+  mounted() {
+    this.$store.commit('notice/connectMqtt')
   },
   methods: {
     imgUrl(name) {

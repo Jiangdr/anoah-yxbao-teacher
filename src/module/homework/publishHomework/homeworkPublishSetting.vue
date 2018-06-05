@@ -56,6 +56,7 @@ export default {
     this.userInfo = this.$store.state.account.userInfo;
   },
   mounted: function() {
+    console.log(this.$route.params.detailData)
     this.publishDateFormat = this.$dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
     this.answerDateFormat = this.$dayjs(new Date((new Date()).getTime() + 24 * 60 * 60 * 1000)).format("YYYY-MM-DD HH:mm:ss");
     this.endDateFormat = this.$dayjs(new Date(2018, 7, 31)).format("YYYY-MM-DD HH:mm:ss");
@@ -91,7 +92,7 @@ export default {
     surePublishFun() {
       var self = this;
       var classIds = "";
-      var array = self.result;
+      var array = self.userInfo.classes;
       for (let i = 0; i < array.length; i++) {
         if (i + 1 === array.length) {
           classIds += array[i].class_id;
