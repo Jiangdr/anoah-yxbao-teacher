@@ -31,7 +31,6 @@ import 'echarts/lib/component/title'
 import '@/style/global.scss'
 import '@/../lib/swiper.min.css'
 import Swiper from '@/../lib/swiper.min.js'
-// import AnoahIM from '@/module/board/anoahim'
 
 // 引入全局过滤器
 import * as filters from '@/filter/index'
@@ -43,21 +42,16 @@ Vue.prototype.Swiper = Swiper
 Vue.prototype.$dayjs = dayjs;
 
 Vue.prototype.$http = Axios;
-
+window.Vue = Vue
 Vue.prototype.$echarts = echarts
-
-// Vue.use(window.qtivue.default)
-// // Vue.use(window.anoahim)
-// Vue.use(window.mp3player.default)
-// Vue.use(window.tcplayer.default)
+Vue.use(window.qtivue.default)
+// Vue.use(AnoahIM)
+Vue.use(window.mp3player.default)
+Vue.use(window.tcplayer.default)
 
 Vue.use(Vant)
 Vue.prototype.util = util
 Vue.config.productionTip = false
-
-// // 注册键盘
-// Vue.use(AnoahIM)
-
 window.bus = new Vue()
 window.bus.$store = store;
 window.bus.mqtt = mqtt;
