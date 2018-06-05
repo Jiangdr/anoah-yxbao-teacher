@@ -417,7 +417,7 @@ export default {
           checked: item.qti_ids_obj[i].checked,
           num: i + 1,
           caller: "PREVIEWOR",
-          hide_result: 1,
+          // hide_result: 1,
           resource_type: "qti_question",
           isSel: true
         });

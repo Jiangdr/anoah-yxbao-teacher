@@ -90,7 +90,8 @@ export default {
     ...mapMutations({
       clearResource: 'answerDetail/clearResource',
       clearParams: 'answerDetail/clearParams',
-      setParamsIndex: 'answerDetail/setParamsIndex'
+      setParamsIndex: 'answerDetail/setParamsIndex',
+      setStudentAnswerDetailData: 'answerDetail/setStudentAnswerDetailData'
     }),
     // 根据资源创建所需数据结构和swiper视图
     renderView() {
@@ -154,6 +155,7 @@ export default {
     },
     // 主观题批改
     subjectiveQtiPigai(item) {
+      this.setStudentAnswerDetailData(item);
       this.$router.push({
         name: "checkAnswerDetai",
         params: {
