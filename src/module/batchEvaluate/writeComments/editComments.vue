@@ -51,9 +51,7 @@ export default {
   },
   methods: {
     goBatchEvaluate() {
-      this.$router.push({
-        path: "/batchEvaluate"
-      });
+      this.$router.go(-1);
     },
     writeComments() {
       if (this.checkBoxGroup.length === 0) {
