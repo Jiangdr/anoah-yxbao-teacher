@@ -14,7 +14,9 @@
       {{student}}的答案
     </div>
     <div class="answer" v-for="(item,index) in answer" :key="index">
-      {{item}}
+      <div v-for="(answer,key) in JSON.parse(item.answer)" :key="key" v-html=" showAnswer(answer[0])">
+
+      </div>
     </div>
   </div>
 </div>
@@ -23,20 +25,21 @@
 <script>
 import axios from './axios/share.js'
 import headerBar from '@/components/headerBar.vue'
+import storage from "@/store/stroage";
 export default {
   name: "share",
   data() {
     return {
       content: '',
       maxLength: 120,
-      classId: this.$route.classId,
-      answer: this.$route.answer,
-      studentInfo: this.$route.studentInfo
+      classId: this.$route.params.classId,
+      answer: this.$route.params.answer,
+      studentInfo: this.$route.params.studentInfo
     }
   },
   computed: {
     title() {
-      let teachr = JSON.parse(localStorage.userinfo).nicknm;
+      let teachr = storage['persistent'].get('userinfo').nicknm;
       return teachr + '分享了' + this.student + '的答案'
     },
     shareParma() {
@@ -44,7 +47,7 @@ export default {
       return JSON.stringify(param)
     },
     student() {
-      return JSON.parse(this.studentInfo).real_name
+      return this.studentInfo.real_name
     }
   },
   methods: {
@@ -65,6 +68,18 @@ export default {
     },
     clear() {
       this.content = "";
+    },
+    showAnswer(item) {
+      let type = item.slice(item.lastIndexOf('.'));
+      if (type === '.gif' || type === '.png' || type === '.jpg') {
+        return `<img src='${window.bus.$store.getters['runEnv/old'] + item}' width="100%"/>`
+      } else if (type === '.mp4') {
+        return `<video src='${window.bus.$store.getters['runEnv/old'] + item}' controls="controls" width="100%"></video>`
+      } else if (type === '.mp3') {
+        return `<audio src='${window.bus.$store.getters['runEnv/old'] + item}' controls="controls" width="100%"></audio>`
+      } else {
+        return `<span>${item}</span>`
+      }
     }
   },
   components: {
@@ -76,8 +91,11 @@ export default {
 <style lang="scss">
 .share{
   padding:0 13px;
+  height:100%;
   .wrapper{
     margin-top:13px;
+    height: calc(100% - 45px);
+    overflow-y: scroll;
     textarea{
       width: 100%;
       height: 148px;
@@ -101,6 +119,10 @@ export default {
   }
   .info{
     margin:30px auto 20px;
+  }
+  .answer{
+    padding-bottom: 20px;
+    text-align: center;
   }
 }
 </style>
