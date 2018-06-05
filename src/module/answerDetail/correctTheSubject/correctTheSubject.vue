@@ -1,7 +1,7 @@
 <template>
   <div class="cube-page cube-view button-view">
 
-    <div v-show="!switchStudentShow">
+    <div v-if="!switchStudentShow">
       <header class="header">
         <h1 @click="clickSwitchStudent">{{studentOneDetail.real_name}}（{{studentOneDetail.num}}/{{studentListArray.length}}）<i class="fa fa-sort-down"></i></h1>
         <i class="cubeic-back" @click="goHomework"><i class="fa fa-angle-left"></i></i>
@@ -17,11 +17,11 @@
             </van-col>
         </van-row>
       </div>
-      <studentAnswer v-show="activeBtn === 'studentAnswer'" :answerInfo="answerInfo"></studentAnswer>
-      <studentMutualComments v-show="activeBtn === 'studentMutualComments'" :listObj="listObj"></studentMutualComments>
+      <studentAnswer v-if="activeBtn === 'studentAnswer'" :answerInfo="answerInfo"></studentAnswer>
+      <studentMutualComments v-if="activeBtn === 'studentMutualComments'" :listObj="listObj"></studentMutualComments>
     </div>
 
-    <div v-show="switchStudentShow">
+    <div v-if="switchStudentShow">
       <header class="header">
         <h1>切换学生</h1>
         <i class="cubeic-back" @click="goCorrectTheSubject"><i class="fa fa-angle-left"></i></i>
