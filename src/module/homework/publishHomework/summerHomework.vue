@@ -103,6 +103,7 @@ export default {
   mounted: function() {},
   methods: {
     goPublishHomework() {
+      this.examExerciseShow = false;
       this.lists.length = 0;
       this.$store.dispatch("hasChoosePagesArray", this.hasChoosePagesNumArray);
       this.$store.dispatch("isOldPackId", "1");
@@ -151,8 +152,10 @@ export default {
           resource_id: this.hasChoosePagesNumArray[i].resource_id
         });
       }
-      this.$store.dispatch("hasChoosePagesArray", []);
-      this.$store.dispatch("isOldPackId", "0");
+      this.examExerciseShow = false;
+      this.lists.length = 0;
+      this.$store.dispatch("hasChoosePagesArray", this.hasChoosePagesNumArray);
+      this.$store.dispatch("isOldPackId", "1");
       this.result = result;
       this.$store.dispatch("chooseSummerHomeworkArray", this.result);
       // console.log(this.hasChoosePagesNumArray);
