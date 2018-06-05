@@ -309,7 +309,7 @@ export default {
             this.currentItem.qti_ids_obj[j].checked = true;
             let arr = this.$refs["cbs-" + j];
             if (arr && arr.length > 0) {
-              arr[0].checked = true;
+              arr[0].selecteState = true;
             }
           }
           break;
@@ -323,6 +323,10 @@ export default {
           parseInt(this.currentItem.qti_num);
         for (let j = 0; j < this.currentItem.qti_ids_obj.length; j++) {
           this.currentItem.qti_ids_obj[j].checked = true;
+          let arr = this.$refs["cbs-" + j];
+          if (arr && arr.length > 0) {
+            arr[0].selecteState = true;
+          }
         }
       }
       this.getHasChooseExerciseNum();
@@ -450,7 +454,7 @@ export default {
         });
         let arr = this.$refs["cbs-" + i];
         if (arr && arr.length > 0) {
-          arr[0].checked = item.qti_ids_obj[i].checked;
+          arr[0].selecteState = item.qti_ids_obj[i].checked;
         }
       }
       // debugger
