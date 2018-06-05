@@ -4,22 +4,90 @@
       <div slot="title-name">二维码扫描</div>
     </header-bar>
     <div class="content">
-      <!-- <div class="succ-qr">
+      <div class="succ-qr" v-if="$route.params.status === '1'">
         <div class="icon icon-succ"></div>
         <p>即将在电脑端登录优学派智慧教育平台</p>
-      </div> -->
-      <div class="err-qr">
+      </div>
+      <div class="err-qr" v-else-if="$route.params.status === '-402'">
         <div class="icon icon-err"></div>
         <p>登录确认已失效，请重新扫码登录</p>
       </div>
-      <div class="login-btn">确认登录</div>
+      <div class="err-qr" v-else-if="$route.params.status === '-400'">
+        <div class="icon icon-err"></div>
+        <p>二维码已失效,请刷新PC端二维码,重新扫码</p>
+      </div>
+      <div class="err-qr" v-else-if="$route.params.status === '-500'">
+        <div class="icon icon-err"></div>
+        <p>接口参数错误,请联系管理员</p>
+      </div>
+      <div class="login-btn" v-if="$route.params.status === '1'" @click="login">确认登录</div>
+      <div class="login-btn" v-else @click="reScan">重新扫码登录</div>
     </div>
   </div>
 </template>
 <script>
 import headerBar from '@/components/headerBar'
+import homeApi from "@/module/home/axios/home"
+import {mapGetters} from "vuex"
+import {Toast} from "vant"
 export default {
   name: 'AfterScan',
+  computed: {
+    ...mapGetters({
+      userId: "userCenter/userId"
+    })
+  },
+  methods: {
+    login() {
+      homeApi.qrcode({
+        token: this.userId,
+        uuid: this.$route.params.uuid,
+        action: 'login'
+      }).then(succ => {
+        this.afterQRscan(succ, this.$route.params.uuid)
+      })
+    },
+    reScan() {
+      window.appPlug.scanQRCode((info) => {
+        let reg = /\?(.*)/
+        let match
+        let uuid = (match = reg.exec(info)) && match[1];
+        if (match && uuid) {
+          // 扫描后获取参数成功
+          homeApi.qrcode({
+            token: this.userId,
+            uuid: uuid,
+            action: 'scan'
+          }).then(succ => {
+            this.afterQRscan(succ, uuid)
+          })
+        }
+      }, (err) => {
+        Toast(err)
+      })
+    },
+    afterQRscan(params, uuid) {
+      if (params.status === 1) {
+        // 扫描成功
+        Toast(params.msg)
+        this.$router.replace({path: '/afterQRscan/1/' + uuid})
+      } else if (params.status === -400) {
+        Toast('二维码失效！')
+        this.$router.replace({path: '/afterQRscan/-400/' + uuid})
+      } else if (params.status === -402) {
+        Toast('登录确认已失效！')
+        this.$router.replace({path: '/afterQRscan/-402/' + uuid})
+      } else if (params.status === -500) {
+        Toast('接口请求参数错误！')
+        this.$router.replace({path: '/afterQRscan/-500/' + uuid})
+      } else if (params.status === 2) {
+        Toast('登录成功')
+        this.$router.back(-1)
+      } else {
+        Toast(params.msg);
+      }
+    }
+  },
   components: {
     headerBar
   }

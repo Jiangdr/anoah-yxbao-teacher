@@ -8,7 +8,7 @@ export default [
     meta: { requiresAuth: true, keepAlive: true }
   },
   {
-    path: '/afterQRscan/:status', // 0为失败，1为成功
+    path: '/afterQRscan/:status/:uuid', // 0为失败，1为成功
     name: 'AfterQrscan',
     component: afterQRscan,
     meta: { requiresAuth: true, keepAlive: true }

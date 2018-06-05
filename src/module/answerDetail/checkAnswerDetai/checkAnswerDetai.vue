@@ -52,10 +52,10 @@
 </template>
 
 <script>
+import {mapState, mapGetters, mapMutations} from 'vuex'
 import api from "@/module/answerDetail/axios/checkAnswerDetai.js";
 import studentAnswer from "@/components/common/studentAnswer.vue";
 import studentMutualComments from "@/components/common/studentMutualComments.vue";
-import {mapGetters} from 'vuex'
 
 export default {
   name: "checkAnswerDetai",
@@ -82,16 +82,20 @@ export default {
     })
   },
   created: function() {
-    console.log(this.$route.params.detailData)
-    this.paramsDetailData = this.$route.params.detailData;
+    this.studentAnswerDetailData = this.$route.params.detailData ? this.$route.params.detailData : this.$store.state.answerDetail.studentAnswerDetailData;
     this.userInfo = this.$store.state.account.userInfo;
     this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
     this.studentList = this.$store.state.homeworkDetail.homeworkInfo.student_list;
+    console.log(this.studentAnswerDetailData)
+    this.setStudentAnswerDetailData(this.studentAnswerDetailData);
     this.formatStudentList();
     this.getStudentAnswerList();
     this.getStudentMutualCommentsList();
   },
   methods: {
+    ...mapMutations({
+      setStudentAnswerDetailData: 'answerDetail/setStudentAnswerDetailData'
+    }),
     goHomework() {
       this.$router.go(-1);
     },
@@ -117,10 +121,10 @@ export default {
     getStudentMutualCommentsList: function() {
       var self = this;
       var data = {
-        publish_id: self.paramsDetailData.course_hour_publish_id,
+        publish_id: self.studentAnswerDetailData.course_hour_publish_id,
         view_userid: self.userInfo.userid,
-        course_resource_id: self.paramsDetailData.course_resource_id,
-        qti_question_id: self.paramsDetailData.source_pk_id,
+        course_resource_id: self.studentAnswerDetailData.course_resource_id,
+        qti_question_id: self.studentAnswerDetailData.source_pk_id,
         user_id: self.studentOneDetail.userid,
         page: '1',
         perpage: '999'
@@ -158,13 +162,13 @@ export default {
     getStudentAnswerList: function(value) {
       var self = this;
       var data = {
-        publish_id: self.paramsDetailData.course_hour_publish_id,
-        course_resource_id: self.paramsDetailData.course_resource_id,
-        dcom_entity_id: self.paramsDetailData.dcom_entity_id,
-        source_pk_id: self.paramsDetailData.source_pk_id,
+        publish_id: self.studentAnswerDetailData.course_hour_publish_id,
+        course_resource_id: self.studentAnswerDetailData.course_resource_id,
+        dcom_entity_id: self.studentAnswerDetailData.dcom_entity_id,
+        source_pk_id: self.studentAnswerDetailData.source_pk_id,
         user_id: self.studentOneDetail.userid,
-        icom_id: self.paramsDetailData.icom_id,
-        dcom_id: self.paramsDetailData.dcom_id
+        icom_id: self.studentAnswerDetailData.icom_id,
+        dcom_id: self.studentAnswerDetailData.dcom_id
       };
       api.getUserAnswerForMiniRs(data).then(
         response => {

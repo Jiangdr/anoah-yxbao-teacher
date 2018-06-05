@@ -84,7 +84,7 @@ import api from "@/axios/iclass";
 import storage from "@/store/stroage";
 import homeApi from "@/module/home/axios/home";
 import { mapGetters, mapState } from "vuex";
-import { Dialog } from "vant";
+import {Dialog, Toast} from "vant"
 import '../../../../lib/mqttws31.js'
 import mqtt from '@/utils/LMQqtt.js'
 export default {
@@ -135,18 +135,38 @@ export default {
     },
     QRscan() {
       window.appPlug.scanQRCode((info) => {
-        alert(JSON.stringify(info))
-      }, (err) => {
-        alert(JSON.stringify(err))
-      })
-      // homeApi.qrcode({
-      //   token: this.userId,
-      //   uuid: 'ddddddddddddddddddd',
-      //   action: 'scan'
-      // }).then(succ => {
-      //   console.log(succ)
-      // })
-      // this.$router.push({path: '/afterQRscan'})
+        let reg = /\?(.*)/
+        let match
+        let uuid = (match = reg.exec(info)) && match[1];
+        if (match && uuid) {
+          // 扫描后获取参数成功
+          homeApi.qrcode({
+            token: this.userId,
+            uuid: uuid,
+            action: 'scan'
+          }).then(succ => {
+            this.afterQRscan(succ, uuid)
+          })
+        }
+      }, (err) => {})
+      // this.afterQRscan({status: 1}, 12311111)
+    },
+    afterQRscan(params, uuid) {
+      if (params.status === 1) {
+        // 扫描成功
+        Toast(params.msg)
+        this.$router.push({path: '/afterQRscan/1/' + uuid})
+      } else if (params.status === -400) {
+        Toast('二维码失效！')
+      } else if (params.status === -402) {
+        Toast('登录确认已失效！')
+      } else if (params.status === -500) {
+        Toast('接口请求参数错误！')
+      } else if (params.status === 2) {
+        Toast('登录成功')
+      } else {
+        Toast(params.msg);
+      }
     },
 
     getEnv(env) {
