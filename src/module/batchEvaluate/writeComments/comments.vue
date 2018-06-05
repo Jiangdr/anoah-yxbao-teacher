@@ -4,7 +4,7 @@
     <header class="header">
       <h1>
         <i class="cubeic-back" @click="goBatchEvaluate">
-          <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
+          <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text"></span>
         </i>
         <div>
           批量写评语
@@ -99,9 +99,7 @@ export default {
   },
   methods: {
     goBatchEvaluate() {
-      this.$router.push({
-        path: "/batchEvaluate"
-      });
+      this.$router.go(-1);
     },
     goAddComments() {
       this.$store.dispatch("batchEvaluateCommentsTemplateType", 1);
