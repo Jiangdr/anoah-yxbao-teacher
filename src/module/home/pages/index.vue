@@ -148,8 +148,7 @@ export default {
             this.afterQRscan(succ, uuid)
           })
         }
-      }, (err) => {})
-      // this.afterQRscan({status: 1}, 12311111)
+      })
     },
     afterQRscan(params, uuid) {
       if (params.status === 1) {

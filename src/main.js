@@ -5,10 +5,10 @@ import App from './App'
 import store from './store/index.js'
 
 import router from './router'
-import 'es6-promise/auto'
 
 import '@/assets/css/base.css'
 import '@/assets/css/global.css'
+
 import Vant from 'vant'
 import 'vant/lib/vant-css/index.css'
 
@@ -35,14 +35,10 @@ import Swiper from '@/../lib/swiper.min.js'
 
 // 引入全局过滤器
 import * as filters from '@/filter/index'
-
-Vue.prototype.$vantLang = 'zh-cn'
-// import "http://e.dev.anoah.com/hot_code/youxuebao/teacher/www/lib/qti/anoahim.js"
-// Vue.use(VueAwesomeSwiper)
-Vue.prototype.Swiper = Swiper
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
+Vue.prototype.Swiper = Swiper
 
 Vue.prototype.$dayjs = dayjs;
 
@@ -56,7 +52,6 @@ Vue.prototype.$echarts = echarts
 // Vue.use(window.tcplayer.default)
 
 Vue.use(Vant)
-// Vue.use(Vuetouch, {name: 'v-touch'})
 Vue.prototype.util = util
 Vue.config.productionTip = false
 
