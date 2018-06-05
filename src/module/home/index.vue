@@ -86,6 +86,8 @@ import storage from "@/store/stroage";
 import homeApi from "@/module/home/axios/home";
 import { mapGetters, mapState } from "vuex";
 import { Dialog } from "vant";
+import '../../../lib/mqttws31.js'
+import mqtt from '@/utils/LMQqtt.js'
 export default {
   name: "Home",
   data() {
@@ -115,6 +117,10 @@ export default {
   },
   created() {
     this.onRefresh();
+    window.bus.mqtt = mqtt;
+    // window.bus.mqtt.connect();
+  },
+  mounted() {
     if (!storage["session"].get("mqttConnect")) {
       window.bus.mqtt.connect();
       homeApi.getMsg({ user_id: this.userId }).then(r => {
@@ -129,7 +135,6 @@ export default {
         }
       });
     }
-    // window.bus.mqtt.connect();
   },
   methods: {
     imgUrl(name) {
