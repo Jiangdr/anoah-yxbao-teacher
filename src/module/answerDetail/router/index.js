@@ -16,7 +16,7 @@ import groupDetail from '@/module/answerDetail/components/question/groupDetail.v
 // 组件详情   口算训练
 import groupDetailColumn from '@/module/answerDetail/components/question/groupDetailColumn.vue'
 // 批改本题页面
-import correctTheSubject from '@/module/answerDetail/correctTheSubject/correctTheSubject.vue'
+import checkAnswerDetai from '@/module/answerDetail/checkAnswerDetai/checkAnswerDetai.vue'
 export default
 [
   {
@@ -39,9 +39,9 @@ export default
     ]
   },
   {
-    path: '/correctTheSubject',
+    path: '/checkAnswerDetai',
     meta: { requiresAuth: false, keepAlive: true },
-    name: "correctTheSubject",
-    component: correctTheSubject
+    name: "checkAnswerDetai",
+    component: checkAnswerDetai
   }
 ]

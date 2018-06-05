@@ -52,13 +52,13 @@
 </template>
 
 <script>
-import api from "@/module/homework/axios/correctTheSubject.js";
+import api from "@/module/answerDetail/axios/checkAnswerDetai.js";
 import studentAnswer from "@/components/common/studentAnswer.vue";
 import studentMutualComments from "@/components/common/studentMutualComments.vue";
 import {mapGetters} from 'vuex'
 
 export default {
-  name: "correctTheSubject",
+  name: "checkAnswerDetai",
   components: {
     studentMutualComments,
     studentAnswer

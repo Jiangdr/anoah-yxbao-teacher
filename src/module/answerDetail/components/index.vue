@@ -155,7 +155,7 @@ export default {
     // 主观题批改
     subjectiveQtiPigai(item) {
       this.$router.push({
-        name: "correctTheSubject",
+        name: "checkAnswerDetai",
         params: {
           detailData: item
         }

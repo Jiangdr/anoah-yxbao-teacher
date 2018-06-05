@@ -35,7 +35,7 @@
         </div>
         <div v-for="(item, index) in setting" :key="index" style="position: relative;">
           <Qti :setting="item"></Qti>
-          <YxCheckBox style="position: absolute;right:10px;bottom:10px;width: 25px;height: 25px;" class="checkbox" :selected="item.checked" :ref="'cbs-'+index" @select="exerciseCheckboxChange(item, $event)"></YxCheckBox>
+          <YxCheckBox style="position: absolute;right:10px;bottom:0px;width: 25px;height: 25px;" class="checkbox" :selected="item.checked" :ref="'cbs-'+index" @select="exerciseCheckboxChange(item, $event)"></YxCheckBox>
         </div>
       </div>
     </div>
@@ -417,6 +417,7 @@ export default {
           checked: item.qti_ids_obj[i].checked,
           num: i + 1,
           caller: "PREVIEWOR",
+          hide_result: 1,
           resource_type: "qti_question",
           isSel: true
         });
