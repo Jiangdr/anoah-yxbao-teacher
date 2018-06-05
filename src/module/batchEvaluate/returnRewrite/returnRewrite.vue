@@ -118,22 +118,6 @@ export default {
     clickCancelTimeFun() {
       this.publishDatePickerShow = false;
     },
-    writeComments() {
-      if (this.checkBoxGroup.length === 0) {
-        this.$toast({
-          message: "请选择学生！",
-          duration: 750
-        });
-        return;
-      }
-      this.$store.dispatch(
-        "chooseBatchEvaluateStudentsArray",
-        this.checkBoxGroup
-      );
-      this.$router.push({
-        path: "/comments"
-      });
-    },
     getTemplateList() {
       var self = this;
       var data = {
