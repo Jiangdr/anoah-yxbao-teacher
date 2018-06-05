@@ -1,6 +1,6 @@
 <template>
   <div class="cube-page cube-view button-view" style="background-color: #fff;height:100%">
-    <div v-if="!examExerciseShow">
+    <div v-show="!examExerciseShow">
       <header class="header">
         <h1>暑假作业</h1>
         <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
@@ -23,7 +23,7 @@
       </van-pull-refresh>
     </div>
 
-    <div v-if="examExerciseShow">
+    <div v-show="examExerciseShow">
       <header class="header">
         <h1>试卷</h1>
         <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i> 返回</i>
@@ -35,13 +35,13 @@
         </div>
         <div v-for="(item, index) in setting" :key="index" style="position: relative;">
           <Qti :setting="item"></Qti>
-          <exerciseCheckBox style="position: absolute;right:10px;bottom:10px;width: 25px;height: 25px;" class="checkbox" :selected="item.checked" :ref="'cbs-'+index" @select="exerciseCheckboxChange(item, $event)"></exerciseCheckBox>
+          <YxCheckBox style="position: absolute;right:10px;bottom:10px;width: 25px;height: 25px;" class="checkbox" :selected="item.checked" :ref="'cbs-'+index" @select="exerciseCheckboxChange(item, $event)"></YxCheckBox>
         </div>
       </div>
     </div>
 
-    <div v-if="this.hasChoosePagesNumAtlast !== 0" class="footer-container">
-      <p class="footer-p">已选试卷<span>{{hasChoosePagesNumAtlast}}</span>份，共<span>{{hasChooseProblemsNumAtlast}}</span>道题</p>
+    <div v-if="this.hasChoosePagesNumArray.length !== 0" class="footer-container">
+      <p class="footer-p">已选试卷<span>{{this.hasChoosePagesNumArray.length}}</span>份，共<span>{{hasChooseProblemsNumAtlast}}</span>道题</p>
       <div class="yx-green-btn buzhi-div"  @click="clickPublish">布&nbsp;&nbsp;&nbsp;&nbsp;置</div>
     </div>
   </div>
@@ -61,9 +61,7 @@ export default {
       checkList: [],
       lists: [],
       result: [],
-      hasChooseProblemsNum: 0,
       hasChooseProblemsNumAtlast: 0,
-      hasChoosePagesNumAtlast: 0,
       olded: false,
       pullRefresIsLoading: false,
       pullRefresh: false,
@@ -100,10 +98,6 @@ export default {
     this.finished = false;
     this.pullRefresh = true;
     this.getList();
-    this.hasChoosePagesNumArray.forEach(element => {
-      this.hasChooseProblemsNum =
-        parseInt(this.hasChooseProblemsNum) + parseInt(element.qti_num);
-    });
   },
   created: function() {},
   mounted: function() {},
@@ -121,7 +115,6 @@ export default {
     },
     getHasChooseExerciseNum() {
       var num = 0;
-      var num2 = 0;
       var array = this.hasChoosePagesNumArray;
       for (let i = 0; i < array.length; i++) {
         for (let j = 0; j < array[i].qti_ids_obj.length; j++) {
@@ -130,14 +123,7 @@ export default {
           }
         }
       }
-
-      for (let i = 0; i < array.length; i++) {
-        if (array[i].isSel) {
-          num2 += 1;
-        }
-      }
       this.hasChooseProblemsNumAtlast = num;
-      this.hasChoosePagesNumAtlast = num2;
     },
     clickPublish() {
       this.lists.length = 0;
@@ -171,10 +157,12 @@ export default {
       var self = this;
       if (this.hasChoosePagesNumArray.length === this.lists.length) {
         this.hasChoosePagesNumArray = [];
-        this.hasChooseProblemsNum = 0;
         let i = 0;
         while (i < this.lists.length) {
           self.$refs["cb-" + i][0].selecteState = false;
+          for (let j = 0; j < this.lists[i].qti_ids_obj.length; j++) {
+            this.lists[i].qti_ids_obj[j].checked = false;
+          }
           ++i;
         }
       } else {
@@ -184,8 +172,10 @@ export default {
           let element = this.lists[j];
           if (self.hasChoosePagesNumArray.indexOf(element) < 0) {
             self.hasChoosePagesNumArray.push(element);
-            self.hasChooseProblemsNum =
-              parseInt(self.hasChooseProblemsNum) + parseInt(element.qti_num);
+          }
+
+          for (let q = 0; q < this.lists[j].qti_ids_obj.length; q++) {
+            this.lists[j].qti_ids_obj[q].checked = true;
           }
           ++j;
         }
@@ -205,8 +195,6 @@ export default {
 
         if (!isHas) {
           this.hasChoosePagesNumArray.push(item);
-          this.hasChooseProblemsNum =
-            parseInt(this.hasChooseProblemsNum) + parseInt(item.qti_num);
           for (let j = 0; j < item.qti_ids_obj.length; j++) {
             item.qti_ids_obj[j].checked = true;
           }
@@ -228,55 +216,59 @@ export default {
       this.getHasChooseExerciseNum();
     },
     exerciseCheckboxChange(item, event) {
-      for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
-        if (
-          this.hasChoosePagesNumArray[i].resource_id === this.currentResourceId
-        ) {
-          if (event.selecteState) {
-            for (
-              let j = 0;
-              j < this.hasChoosePagesNumArray[i].qti_ids_obj.length;
-              j++
-            ) {
-              if (
-                item.qid === this.hasChoosePagesNumArray[i].qti_ids_obj[j].value
-              ) {
-                this.hasChoosePagesNumArray[i].qti_ids_obj[j].checked = true;
-              }
-            }
+      if (event.selecteState) {
+        let isHas = false;
+        for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
+          if (
+            this.hasChoosePagesNumArray[i].resource_id ===
+            this.currentItem.resource_id
+          ) {
+            isHas = true;
+            break;
+          }
+        }
+
+        if (!isHas) {
+          this.hasChoosePagesNumArray.push(this.currentItem);
+          let arr = this.$refs["cb-" + this.currentItem.listIndex];
+          if (arr && arr.length > 0) {
+            arr[0].selecteState = true;
+          }
+        }
+        for (let j = 0; j < this.currentItem.qti_ids_obj.length; j++) {
+          if (item.qid === this.currentItem.qti_ids_obj[j].value) {
+            this.currentItem.qti_ids_obj[j].checked = true;
+          }
+        }
+      } else {
+        var chooseOne = false;
+        for (let j = 0; j < this.currentItem.qti_ids_obj.length; j++) {
+          if (item.qid === this.currentItem.qti_ids_obj[j].value) {
+            this.currentItem.qti_ids_obj[j].checked = false;
           } else {
-            for (
-              let j = 0;
-              j < this.hasChoosePagesNumArray[i].qti_ids_obj.length;
-              j++
-            ) {
-              if (
-                item.qid === this.hasChoosePagesNumArray[i].qti_ids_obj[j].value
-              ) {
-                this.hasChoosePagesNumArray[i].qti_ids_obj[j].checked = false;
-              }
+            if (this.currentItem.qti_ids_obj[j].checked) {
+              chooseOne = true;
+            } else {
+              chooseOne = false;
             }
+          }
+        }
 
-            var chooseOne = true;
-            for (
-              let j = 0;
-              j < this.hasChoosePagesNumArray[i].qti_ids_obj.length;
-              j++
-            ) {
-              if (this.hasChoosePagesNumArray[i].qti_ids_obj[j].checked) {
-                chooseOne = true;
-              } else {
-                chooseOne = false;
-              }
+        if (!chooseOne) {
+          for (
+            let index = 0;
+            index < this.hasChoosePagesNumArray.length;
+            index++
+          ) {
+            const element = this.hasChoosePagesNumArray[index];
+            if (element.resource_id === this.currentItem.resource_id) {
+              this.hasChoosePagesNumArray.splice(index, 1);
+              break;
             }
-
-            if (!chooseOne) {
-              for (let m = 0; m < this.lists.length; m++) {
-                if (this.lists[m].resource_id === this.currentResourceId) {
-                  this.lists[m].isSel = false;
-                }
-              }
-            }
+          }
+          let arr = this.$refs["cb-" + this.currentItem.listIndex];
+          if (arr && arr.length > 0) {
+            arr[0].selecteState = false;
           }
         }
       }
@@ -298,35 +290,14 @@ export default {
       }
     },
     clickChooseAll() {
-      let isHas = false;
-      for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
-        if (
-          this.hasChoosePagesNumArray[i].resource_id ===
-          this.currentItem.resource_id
-        ) {
-          isHas = true;
-          for (let j = 0; j < this.currentItem.qti_ids_obj.length; j++) {
-            this.currentItem.qti_ids_obj[j].checked = true;
-            let arr = this.$refs["cbs-" + j];
-            if (arr && arr.length > 0) {
-              arr[0].selecteState = true;
-            }
-          }
-          break;
-        }
-      }
-
-      if (!isHas) {
+      if (!this.isSelect(this.currentItem)) {
         this.hasChoosePagesNumArray.push(this.currentItem);
-        this.hasChooseProblemsNum =
-          parseInt(this.hasChooseProblemsNum) +
-          parseInt(this.currentItem.qti_num);
-        for (let j = 0; j < this.currentItem.qti_ids_obj.length; j++) {
-          this.currentItem.qti_ids_obj[j].checked = true;
-          let arr = this.$refs["cbs-" + j];
-          if (arr && arr.length > 0) {
-            arr[0].selecteState = true;
-          }
+      }
+      for (let j = 0; j < this.currentItem.qti_ids_obj.length; j++) {
+        this.currentItem.qti_ids_obj[j].checked = true;
+        let arr = this.$refs["cbs-" + j];
+        if (arr && arr.length > 0) {
+          arr[0].selecteState = true;
         }
       }
       this.getHasChooseExerciseNum();
@@ -344,49 +315,33 @@ export default {
         success => {
           self.loading = false;
           self.pullRefresIsLoading = false;
-          if (self.pullRefresh) {
-            self.hasChooseProblemsNum = 0;
-            this.olded = this.$store.state.homework.isOldPackId === "1";
-            if (self.$store.state.homework.hasChoosePagesArray.length > 0) {
-              self.hasChoosePagesNumArray = JSON.parse(
-                JSON.stringify(self.$store.state.homework.hasChoosePagesArray)
-              );
-              self.hasChoosePagesNumArray.forEach(elementnum => {
-                self.hasChooseProblemsNum =
-                  parseInt(self.hasChooseProblemsNum) +
-                  parseInt(elementnum.qti_num);
-              });
-            } else {
-              self.hasChoosePagesNumArray = [];
-            }
-            self.lists.length = 0;
-          }
-          self.pullRefresh = false;
           if (success.lists.length < 1) {
             self.noMore = true;
           } else {
-            success.lists.forEach(element => {
-              if (self.olded && self.isSelect(element)) {
-                element.isSel = true;
-                let arr = self.$refs["cb-" + self.lists.length];
-                if (arr && arr.length > 0) {
-                  arr[0].selecteState = true;
-                }
-                element.qti_ids_obj = [];
-                for (let j = 0; j < element.qti_ids.length; j++) {
-                  element.qti_ids_obj.push({
-                    value: element.qti_ids[j],
-                    checked: true
-                  });
-                }
-              } else if (!self.olded) {
-                element.allExcerciseArr = JSON.parse(
-                  JSON.stringify(element.qti_ids)
+            if (self.pullRefresh) {
+              self.olded = self.$store.state.homework.isOldPackId === "1";
+              if (self.$store.state.homework.hasChoosePagesArray.length > 0) {
+                self.hasChoosePagesNumArray = JSON.parse(
+                  JSON.stringify(self.$store.state.homework.hasChoosePagesArray)
                 );
+              } else {
+                self.hasChoosePagesNumArray = [];
+              }
+              self.lists.length = 0;
+            }
+
+            success.lists.forEach(element => {
+              if (self.olded) {
+                element = self.getSelectItem(element);
+                if (element !== null) {
+                  element.isSel = true;
+                  let arr = self.$refs["cb-" + self.lists.length];
+                  if (arr && arr.length > 0) {
+                    arr[0].selecteState = true;
+                  }
+                }
+              } else {
                 self.hasChoosePagesNumArray.push(element);
-                self.hasChooseProblemsNum =
-                  parseInt(self.hasChooseProblemsNum) +
-                  parseInt(element.qti_num);
                 element.isSel = true;
                 let arr = self.$refs["cb-" + self.lists.length];
                 if (arr && arr.length > 0) {
@@ -400,9 +355,11 @@ export default {
                   });
                 }
               }
+              element.listIndex = self.lists.length;
               self.lists.push(element);
             });
           }
+          self.pullRefresh = false;
           self.getHasChooseExerciseNum();
         },
         err => {
@@ -413,6 +370,13 @@ export default {
           self.$toast("网络异常");
         }
       );
+    },
+    getSelectItem(item) {
+      var res = null;
+      this.hasChoosePagesNumArray.forEach(elements => {
+        if (elements.resource_id === item.resource_id) res = elements;
+      });
+      return res;
     },
     isSelect(item) {
       var isContain = false;
