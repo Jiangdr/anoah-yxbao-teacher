@@ -75,7 +75,6 @@
       <div @click="getEnv('.t')">t</div>
       <div @click="getEnv('')">外网</div>
     </van-popup>
-
   </div>
 </template>
 
@@ -86,7 +85,7 @@ import storage from "@/store/stroage";
 import homeApi from "@/module/home/axios/home";
 import { mapGetters, mapState } from "vuex";
 import { Dialog } from "vant";
-import '../../../lib/mqttws31.js'
+import '../../../../lib/mqttws31.js'
 import mqtt from '@/utils/LMQqtt.js'
 export default {
   name: "Home",

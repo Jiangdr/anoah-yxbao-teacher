@@ -7,8 +7,6 @@ import store from './store/index.js'
 import router from './router'
 import 'es6-promise/auto'
 
-// import Vuetouch from 'vue-touch'
-
 import '@/assets/css/base.css'
 import '@/assets/css/global.css'
 
@@ -33,15 +31,10 @@ import 'echarts/lib/component/title'
 import '@/style/global.scss'
 import '@/../lib/swiper.min.css'
 import Swiper from '@/../lib/swiper.min.js'
-// import VueAwesomeSwiper from 'vue-awesome-swiper'
-
-// require styles
-// import 'swiper/dist/css/swiper.css'
+// import AnoahIM from '@/module/board/anoahim'
 
 // 引入全局过滤器
 import * as filters from '@/filter/index'
-// import "http://e.dev.anoah.com/hot_code/youxuebao/teacher/www/lib/qti/anoahim.js"
-// Vue.use(VueAwesomeSwiper)
 Vue.prototype.Swiper = Swiper
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
@@ -52,8 +45,6 @@ Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$http = Axios;
 
 Vue.prototype.$echarts = echarts
-// Axios.defaults.withCredentials = true;
-// window.Vue.prototype.$http = Axios;
 
 Vue.use(window.qtivue.default)
 // Vue.use(window.anoahim)
@@ -66,7 +57,7 @@ Vue.prototype.util = util
 Vue.config.productionTip = false
 
 // 注册键盘
-Vue.use(AnoahIM)
+// Vue.use(AnoahIM)
 
 window.bus = new Vue()
 window.bus.$store = store;
