@@ -129,7 +129,7 @@ export default {
         }
       });
     }
-    window.bus.mqtt.connect();
+    // window.bus.mqtt.connect();
   },
   methods: {
     imgUrl(name) {
