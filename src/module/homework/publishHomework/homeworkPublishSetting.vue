@@ -36,7 +36,7 @@
 <script>
 import api from "@/module/homework/axios/publishHomeWork.js";
 export default {
-  name: "publishHomework",
+  name: "homeworkPublishSetting",
   data() {
     return {
       homeworkName: "暑假作业",
