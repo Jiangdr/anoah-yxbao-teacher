@@ -16,9 +16,6 @@ import Vant from 'vant'
 import 'vant/lib/vant-css/index.css'
 import 'vant/lib/vant-css/icon-local.css'
 
-import '../lib/cube.min.css'
-import Cube from '../lib/cube.min.js'
-
 import 'font-awesome/css/font-awesome.css'
 
 import util from '@/utils/index.js'
@@ -66,8 +63,6 @@ Vue.use(window.mp3player.default)
 Vue.use(window.tcplayer.default)
 
 Vue.use(Vant)
-
-Vue.use(Cube)
 // Vue.use(Vuetouch, {name: 'v-touch'})
 Vue.prototype.util = util
 Vue.config.productionTip = false
