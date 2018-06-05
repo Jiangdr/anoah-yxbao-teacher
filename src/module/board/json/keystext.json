@@ -1,0 +1,905 @@
+{
+  "number": {
+    "name": "数字键盘",
+    "model": "TheNumber",
+    "data": {
+      "ordinary": [
+        [
+          {
+            "text": "1",
+            "type": "default"
+          },
+          {
+            "text": "2",
+            "type": "default"
+          },
+          {
+            "text": "3",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "4",
+            "type": "default"
+          },
+          {
+            "text": "5",
+            "type": "default"
+          },
+          {
+            "text": "6",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "7",
+            "type": "default"
+          },
+          {
+            "text": "8",
+            "type": "default"
+          },
+          {
+            "text": "9",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "0",
+            "type": "default"
+          }
+        ]
+      ],
+      "large": [
+        [
+          {
+            "text": "删除",
+            "type": "symbol",
+            "expect": "delete"
+          }
+        ],
+        [
+          {
+            "text": "下一空",
+            "type": "symbol",
+            "expect": "next"
+          }
+        ]
+      ],
+      "defaultSymbol": {
+        "+": {
+          "type": "symbol"
+        },
+        "\\frac {\\S*} {\\S*}": {
+          "type": "symbol fraction",
+          "expect": "fraction"
+        },
+        "-": {
+          "type": "symbol"
+        },
+        "%": {
+          "type": "symbol"
+        },
+        "×": {
+          "type": "symbol"
+        },
+        "：": {
+          "type": "symbol"
+        },
+        "÷": {
+          "type": "symbol"
+        },
+        "=": {
+          "type": "symbol"
+        },
+        ".": {
+          "type": "symbol"
+        },
+        "……": {
+          "type": "symbol small",
+          "view": "……(取余)"
+        }
+      }
+    }
+  },
+  "vertical": {
+    "name": "竖式键盘",
+    "model": "TheConstant",
+    "data": {
+      "ordinary": [
+        [
+          {
+            "text": "1",
+            "type": "default"
+          },
+          {
+            "text": "2",
+            "type": "default"
+          },
+          {
+            "text": "3",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "4",
+            "type": "default"
+          },
+          {
+            "text": "5",
+            "type": "default"
+          },
+          {
+            "text": "6",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "7",
+            "type": "default"
+          },
+          {
+            "text": "8",
+            "type": "default"
+          },
+          {
+            "text": "9",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "-",
+            "type": "symbol"
+          },
+          {
+            "text": "0",
+            "type": "default"
+          },
+          {
+            "text": ".",
+            "type": "symbol"
+          }
+        ]
+      ],
+      "large": [
+        [
+          {
+            "text": "删除",
+            "type": "symbol",
+            "expect": "delete"
+          }
+        ],
+        [
+          {
+            "text": "下一空",
+            "type": "symbol",
+            "expect": "next"
+          }
+        ]
+      ]
+    }
+  },
+  "comboNumber": {
+    "name": "组合键盘的数字键盘",
+    "model": "TheConstant",
+    "data": {
+      "ordinary": [
+        [
+          {
+            "text": "1",
+            "type": "default"
+          },
+          {
+            "text": "2",
+            "type": "default"
+          },
+          {
+            "text": "3",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "4",
+            "type": "default"
+          },
+          {
+            "text": "5",
+            "type": "default"
+          },
+          {
+            "text": "6",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "7",
+            "type": "default"
+          },
+          {
+            "text": "8",
+            "type": "default"
+          },
+          {
+            "text": "9",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "-",
+            "type": "symbol"
+          },
+          {
+            "text": "0",
+            "type": "default"
+          },
+          {
+            "text": ".",
+            "type": "symbol"
+          }
+        ]
+      ],
+      "large": [
+        [
+          {
+            "text": "删除",
+            "type": "symbol",
+            "expect": "delete"
+          }
+        ],
+        [
+          {
+            "text": "下一空",
+            "type": "symbol",
+            "expect": "next"
+          }
+        ],
+        [
+          {
+            "text": "返回",
+            "expect": "goback",
+            "type": "symbol"
+          }
+        ]
+      ]
+    }
+  },
+  "takeOff": {
+    "name": "脱式键盘",
+    "model": "TheConstant",
+    "data": {
+      "ordinary": [
+        [
+          {
+            "text": "+",
+            "type": "symbol"
+          },
+          {
+            "text": "1",
+            "type": "default"
+          },
+          {
+            "text": "2",
+            "type": "default"
+          },
+          {
+            "text": "3",
+            "type": "default"
+          },
+          {
+            "text": ".",
+            "type": "symbol"
+          }
+        ],
+        [
+          {
+            "text": "-",
+            "type": "symbol"
+          },
+          {
+            "text": "4",
+            "type": "default"
+          },
+          {
+            "text": "5",
+            "type": "default"
+          },
+          {
+            "text": "6",
+            "type": "default"
+          },
+          {
+            "text": "换行",
+            "type": "symbol",
+            "expect": "enter"
+          }
+        ],
+        [
+          {
+            "text": "x",
+            "type": "symbol"
+          },
+          {
+            "text": "7",
+            "type": "default"
+          },
+          {
+            "text": "8",
+            "type": "default"
+          },
+          {
+            "text": "9",
+            "type": "default"
+          },
+          {
+            "text": "删除",
+            "type": "symbol",
+            "expect": "delete"
+          }
+        ],
+        [
+          {
+            "text": "/",
+            "type": "symbol"
+          },
+          {
+            "text": "=",
+            "type": "symbol"
+          },
+          {
+            "text": "0",
+            "type": "default"
+          },
+          {
+            "text": "(",
+            "type": "symbol"
+          },
+          {
+            "text": ")",
+            "type": "symbol"
+          }
+        ],
+        [
+          {
+            "text": "[",
+            "type": "symbol"
+          },
+          {
+            "text": "]",
+            "type": "symbol"
+          },
+          {
+            "text": "{",
+            "type": "symbol"
+          },
+          {
+            "text": "}",
+            "type": "symbol"
+          },
+          {
+            "text": "\\frac {\\S*} {\\S*}",
+            "type": "symbol fraction",
+            "expect": "fraction"
+          }
+        ]
+      ]
+    }
+  },
+  "letters": {
+    "name": "英文字母键盘",
+    "model": "TheLetter",
+    "data": {
+      "ordinary": [
+        [
+          {
+            "text": "q",
+            "type": "default"
+          },
+          {
+            "text": "w",
+            "type": "default"
+          },
+          {
+            "text": "e",
+            "type": "default"
+          },
+          {
+            "text": "r",
+            "type": "default"
+          },
+          {
+            "text": "t",
+            "type": "default"
+          },
+          {
+            "text": "y",
+            "type": "default"
+          },
+          {
+            "text": "u",
+            "type": "default"
+          },
+          {
+            "text": "i",
+            "type": "default"
+          },
+          {
+            "text": "o",
+            "type": "default"
+          },
+          {
+            "text": "p",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "a",
+            "type": "default"
+          },
+          {
+            "text": "s",
+            "type": "default"
+          },
+          {
+            "text": "d",
+            "type": "default"
+          },
+          {
+            "text": "f",
+            "type": "default"
+          },
+          {
+            "text": "g",
+            "type": "default"
+          },
+          {
+            "text": "h",
+            "type": "default"
+          },
+          {
+            "text": "j",
+            "type": "default"
+          },
+          {
+            "text": "k",
+            "type": "default"
+          },
+          {
+            "text": "l",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "A/a",
+            "type": "symbol",
+            "expect": "caseSwitch"
+          },
+          {
+            "text": "z",
+            "type": "default"
+          },
+          {
+            "text": "x",
+            "type": "default"
+          },
+          {
+            "text": "c",
+            "type": "default"
+          },
+          {
+            "text": "v",
+            "type": "default"
+          },
+          {
+            "text": "b",
+            "type": "default"
+          },
+          {
+            "text": "n",
+            "type": "default"
+          },
+          {
+            "text": "m",
+            "type": "default"
+          },
+          {
+            "text": "删除",
+            "type": "symbol",
+            "expect": "delete"
+          }
+        ],
+        [
+          {
+            "text": " ",
+            "type": "space",
+            "expect": "space"
+          },
+          {
+            "text": "下一空",
+            "type": "symbol",
+            "expect": "next"
+          }
+        ]
+      ],
+      "defaultSymbol": {
+        ",": {
+          "type": "symbol"
+        },
+        ".": {
+          "type": "symbol"
+        },
+        "'": {
+          "type": "symbol"
+        },
+        "-": {
+          "type": "symbol"
+        }
+      }
+    }
+  },
+  "chinese": {
+    "name": "中文键盘",
+    "model": "TheLetter",
+    "data": {
+      "ordinary": [
+        [
+          {
+            "text": "q",
+            "type": "default"
+          },
+          {
+            "text": "w",
+            "type": "default"
+          },
+          {
+            "text": "e",
+            "type": "default"
+          },
+          {
+            "text": "r",
+            "type": "default"
+          },
+          {
+            "text": "t",
+            "type": "default"
+          },
+          {
+            "text": "y",
+            "type": "default"
+          },
+          {
+            "text": "u",
+            "type": "default"
+          },
+          {
+            "text": "i",
+            "type": "default"
+          },
+          {
+            "text": "o",
+            "type": "default"
+          },
+          {
+            "text": "p",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "a",
+            "type": "default"
+          },
+          {
+            "text": "s",
+            "type": "default"
+          },
+          {
+            "text": "d",
+            "type": "default"
+          },
+          {
+            "text": "f",
+            "type": "default"
+          },
+          {
+            "text": "g",
+            "type": "default"
+          },
+          {
+            "text": "h",
+            "type": "default"
+          },
+          {
+            "text": "j",
+            "type": "default"
+          },
+          {
+            "text": "k",
+            "type": "default"
+          },
+          {
+            "text": "l",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "A/a",
+            "type": "symbol",
+            "expect": "caseSwitch"
+          },
+          {
+            "text": "z",
+            "type": "default"
+          },
+          {
+            "text": "x",
+            "type": "default"
+          },
+          {
+            "text": "c",
+            "type": "default"
+          },
+          {
+            "text": "v",
+            "type": "default"
+          },
+          {
+            "text": "b",
+            "type": "default"
+          },
+          {
+            "text": "n",
+            "type": "default"
+          },
+          {
+            "text": "m",
+            "type": "default"
+          },
+          {
+            "text": "删除",
+            "type": "symbol",
+            "expect": "delete"
+          }
+        ],
+        [
+          {
+            "text": " ",
+            "type": "space",
+            "expect": "space"
+          },
+          {
+            "text": "下一空",
+            "type": "symbol",
+            "expect": "next"
+          }
+        ]
+      ],
+      "defaultSymbol": {
+        "，": {
+          "type": "symbol"
+        },
+        "。": {
+          "type": "symbol"
+        },
+        "、": {
+          "type": "symbol"
+        },
+        "？": {
+          "type": "symbol"
+        }
+      }
+    }
+  },
+  "symbol": {
+    "name": "符号键盘",
+    "model": "TheSymbol",
+    "data": {
+      "defaultSymbol": {
+        ",": {
+          "type": "symbol"
+        },
+        ".": {
+          "type": "symbol"
+        },
+        "'": {
+          "type": "symbol"
+        },
+        "-": {
+          "type": "symbol"
+        }
+      },
+      "large": [
+        [
+          {
+            "text": "删除",
+            "type": "symbol",
+            "expect": "delete"
+          }
+        ],
+        [
+          {
+            "text": "下一空",
+            "type": "symbol",
+            "expect": "next"
+          }
+        ]
+      ]
+    }
+  },
+  "combo": {
+    "name": "客观填空组合键盘",
+    "model": "TheCombo",
+    "data": {
+      "ordinary": [
+        [
+          {
+            "text": "q",
+            "type": "default"
+          },
+          {
+            "text": "w",
+            "type": "default"
+          },
+          {
+            "text": "e",
+            "type": "default"
+          },
+          {
+            "text": "r",
+            "type": "default"
+          },
+          {
+            "text": "t",
+            "type": "default"
+          },
+          {
+            "text": "y",
+            "type": "default"
+          },
+          {
+            "text": "u",
+            "type": "default"
+          },
+          {
+            "text": "i",
+            "type": "default"
+          },
+          {
+            "text": "o",
+            "type": "default"
+          },
+          {
+            "text": "p",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "a",
+            "type": "default"
+          },
+          {
+            "text": "s",
+            "type": "default"
+          },
+          {
+            "text": "d",
+            "type": "default"
+          },
+          {
+            "text": "f",
+            "type": "default"
+          },
+          {
+            "text": "g",
+            "type": "default"
+          },
+          {
+            "text": "h",
+            "type": "default"
+          },
+          {
+            "text": "j",
+            "type": "default"
+          },
+          {
+            "text": "k",
+            "type": "default"
+          },
+          {
+            "text": "l",
+            "type": "default"
+          }
+        ],
+        [
+          {
+            "text": "A/a",
+            "type": "symbol",
+            "expect": "caseSwitch"
+          },
+          {
+            "text": "z",
+            "type": "default"
+          },
+          {
+            "text": "x",
+            "type": "default"
+          },
+          {
+            "text": "c",
+            "type": "default"
+          },
+          {
+            "text": "v",
+            "type": "default"
+          },
+          {
+            "text": "b",
+            "type": "default"
+          },
+          {
+            "text": "n",
+            "type": "default"
+          },
+          {
+            "text": "m",
+            "type": "default"
+          },
+          {
+            "text": "删除",
+            "type": "symbol",
+            "expect": "delete"
+          }
+        ],
+        [
+          {
+            "text": "123",
+            "type": "symbol",
+            "expect": "chooseNumber"
+          },
+          {
+            "text": " ",
+            "type": "space",
+            "expect": "space"
+          },
+          {
+            "text": "中/英",
+            "view": {
+              "text": "英/中",
+              "chinese": "中/英"
+            },
+            "type": "symbol",
+            "expect": "languageSwitch"
+          },
+          {
+            "text": "下一空",
+            "type": "symbol",
+            "expect": "next"
+          }
+        ]
+      ],
+      "defaultSymbol": {
+        "！": {
+          "type": "symbol"
+        },
+        "，": {
+          "type": "symbol"
+        },
+        "。": {
+          "type": "symbol"
+        }
+      }
+    }
+  }
+}

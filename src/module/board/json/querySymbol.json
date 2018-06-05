@@ -1,0 +1,568 @@
+{
+  "G_2_01": {
+    ".": {
+      "type": "symbol"
+    },
+    "<": {
+      "type": "symbol"
+    },
+    ">": {
+      "type": "symbol"
+    },
+    "≠": {
+      "type": "symbol"
+    },
+    "≤": {
+      "type": "symbol"
+    },
+    "≥": {
+      "type": "symbol"
+    },
+    "+": {
+      "type": "symbol"
+    },
+    "-": {
+      "type": "symbol"
+    },
+    "=": {
+      "type": "symbol"
+    },
+    "≈": {
+      "type": "symbol"
+    },
+    "≡": {
+      "type": "symbol"
+    },
+    "×": {
+      "type": "symbol"
+    },
+    "÷": {
+      "type": "symbol"
+    },
+    "•": {
+      "type": "symbol"
+    },
+    "|": {
+      "type": "symbol"
+    },
+    "!": {
+      "type": "symbol"
+    },
+    "log": {
+      "type": "symbol"
+    },
+    "lg": {
+      "type": "symbol"
+    },
+    "ln": {
+      "type": "symbol"
+    },
+    ":": {
+      "type": "symbol"
+    },
+    "±": {
+      "type": "symbol"
+    },
+    "∓": {
+      "type": "symbol"
+    },
+    "∏": {
+      "type": "symbol"
+    }
+  },
+  "G_2_02": {
+    "……": {
+      "type": "symbol small",
+      "view":"……取余"
+    },
+    "(": {
+      "type": "symbol"
+    },
+    ")": {
+      "type": "symbol"
+    },
+    "{": {
+      "type": "symbol"
+    },
+    "}": {
+      "type": "symbol"
+    },
+    "[": {
+      "type": "symbol"
+    },
+    "]": {
+      "type": "symbol"
+    }
+  },
+  "G_2_03": {
+    "{mm}^{2}": {
+      "type": "symbol math-icon",
+      "view": "&#xe61f;",
+      "expect": "{mm}^{2}"
+    },
+    "{cm}^{2}": {
+      "type": "symbol math-icon",
+      "view": "&#xe623;",
+      "expect": "{cm}^{2}"
+    },
+    "{dm}^{2}": {
+      "type": "symbol math-icon",
+      "view": "&#xe625;",
+      "expect": "{dm}^{2}"
+    },
+    "{m}^{2}": {
+      "type": "symbol math-icon",
+      "view": "&#xe61e;",
+      "expect": "{m}^{2}"
+    },
+    "{km}^{2}": {
+      "type": "symbol math-icon",
+      "view": "&#xe622;",
+      "expect": "{km}^{2}"
+    },
+    "{hm}^{2}": {
+      "type": "symbol math-icon",
+      "view": "&#xe621;",
+      "expect": "{hm}^{2}"
+    },
+    "{nm}^{2}": {
+      "type": "symbol math-icon",
+      "view": "&#xe624;",
+      "expect": "{nm}^{2}"
+    },
+    "{μm}^{2}": {
+      "type": "symbol math-icon",
+      "view": "&#xe620;",
+      "expect": "{μm}^{2}"
+    }
+  },
+  "G_2_04": {
+    "{mm}^{3}": {
+      "type": "symbol math-icon",
+      "view": "&#xe619;",
+      "expect": "{mm}^{3}"
+    },
+    "{cm}^{3}": {
+      "type": "symbol math-icon",
+      "view": "&#xe61a;",
+      "expect": "{cm}^{3}"
+    },
+    "{dm}^{3}": {
+      "type": "symbol math-icon",
+      "view": "&#xe618;",
+      "expect": "{dm}^{3}"
+    },
+    "{m}^{3}": {
+      "type": "symbol math-icon",
+      "view": "m³",
+      "expect": "{m}^{3}"
+    },
+    "{km}^{3}": {
+      "type": "symbol math-icon",
+      "view": "&#xe617;",
+      "expect": "{km}^{3}"
+    },
+    "{nm}^{3}": {
+      "type": "symbol math-icon",
+      "view": "&#xe61c;",
+      "expect": "{nm}^{3}"
+    },
+    "{μm}^{3}": {
+      "type": "symbol math-icon",
+      "view": "&#xe616;",
+      "expect": "{μm}^{3}"
+    }
+  },
+
+  "G_2_05": {
+    "mm": {
+      "type": "symbol"
+    },
+    "cm": {
+      "type": "symbol"
+    },
+    "dm": {
+      "type": "symbol"
+    },
+    "m": {
+      "type": "symbol"
+    },
+    "km": {
+      "type": "symbol"
+    },
+    "μm": {
+      "type": "symbol"
+    },
+    "nm": {
+      "type": "symbol"
+    },
+    "n mile": {
+      "type": "symbol"
+    }
+  },
+  "G_2_06": {
+    "℉": {
+      "type": "symbol"
+    },
+    "℃": {
+      "type": "symbol"
+    }
+  },
+  "G_2_07": {
+    "°": {
+      "type": "symbol",
+      "view": "°(度)"
+    },
+    "′": {
+      "type": "symbol"
+    },
+    "″": {
+      "type": "symbol"
+    },
+    "rad": {
+      "type": "symbol"
+    }
+  },
+  "G_2_08": {
+    "π": {
+      "type": "symbol"
+    },
+    "α": {
+      "type": "symbol"
+    },
+    "β": {
+      "type": "symbol"
+    },
+    "θ": {
+      "type": "symbol"
+    },
+    "γ": {
+      "type": "symbol"
+    },
+    "k": {
+      "type": "symbol"
+    },
+    "φ": {
+      "type": "symbol"
+    },
+    "ω": {
+      "type": "symbol"
+    },
+    "sin": {
+      "type": "symbol"
+    },
+    "cos": {
+      "type": "symbol"
+    },
+    "tan": {
+      "type": "symbol"
+    },
+    "cot": {
+      "type": "symbol"
+    },
+    "sec": {
+      "type": "symbol"
+    },
+    "csc": {
+      "type": "symbol"
+    },
+    "arcsin": {
+      "type": "symbol"
+    },
+    "arccos": {
+      "type": "symbol"
+    },
+    "arctan": {
+      "type": "symbol"
+    },
+    "arccot": {
+      "type": "symbol"
+    },
+    "arcsec": {
+      "type": "symbol"
+    },
+    "arccsc": {
+      "type": "symbol"
+    }
+  },
+  "G_2_09": {
+    "$": {
+      "type": "symbol"
+    },
+    "￠": {
+      "type": "symbol"
+    },
+    "￡": {
+      "type": "symbol"
+    },
+    "¥": {
+      "type": "symbol"
+    },
+    "€": {
+      "type": "symbol"
+    }
+  },
+  "G_2_10": {
+    "⇒": {
+      "type": "symbol"
+    },
+    "⇐": {
+      "type": "symbol"
+    },
+    "⇔": {
+      "type": "symbol"
+    },
+    "∧": {
+      "type": "symbol"
+    },
+    "∨": {
+      "type": "symbol"
+    },
+    "¬": {
+      "type": "symbol"
+    },
+    "∀": {
+      "type": "symbol"
+    },
+    "∃": {
+      "type": "symbol"
+    },
+    "↔": {
+      "type": "symbol"
+    },
+    "→": {
+      "type": "symbol"
+    }
+  },
+  "G_2_11": {
+    "∈": {
+      "type": "symbol"
+    },
+    "∋": {
+      "type": "symbol"
+    },
+    "∉": {
+      "type": "symbol"
+    },
+    "⊈": {
+      "type": "symbol"
+    },
+    "⊂": {
+      "type": "symbol"
+    },
+    "⊃": {
+      "type": "symbol"
+    },
+    "⊆": {
+      "type": "symbol"
+    },
+    "⊇": {
+      "type": "symbol"
+    },
+    "⫋": {
+      "type": "symbol"
+    },
+    "∅": {
+      "type": "symbol"
+    },
+    "∪": {
+      "type": "symbol"
+    },
+    "∩": {
+      "type": "symbol"
+    },
+    "card": {
+      "type": "symbol"
+    },
+    "∞": {
+      "type": "symbol"
+    }
+  },
+  "G_2_12": {
+    "∵": {
+      "type": "symbol"
+    },
+    "∴": {
+      "type": "symbol"
+    },
+    "∠": {
+      "type": "symbol"
+    },
+    "⊥": {
+      "type": "symbol"
+    },
+    "∥": {
+      "type": "symbol"
+    },
+    "△": {
+      "type": "symbol"
+    },
+    "▱": {
+      "type": "symbol"
+    },
+    "Rt△": {
+      "type": "symbol"
+    },
+    "☉": {
+      "type": "symbol"
+    },
+    "≌": {
+      "type": "symbol"
+    },
+    "∽": {
+      "type": "symbol"
+    },
+    "⊄": {
+      "type": "symbol"
+    },
+    "⌒": {
+      "type": "symbol"
+    }
+  },
+  "G_2_13": {
+    "INPUT": {
+      "type": "symbol"
+    },
+    "PRINT": {
+      "type": "symbol"
+    },
+    "END": {
+      "type": "symbol"
+    },
+    "*": {
+      "type": "symbol"
+    },
+    "^": {
+      "type": "symbol"
+    },
+    "/": {
+      "type": "symbol"
+    },
+    "IF": {
+      "type": "symbol"
+    },
+    "THEN": {
+      "type": "symbol"
+    },
+    "ELSE": {
+      "type": "symbol"
+    },
+    "END IF": {
+      "type": "symbol"
+    },
+    "DO": {
+      "type": "symbol"
+    },
+    "LOOP UNTIL": {
+      "type": "symbol"
+    },
+    "WHILE": {
+      "type": "symbol"
+    },
+    "WEND": {
+      "type": "symbol"
+    },
+    "MOD": {
+      "type": "symbol"
+    },
+    "SQR": {
+      "type": "symbol"
+    }
+  },
+  "G_2_14": {
+    "Δ": {
+      "type": "symbol"
+    },
+    "lim": {
+      "type": "symbol"
+    },
+    "ξ": {
+      "type": "symbol"
+    },
+    "Σ": {
+      "type": "symbol"
+    },
+    "∫": {
+      "type": "symbol"
+    }
+  },
+  "G_2_16": {
+    "s": {
+      "type": "symbol"
+    },
+    "{s}^{2}": {
+      "type": "symbol",
+      "view": "s²"
+    },
+    "ˉ": {
+      "type": "symbol"
+    },
+    "μ": {
+      "type": "symbol"
+    },
+    "σ": {
+      "type": "symbol"
+    },
+    "{σ}^{2}": {
+      "type": "symbol math-icon",
+      "view": "σ²",
+      "expect": "{σ}^{2}"
+    }
+  },
+  "G_2_17": {
+    "B": {
+      "type": "symbol"
+    },
+    "K": {
+      "type": "symbol"
+    },
+    "M": {
+      "type": "symbol"
+    },
+    "G": {
+      "type": "symbol"
+    },
+    "T": {
+      "type": "symbol"
+    }
+  },
+  "G_2_18": {
+    "～": {
+      "type": "symbol"
+    },
+    "min": {
+      "type": "symbol"
+    },
+    "max": {
+      "type": "symbol"
+    },
+    "⨂": {
+      "type": "symbol"
+    },
+    "⨁": {
+      "type": "symbol"
+    }
+  },
+  "G_2_19": {
+    "\\frac {\\S*} {\\S*}": {
+      "type": "symbol fraction",
+      "expect": "fraction"
+    },
+    "\\sqrt[{2}] {\\S*}": {
+      "type": "symbol sqrt2",
+      "expect": "sqrt2"
+    },
+    "\\sqrt[{3}] {\\S*}": {
+      "type": "symbol sqrt3",
+      "expect": "sqrt3"
+    },
+    "{\\S*}^{\\S*}": {
+      "type": "symbol aimsup",
+      "expect": "aimsup"
+    },
+    "{\\S*}_{\\S*}": {
+      "type": "symbol aimsub",
+      "expect": "aimsub"
+    }
+  }
+}
