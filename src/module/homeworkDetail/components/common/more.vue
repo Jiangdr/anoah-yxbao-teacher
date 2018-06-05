@@ -12,7 +12,7 @@
         <div class="popupItem cancel" @click="togglePopup">取消</div>
       </div>
     </van-popup>
-    <van-popup type="collection-popup" v-model="showCollectionPopup" :close-on-click-overlay="false">
+    <van-popup type="collection-popup" v-model="showCollectionPopup" :close-on-click-overlay="false" class="popup">
       <div class="wrapper" v-if="favorite==1">
         <i></i>
         <span>已收藏</span>
@@ -91,7 +91,7 @@ export default {
     },
     deleteHomework() {
       let params = {
-        publish_id: this.publishId
+        publish_id: this.info.course_hour_publish_id
       }
       homeworkDetil.remove(params).then(r => {
         Toast('删除成功！')
