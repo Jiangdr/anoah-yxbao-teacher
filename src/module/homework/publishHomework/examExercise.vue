@@ -55,7 +55,6 @@ export default {
       this.$router.go(-1);
     },
     checkboxChange(item, event) {
-      debugger
       if (event.selecteState) {
         this.hasChoosePagesNumArray.push(item);
         this.hasChooseProblemsNum =
