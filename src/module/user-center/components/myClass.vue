@@ -1,27 +1,33 @@
 <template>
   <div id="my-class">
-    <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
+    <header-bar @back="back"><span slot="title-name">{{title}}</span></header-bar>
     <van-cell-group v-if="classes" v-for="(item,index) in classes" :key="index">
-      <van-cell :title="item.class_name" :label="item.student_counter" center is-link @click="link(item.class_id)"/>
+      <van-cell class="aboutus-van-cell" is-link @click="link(item.class_id)">
+        <template slot="title">
+          <div class="item-choice ft19"><img :src="item.class_icon?item.class_icon:defaultClassIcon" class="halfscaleelement"/>{{item.class_name}}</div>
+        </template>
+      </van-cell>
     </van-cell-group>
   </div>
 </template>
 <script>
 import api from '@/module/user-center/axios/usercenter'
 import NavBar from '@/module/user-center/components/common/navbar'
-import {mapGetters} from 'vuex'
+import headerBar from '@/components/headerBar.vue'
+import {mapState} from 'vuex'
 export default {
   name: 'MyClass',
   data () {
     return {
       title: '我的班级',
       hasBack: true,
-      classes: null
+      classes: null,
+      defaultClassIcon: require('@/assets/images/usercenter/myclassdefaulticon.png')
     }
   },
   computed: {
-    ...mapGetters({
-      userId: 'userCenter/userId'
+    ...mapState({
+      userId: state => state.account.userInfo.userid
     })
   },
   mounted () {
@@ -43,10 +49,17 @@ export default {
     }
   },
   components: {
-    NavBar
+    NavBar,
+    headerBar
   }
 }
 </script>
 
 <style scoped>
+  div.item-choice
+  {
+    display: flex;
+    align-items: center;
+    height: 30px;
+  }
 </style>
