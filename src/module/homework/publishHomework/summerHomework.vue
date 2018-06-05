@@ -1,6 +1,6 @@
 <template>
   <div class="cube-page cube-view button-view" style="background-color: #fff;height:100%">
-    <div v-show="!examExerciseShow">
+    <div v-if="!examExerciseShow">
       <header class="header">
         <h1>暑假作业</h1>
         <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
@@ -14,7 +14,7 @@
                 <p>{{(index+1)+"."+item.name}}</p>
                 <p class="des-item">共<span>{{item.qti_num}}</span>道题</p>
             </div>
-            <YxCheckBox class="checkbox" :selected="item.isSel" :ref="'cb-'+index" @select="checkboxChange(item,$event)"></YxCheckBox>
+            <YxCheckBox class="checkbox" :selected="item.isSel" :ref="'cb-'+index" @select="checkboxChange(item, $event)"></YxCheckBox>
           </div>
         </van-list>
         <div v-if="lists.length==0" class="text-font">
@@ -23,22 +23,25 @@
       </van-pull-refresh>
     </div>
 
-    <div v-show="examExerciseShow">
+    <div v-if="examExerciseShow">
       <header class="header">
         <h1>试卷</h1>
         <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i> 返回</i>
       </header>
       <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
-        <div style="padding: 5px 10px;height: 25px; line-height: 25px;">全部题目（{{setting.length}}）</div>
+        <div style="padding: 5px 10px;height: 25px; line-height: 25px;">
+          <div style="float: left;">全部题目（{{setting.length}}）</div>
+          <!-- <div style="float: right;" @click="clickChooseAll">全选</div> -->
+        </div>
         <div v-for="(item, index) in setting" :key="index" style="position: relative;">
           <Qti :setting="item"></Qti>
-          <exerciseCheckBox style="position: absolute;right:10px;bottom:10px;width: 25px;height: 25px;" class="checkbox" :selected="item.isSel" :ref="'cb-'+item.qid" @select="exerciseCheckboxChange(item,$event)"></exerciseCheckBox>
+          <exerciseCheckBox style="position: absolute;right:10px;bottom:10px;width: 25px;height: 25px;" class="checkbox" :selected="item.checked" :ref="'cb-'+item.qid" @select="exerciseCheckboxChange(item, $event)"></exerciseCheckBox>
         </div>
       </div>
     </div>
 
-    <div v-if="this.hasChoosePagesNumArray.length !== 0" class="footer-container">
-      <p class="footer-p">已选试卷<span>{{hasChoosePagesNumArray.length}}</span>份，共<span>{{hasChooseProblemsNumAtlast}}</span>道题</p>
+    <div v-if="this.hasChoosePagesNumAtlast !== 0" class="footer-container">
+      <p class="footer-p">已选试卷<span>{{hasChoosePagesNumAtlast}}</span>份，共<span>{{hasChooseProblemsNumAtlast}}</span>道题</p>
       <div class="yx-green-btn buzhi-div"  @click="clickPublish">布&nbsp;&nbsp;&nbsp;&nbsp;置</div>
     </div>
   </div>
@@ -48,10 +51,11 @@
 import api from "@/module/homework/axios/publishHomeWork.js";
 import YxCheckBox from "@/components/common/yx-check-box.vue";
 import exerciseCheckBox from "@/components/common/exercise-check-box.vue";
+import renderQti from "@/components/renderQti.vue";
 
 export default {
-  name: "publishHomework",
-  components: { YxCheckBox, exerciseCheckBox },
+  name: "summerHomework",
+  components: { YxCheckBox, exerciseCheckBox, renderQti },
   data() {
     return {
       checkList: [],
@@ -59,6 +63,7 @@ export default {
       result: [],
       hasChooseProblemsNum: 0,
       hasChooseProblemsNumAtlast: 0,
+      hasChoosePagesNumAtlast: 0,
       olded: false,
       pullRefresIsLoading: false,
       pullRefresh: false,
@@ -72,6 +77,7 @@ export default {
         height: window.innerHeight - 115 + "px"
       },
       setting: [],
+      qti_ids: [],
       currentResourceId: ""
     };
   },
@@ -87,7 +93,7 @@ export default {
         JSON.stringify(this.$store.state.homework.hasChoosePagesArray)
       );
     }
-    this.qti_ids = this.$store.state.homework.chooseExamExerciseQtiIdsArray;
+    // this.qti_ids = this.$store.state.homework.chooseExamExerciseQtiIdsArray;
 
     this.page = 0;
     this.finished = false;
@@ -113,11 +119,24 @@ export default {
       this.examExerciseShow = false;
     },
     getHasChooseExerciseNum() {
-      this.hasChooseProblemsNumAtlast = 0;
+      var num = 0;
+      var num2 = 0;
       var array = this.hasChoosePagesNumArray;
       for (let i = 0; i < array.length; i++) {
-        this.hasChooseProblemsNumAtlast += array[i].qti_ids.length;
+        for (let j = 0; j < array[i].qti_ids_obj.length; j++) {
+          if (array[i].qti_ids_obj[j].checked) {
+            num += 1;
+          }
+        }
       }
+
+      for (let i = 0; i < array.length; i++) {
+        if (array[i].isSel) {
+          num2 += 1;
+        }
+      }
+      this.hasChooseProblemsNumAtlast = num;
+      this.hasChoosePagesNumAtlast = num2;
     },
     clickPublish() {
       this.lists.length = 0;
@@ -140,10 +159,12 @@ export default {
       this.$store.dispatch("isOldPackId", "0");
       this.result = result;
       this.$store.dispatch("chooseSummerHomeworkArray", this.result);
+      console.log(this.hasChoosePagesNumArray);
       // debugger
-      this.$router.push({
-        path: "/homeworkPublishSetting"
-      });
+      // return
+      // this.$router.push({
+      //   path: "/homeworkPublishSetting"
+      // });
     },
     selectAll() {
       var self = this;
@@ -165,55 +186,72 @@ export default {
       }
     },
     checkboxChange(item, event) {
-      // this.currentResourceId = item.resource_id;
       if (event.selecteState) {
-        item.qti_ids = item.allExcerciseArr;
-        this.hasChoosePagesNumArray.push(item);
-        this.hasChooseProblemsNum =
-          parseInt(this.hasChooseProblemsNum) + parseInt(item.qti_num);
-
-        // for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
-        //   const element = this.hasChoosePagesNumArray[i];
-        //   this.setting = [];
-        //   this.qtiFun();
-        // }
+        for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
+          if (this.hasChoosePagesNumArray[i].resource_id === item.resource_id) {
+            for (let j = 0; j < this.hasChoosePagesNumArray[i].qti_ids_obj.length; j++) {
+              this.hasChoosePagesNumArray[i].qti_ids_obj[j].checked = true;
+            }
+          }
+        }
+        for (let m = 0; m < this.lists.length; m++) {
+          if (this.lists[m].resource_id === item.resource_id) {
+            this.lists[m].isSel = true;
+          }
+        }
       } else {
-        this.hasChoosePagesNumArray.splice(
-          this.hasChoosePagesNumArray.indexOf(item),
-          1
-        );
-        this.hasChooseProblemsNum =
-          parseInt(this.hasChooseProblemsNum) - parseInt(item.qti_num);
-      }
-      this.getHasChooseExerciseNum();
-    },
-    exerciseCheckboxChange(item, event) {
-      var array = this.hasChoosePagesNumArray;
-      for (let i = 0; i < array.length; i++) {
-        if (array[i].resource_id === this.currentResourceId) {
-          if (event.selecteState) {
-            this.hasChoosePagesNumArray[i].qti_ids.push(item.qid);
-            this.hasChooseProblemsNum = parseInt(this.hasChooseProblemsNum) + 1;
-          } else {
-            this.hasChoosePagesNumArray[i].qti_ids.splice(
-              this.hasChoosePagesNumArray[i].qti_ids.indexOf(item.qid),
-              1
-            );
-            this.hasChooseProblemsNum = parseInt(this.hasChooseProblemsNum) - 1;
+        for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
+          if (this.hasChoosePagesNumArray[i].resource_id === item.resource_id) {
+            for (let j = 0; j < this.hasChoosePagesNumArray[i].qti_ids_obj.length; j++) {
+              this.hasChoosePagesNumArray[i].qti_ids_obj[j].checked = false;
+            }
+          }
+        }
+
+        for (let m = 0; m < this.lists.length; m++) {
+          if (this.lists[m].resource_id === item.resource_id) {
+            this.lists[m].isSel = false;
           }
         }
       }
       this.getHasChooseExerciseNum();
     },
-    clickTab(name) {
-      this.activeTabName = name;
-    },
-    clickSelectAll() {
-      this.checkList = [];
-      var array = this.options;
-      for (let i = 0; i < array.length; i++) {
-        this.checkList.push(array[i].value);
+    exerciseCheckboxChange(item, event) {
+      for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
+        if (this.hasChoosePagesNumArray[i].resource_id === this.currentResourceId) {
+          if (event.selecteState) {
+            for (let j = 0; j < this.hasChoosePagesNumArray[i].qti_ids_obj.length; j++) {
+              if (item.qid === this.hasChoosePagesNumArray[i].qti_ids_obj[j].value) {
+                this.hasChoosePagesNumArray[i].qti_ids_obj[j].checked = true;
+              }
+            }
+          } else {
+            for (let j = 0; j < this.hasChoosePagesNumArray[i].qti_ids_obj.length; j++) {
+              if (item.qid === this.hasChoosePagesNumArray[i].qti_ids_obj[j].value) {
+                this.hasChoosePagesNumArray[i].qti_ids_obj[j].checked = false;
+              }
+            }
+
+            var chooseOne = true;
+            for (let j = 0; j < this.hasChoosePagesNumArray[i].qti_ids_obj.length; j++) {
+              if (this.hasChoosePagesNumArray[i].qti_ids_obj[j].checked) {
+                chooseOne = true;
+              } else {
+                chooseOne = false;
+              }
+            }
+
+            if (!chooseOne) {
+              for (let m = 0; m < this.lists.length; m++) {
+                if (this.lists[m].resource_id === this.currentResourceId) {
+                  this.lists[m].isSel = false;
+                }
+              }
+            }
+          }
+        }
       }
+      this.getHasChooseExerciseNum();
     },
     onRefresh() {
       this.page = 0;
@@ -229,6 +267,16 @@ export default {
       } else {
         this.getList();
       }
+    },
+    clickChooseAll() {
+      for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
+        if (this.hasChoosePagesNumArray[i].resource_id === this.currentResourceId) {
+          for (let j = 0; j < this.hasChoosePagesNumArray[i].qti_ids_obj.length; j++) {
+            this.hasChoosePagesNumArray[i].qti_ids_obj[j].checked = true;
+          }
+        }
+      }
+      this.getHasChooseExerciseNum();
     },
     getList: function(value) {
       var self = this;
@@ -271,6 +319,13 @@ export default {
                 if (arr && arr.length > 0) {
                   arr[0].selecteState = true;
                 }
+                element.qti_ids_obj = [];
+                for (let j = 0; j < element.qti_ids.length; j++) {
+                  element.qti_ids_obj.push({
+                    value: element.qti_ids[j],
+                    checked: true
+                  });
+                }
               } else if (!self.olded) {
                 element.allExcerciseArr = JSON.parse(
                   JSON.stringify(element.qti_ids)
@@ -284,10 +339,16 @@ export default {
                 if (arr && arr.length > 0) {
                   arr[0].selecteState = true;
                 }
+                element.qti_ids_obj = [];
+                for (let j = 0; j < element.qti_ids.length; j++) {
+                  element.qti_ids_obj.push({
+                    value: element.qti_ids[j],
+                    checked: true
+                  });
+                }
               }
               self.lists.push(element);
             });
-            console.log(self.lists);
           }
           self.getHasChooseExerciseNum();
         },
@@ -309,29 +370,42 @@ export default {
     },
     qtiFun() {
       for (var i = 0; i < this.qti_ids.length; i++) {
-        this.setting[i] = {
+        this.setting.push({
           domain: "e.dev.anoah.com",
-          qid: this.qti_ids[i],
+          qid: this.qti_ids[i].value,
+          checked: this.qti_ids[i].checked,
           num: i + 1,
           caller: "PREVIEWOR",
           resource_type: "qti_question",
           isSel: true
-        };
+        });
       }
     },
     clickTiltleName(item) {
       this.setting = [];
       this.examExerciseShow = true;
-      this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.qti_ids);
-      this.qti_ids = item.allExcerciseArr;
+      // this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.qti_ids);
+      this.qti_ids = item.qti_ids_obj;
       this.currentResourceId = item.resource_id;
-      this.qtiFun();
+      // this.qtiFun();
+      for (var i = 0; i < item.qti_ids_obj.length; i++) {
+        this.setting.push({
+          domain: "e.dev.anoah.com",
+          qid: item.qti_ids_obj[i].value,
+          checked: item.qti_ids_obj[i].checked,
+          num: i + 1,
+          caller: "PREVIEWOR",
+          resource_type: "qti_question",
+          isSel: true
+        });
+      }
+      // debugger
     }
   }
 };
 </script>
 
-<style scoped  lang="scss">
+<style scoped lang="scss">
 @import "@/assets/css/custom.scss";
 .listfooterdiv {
   height: calc(100% - #{$header-height} - #{$bottom-height});
