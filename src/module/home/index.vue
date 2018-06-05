@@ -121,20 +121,7 @@ export default {
     // window.bus.mqtt.connect();
   },
   mounted() {
-    if (!storage["session"].get("mqttConnect")) {
-      window.bus.mqtt.connect();
-      homeApi.getMsg({ user_id: this.userId }).then(r => {
-        if (r.notice > 0 || r.homework > 0) {
-          this.$store.commit("notice/setMsg", true);
-          if (r.notice > 0) {
-            this.$store.commit("notice/setSchoolMsg", true);
-          }
-          if (r.homework > 0) {
-            this.$store.commit("notice/setHomeworkMsg", true);
-          }
-        }
-      });
-    }
+    this.$store.commit('notice/connectMqtt')
   },
   methods: {
     imgUrl(name) {
