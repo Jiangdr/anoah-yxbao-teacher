@@ -2,7 +2,8 @@ export default {
   namespaced: true,
   state: {
     resource: [],
-    params: null
+    params: null,
+    studentAnswerDetailData: {}
   },
   getters: {
   },
@@ -21,6 +22,9 @@ export default {
     },
     clearResource: state => {
       state.resource = []
+    },
+    setStudentAnswerDetailData: (state, payload) => {
+      state.studentAnswerDetailData = payload
     }
   },
   actions: {
