@@ -73,8 +73,7 @@ Vue.prototype.util = util
 Vue.config.productionTip = false
 
 // 注册键盘
-// import AnoahIM from '@/module/board/anoahim.js'
-// Vue.use(AnoahIM)
+Vue.use(AnoahIM)
 
 window.bus = new Vue()
 window.bus.$store = store;
