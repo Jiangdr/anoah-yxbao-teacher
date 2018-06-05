@@ -474,7 +474,7 @@ export default {
         per_page: 6,
         type: self.homeworkState === "0" ? "1,2,20" : "5",
         favorite: self.markStatus,
-        edu_subject_id: self.bookActiveID,
+        book_id: self.bookActiveID,
         asc: 1,
         keyword: self.searchKeyword
       };
