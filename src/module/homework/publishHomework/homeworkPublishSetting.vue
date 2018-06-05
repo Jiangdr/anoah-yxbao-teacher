@@ -134,6 +134,8 @@ export default {
             message: "布置成功！",
             duration: 750
           });
+          this.$store.dispatch("hasChoosePagesArray", []);
+          this.$store.dispatch("isOldPackId", "0");
           setTimeout(function() {
             self.$router.push({
               path: "/homework"
