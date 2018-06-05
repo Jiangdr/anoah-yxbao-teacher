@@ -4,7 +4,7 @@
     <header class="header">
       <h1>编辑模板</h1>
       <i class="cubeic-back" @click="goBatchEvaluate">
-        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
+        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text"></span>
       </i>
     </header>
 
