@@ -50,7 +50,7 @@ export default {
       env: 'runEnv/old'
     })
   },
-  created() {
+  activated() {
     this.getresource();
   },
   methods: {

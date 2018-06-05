@@ -2,7 +2,7 @@
 <div id="question-detail" style="height:100%">
   <header-bar @back="goBack">
     <div slot="title-name">{{params && params.title || '标题需要传入'}}({{currectIndex}}/{{qtiCount}})</div>
-    <div slot="right-area" v-if="params && params.type === 2">原题</div>
+    <div slot="right-area" v-if="params && params.type === 2 && judgeQtiType(resource[currentIndex - 1])">原题</div>
   </header-bar>
   <div class="swiper-container" :class="{scroll: params && judgeQtiType(resource[currentIndex - 1])}">
     <div class="swiper-wrapper" style="100%">
@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="subjective-button van-hairline--top" v-if="params && judgeQtiType(resource[currentIndex - 1])">
-    <span @click="subjectiveQtiPigai(resource[currentIndex - 1])" v-if="resource[currentIndex - 1].status === 3 || resource[currentIndex - 1].status === 4">查看详情</span>
+    <span @click="subjectiveQtiPigai(resource[currentIndex - 1])" v-if="resource[currentIndex - 1].status === 3 || resource[currentIndex - 1].status === 4 || resource[currentIndex - 1].read_only === 0">查看详情</span>
     <span v-if="resource[currentIndex - 1].status === 1">一键批阅</span>
     <span v-if="resource[currentIndex - 1].status === 1" @click="subjectiveQtiPigai(resource[currentIndex - 1])">批改本题</span>
   </div>

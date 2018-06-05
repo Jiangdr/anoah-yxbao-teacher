@@ -45,6 +45,7 @@ import Swiper from '@/../lib/swiper.min.js'
 
 // 引入全局过滤器
 import * as filters from '@/filter/index'
+// import "http://e.dev.anoah.com/hot_code/youxuebao/teacher/www/lib/qti/anoahim.js"
 // Vue.use(VueAwesomeSwiper)
 Vue.prototype.Swiper = Swiper
 Object.keys(filters).forEach(key => {
@@ -57,10 +58,10 @@ Vue.prototype.$http = Axios;
 
 Vue.prototype.$echarts = echarts
 // Axios.defaults.withCredentials = true;
-window.Vue.prototype.$http = Axios;
+// window.Vue.prototype.$http = Axios;
 
 Vue.use(window.qtivue.default)
-Vue.use(window.anoahim)
+// Vue.use(window.anoahim)
 Vue.use(window.mp3player.default)
 Vue.use(window.tcplayer.default)
 
