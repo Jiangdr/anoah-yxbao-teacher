@@ -104,7 +104,7 @@
           </div>
         </van-list>
 
-        <div v-if="homeworkListArray.length === 0" class="tip-div">
+        <div v-if="homeworkListArray.length === 0 && !pullRefresh" class="tip-div">
           <img src="@/assets/images/homework/tip-head.png"/>
           <div><p class="tip-bold-p">暂无作业~</p><p>快去布置作业吧</p><p>布置后您可以在这里看到实时统计</p></div>
         </div>
@@ -563,6 +563,7 @@ export default {
         },
         err => {
           console.log(err);
+          self.pullRefresh = false;
           self.loading = false;
           self.$toast("网络异常");
         }
