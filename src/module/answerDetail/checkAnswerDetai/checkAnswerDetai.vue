@@ -48,6 +48,12 @@
         <div>分享<br/>班级</div>
       </div>
     </div>
+
+    <div class="publish-homework-btn-div" style="bottom: 110px;" @click="correctIdeaBtn">
+      <div class="publish-homework-btn">
+        <div>批改<br/>意见</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -73,7 +79,9 @@ export default {
       },
       studentListArray: [],
       studentAllInfo: {},
-      switchStudentShow: false
+      switchStudentShow: false,
+      studentOneDetail: {},
+      studentAnswerDetailData: this.$store.state.answerDetail.studentAnswerDetailData
     };
   },
   computed: {
@@ -81,21 +89,16 @@ export default {
       env: 'runEnv/old'
     })
   },
-  created: function() {
-    this.studentAnswerDetailData = this.$route.params.detailData ? this.$route.params.detailData : this.$store.state.answerDetail.studentAnswerDetailData;
+  mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
     this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
     this.studentList = this.$store.state.homeworkDetail.homeworkInfo.student_list;
-    console.log(this.studentAnswerDetailData)
-    this.setStudentAnswerDetailData(this.studentAnswerDetailData);
+    // console.log(this.studentAnswerDetailData)
     this.formatStudentList();
     this.getStudentAnswerList();
     this.getStudentMutualCommentsList();
   },
   methods: {
-    ...mapMutations({
-      setStudentAnswerDetailData: 'answerDetail/setStudentAnswerDetailData'
-    }),
     goHomework() {
       this.$router.go(-1);
     },
@@ -227,6 +230,14 @@ export default {
           classId: this.studentAllInfo.class_id,
           answer: this.studentAllInfo.answer,
           studentInfo: this.studentAllInfo
+        }
+      });
+    },
+    correctIdeaBtn() {
+      this.$router.push({
+        name: "correctIdea",
+        params: {
+          studentInfo: this.studentOneDetail
         }
       });
     }

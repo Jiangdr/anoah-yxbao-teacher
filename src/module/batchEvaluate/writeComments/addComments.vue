@@ -74,6 +74,10 @@ export default {
           self.$router.push({
             path: "/comments"
           });
+        } else if (self.batchEvaluateCommentsTemplateType === 2) {
+          self.$router.push({
+            path: "/correctIdea"
+          });
         }
         self.$toast({
           message: "添加成功！",
