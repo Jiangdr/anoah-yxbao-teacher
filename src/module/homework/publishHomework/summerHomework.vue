@@ -159,14 +159,14 @@ export default {
       this.$store.dispatch("isOldPackId", "0");
       this.result = result;
       this.$store.dispatch("chooseSummerHomeworkArray", this.result);
-      console.log(this.hasChoosePagesNumArray);
+      // console.log(this.hasChoosePagesNumArray);
       // debugger
       // return
-      // this.$router.push({
-      //   path: "/homeworkPublishSetting"
-      // });
+      this.$router.push({
+        path: "/homeworkPublishSetting"
+      });
     },
-    selectAll() {
+    selectAll(type) {
       var self = this;
       if (this.hasChoosePagesNumArray.length === this.lists.length) {
         this.hasChoosePagesNumArray = [];
@@ -184,6 +184,16 @@ export default {
           self.$refs["cb-" + element.resource_id][0].selecteState = true;
         });
       }
+      // if () {
+
+      // }
+      // for (let i = 0; i < this.hasChoosePagesNumArray.length; i++) {
+      //   if (this.hasChoosePagesNumArray[i].resource_id === item.resource_id) {
+      //     for (let j = 0; j < this.hasChoosePagesNumArray[i].qti_ids_obj.length; j++) {
+      //       this.hasChoosePagesNumArray[i].qti_ids_obj[j].checked = false;
+      //     }
+      //   }
+      // }
     },
     checkboxChange(item, event) {
       if (event.selecteState) {
@@ -276,6 +286,12 @@ export default {
           }
         }
       }
+      this.setting = [];
+
+      for (var i = 0; i < this.setting.length; i++) {
+        this.setting[i].checked = true;
+      }
+      // this.$nextTick()
       this.getHasChooseExerciseNum();
     },
     getList: function(value) {
