@@ -172,7 +172,7 @@ export default {
       api.getUserAnswerForMiniRs(data).then(
         response => {
           var answerObj = response.answer[0].answer_detail;
-          if (answerObj.images.length > 0) {
+          if (answerObj.images[0] && answerObj.images.length > 0) {
             var arrayImages = [];
             var array = answerObj.images;
             for (let i = 0; i < answerObj.images.length; i++) {
