@@ -324,7 +324,6 @@ export default {
     },
     searchAction() {
       this.searchKeyword = this.inputValue;
-      this.isSearching = false;
       this.onRefresh();
     },
     cancelAction() {
@@ -607,6 +606,7 @@ export default {
   left: 2.66667vw;
   width: 64%;
   top: -0.5vw;
+  font-weight: normal;
   input[type="search"]::-webkit-search-cancel-button {
     display: none;
   }
@@ -645,6 +645,7 @@ export default {
   right: 15%;
   padding-left: 1%;
   cursor: pointer;
+  font-weight: normal;
 }
 .search-btn:active,
 .cancel-btn:active {
@@ -655,6 +656,7 @@ export default {
   float: right;
   padding-right: 2.66667vw;
   cursor: pointer;
+  font-weight: normal;
 }
 .search-little-icon {
   width: calc(#{$header-height}/ 3);

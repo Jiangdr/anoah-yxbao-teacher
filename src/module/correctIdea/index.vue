@@ -7,11 +7,8 @@
           <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text"></span>
         </i>
         <div>
-          批量写评语
+          本题批改意见
         </div>
-        <!-- <div style="position: absolute; right: 10px; top: 0; height: 45px;" @click="clickVoiceShow">
-          <img style="vertical-align: middle;width: 28px;" src="@/assets/images/batchEvaluate/voicePng.png" alt="">
-        </div> -->
       </h1>
     </header>
 
@@ -68,10 +65,10 @@
 </template>
 
 <script>
-import api from "@/module/batchEvaluate/axios/batchEvaluate.js";
+import api from './axios/correctIdea.js'
 
 export default {
-  name: "comments",
+  name: "correctIdea",
   data() {
     return {
       listContainerStyle: {
@@ -88,6 +85,8 @@ export default {
   },
   mounted: function() {
     this.account = this.$store.state.account;
+    this.studentAnswerDetailData = this.$store.state.answerDetail.studentAnswerDetailData;
+    this.studentInfo = this.$route.params.studentInfo
     this.getTemplateList();
   },
   watch: {
@@ -102,13 +101,13 @@ export default {
       this.$router.go(-1);
     },
     goAddComments() {
-      this.$store.dispatch("batchEvaluateCommentsTemplateType", 1);
+      this.$store.dispatch("batchEvaluateCommentsTemplateType", 2);
       this.$router.push({
         path: "/addComments"
       });
     },
     goEditComments() {
-      this.$store.dispatch("batchEvaluateCommentsTemplateType", 1);
+      this.$store.dispatch("batchEvaluateCommentsTemplateType", 2);
       this.$router.push({
         path: "/editComments"
       });
@@ -130,27 +129,11 @@ export default {
         window.appPlug.aliUpLoad(param, function(msg) { alert(JSON.stringify(msg)) }, function(msg) { alert(msg) });
       }
     },
-    writeComments() {
-      if (this.checkBoxGroup.length === 0) {
-        this.$toast({
-          message: "请选择学生！",
-          duration: 750
-        });
-        return;
-      }
-      this.$store.dispatch(
-        "chooseBatchEvaluateStudentsArray",
-        this.checkBoxGroup
-      );
-      this.$router.push({
-        path: "/comments"
-      });
-    },
     getTemplateList() {
       var self = this;
       var data = {
         user_id: self.account.userInfo.userid,
-        type: 1
+        type: 2
       };
 
       api.commentplGetList(data).then(function(response) {
@@ -160,7 +143,27 @@ export default {
     clearTextArea() {
       this.comment = "";
     },
-    sureBtn() {},
+    sureBtn() {
+      var self = this;
+      var data = {
+        teacher_id: self.account.userInfo.userid,
+        student_id: '',
+        comment: self.comment,
+        audio_ids: '',
+        publish_id: self.studentAnswerDetailData.course_hour_publish_id,
+        user_id: self.studentInfo.userid
+      };
+
+      api.commentplGetList(data).then(function(response) {
+        self.$toast({
+          message: "批改意见保存成功！",
+          duration: 750
+        });
+        self.$router.push({
+          name: "checkAnswerDetai"
+        });
+      });
+    },
     chooseTemplate(item) {
       this.comment = item.comment;
     }

@@ -4,7 +4,7 @@
     <header class="header">
       <h1>添加评语</h1>
       <i class="cubeic-back" @click="goBatchEvaluate">
-        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
+        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text"></span>
       </i>
     </header>
 
@@ -54,9 +54,7 @@ export default {
   },
   methods: {
     goBatchEvaluate() {
-      this.$router.push({
-        path: "/batchEvaluate"
-      });
+      this.$router.go(-1);
     },
     addTemplateListsBtn() {
       var self = this;
@@ -75,6 +73,10 @@ export default {
         } else if (self.batchEvaluateCommentsTemplateType === 1) {
           self.$router.push({
             path: "/comments"
+          });
+        } else if (self.batchEvaluateCommentsTemplateType === 2) {
+          self.$router.push({
+            path: "/correctIdea"
           });
         }
         self.$toast({

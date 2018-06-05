@@ -93,9 +93,7 @@ export default {
   },
   methods: {
     goBatchEvaluate() {
-      this.$router.push({
-        path: "/batchEvaluate"
-      });
+      this.$router.go(-1);
     },
     goAddComments() {
       this.$store.dispatch("batchEvaluateCommentsTemplateType", 3);

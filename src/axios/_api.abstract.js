@@ -38,9 +38,16 @@ class API_ABSTRACT {
     } else if (type === 'get') {
       data = options.api === 'old' ? { 'info': JSON.stringify(data) } : JSON.stringify(data)
       return http.get(url, data, options).then(r => {
+        if (url.indexOf('VerifyQrcode') > 0) {
+          return r
+        }
         return this.checkStatus(r, options)
       })
     }
+  }
+
+  doParams() {
+
   }
 }
 
