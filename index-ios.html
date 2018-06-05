@@ -7,7 +7,6 @@
       window.platform = 'ios';
    <%= htmlWebpackPlugin.options.version %>
    </script>
-     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script type="text/javascript" src="../lib/ios/cordova.js"></script>
     <script src="../lib/app_plug.js"></script>
     <script src="<%= htmlWebpackPlugin.options.qtiUrl %>qtivue.js"></script>
@@ -23,4 +22,8 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+  <script src= "<%= htmlWebpackPlugin.options.himUrl %>anoahim.js"></script>
+<script>
+  window.Vue.use(AnoahIM);
+</script>
 </html>
