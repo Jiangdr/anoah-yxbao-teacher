@@ -113,10 +113,10 @@ export default {
         publish_id: self.paramsDetailData.course_hour_publish_id,
         view_userid: self.userInfo.userid,
         course_resource_id: self.paramsDetailData.course_resource_id,
-        qti_question_id: '9002511502880300001',
+        qti_question_id: self.paramsDetailData.source_pk_id,
         user_id: self.studentOneDetail.userid,
         page: '1',
-        perpage: '5'
+        perpage: '999'
       };
       api.studentMutualCommentsGetLists(data).then(
         response => {
