@@ -55,14 +55,13 @@ Object.keys(filters).forEach(key => {
 Vue.prototype.$dayjs = dayjs;
 
 Vue.prototype.$http = Axios;
-window.Vue.prototype.$http = Axios;
 
 Vue.prototype.$echarts = echarts
 // Axios.defaults.withCredentials = true;
-window.Vue.prototype.$http = Axios;
+// window.Vue.prototype.$http = Axios;
 
 Vue.use(window.qtivue.default)
-Vue.use(window.anoahim)
+// Vue.use(window.anoahim)
 Vue.use(window.mp3player.default)
 Vue.use(window.tcplayer.default)
 
