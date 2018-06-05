@@ -292,6 +292,10 @@ export default {
     clickChooseAll() {
       if (!this.isSelect(this.currentItem)) {
         this.hasChoosePagesNumArray.push(this.currentItem);
+        let arr = this.$refs["cb-" + this.currentItem.listIndex];
+        if (arr && arr.length > 0) {
+          arr[0].selecteState = true;
+        }
       }
       for (let j = 0; j < this.currentItem.qti_ids_obj.length; j++) {
         this.currentItem.qti_ids_obj[j].checked = true;
