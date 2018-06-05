@@ -5,7 +5,7 @@
         <i class="red-icon" v-if="newMsg"></i>
         <i class="icon message"></i>
       </div>
-      <div @click="showPopup =true">
+      <div @click="QRscan">
         <i class="icon scan"></i>
       </div>
     </div>
@@ -142,8 +142,20 @@ export default {
         params: { role: "teacher" }
       });
     },
-    scan() {
-      alert("扫码");
+    QRscan() {
+      window.appPlug.scanQRCode((info) => {
+        alert(JSON.stringify(info))
+      }, (err) => {
+        alert(JSON.stringify(err))
+      })
+      // homeApi.qrcode({
+      //   token: this.userId,
+      //   uuid: 'ddddddddddddddddddd',
+      //   action: 'scan'
+      // }).then(succ => {
+      //   console.log(succ)
+      // })
+      // this.$router.push({path: '/afterQRscan'})
     },
 
     getEnv(env) {
@@ -287,7 +299,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/style/base.scss";
 .spa {
-  background-image: url("../../assets/images/home/bg.jpg");
+  background-image: url("../../../assets/images/home/bg.jpg");
   background-repeat: no-repeat;
   background-size: 100% auto;
 }
@@ -304,7 +316,7 @@ export default {
       display: inline-block;
       width: 7px;
       height: 7px;
-      background: url("../../assets/images/public/red-icon.png") no-repeat;
+      background: url("../../../assets/images/public/red-icon.png") no-repeat;
       background-size: 100% auto;
       position: absolute;
       top: 7px;
