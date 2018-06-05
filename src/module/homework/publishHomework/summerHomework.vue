@@ -136,9 +136,18 @@ export default {
       }
       var result = [];
       for (var i = 0; i < this.hasChoosePagesNumArray.length; i++) {
+        var tempArr = [];
+        for (
+          let index = 0;
+          index < this.hasChoosePagesNumArray[i].qti_ids_obj.length;
+          index++
+        ) {
+          const element = this.hasChoosePagesNumArray[i].qti_ids_obj[index];
+          if (element.checked) tempArr.push(element.value);
+        }
         result.push({
           name: this.hasChoosePagesNumArray[i].name,
-          qti_ids: this.hasChoosePagesNumArray[i].qti_ids,
+          qti_ids: tempArr,
           resource_id: this.hasChoosePagesNumArray[i].resource_id
         });
       }
