@@ -1,20 +1,28 @@
 <template>
   <div id="setting">
-    <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
-    <van-cell-group>
-      <van-cell title="缓存" value="20Mb" center />
-      <van-cell title="修改密码" is-link @click="linkTo('password')"/>
-      <van-cell title="消息设置" is-link @click="linkTo('setting')"/>
-      <van-cell title="检查更新" value="v1.0.0" />
-    </van-cell-group>
-    <van-button class="loginout" type="primary" size="large" @click="showActionSheet = true">退出</van-button>
+    <div style="background-color: #fff;flex:0;">
+      <header-bar @back="back"><span slot="title-name">{{title}}</span></header-bar>
+      <van-cell-group>
+        <van-cell class="aboutus-van-cell" title="清除缓存" is-link value="20Mb" center />
+        <van-cell class="aboutus-van-cell" title="修改密码" is-link @click="linkTo('password')"/>
+        <van-cell class="aboutus-van-cell" title="消息设置" is-link @click="linkTo('setting')"/>
+        <van-cell class="aboutus-van-cell" is-link value="v1.0.0">
+          <template slot="title">
+            <div class="item-choice">检查更新<img src="@/assets/images/usercenter/new.png" class="halfscaleelement"/> </div>
+          </template>
+        </van-cell>
+      </van-cell-group>
+    </div>
+    <bottom-button-area :disabled="false" @click="showActionSheet = true" buttonText="退出" color="red"></bottom-button-area>
     <van-actionsheet v-model="showActionSheet" :actions="actions" cancel-text="取消" />
   </div>
 </template>
 
 <script>
 import NavBar from '@/module/user-center/components/common/navbar'
-import storage from '@/store/stroage'
+import headerBar from '@/components/headerBar.vue'
+import BottomButtonArea from '@/module/user-center/components/common/bottomButtonArea'
+import storage from '@/store/stroage.js'
 export default {
   name: 'Setting',
   data () {
@@ -45,23 +53,37 @@ export default {
     loginOut () {
       this.showActionSheet = false
       localStorage.clear();
-      storage['session'].remove('mqttConnect');
-      window.bus.mqtt.client.disconnect()
+      if (window.bus.mqtt.client && window.bus.mqtt.client.isConnected()) {
+        window.bus.mqtt.client.disconnect()
+      }
+      localStorage.clear()
       this.$router.push({path: '/login?redirect=/'})
     }
   },
   components: {
-    NavBar
+    NavBar,
+    headerBar,
+    BottomButtonArea
   }
 }
 </script>
 
 <style scoped>
-.loginout{
-  position: fixed;
-  bottom: 0;
-}
-.warning{
-  color: #e4393c !important;
-}
+  #setting
+  {
+    height: 100%;
+    background-color: #F6F7F9;
+    display: flex;
+    flex-direction: column;
+  }
+  .aboutus-van-cell
+  {
+    width: 97%;
+  }
+  div.item-choice
+  {
+    display: flex;
+    align-items: center;
+    height: 30px;
+  }
 </style>

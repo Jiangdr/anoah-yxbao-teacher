@@ -1,15 +1,17 @@
 <template>
   <div id="modify-name">
-    <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
-    <van-field v-model.trim="newName" :placeholder="name" icon="clear" @click-icon="newName = ''" :error-message="errMsg"/>
-    <van-button type="primary" size="large" :disabled="noInput" @click="set">保存</van-button>
+    <header-bar @back="back"><span slot="title-name">{{title}}</span></header-bar>
+    <van-field v-model.trim="newName" placeholder="请输入修改后的姓名" icon="clear" @click-icon="newName = ''" :error-message="errMsg"/>
+    <bottom-button-area :disabled="noInput" @click="set" buttonText="保 存"></bottom-button-area>
   </div>
 </template>
 
 <script>
 import NavBar from '@/module/user-center/components/common/navbar'
 import api from '@/module/user-center/axios/usercenter'
-import {mapGetters} from 'vuex'
+import headerBar from '@/components/headerBar.vue'
+import BottomButtonArea from '@/module/user-center/components/common/bottomButtonArea'
+import {mapState} from 'vuex'
 import { Toast } from 'vant'
 export default {
   name: 'ModifyName',
@@ -24,8 +26,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      userId: 'userCenter/userId'
+    ...mapState({
+      userId: state => state.account.userInfo.userid
     })
   },
   watch: {
@@ -52,6 +54,7 @@ export default {
       }).then(succ => {
         Toast({position: 'bottom', message: '修改成功'})
         setTimeout(() => {
+          this.$route.meta.nickName = this.newName
           this.back()
         }, 1000)
       }, err => {
@@ -60,7 +63,9 @@ export default {
     }
   },
   components: {
-    NavBar
+    NavBar,
+    headerBar,
+    BottomButtonArea
   }
 }
 </script>

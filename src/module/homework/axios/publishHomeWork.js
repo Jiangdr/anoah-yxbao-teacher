@@ -9,10 +9,15 @@ let apis = {
   getLists: "jwt/resource/package/search",
   saveRecord: "jwt/user/book/saveRecord",
   getLastRecord: "jwt/user/book/getLastRecord",
+  favoriteUpdate: "jwt/resource/favorite/update",
   getBooksByTeacher: "jwt/resource/common/getBooksByTeacher"
 }
 
 let publishHomeWork = new API(apis)
+
+publishHomeWork.favoriteUpdate = (params) => {
+  return publishHomeWork.fetch(apis.favoriteUpdate, params, 'post')
+}
 
 publishHomeWork.homeworkLists = (params) => {
   return publishHomeWork.fetch(apis.homeworkLists, params, 'post')

@@ -29,7 +29,6 @@ export default {
       if (item.active) {
         return false
       }
-
     }
   }
 }

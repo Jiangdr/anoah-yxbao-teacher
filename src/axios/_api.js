@@ -30,7 +30,11 @@ class API extends API_ABSTRACT {
       },
         // jwt失效
       j => {
-        return this.refreshAuthFetch();
+        if (j.status === -100 || j.status === -101 || j.status === -102) {
+          return this.refreshAuthFetch();
+        } else {
+          return j;
+        }
       });
     } else {
       // 没有jwt

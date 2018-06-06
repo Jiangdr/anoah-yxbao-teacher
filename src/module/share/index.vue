@@ -15,7 +15,6 @@
     </div>
     <div class="answer" v-for="(item,index) in answer" :key="index">
       <div v-for="(answer,key) in JSON.parse(item.answer)" :key="key" v-html=" showAnswer(answer[0])">
-
       </div>
     </div>
   </div>
@@ -121,8 +120,11 @@ export default {
     margin:30px auto 20px;
   }
   .answer{
-    padding-bottom: 20px;
+    // padding-bottom: 20px;
     text-align: center;
+    &>div{
+      margin-bottom: 20px;
+    }
   }
 }
 </style>
