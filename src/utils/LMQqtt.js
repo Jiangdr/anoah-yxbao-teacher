@@ -1,4 +1,4 @@
-import storage from '@/store/stroage'
+// import storage from '@/store/stroage'
 const LMqtt = {
   client: null,
   cfg: {
@@ -62,7 +62,7 @@ const LMqtt = {
         }
         // 学校
         me.client.subscribe(`school_${userinfo.school_id}`);
-        storage['session'].set('mqttConnect', true)
+        // storage['session'].set('mqttConnect', true)
       },
       onFailure: function(e) {
         console.log('连接失败')

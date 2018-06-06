@@ -4,7 +4,7 @@ let apis = {
   'info': '/jwt/users/user/info',
   'myClass': '/jwt/users/classes/index',
   'classInfo': '/jwt/users/classes/detail',
-  'personal': '/jwt/users/user/modify',
+  'personal': 'jwt/users/user/modify',
   'captcha': '/user/sms/captcha', // 发送验证码
   'valid': '/user/sms/valid', // 验证验证码
   'bind': '/user/phone/bind',
@@ -24,6 +24,10 @@ usercenter.obtainclasses = (params) => {
 
 usercenter.obtainclassDeatail = (params) => {
   return usercenter.fetch(usercenter.apis.classInfo, params, 'post')
+}
+
+usercenter.uploadImg = (url, params) => {
+  return usercenter.uploadImage(url, params)
 }
 
 usercenter.modify = (params) => {

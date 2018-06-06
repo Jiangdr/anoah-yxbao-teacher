@@ -9,6 +9,7 @@ import batchEvaluateStore from '@/module/batchEvaluate/store/batchEvaluate.js'
 import homeworkDetailStore from '@/module/homeworkDetail/store/detail.js'
 import answerDetailStore from '@/module/answerDetail/store/index'
 import noticeStore from '@/module/notice/store/notice.js'
+import wrongQtiNote from '@/module/wrongQtiNote/store/index'
 
 Vue.use(Vuex)
 
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     batchEvaluate: batchEvaluateStore,
     homeworkDetail: homeworkDetailStore, // 作业详情
     answerDetail: answerDetailStore, // 批改、查看统计
-    notice: noticeStore
+    notice: noticeStore,
+    wrongQtiNote: wrongQtiNote // 错题本
   }
 })

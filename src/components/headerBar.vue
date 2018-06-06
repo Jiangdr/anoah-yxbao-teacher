@@ -59,6 +59,7 @@ export default {
     // align-items: center;
   }
   .right-area{
+    font-size: 16px;
     width: 50px;
     text-align: right;
   }

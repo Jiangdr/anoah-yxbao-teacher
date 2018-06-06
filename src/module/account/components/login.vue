@@ -124,15 +124,17 @@ export default {
     }
     .forget-pwd{
       text-align: center;
-      color: #666;
       position: fixed;
-      bottom: 30px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       opacity: 1;
       transition: all .3s ease;
       &.slideUp{
         opacity: 0;
+      }
+      & *{
+        color: #666;
       }
     }
   }

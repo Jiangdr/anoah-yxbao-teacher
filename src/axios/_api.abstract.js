@@ -50,6 +50,15 @@ class API_ABSTRACT {
     }
   }
 
+  uploadImage (url, formData, options = {'errorTips': true, 'api': 'old'}) {
+    const apiDomain = window.bus.$store.getters['runEnv/' + options.api] ? window.bus.$store.getters['runEnv/' + options.api] : window.bus.$store.getters['runEnv/' + options.api]
+    url = !~url.indexOf('http') ? apiDomain + url : url
+    return http.uploadImage(url, formData).then(r => {
+      r.recordset = {'result': r.result}
+      return this.checkStatus(r, options)
+    })
+  }
+
   doParams() {
 
   }

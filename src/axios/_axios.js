@@ -73,5 +73,20 @@ export default {
         return responseFormat(response)
       }
     )
+  },
+  uploadImage (url, formData) {
+    alert(url)
+    return axios({
+      method: 'post',
+      url,
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then(
+      (response) => {
+        return responseFormat(response)
+      }
+    )
   }
 }

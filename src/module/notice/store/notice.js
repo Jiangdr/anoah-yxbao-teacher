@@ -19,7 +19,7 @@ export default {
       state.newSchoolMsg = val
     },
     connectMqtt(state) {
-      if (!storage["session"].get("mqttConnect")) {
+      if (!window.bus.mqtt.client || !window.bus.mqtt.client.isConnected()) {
         window.bus.mqtt.connect();
         homeApi.getMsg({ user_id: storage['persistent'].get('userinfo').userid }).then(r => {
           if (r.notice > 0 || r.homework > 0) {
