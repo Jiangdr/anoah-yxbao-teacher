@@ -46,12 +46,19 @@
     <div class="publish-homework-btn-div" @click="shareClassBtn">
       <div class="publish-homework-btn">
         <div>分享<br/>班级</div>
+        <!-- <img src="@/assets/images/answerDetail/share.png" alt=""> -->
       </div>
     </div>
 
     <div class="publish-homework-btn-div" style="bottom: 110px;" @click="correctIdeaBtn">
       <div class="publish-homework-btn">
         <div>批改<br/>意见</div>
+      </div>
+    </div>
+
+    <div class="publish-homework-btn-div" style="bottom: 220px;" @click="goOnepage">
+      <div class="publish-homework-btn">
+        <div>画笔</div>
       </div>
     </div>
   </div>
@@ -101,6 +108,14 @@ export default {
   methods: {
     goHomework() {
       this.$router.go(-1);
+    },
+    goOnepage() {
+      this.$router.push({
+        name: "onePenPage",
+        params: {
+          studentAnswerDetailData: this.studentAnswerDetailData
+        }
+      });
     },
     clickSwitchStudent() {
       this.switchStudentShow = !this.switchStudentShow;
