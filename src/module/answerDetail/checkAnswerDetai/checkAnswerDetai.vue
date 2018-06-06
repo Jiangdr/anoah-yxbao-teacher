@@ -43,24 +43,24 @@
       </div>
     </div>
 
-    <div class="publish-homework-btn-div" @click="shareClassBtn">
+    <div class="publish-homework-btn-div" style="bottom: 200px;" @click="goOnepage">
       <div class="publish-homework-btn">
-        <div>分享<br/>班级</div>
-        <!-- <img src="@/assets/images/answerDetail/share.png" alt=""> -->
+        <img src="@/assets/images/answerDetail/onePen.png" alt="画笔">
       </div>
     </div>
 
     <div class="publish-homework-btn-div" style="bottom: 110px;" @click="correctIdeaBtn">
       <div class="publish-homework-btn">
-        <div>批改<br/>意见</div>
+        <img src="@/assets/images/answerDetail/note.png" alt="批改意见">
       </div>
     </div>
 
-    <div class="publish-homework-btn-div" style="bottom: 220px;" @click="goOnepage">
+    <div class="publish-homework-btn-div" @click="shareClassBtn">
       <div class="publish-homework-btn">
-        <div>画笔</div>
+        <img src="@/assets/images/answerDetail/share.png" alt="分享班级">
       </div>
     </div>
+
   </div>
 </template>
 
@@ -312,22 +312,15 @@ li {
   justify-content: center;
 }
 .publish-homework-btn-div {
-  width: 60px;
-  height: 60px;
-  background-color: #2ec2a9;
-  border-radius: 50%;
   position: absolute;
   bottom: 20px;
   right: 20px;
-  color: #ffffff;
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-    0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
 }
 .publish-homework-btn {
-  font-size: 18px;
   height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 60px;
+}
+.publish-homework-btn img{
+  width: 100%;
 }
 </style>
