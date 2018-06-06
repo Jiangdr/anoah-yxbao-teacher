@@ -76,7 +76,9 @@ function getRect(el) {
       left: el.offsetLeft,
       width: el.offsetWidth,
       height: el.offsetHeight,
-      scrollTop: el.scrollTop
+      scrollTop: el.scrollTop,
+      scrollHeight: el.scrollHeight,
+      offsetHeight: el.offsetHeight
     }
   }
 }

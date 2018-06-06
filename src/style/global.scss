@@ -135,3 +135,10 @@ div.van-actionsheet__cancel.van-hairline--top
 .ft-bd {font-weight: bold;}
 .ft-nm {font-weight: normal;}
 .ft-lt {font-weight: lighter;}
+// qti 样式
+#wrong-qti-note .qti_typediff{
+  display: none !important;
+}
+#wrong-qti-note .qti_result{
+  display: none !important;
+}
