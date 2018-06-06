@@ -49,6 +49,7 @@ export default {
       userInfo: state => state.account.userInfo
     }),
     avatar () {
+      alert(111)
       return this.$store.getters['runEnv/old'] + this.userInfo.avatar
     },
     userName () {

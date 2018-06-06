@@ -34,6 +34,9 @@ export default {
     },
     setUserId (state, val) {
       state.userid = val;
+    },
+    setAvatar (state, val) {
+      state.userInfo.avatar = val
     }
   },
   actions: {
