@@ -45,8 +45,9 @@ export default {
     loginOut () {
       this.showActionSheet = false
       localStorage.clear();
-      storage['session'].remove('mqttConnect');
-      window.bus.mqtt.client.disconnect()
+      if (window.bus.mqtt.client) {
+        window.bus.mqtt.client.disconnect()
+      }
       this.$router.push({path: '/login?redirect=/'})
     }
   },
