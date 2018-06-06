@@ -47,7 +47,7 @@
         <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
           <van-list v-model="loading" :finished="finished" @load="onLoad" :offset="offset" :immediate-check="false" >
             <div v-if="list.length===0 && !refreshLoading && !loading" class="no-data">
-              <img :src="imgUrl('no-data')" alt="">
+              <img src="@/assets/images/homeworkDetail/no-data.png" alt="">
               <p>暂无待处理事项</p>
             </div>
 
@@ -263,7 +263,7 @@ export default {
       }
 
       let data = {
-        page: this.page,
+        page: 99,
         per_page: this.per_page,
         user_id: this.userId
       };
