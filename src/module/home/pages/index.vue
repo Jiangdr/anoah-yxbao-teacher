@@ -23,7 +23,7 @@
       </div>
       <div class="line"></div>
       <div>
-        <div>
+        <div @click="linkTo">
           <i class="icon wrong"></i>
           <span class="font-h4">错题本</span>
         </div>
@@ -167,13 +167,11 @@ export default {
         Toast(params.msg);
       }
     },
-
     getEnv(env) {
       // window.runEnv = env;
       this.showPopup = false;
       this.$store.dispatch("runEnv/changeEnv", env);
     },
-
     go(type) {
       // 代码走本地
       let href = window.location.href.split("#")[0];
@@ -299,6 +297,10 @@ export default {
         return false;
       }
       this.$router.push({ path: "/user-center" });
+    },
+    // 跳转错题本
+    linkTo() {
+      this.$router.push({path: '/wrongQtiNote'})
     }
   },
   components: {
