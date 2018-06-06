@@ -2,17 +2,17 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>试卷</h1>
-      <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i> 返回</i>
+      <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i></i>
     </header>
     <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
       <div style="padding: 5px 10px;height: 25px; line-height: 25px;">全部题目（{{setting.length}}）</div>
       <div v-for="(item, index) in setting" :key="index" style="position: relative;">
         <Qti :setting="item"></Qti>
-        <exerciseCheckBox style="position: absolute;right:10px;bottom:10px;width: 25px;height: 25px;" class="checkbox" :selected="item.isSel" :ref="'cb-'+item.qid" @select="checkboxChange(item,$event)"></exerciseCheckBox>
+        <!-- <exerciseCheckBox style="position: absolute;right:10px;bottom:10px;width: 25px;height: 25px;" class="checkbox" :selected="item.isSel" :ref="'cb-'+item.qid" @select="checkboxChange(item,$event)"></exerciseCheckBox> -->
       </div>
     </div>
 
-    <div class="footer-container div-center"><div outline="true" class="yx-green-btn"  @click="clickPublish">确认布置</div></div>
+    <!-- <div class="footer-container div-center"><div outline="true" class="yx-green-btn"  @click="clickPublish">确认布置</div></div> -->
   </div>
 </template>
 
@@ -45,6 +45,7 @@ export default {
           domain: "e.dev.anoah.com",
           qid: this.qti_ids[i],
           num: i + 1,
+          hide_result: 1,
           caller: "PREVIEWOR",
           resource_type: "qti_question",
           isSel: true
