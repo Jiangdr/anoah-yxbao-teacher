@@ -1,15 +1,16 @@
 <template>
   <div id="msg-setting">
-    <nav-bar :title="title" :hasBack="hasBack" @historyBack="back"></nav-bar>
+    <header-bar @back="back"><span slot="title-name">{{title}}</span></header-bar>
     <van-cell-group>
-      <van-switch-cell border v-model="hwMsg" title="接收作业消息"/>
-      <van-switch-cell border v-model="schMsg" title="接收学校通知"/>
+      <van-switch-cell class="msgSettingVanSwitch" border v-model="hwMsg" title="接收作业消息"/>
+      <van-switch-cell class="msgSettingVanSwitch" border v-model="schMsg" title="接收学校通知"/>
     </van-cell-group>
   </div>
 </template>
 
 <script>
 import NavBar from '@/module/user-center/components/common/navbar'
+import headerBar from '@/components/headerBar.vue'
 export default {
   name: 'MsgSetting',
   data () {
@@ -57,10 +58,14 @@ export default {
     }
   },
   components: {
-    NavBar
+    NavBar,
+    headerBar
   }
 }
 </script>
 
 <style scoped>
+  .van-switch{
+    background-color: #a21d1d;
+  }
 </style>

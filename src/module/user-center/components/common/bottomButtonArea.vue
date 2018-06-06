@@ -1,7 +1,7 @@
 <template>
   <div class="bottombuttonarea">
     <div style="position: relative;top: 50%;transform: translateY(-50%);">
-      <yx-next-btn :disabled="disabled" @click="$emit('click')" :text="buttonText" class="login-btn"></yx-next-btn>
+      <yx-next-btn :disabled="disabled" :loginBtnColor="color" @click="$emit('click')" :text="buttonText" class="login-btn"></yx-next-btn>
     </div>
   </div>
 </template>
@@ -12,7 +12,7 @@ export default {
   data () {
     return {}
   },
-  props: ['buttonText', 'disabled'],
+  props: ['buttonText', 'disabled', 'color'],
   components: {
     YxNextBtn
   }

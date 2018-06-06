@@ -68,14 +68,14 @@ export default {
     height: 100%;
     flex-direction: column;
   }
- div.restcontainer{
-   background-color: #F5F7F6;
-   flex-grow: 1;
-   display: inherit;
-   justify-content: space-between;
-   flex-direction: column;
-   align-items: center;
- }
+  div.restcontainer{
+    background-color: #F5F7F6;
+    flex-grow: 1;
+    display: inherit;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+  }
   .versiontextfont
   {
     font-size: 17px;
