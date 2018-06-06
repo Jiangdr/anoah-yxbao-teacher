@@ -26,11 +26,11 @@
       </div>
     </div>
 
-    <video preload='auto' v-if="videoShow" autoplay :src='videoUrl' webkit-playsinline='true' playsinline='true' x-webkit-airplay='true' x5-video-player-type='h5' x5-video-player-fullscreen='true' x5-video-ignore-metadata='true' style="position: absolute;top: 0;left: 0;width: 100%;z-index: 998;">
+    <video preload='auto' v-if="videoShow" autoplay :src='videoUrl' webkit-playsinline='true' playsinline='true' x-webkit-airplay='true' x5-video-player-type='h5' x5-video-player-fullscreen='true' x5-video-ignore-metadata='true' style="position: absolute;top: 0px;left: 0px;width: 100%;z-index: 998;height: 100%;background: rgba(0,0,0,0.8);">
       <p>不支持video</p>
     </video>
 
-    <div style="position: absolute;top: 5px;right: 5px;z-index: 999;" v-if="videoShow" @click="closeVideoShow"><i style="font-size:30px" class="fa fa-times-circle"></i></div>
+    <div style="position: absolute;top: 5px;right: 5px;z-index: 999;color: #fff;" v-if="videoShow" @click="closeVideoShow"><i style="font-size:30px" class="fa fa-times-circle"></i></div>
 
   </div>
 </template>

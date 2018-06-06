@@ -80,10 +80,10 @@
                 <i class="icon unfinish"></i>未完成
               </van-col>
               <van-col span="9">{{homeworkInfo.unfinished_counter}}人</van-col>
-              <van-col span="6" class="btn" v-if="isUrge">
+              <van-col span="6" class="btn" v-if="isUrge<=0">
                 <p @click="toggleUrge" :class="{disable:homeworkInfo.unfinished_counter===0}">催交作业</p>
               </van-col>
-              <van-col span="6" class="btn" v-if="!isUrge">
+              <van-col span="6" class="btn" v-if="isUrge>0">
                 <p class="disable">今日已提醒</p>
               </van-col>
             </van-row>
@@ -92,10 +92,10 @@
                 <i class="icon revising"></i>未订正
               </van-col>
               <van-col span="9">{{homeworkInfo.unretyr_counter}}人</van-col>
-              <van-col span="6" class="btn" v-if="isRemind">
+              <van-col span="6" class="btn" v-if="isRemind<=0">
                 <p @click="toggleRemind" :class="{disable:homeworkInfo.unretyr_counter===0}">提醒订正</p>
               </van-col>
-              <van-col span="6" class="btn" v-if="!isRemind">
+              <van-col span="6" class="btn" v-if="isRemind>0">
                 <p class="disable">今日已提醒</p>
               </van-col>
             </van-row>
@@ -163,8 +163,8 @@ export default {
       urge: false, // 催交作业遮罩层
       remind: false, // 订正题型遮罩层
       notcorrect: false, // 是否只看待批阅
-      isUrge: false, // 是否已催交作业
-      isRemind: false, // 是否已题型订正
+      isUrge: '', // 是否已催交作业
+      isRemind: '', // 是否已题型订正
       answerTip: false, // 发布答案弹框
       correctTip: false, // 一键批阅弹框
       // homeworkStatus: "", // 当前作业完成状态 1未批改 3已批改
@@ -212,9 +212,9 @@ export default {
       this.correct = this.homeworkInfo.class_average_correct_rate;
       this.studentList = this.homeworkInfo.student_list
       // 是否催交过作业  0 未催交 1 当日已催交
-      this.isUrge = this.homeworkInfo.notice_zuoye === 0
+      this.isUrge = this.homeworkInfo.notice_zuoye
       // 是否提醒订正  0 未提醒 1 当日已提醒
-      this.isRemind = this.homeworkInfo.notice_retry === 0
+      this.isRemind = this.homeworkInfo.notice_retry
     },
     check() {
       this.notcorrect = !this.notcorrect;
@@ -235,7 +235,7 @@ export default {
     },
     // 催交作业弹出框
     toggleUrge() {
-      if (this.homeworkInfo.unfinished_counter === 0 || !this.isUrge) {
+      if (this.homeworkInfo.unfinished_counter === 0 || this.isUrge > 0) {
         return false
       }
       let params = {
@@ -254,7 +254,7 @@ export default {
     },
     // 提醒订正弹出框
     toggleRemind() {
-      if (this.homeworkInfo.unretyr_counter === 0 || !this.isRemind) {
+      if (this.homeworkInfo.unretyr_counter === 0 || this.isRemind > 0) {
         return false
       }
       let params = {

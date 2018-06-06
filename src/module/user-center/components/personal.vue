@@ -26,6 +26,8 @@
         <span><span class="cl-dec">{{userInfo.phone || '未绑定'}}</span><van-icon name="arrow" style="vertical-align:middle;top:-2px" class="cl-mark van-icon"></van-icon></span>
       </div>
     </div>
+    <input ref="file1" type="file">
+    <input type="button" value="保存" @click="uploadFile">
     <van-actionsheet v-model="showActionSheet" :actions="actions" cancel-text="取消" />
   </div>
 </template>
@@ -69,26 +71,25 @@ export default {
   computed: {
     ...mapState({
       userId: state => state.account.userInfo.userid,
-      userBirthday: function (state) {
-        return state.account.userInfo ? state.account.userInfo.birthday === '0000-00-00' ? '' : state.account.userInfo.birthday : ''
-      },
       uInfo: state => state.account.userInfo
-    }),
-    /*  ...mapGetters({
-      userId: 'userCenter/userId'
-    }), */
-    currentDate: {
-      get () {
-        return this.userBirthday === '' ? new Date() : new Date(this.userBirthday)
-      },
-      set (v) {}
-    }
+    })
   },
   methods: {
     ...mapMutations({
       setAvatar: 'account/setAvatar',
       setUserName: 'account/setUsername'
     }),
+    uploadFile () {
+      let formData = new FormData()
+      formData.append('code', this.$refs.file1.files[0])
+      let url
+      api.uploadImage(
+        '/api_dist/index.php?q=json/user/UserAvatar/uploadAvatar&info={"binary":"1"}&userid=' + this.userInfo.userid, formData
+      ).then(succ => {
+        url = succ.result
+        this.modifyAvatar(url)
+      })
+    },
     link (phone) {
       if (phone) {
         this.$router.push({path: `/modifyPhone/${phone}`})
@@ -111,11 +112,13 @@ export default {
     getImagesSuc (v) {
       let formData = new FormData()
       formData.append('code', v)
+      alert('v=' + v)
       let url
       api.uploadImage(
         '/api_dist/index.php?q=json/user/UserAvatar/uploadAvatar&info={"binary":"1"}&userid=' + this.userInfo.userid, formData
       ).then(succ => {
         url = succ.result
+        alert('succ.result=' + url)
         this.modifyAvatar(url)
       })
       this.showActionSheet = false
@@ -140,7 +143,6 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       if (from.name === 'modifyName' && from.meta.nickName) {
-        vm.userInfo.nicknm = from.meta.nickName
         vm.setUserName(from.meta.nickName)
         to.meta.nickName = from.meta.nickName
         from.meta.nickName = null

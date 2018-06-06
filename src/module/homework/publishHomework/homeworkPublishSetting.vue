@@ -55,8 +55,10 @@ export default {
   created: function() {
     this.userInfo = this.$store.state.account.userInfo;
   },
+  activated() {
+    this.paramsData = this.$route.params;
+  },
   mounted: function() {
-    console.log(this.$route.params.detailData)
     this.publishDateFormat = this.$dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
     this.answerDateFormat = this.$dayjs(new Date((new Date()).getTime() + 24 * 60 * 60 * 1000)).format("YYYY-MM-DD HH:mm:ss");
     this.endDateFormat = this.$dayjs(new Date(2018, 7, 31)).format("YYYY-MM-DD HH:mm:ss");
@@ -64,9 +66,6 @@ export default {
   },
   methods: {
     goSummerHomework() {
-      // this.$router.push({
-      //   path: "/summerHomework"
-      // });
       this.$router.back(-1);
     },
     clickShowPupUpDatePickerFun(type) {
@@ -92,7 +91,6 @@ export default {
     surePublishFun() {
       var self = this;
       var classIds = "";
-      // var array = self.userInfo.classes;
       var array = self.result;
       for (let i = 0; i < array.length; i++) {
         if (i + 1 === array.length) {
@@ -113,6 +111,10 @@ export default {
         });
       }
 
+      if (this.paramsData[0]) {
+        resourceId = this.paramsData;
+      }
+
       var data = {
         user_id: this.userInfo.userid,
         title: self.homeworkName,
@@ -123,28 +125,31 @@ export default {
         view_answer_time: self.answerDateFormat
       };
 
-      if (data.title && data.view_answer_time) {
+      if (data.title) {
         self.$toast.loading({
           mask: true,
           message: '加载中...'
         });
         api.launch(data).then(function(r) {
-          self.$toast.clear();
-          self.$toast({
-            message: "布置成功！",
-            duration: 750
-          });
-          this.$store.dispatch("hasChoosePagesArray", []);
-          this.$store.dispatch("isOldPackId", "0");
-          setTimeout(function() {
-            self.$router.push({
-              path: "/homework"
+          if (r.msg) {
+            self.$toast.clear();
+            self.$toast({
+              message: r.msg,
+              duration: 750
             });
-          }, 500);
+          } else {
+            setTimeout(function() {
+              self.$router.push({
+                path: "/homework"
+              });
+            }, 500);
+          }
+          self.$store.dispatch("hasChoosePagesArray", []);
+          self.$store.dispatch("isOldPackId", "0");
         });
       } else {
         self.$toast({
-          message: "请填写完整条件！",
+          message: "请填写作业名称！",
           duration: 750
         });
       }

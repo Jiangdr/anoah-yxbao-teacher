@@ -29,36 +29,43 @@
       <div>
         <ul>
           <li class="list-item" v-for="(item, index) in studentListArray" :key="index" @click="clickStudent(item)">
-            <div style="position: relative;margin-bottom:8px;">
-              <span style="width: 60px;height: 60px;display: inline-block;position: relative;">
-                <img style="border-radius: 50%;width: 100%;height: 100%;" :src="item.avatar"/>
+            <div class="avatorSpanDiv">
+              <span class="avatorSpan">
+                <img class="avator" :src="item.avatar"/>
               </span>
               <div class="bg-class checkbox">
-                <img src="@/assets/images/batchEvaluate/chooseAvator.png" v-if="item.selectState" style="width:100%;height:100%"/>
+                <img src="@/assets/images/batchEvaluate/chooseAvator.png" v-if="item.selectState" class="selectStateImg"/>
               </div>
             </div>
-            <div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ item.real_name }}</div>
+            <div class="realName">{{ item.real_name }}</div>
           </li>
         </ul>
       </div>
     </div>
 
-    <div class="publish-homework-btn-div" @click="shareClassBtn">
+    <div class="publish-homework-btn-div bottomMargin" @click="goOnepage">
       <div class="publish-homework-btn">
-        <div>分享<br/>班级</div>
+        <img src="@/assets/images/answerDetail/onePen.png" alt="画笔">
       </div>
     </div>
 
-    <div class="publish-homework-btn-div" style="bottom: 110px;" @click="correctIdeaBtn">
+    <div class="publish-homework-btn-div bottomMarginSecond" @click="correctIdeaBtn">
       <div class="publish-homework-btn">
-        <div>批改<br/>意见</div>
+        <img src="@/assets/images/answerDetail/note.png" alt="批改意见">
       </div>
     </div>
+
+    <div class="publish-homework-btn-div" @click="shareClassBtn">
+      <div class="publish-homework-btn">
+        <img src="@/assets/images/answerDetail/share.png" alt="分享班级">
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
-import {mapState, mapGetters, mapMutations} from 'vuex'
+import { mapState, mapGetters, mapMutations } from "vuex";
 import api from "@/module/answerDetail/axios/checkAnswerDetai.js";
 import studentAnswer from "@/components/common/studentAnswer.vue";
 import studentMutualComments from "@/components/common/studentMutualComments.vue";
@@ -75,18 +82,19 @@ export default {
       activeBtn: "studentAnswer",
       answerInfo: {},
       listContainerStyle: {
-        height: window.innerHeight - 50 + 'px'
+        height: window.innerHeight - 50 + "px"
       },
       studentListArray: [],
       studentAllInfo: {},
       switchStudentShow: false,
       studentOneDetail: {},
-      studentAnswerDetailData: this.$store.state.answerDetail.studentAnswerDetailData
+      studentAnswerDetailData: this.$store.state.answerDetail
+        .studentAnswerDetailData
     };
   },
   computed: {
     ...mapGetters({
-      env: 'runEnv/old'
+      env: "runEnv/old"
     })
   },
   mounted: function() {
@@ -101,6 +109,14 @@ export default {
   methods: {
     goHomework() {
       this.$router.go(-1);
+    },
+    goOnepage() {
+      this.$router.push({
+        name: "onePenPage",
+        params: {
+          studentAnswerDetailData: this.studentAnswerDetailData
+        }
+      });
     },
     clickSwitchStudent() {
       this.switchStudentShow = !this.switchStudentShow;
@@ -129,8 +145,8 @@ export default {
         course_resource_id: self.studentAnswerDetailData.course_resource_id,
         qti_question_id: self.studentAnswerDetailData.source_pk_id,
         user_id: self.studentOneDetail.userid,
-        page: '1',
-        perpage: '999'
+        page: "1",
+        perpage: "999"
       };
       api.studentMutualCommentsGetLists(data).then(
         response => {
@@ -138,11 +154,11 @@ export default {
           var array = listObj.lists;
           array.forEach(element => {
             element.rank = Number(element.rank);
-            if (element.avatar.indexOf('http://') === -1) {
-              element.avatar = self.env + element.avatar
+            if (element.avatar.indexOf("http://") === -1) {
+              element.avatar = self.env + element.avatar;
             }
           });
-          listObj.score = Math.round(Number(listObj.score))
+          listObj.score = Math.round(Number(listObj.score));
           listObj.lists = array;
           listObj.studentsNum = listObj.lists.length;
           self.listObj = listObj;
@@ -182,39 +198,39 @@ export default {
             var array = answerObj.images;
             for (let i = 0; i < answerObj.images.length; i++) {
               var element = answerObj.images[i];
-              if (element.indexOf('http://') === -1) {
-                element = self.env + element
+              if (element.indexOf("http://") === -1) {
+                element = self.env + element;
                 arrayImages.push(element);
               }
             }
             answerObj.images = arrayImages;
-          };
+          }
 
           if (answerObj.video[0] && answerObj.video[0].length > 0) {
             var arrayVideo = [];
             var array2 = answerObj.video[0];
             for (let i = 0; i < array2.length; i++) {
               var element2 = array2[i];
-              if (element2 && element2.indexOf('http://') === -1) {
-                element2 = self.env + element2
+              if (element2 && element2.indexOf("http://") === -1) {
+                element2 = self.env + element2;
                 arrayVideo.push(element2);
               }
             }
             answerObj.video = arrayVideo;
-          };
+          }
 
           if (answerObj.audio[0] && answerObj.audio[0].length > 0) {
             var arrayAudio = [];
             var array3 = answerObj.audio[0];
             for (let i = 0; i < array3.length; i++) {
               var element3 = array3[i];
-              if (element3 && element3.indexOf('http://') === -1) {
-                element3 = self.env + element3
+              if (element3 && element3.indexOf("http://") === -1) {
+                element3 = self.env + element3;
                 arrayAudio.push(element3);
               }
             }
             answerObj.audio = arrayAudio;
-          };
+          }
           self.answerInfo = answerObj;
         },
         err => {
@@ -246,6 +262,30 @@ export default {
 </script>
 
 <style scoped>
+.avatorSpanDiv {
+  position: relative;margin-bottom:8px;
+}
+.avatorSpan {
+  width: 60px;height: 60px;display: inline-block;position: relative;
+}
+.avator {
+  border-radius: 50%;width: 100%;height: 100%;
+}
+.selectStateImg {
+  width: 100%;
+  height: 100%;
+}
+.realName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bottomMargin {
+  bottom: 200px;
+}
+.bottomMarginSecond {
+  bottom: 110px;
+}
 .activeTabClass {
   color: #2ec2a9;
 }
@@ -255,9 +295,9 @@ export default {
   box-sizing: border-box;
   text-align: center;
 }
-.btns .active span{
+.btns .active span {
   color: #08b783;
-  border-bottom:2px solid #08b783;
+  border-bottom: 2px solid #08b783;
 }
 .btns span {
   display: inline-block;
@@ -286,8 +326,8 @@ li {
   border-radius: 20px;
 }
 .checkboxAll img {
-  width:100%;
-  height:100%
+  width: 100%;
+  height: 100%;
 }
 .bg-class {
   width: 50px;
@@ -297,22 +337,15 @@ li {
   justify-content: center;
 }
 .publish-homework-btn-div {
-  width: 60px;
-  height: 60px;
-  background-color: #2ec2a9;
-  border-radius: 50%;
   position: absolute;
   bottom: 20px;
   right: 20px;
-  color: #ffffff;
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-    0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
 }
 .publish-homework-btn {
-  font-size: 18px;
   height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 60px;
+}
+.publish-homework-btn img {
+  width: 100%;
 }
 </style>

@@ -67,7 +67,9 @@ export default {
       for (let i = 0; i < this.list.length; i++) {
         let item = {
           'title': this.list[i].resource_name,
-          'rids': [this.list[i].resource_id]
+          'rids': [this.list[i].resource_id],
+          'select_all': false,
+          'exam_resource_id': 0
         }
         resourceId.push(item)
       }
