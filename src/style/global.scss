@@ -1,6 +1,6 @@
 .van-cell__title  .van-cell__label
 {
-  color: #b8b8b8;
+  @extend .cl-mark
 }
 .feedbackuserLink .van-cell__title span
 {
@@ -22,7 +22,11 @@
 }
 .feedbackotherquestion .van-cell__value span
 {
-  color: #b8b8b8;
+  @extend .cl-mark
+}
+.aboutus-van-cell .van-cell__value span
+{
+  @extend .cl-dec
 }
 .van-cell.feedbackmsglist,.van-cell.feedbackuserLink
 {
@@ -30,7 +34,7 @@
 }
 .halfscaleelement
 {
-  transform:scale(.5);
+  transform:scale(.65);
 }
 div.van-actionsheet{
   background: none;
@@ -50,9 +54,84 @@ div.van-actionsheet__cancel.van-hairline--top
   margin-right: auto;
   overflow: hidden;
 }
+.msgSettingVanSwitch .van-switch{
+  background-color: #C8CAC9;
+}
+
+.msgSettingVanSwitch .van-switch--on{
+  background-color: #3EA3FF;
+}
+.msgSettingVanSwitch .van-switch--on .van-switch__node
+{
+  transform: translateX(.8em);
+}
+.msgSettingVanSwitch .van-switch__node{
+  width: 17px;
+  height: 17px;
+  top: 2px;
+  margin-left: 3px;
+}
+
+.msgSettingVanSwitch .van-switch{
+  height:21px;
+}
+.personalTimepicker .van-picker-column__item
+{
+  @extend .cl-mark;
+}
+.personalTimepicker .van-picker-column__item--selected{
+  @extend .cl-black;
+}
 
 .ellipsis{
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+//字体颜色样式定义
+.cl-title {color: #1e1e1e;}
+.cl-font {color: #4e4e50;}
+.cl-dec {color: #7f8184;}
+.cl-mark {color: #9c9ea1;}
+.cl-mark2 {color: #c8c9c9;}
+.cl-bd {color: #e8ebee;}
+.cl-bgc{background-color: #f5f7f8;}
+.cl-button {color: #2ecbd0}
+.cl-blue{color: #3ea2ff;}
+.cl-orange {color: #ff8d13;}
+.cl-black {color: #000;}
+.cl-white {color: #fff;}
+.cl-red {color: #ff5366;}
+.cl-yellow{color: #ff9700;}
+//背景颜色定义
+.bg-title {background-color: #1e1e1e;}
+.bg-font {background-color: #4e4e50;}
+.bg-dec {background-color: #7f8184;}
+.bg-mark {background-color: #9c9ea1;}
+.bg-mark2 {background-color: #c8c9c9;}
+.bg-button {background-color: #2ecbd0}
+.bg-blue {background-color: #3e97ff;}
+.bg-red {background-color: #ff5366;}
+.bg-green {background-color: #12d198;}
+.bg-yellow{background-color: #ff9700;}
+.bg-orange{background-color: #ff8d13;}
+.bg-black {background-color: #000;}
+.bg-white {background-color: #fff;}
+
+
+.ft20 {font-size: 20px;}
+.ft19 {font-size: 19px;}
+.ft18 {font-size: 18px;}
+.ft17 {font-size: 17px;}
+.ft16 {font-size: 16px;}
+.ft15 {font-size: 15px;}
+.ft14 {font-size: 14px;}
+.ft13 {font-size: 13px;}
+.ft12 {font-size: 12px;}
+.ft10 {font-size: 10px;}
+.ft8 {font-size: 8px;}
+
+.ft-bd {font-weight: bold;}
+.ft-nm {font-weight: normal;}
+.ft-lt {font-weight: lighter;}
