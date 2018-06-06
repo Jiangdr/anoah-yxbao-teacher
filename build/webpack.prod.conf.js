@@ -77,7 +77,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       version: `window.version = "${config.build.version}";`,
       qtiUrl: `${config.build.qtiUrl}`,
-      himUrl: `${config.dev.himUrl}`,
+      himUrl: `${config.build.himUrl}`,
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
@@ -96,7 +96,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       version: `window.version = "${config.build.version}";`,
       qtiUrl: `${config.build.qtiUrl}`,
-      himUrl: `${config.dev.himUrl}`,
+      himUrl: `${config.build.himUrl}`,
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
@@ -115,7 +115,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       version: `window.version = "${config.build.version}";`,
       qtiUrl: `${config.build.qtiUrl}`,
-      himUrl: `${config.dev.himUrl}`,
+      himUrl: `${config.build.himUrl}`,
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
