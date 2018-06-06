@@ -7,7 +7,7 @@
     </div>
     <yx-login-btn :loading="loading" :disabled="isDisabled" @click="doLogin" class="login-btn" text="登 录"></yx-login-btn>
     <div class="forget-pwd" :class="{slideUp: slideUp}">
-      <router-link :to="{path:'/forgetPassword'}">忘记密码?</router-link>
+      <a is="router-link" :to="{path:'/forgetPassword'}">忘记密码?</a>
     </div>
   </div>
 </template>
@@ -124,15 +124,17 @@ export default {
     }
     .forget-pwd{
       text-align: center;
-      color: #666;
       position: fixed;
-      bottom: 30px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       opacity: 1;
       transition: all .3s ease;
       &.slideUp{
         opacity: 0;
+      }
+      & a{
+        color: #666;
       }
     }
   }
