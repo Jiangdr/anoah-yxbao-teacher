@@ -5,6 +5,7 @@
 const path = require('path')
 
 let basePath = '../dist/HW';
+let publishPath = 'E:\\php\\dev-yii\\www\\hot_code\\youxuebao\\teacher\\www\\HW';
 
 module.exports = {
   dev: {
@@ -53,18 +54,18 @@ module.exports = {
     qtiUrl: '../lib/qti/',
     version: new Date().toLocaleString(),
     // Template for index.html
-    index: path.resolve(__dirname, basePath + '/index.html'),
-    indexAndroid: path.resolve(__dirname, basePath + '/index-android.html'),
-    indexIos: path.resolve(__dirname, basePath + '/index-ios.html'),
+    index: process.env.arg === 'publish' ? publishPath + '/index.html' : path.resolve(__dirname, basePath + '/index.html'),
+    indexAndroid: process.env.arg === 'publish' ? publishPath + '/index-android.html' : path.resolve(__dirname, basePath + '/index-android.html'),
+    indexIos: process.env.arg === 'publish' ? publishPath + '/index-ios.html' : path.resolve(__dirname, basePath + '/index-ios.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, basePath),
+    assetsRoot: process.env.arg === 'publish' ? publishPath : path.resolve(__dirname, basePath),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
 
     /**
-                 * Source Maps
-                 */
+     * Source Maps
+     */
 
     productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production
