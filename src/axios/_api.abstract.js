@@ -14,6 +14,10 @@ class API_ABSTRACT {
   checkStatus (data, opt) {
     if (data.status === 1) {
       return data.recordset
+      // JWT验证异常
+    } if (data.status === -100 || data.status === -102 || data.status === -101) {
+      return Promise.reject(data)
+      // 取数据异常
     } else {
       if (opt.errorTips) {
         if (data.msg === 'OK' && typeof data.recordset === 'string') {
@@ -38,9 +42,16 @@ class API_ABSTRACT {
     } else if (type === 'get') {
       data = options.api === 'old' ? { 'info': JSON.stringify(data) } : JSON.stringify(data)
       return http.get(url, data, options).then(r => {
+        if (url.indexOf('VerifyQrcode') > 0) {
+          return r
+        }
         return this.checkStatus(r, options)
       })
     }
+  }
+
+  doParams() {
+
   }
 }
 

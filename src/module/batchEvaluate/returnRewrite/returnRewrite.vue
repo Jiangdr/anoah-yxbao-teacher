@@ -72,11 +72,15 @@ export default {
       maxDate: new Date(2019, 12, 30),
       currentDate: new Date(),
       publishDatePickerShow: false,
+      endTime: "",
       chooseBatchEvaluateStudentsArray: 0
     };
   },
   created: function() {
+  },
+  activated() {
     this.endTime = this.$dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+    this.comment = "";
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
@@ -93,9 +97,7 @@ export default {
   },
   methods: {
     goBatchEvaluate() {
-      this.$router.push({
-        path: "/batchEvaluate"
-      });
+      this.$router.go(-1);
     },
     goAddComments() {
       this.$store.dispatch("batchEvaluateCommentsTemplateType", 3);
@@ -119,22 +121,6 @@ export default {
     },
     clickCancelTimeFun() {
       this.publishDatePickerShow = false;
-    },
-    writeComments() {
-      if (this.checkBoxGroup.length === 0) {
-        this.$toast({
-          message: "请选择学生！",
-          duration: 750
-        });
-        return;
-      }
-      this.$store.dispatch(
-        "chooseBatchEvaluateStudentsArray",
-        this.checkBoxGroup
-      );
-      this.$router.push({
-        path: "/comments"
-      });
     },
     getTemplateList() {
       var self = this;

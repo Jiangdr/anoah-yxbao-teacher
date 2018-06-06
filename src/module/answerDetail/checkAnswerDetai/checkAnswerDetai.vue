@@ -48,17 +48,23 @@
         <div>分享<br/>班级</div>
       </div>
     </div>
+
+    <div class="publish-homework-btn-div" style="bottom: 110px;" @click="correctIdeaBtn">
+      <div class="publish-homework-btn">
+        <div>批改<br/>意见</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import api from "@/module/homework/axios/correctTheSubject.js";
+import {mapState, mapGetters, mapMutations} from 'vuex'
+import api from "@/module/answerDetail/axios/checkAnswerDetai.js";
 import studentAnswer from "@/components/common/studentAnswer.vue";
 import studentMutualComments from "@/components/common/studentMutualComments.vue";
-import {mapGetters} from 'vuex'
 
 export default {
-  name: "correctTheSubject",
+  name: "checkAnswerDetai",
   components: {
     studentMutualComments,
     studentAnswer
@@ -73,7 +79,9 @@ export default {
       },
       studentListArray: [],
       studentAllInfo: {},
-      switchStudentShow: false
+      switchStudentShow: false,
+      studentOneDetail: {},
+      studentAnswerDetailData: this.$store.state.answerDetail.studentAnswerDetailData
     };
   },
   computed: {
@@ -81,12 +89,11 @@ export default {
       env: 'runEnv/old'
     })
   },
-  created: function() {
-    console.log(this.$route.params.detailData)
-    this.paramsDetailData = this.$route.params.detailData;
+  mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
     this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
     this.studentList = this.$store.state.homeworkDetail.homeworkInfo.student_list;
+    // console.log(this.studentAnswerDetailData)
     this.formatStudentList();
     this.getStudentAnswerList();
     this.getStudentMutualCommentsList();
@@ -117,10 +124,10 @@ export default {
     getStudentMutualCommentsList: function() {
       var self = this;
       var data = {
-        publish_id: self.paramsDetailData.course_hour_publish_id,
+        publish_id: self.studentAnswerDetailData.course_hour_publish_id,
         view_userid: self.userInfo.userid,
-        course_resource_id: self.paramsDetailData.course_resource_id,
-        qti_question_id: self.paramsDetailData.source_pk_id,
+        course_resource_id: self.studentAnswerDetailData.course_resource_id,
+        qti_question_id: self.studentAnswerDetailData.source_pk_id,
         user_id: self.studentOneDetail.userid,
         page: '1',
         perpage: '999'
@@ -158,13 +165,13 @@ export default {
     getStudentAnswerList: function(value) {
       var self = this;
       var data = {
-        publish_id: self.paramsDetailData.course_hour_publish_id,
-        course_resource_id: self.paramsDetailData.course_resource_id,
-        dcom_entity_id: self.paramsDetailData.dcom_entity_id,
-        source_pk_id: self.paramsDetailData.source_pk_id,
+        publish_id: self.studentAnswerDetailData.course_hour_publish_id,
+        course_resource_id: self.studentAnswerDetailData.course_resource_id,
+        dcom_entity_id: self.studentAnswerDetailData.dcom_entity_id,
+        source_pk_id: self.studentAnswerDetailData.source_pk_id,
         user_id: self.studentOneDetail.userid,
-        icom_id: self.paramsDetailData.icom_id,
-        dcom_id: self.paramsDetailData.dcom_id
+        icom_id: self.studentAnswerDetailData.icom_id,
+        dcom_id: self.studentAnswerDetailData.dcom_id
       };
       api.getUserAnswerForMiniRs(data).then(
         response => {
@@ -223,6 +230,14 @@ export default {
           classId: this.studentAllInfo.class_id,
           answer: this.studentAllInfo.answer,
           studentInfo: this.studentAllInfo
+        }
+      });
+    },
+    correctIdeaBtn() {
+      this.$router.push({
+        name: "correctIdea",
+        params: {
+          studentInfo: this.studentOneDetail
         }
       });
     }

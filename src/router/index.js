@@ -12,35 +12,17 @@ import homeworkDetail from '@/module/homeworkDetail/router'
 // 批改作业--统计
 import tongji from '@/module/tongji/router/index'
 import userCenter from '@/module/user-center/router'
-import home from '@/module/home/index'
-import list from '@/module/home/list'
-import test from '@/components/test'
+import home from '@/module/home/router/index'
 import homeworkRoutes from '@/module/homework/homework.route'
 import studentHomework from '@/module/studentHomework/route'
 import originalQuestion from '@/module/qti/router/index'
 import share from '@/module/share/router/index'
+import correctIdea from '@/module/correctIdea/router/index'
 // 批量评价
 import batchEvaluateRoutes from '@/module/batchEvaluate/batchEvaluate.route'
 Vue.use(Router)
 let routes = [
-  {
-    path: '/test',
-    name: 'test',
-    component: test,
-    meta: { requiresAuth: true, keepAlive: false }
-  },
-  {
-    path: '/',
-    name: 'Home',
-    component: home,
-    meta: { requiresAuth: true, keepAlive: true }
-  },
-  {
-    path: '/list',
-    name: 'List',
-    component: list,
-    meta: { requiresAuth: true, keepAlive: false }
-  },
+  ...home,
   ...homeworkRoutes,
   ...userCenter,
   ...account,
@@ -52,7 +34,8 @@ let routes = [
   ...batchEvaluateRoutes,
   ...studentHomework,
   ...originalQuestion,
-  ...share
+  ...share,
+  ...correctIdea
 ]
 let router = new Router({
   routes: routes

@@ -4,7 +4,7 @@
     <header class="header">
       <h1>
         <i class="cubeic-back" @click="goBatchEvaluate">
-          <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text">返回</span>
+          <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text"></span>
         </i>
         <div>
           批量写评语
@@ -88,6 +88,10 @@ export default {
   },
   mounted: function() {
     this.account = this.$store.state.account;
+    this.chooseBatchEvaluateStudentsArray = this.$store.state.batchEvaluate.chooseBatchEvaluateStudentsArray;
+    this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
+  },
+  activated() {
     this.getTemplateList();
   },
   watch: {
@@ -99,9 +103,7 @@ export default {
   },
   methods: {
     goBatchEvaluate() {
-      this.$router.push({
-        path: "/batchEvaluate"
-      });
+      this.$router.go(-1);
     },
     goAddComments() {
       this.$store.dispatch("batchEvaluateCommentsTemplateType", 1);
@@ -162,7 +164,36 @@ export default {
     clearTextArea() {
       this.comment = "";
     },
-    sureBtn() {},
+    sureBtn() {
+      var self = this;
+      var array = self.chooseBatchEvaluateStudentsArray;
+      var studentIds = "";
+
+      for (let i = 0; i < array.length; i++) {
+        if (i + 1 === array.length) {
+          studentIds += array[i].userid;
+        } else {
+          studentIds += array[i].userid + ",";
+        }
+      }
+      var data = {
+        publish_id: self.homeworkOneListInfoObj.course_hour_publish_id,
+        student_id: studentIds,
+        comment: self.comment,
+        teacher_id: self.account.userInfo.userid,
+        audio_ids: ''
+      };
+
+      api.addComment(data).then(function(response) {
+        self.$toast({
+          message: "批改意见保存成功！",
+          duration: 750
+        });
+        self.$router.push({
+          name: "batchEvaluate"
+        });
+      });
+    },
     chooseTemplate(item) {
       this.comment = item.comment;
     }

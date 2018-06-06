@@ -5,7 +5,7 @@
         <i class="red-icon" v-if="newMsg"></i>
         <i class="icon message"></i>
       </div>
-      <div @click="showPopup =true">
+      <div @click="QRscan">
         <i class="icon scan"></i>
       </div>
     </div>
@@ -75,7 +75,6 @@
       <div @click="getEnv('.t')">t</div>
       <div @click="getEnv('')">外网</div>
     </van-popup>
-
   </div>
 </template>
 
@@ -85,8 +84,8 @@ import api from "@/axios/iclass";
 import storage from "@/store/stroage";
 import homeApi from "@/module/home/axios/home";
 import { mapGetters, mapState } from "vuex";
-import { Dialog } from "vant";
-import '../../../lib/mqttws31.js'
+import {Dialog, Toast} from "vant"
+import '../../../../lib/mqttws31.js'
 import mqtt from '@/utils/LMQqtt.js'
 export default {
   name: "Home",
@@ -134,8 +133,39 @@ export default {
         params: { role: "teacher" }
       });
     },
-    scan() {
-      alert("扫码");
+    QRscan() {
+      window.appPlug.scanQRCode((info) => {
+        let reg = /\?(.*)/
+        let match
+        let uuid = (match = reg.exec(info)) && match[1];
+        if (match && uuid) {
+          // 扫描后获取参数成功
+          homeApi.qrcode({
+            token: this.userId,
+            uuid: uuid,
+            action: 'scan'
+          }).then(succ => {
+            this.afterQRscan(succ, uuid)
+          })
+        }
+      })
+    },
+    afterQRscan(params, uuid) {
+      if (params.status === 1) {
+        // 扫描成功
+        Toast(params.msg)
+        this.$router.push({path: '/afterQRscan/1/' + uuid})
+      } else if (params.status === -400) {
+        Toast('二维码失效！')
+      } else if (params.status === -402) {
+        Toast('登录确认已失效！')
+      } else if (params.status === -500) {
+        Toast('接口请求参数错误！')
+      } else if (params.status === 2) {
+        Toast('登录成功')
+      } else {
+        Toast(params.msg);
+      }
     },
 
     getEnv(env) {
@@ -279,7 +309,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/style/base.scss";
 .spa {
-  background-image: url("../../assets/images/home/bg.jpg");
+  background-image: url("../../../assets/images/home/bg.jpg");
   background-repeat: no-repeat;
   background-size: 100% auto;
 }
@@ -296,7 +326,7 @@ export default {
       display: inline-block;
       width: 7px;
       height: 7px;
-      background: url("../../assets/images/public/red-icon.png") no-repeat;
+      background: url("../../../assets/images/public/red-icon.png") no-repeat;
       background-size: 100% auto;
       position: absolute;
       top: 7px;

@@ -2,7 +2,7 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>作业发布</h1>
-      <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i> 返回</i>
+      <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i></i>
     </header>
 
     <div>
@@ -36,7 +36,7 @@
 <script>
 import api from "@/module/homework/axios/publishHomeWork.js";
 export default {
-  name: "publishHomework",
+  name: "homeworkPublishSetting",
   data() {
     return {
       homeworkName: "暑假作业",
@@ -92,7 +92,8 @@ export default {
     surePublishFun() {
       var self = this;
       var classIds = "";
-      var array = self.userInfo.classes;
+      // var array = self.userInfo.classes;
+      var array = self.result;
       for (let i = 0; i < array.length; i++) {
         if (i + 1 === array.length) {
           classIds += array[i].class_id;
@@ -133,6 +134,8 @@ export default {
             message: "布置成功！",
             duration: 750
           });
+          this.$store.dispatch("hasChoosePagesArray", []);
+          this.$store.dispatch("isOldPackId", "0");
           setTimeout(function() {
             self.$router.push({
               path: "/homework"

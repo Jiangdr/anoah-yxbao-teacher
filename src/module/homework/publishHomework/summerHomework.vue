@@ -27,15 +27,16 @@
       <header class="header">
         <h1>试卷</h1>
         <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i> 返回</i>
+        <div class="collect" @click="sendFavorite" :class="isFavorite ? 'collect-active' : 'collect-default'"></div>
       </header>
       <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
         <div style="padding: 5px 10px;height: 25px; line-height: 25px;">
           <div style="float: left;">全部题目（{{setting.length}}）</div>
-          <div style="float: right;" @click="clickChooseAll">全选</div>
+          <div style="float: right;" @click="clickChooseAll">{{currentPageSelectNum==qti_ids.length?'取消全选':'全选'}}</div>
         </div>
         <div v-for="(item, index) in setting" :key="index" style="position: relative;">
           <Qti :setting="item"></Qti>
-          <YxCheckBox style="position: absolute;right:10px;bottom:10px;width: 25px;height: 25px;" class="checkbox" :selected="item.checked" :ref="'cbs-'+index" @select="exerciseCheckboxChange(item, $event)"></YxCheckBox>
+          <YxCheckBox style="position: absolute;right:10px;bottom:0px;width: 25px;height: 25px;" class="checkbox" :selected="item.checked" :ref="'cbs-'+index" @select="exerciseCheckboxChange(item, $event)"></YxCheckBox>
         </div>
       </div>
     </div>
@@ -50,12 +51,11 @@
 <script>
 import api from "@/module/homework/axios/publishHomeWork.js";
 import YxCheckBox from "@/components/common/yx-check-box.vue";
-import exerciseCheckBox from "@/components/common/exercise-check-box.vue";
 import renderQti from "@/components/renderQti.vue";
 
 export default {
   name: "summerHomework",
-  components: { YxCheckBox, exerciseCheckBox, renderQti },
+  components: { YxCheckBox, renderQti },
   data() {
     return {
       checkList: [],
@@ -76,7 +76,8 @@ export default {
       },
       setting: [],
       qti_ids: [],
-      currentResourceId: ""
+      currentPageSelectNum: 0,
+      isFavorite: false
     };
   },
   computed: {},
@@ -103,6 +104,7 @@ export default {
   mounted: function() {},
   methods: {
     goPublishHomework() {
+      this.examExerciseShow = false;
       this.lists.length = 0;
       this.$store.dispatch("hasChoosePagesArray", this.hasChoosePagesNumArray);
       this.$store.dispatch("isOldPackId", "1");
@@ -116,10 +118,14 @@ export default {
     getHasChooseExerciseNum() {
       var num = 0;
       var array = this.hasChoosePagesNumArray;
+      this.currentPageSelectNum = 0;
       for (let i = 0; i < array.length; i++) {
         for (let j = 0; j < array[i].qti_ids_obj.length; j++) {
           if (array[i].qti_ids_obj[j].checked) {
             num += 1;
+            if (this.currentItem && array[i].resource_id === this.currentItem.resource_id) {
+              this.currentPageSelectNum++;
+            }
           }
         }
       }
@@ -136,18 +142,28 @@ export default {
       }
       var result = [];
       for (var i = 0; i < this.hasChoosePagesNumArray.length; i++) {
+        var tempArr = [];
+        for (
+          let index = 0;
+          index < this.hasChoosePagesNumArray[i].qti_ids_obj.length;
+          index++
+        ) {
+          const element = this.hasChoosePagesNumArray[i].qti_ids_obj[index];
+          if (element.checked) tempArr.push(element.value);
+        }
         result.push({
           name: this.hasChoosePagesNumArray[i].name,
-          qti_ids: this.hasChoosePagesNumArray[i].qti_ids,
+          qti_ids: tempArr,
           resource_id: this.hasChoosePagesNumArray[i].resource_id
         });
       }
-      this.$store.dispatch("hasChoosePagesArray", []);
-      this.$store.dispatch("isOldPackId", "0");
+      this.examExerciseShow = false;
+      this.lists.length = 0;
+      this.$store.dispatch("hasChoosePagesArray", this.hasChoosePagesNumArray);
+      this.$store.dispatch("isOldPackId", "1");
       this.result = result;
       this.$store.dispatch("chooseSummerHomeworkArray", this.result);
       // console.log(this.hasChoosePagesNumArray);
-      // debugger
       // return
       this.$router.push({
         path: "/homeworkPublishSetting"
@@ -290,6 +306,32 @@ export default {
       }
     },
     clickChooseAll() {
+      if (this.currentPageSelectNum === this.qti_ids.length) {
+        for (let j = 0; j < this.currentItem.qti_ids_obj.length; j++) {
+          this.currentItem.qti_ids_obj[j].checked = false;
+          let arr = this.$refs["cbs-" + j];
+          if (arr && arr.length > 0) {
+            arr[0].selecteState = false;
+          }
+        }
+        for (
+          let index = 0;
+          index < this.hasChoosePagesNumArray.length;
+          index++
+        ) {
+          const element = this.hasChoosePagesNumArray[index];
+          if (element.resource_id === this.currentItem.resource_id) {
+            this.hasChoosePagesNumArray.splice(index, 1);
+            break;
+          }
+        }
+        let arr = this.$refs["cb-" + this.currentItem.listIndex];
+        if (arr && arr.length > 0) {
+          arr[0].selecteState = false;
+        }
+        this.getHasChooseExerciseNum();
+        return false;
+      }
       if (!this.isSelect(this.currentItem)) {
         this.hasChoosePagesNumArray.push(this.currentItem);
         let arr = this.$refs["cb-" + this.currentItem.listIndex];
@@ -306,6 +348,24 @@ export default {
       }
       this.getHasChooseExerciseNum();
     },
+    sendFavorite: function() {
+      var self = this;
+      var data = {
+        user_id: self.userInfo.userid,
+        resource_id: self.currentItem.resource_id
+      };
+
+      api.favoriteUpdate(data).then(
+        success => {
+          self.isFavorite = success.status !== 0;
+          self.currentItem.is_favorite = success.status;
+        },
+        err => {
+          console.log(err);
+          self.$toast("网络异常");
+        }
+      );
+    },
     getList: function(value) {
       var self = this;
       self.page++;
@@ -315,6 +375,7 @@ export default {
         page: self.page,
         per_page: 1000
       };
+
       api.getResourceLists(data).then(
         success => {
           self.loading = false;
@@ -407,8 +468,9 @@ export default {
       this.examExerciseShow = true;
       // this.$store.dispatch("chooseExamExerciseQtiIdsArray", item.qti_ids);
       this.qti_ids = item.qti_ids_obj;
+      this.currentPageSelectNum = 0;
       this.currentItem = item;
-      this.currentResourceId = item.resource_id;
+      this.isFavorite = item.is_favorite !== 0;
       // this.qtiFun();
       for (var i = 0; i < item.qti_ids_obj.length; i++) {
         this.setting.push({
@@ -417,6 +479,7 @@ export default {
           checked: item.qti_ids_obj[i].checked,
           num: i + 1,
           caller: "PREVIEWOR",
+          // hide_result: 1,
           resource_type: "qti_question",
           isSel: true
         });
@@ -425,6 +488,8 @@ export default {
           arr[0].selecteState = item.qti_ids_obj[i].checked;
         }
       }
+
+      this.getHasChooseExerciseNum();
       // debugger
     }
   }
@@ -433,6 +498,26 @@ export default {
 
 <style scoped lang="scss">
 @import "@/assets/css/custom.scss";
+.collect {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  margin-top: 3px;
+  vertical-align: text-bottom;
+  margin-right: 5px;
+  position: absolute;
+  top: 1.5vw;
+  right: 2vw;
+}
+.collect-active {
+  background-image: url("../../../assets/images/homeworkDetail/collect.png");
+}
+.collect-default {
+  background-image: url("../../../assets/images/homeworkDetail/collect-default.png");
+}
 .listfooterdiv {
   height: calc(100% - #{$header-height} - #{$bottom-height});
 }

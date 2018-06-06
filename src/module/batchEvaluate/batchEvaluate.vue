@@ -101,10 +101,13 @@ export default {
       env: 'runEnv/old'
     })
   },
+  activated() {
+    this.checkBoxGroup = [];
+    this.getStudentsList();
+  },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
     this.homeworkOneListInfoObj = this.$store.state.homework.homeworkOneListInfoObj;
-    this.getStudentsList();
   },
   methods: {
     goHomework() {

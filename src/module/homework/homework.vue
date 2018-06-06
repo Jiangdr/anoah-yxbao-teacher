@@ -104,7 +104,7 @@
           </div>
         </van-list>
 
-        <div v-if="homeworkListArray.length === 0" class="tip-div">
+        <div v-if="homeworkListArray.length === 0 && !pullRefresh" class="tip-div">
           <img src="@/assets/images/homework/tip-head.png"/>
           <div><p class="tip-bold-p">暂无作业~</p><p>快去布置作业吧</p><p>布置后您可以在这里看到实时统计</p></div>
         </div>
@@ -163,6 +163,15 @@ export default {
   },
   activated: function() {
     this.homeworkState = this.$store.state.homework.homeworkState;
+    this.timeActiveID = 0;
+    this.chooseTime = this.columnsOfTime[0];
+    this.chooseStatus = this.columnsOfStatus[0];
+    this.statusActiveID = this.chooseStatus.value;
+    this.chooseClass = this.columnsOfClass[0];
+    this.classActiveID = 0;
+    this.markStatus = 0;
+    this.bookActiveID = "0";
+    this.searchKeyword = "";
     this.onRefresh();
   },
   created: function() {
@@ -324,7 +333,6 @@ export default {
     },
     searchAction() {
       this.searchKeyword = this.inputValue;
-      this.isSearching = false;
       this.onRefresh();
     },
     cancelAction() {
@@ -475,7 +483,7 @@ export default {
         per_page: 6,
         type: self.homeworkState === "0" ? "1,2,20" : "5",
         favorite: self.markStatus,
-        edu_subject_id: self.bookActiveID,
+        book_id: self.bookActiveID,
         asc: 1,
         keyword: self.searchKeyword
       };
@@ -563,6 +571,7 @@ export default {
         },
         err => {
           console.log(err);
+          self.pullRefresh = false;
           self.loading = false;
           self.$toast("网络异常");
         }
@@ -606,6 +615,7 @@ export default {
   left: 2.66667vw;
   width: 64%;
   top: -0.5vw;
+  font-weight: normal;
   input[type="search"]::-webkit-search-cancel-button {
     display: none;
   }
@@ -644,6 +654,7 @@ export default {
   right: 15%;
   padding-left: 1%;
   cursor: pointer;
+  font-weight: normal;
 }
 .search-btn:active,
 .cancel-btn:active {
@@ -654,6 +665,7 @@ export default {
   float: right;
   padding-right: 2.66667vw;
   cursor: pointer;
+  font-weight: normal;
 }
 .search-little-icon {
   width: calc(#{$header-height}/ 3);
