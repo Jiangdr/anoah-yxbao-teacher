@@ -25,9 +25,10 @@ export default {
       showActionSheet: false,
       maxImageNum: 8,
       actions: [
-        /* {
-            name: '拍照'
-          }, */
+        {
+          name: '拍照',
+          callback: this.capturePhoto
+        },
         {
           name: '从手机相册选择',
           callback: this.selectImagesFromLocal
