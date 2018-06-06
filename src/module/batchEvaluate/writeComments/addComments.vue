@@ -45,6 +45,9 @@ export default {
     this.chooseBatchEvaluateStudentsArray = this.$store.state.batchEvaluate.chooseBatchEvaluateStudentsArray;
     this.batchEvaluateCommentsTemplateType = this.$store.state.batchEvaluate.batchEvaluateCommentsTemplateType;
   },
+  activated() {
+    this.comment = "";
+  },
   watch: {
     comment: function(val, oldVal) {
       if (val.length > 50) {

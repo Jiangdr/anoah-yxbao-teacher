@@ -163,6 +163,15 @@ export default {
   },
   activated: function() {
     this.homeworkState = this.$store.state.homework.homeworkState;
+    this.timeActiveID = 0;
+    this.chooseTime = this.columnsOfTime[0];
+    this.chooseStatus = this.columnsOfStatus[0];
+    this.statusActiveID = this.chooseStatus.value;
+    this.chooseClass = this.columnsOfClass[0];
+    this.classActiveID = 0;
+    this.markStatus = 0;
+    this.bookActiveID = "0";
+    this.searchKeyword = "";
     this.onRefresh();
   },
   created: function() {

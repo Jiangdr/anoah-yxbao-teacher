@@ -72,11 +72,15 @@ export default {
       maxDate: new Date(2019, 12, 30),
       currentDate: new Date(),
       publishDatePickerShow: false,
+      endTime: "",
       chooseBatchEvaluateStudentsArray: 0
     };
   },
   created: function() {
+  },
+  activated() {
     this.endTime = this.$dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+    this.comment = "";
   },
   mounted: function() {
     this.userInfo = this.$store.state.account.userInfo;
