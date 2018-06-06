@@ -45,7 +45,7 @@ Vue.prototype.$http = Axios;
 window.Vue = Vue
 Vue.prototype.$echarts = echarts
 Vue.use(window.qtivue.default)
-// Vue.use(AnoahIM)
+Vue.use(AnoahIM)
 Vue.use(window.mp3player.default)
 Vue.use(window.tcplayer.default)
 
