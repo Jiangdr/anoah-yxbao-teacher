@@ -12,7 +12,6 @@
       </div>
     </div>
 
-    <!-- <div class="footer-container div-center"><div outline="true" class="yx-green-btn"  @click="clickPublish">确认布置</div></div> -->
   </div>
 </template>
 
@@ -68,32 +67,6 @@ export default {
         this.hasChooseProblemsNum =
           parseInt(this.hasChooseProblemsNum) - parseInt(item.qti_num);
       }
-    },
-    clickPublish() {
-      // if (this.hasChoosePagesNum === 0) {
-      //   this.$toast({
-      //     message: "请选择试卷！",
-      //     duration: 1000
-      //   });
-      //   return;
-      // }
-      // this.$store.dispatch("chooseSummerHomeworkArray", this.result);
-      // this.$router.push({
-      //   path: "/homeworkPublishSetting"
-      // });
-
-      // var result = [];
-      // for (var i = 0; i < this.hasChoosePagesNumArray.length; i++) {
-      //   result.push({
-      //     name: this.hasChoosePagesNumArray[i].name,
-      //     qti_ids: this.hasChoosePagesNumArray[i].qti_ids,
-      //     resource_id: this.hasChoosePagesNumArray[i].resource_id
-      //   });
-      // }
-      // this.$store.dispatch("hasChoosePagesArray", []);
-      // this.$store.dispatch("isOldPackId", "0");
-      // this.result = result;
-      // this.$store.dispatch("chooseSummerHomeworkArray", this.result);
     }
   }
 };
