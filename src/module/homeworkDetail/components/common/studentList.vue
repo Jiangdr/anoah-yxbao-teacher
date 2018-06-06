@@ -14,7 +14,7 @@
       <div class="table-body">
         <div @click="studentHomework(stu)"  v-for="(stu, index) in studentList" :key='index'>
           <van-row class="stu">
-            <van-col span="5" class="lf">{{stu.real_name}}</van-col>
+            <van-col span="5" class="lf"><p>{{stu.real_name}}</p></van-col>
             <van-col span="5">{{stu.completed_num}}</van-col>
             <van-col span="5">{{itemCorrect(stu.rate)}}</van-col>
             <van-col span="5">{{stu.correct_num}}</van-col>
