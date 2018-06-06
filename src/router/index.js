@@ -17,6 +17,7 @@ import homeworkRoutes from '@/module/homework/homework.route'
 import studentHomework from '@/module/studentHomework/route'
 import originalQuestion from '@/module/qti/router/index'
 import share from '@/module/share/router/index'
+import wrongQtiNote from '@/module/wrongQtiNote/router/index'
 // 批量评价
 import batchEvaluateRoutes from '@/module/batchEvaluate/batchEvaluate.route'
 Vue.use(Router)
@@ -33,7 +34,8 @@ let routes = [
   ...batchEvaluateRoutes,
   ...studentHomework,
   ...originalQuestion,
-  ...share
+  ...share,
+  ...wrongQtiNote
 ]
 let router = new Router({
   routes: routes
