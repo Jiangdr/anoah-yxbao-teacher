@@ -836,7 +836,7 @@ export default {
   box-sizing: border-box;
 }
 .publish-homework-btn {
-  font-size: 18px;
+  font-size: 16px;
   height: 60px;
   display: flex;
   align-items: center;
