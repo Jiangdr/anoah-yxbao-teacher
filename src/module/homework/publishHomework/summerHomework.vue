@@ -1,6 +1,6 @@
 <template>
-  <div class="cube-page cube-view button-view" style="background-color: #fff;height:100%">
-    <div v-show="!examExerciseShow">
+  <div class="cube-page cube-view button-view" style="background-color: #fff;">
+    <div v-show="!examExerciseShow" style="height:100%">
       <header class="header">
         <h1>暑假作业</h1>
         <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
