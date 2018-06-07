@@ -26,9 +26,10 @@
         <span><span class="cl-dec">{{userInfo.phone || '未绑定'}}</span><van-icon name="arrow" style="vertical-align:middle;top:-2px" class="cl-mark van-icon"></van-icon></span>
       </div>
     </div>
-    <input ref="file1" type="file">
-    <input type="button" value="保存" @click="uploadFile">
     <van-actionsheet v-model="showActionSheet" :actions="actions" cancel-text="取消" />
+    <van-popup v-model="loadingShow" :close-on-click-overlay="false" :overlay-style="popupoverlaystyle">
+      <van-loading color="black" />
+    </van-popup>
   </div>
 </template>
 
@@ -48,6 +49,8 @@ export default {
       hasBack: true,
       userInfo: null,
       avatarUrl: null,
+      loadingShow: false,
+      popupoverlaystyle: { backgroundColor: 'rgba(255,255,255,0.5)' },
       actions: [
         {
           name: '拍照',
@@ -79,17 +82,6 @@ export default {
       setAvatar: 'account/setAvatar',
       setUserName: 'account/setUsername'
     }),
-    uploadFile () {
-      let formData = new FormData()
-      formData.append('code', this.$refs.file1.files[0])
-      let url
-      api.uploadImage(
-        '/api_dist/index.php?q=json/user/UserAvatar/uploadAvatar&info={"binary":"1"}&userid=' + this.userInfo.userid, formData
-      ).then(succ => {
-        url = succ.result
-        this.modifyAvatar(url)
-      })
-    },
     link (phone) {
       if (phone) {
         this.$router.push({path: `/modifyPhone/${phone}`})
@@ -104,26 +96,27 @@ export default {
       this.$router.back(-1)
     },
     capturePhoto () {
-      window.appPlug.capturePhoto(this.getImagesSuc, this.getImagesFail, true, true)
+      window.appPlug.capturePhoto(this.getImagesSuc, this.getImagesFail, true, false)
+      this.loadingShow = true
     },
     selectImagesFromLocal () {
-      window.appPlug.getImage(this.getImagesSuc, this.getImagesFail, true, true)
+      window.appPlug.getImage(this.getImagesSuc, this.getImagesFail, true, false)
+      this.loadingShow = true
     },
     getImagesSuc (v) {
       let formData = new FormData()
       formData.append('code', v)
-      alert('v=' + v)
       let url
       api.uploadImage(
-        '/api_dist/index.php?q=json/user/UserAvatar/uploadAvatar&info={"binary":"1"}&userid=' + this.userInfo.userid, formData
+        '/api_dist/index.php?q=json/user/UserAvatar/uploadAvatar&info={"binary":"0"}&userid=' + this.userInfo.userid, formData
       ).then(succ => {
         url = succ.result
-        alert('succ.result=' + url)
         this.modifyAvatar(url)
       })
       this.showActionSheet = false
     },
     getImagesFail (e) {
+      this.loadingShow = false
       alert(e)
     },
     modifyAvatar (url) {
@@ -136,7 +129,7 @@ export default {
         this.avatarUrl = url + '?v=' + new Date().getTime()
         this.setAvatar(this.avatarUrl)
         this.userInfo.avatar = this.avatarUrl
-        alert('modifyAvatar succ')
+        this.loadingShow = false
       })
     }
   },
