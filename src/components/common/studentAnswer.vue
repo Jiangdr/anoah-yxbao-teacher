@@ -1,10 +1,10 @@
 <template>
   <div v-bind:style="listContainerStyle">
-    <div style="line-height: 28px;background-color: #fff;padding: 5px 10px;">
+    <div @click="paint" style="line-height: 28px;background-color: #fff;padding: 5px 10px;">
       {{answerInfo.characters}}
     </div>
 
-    <div v-for="item in answerInfo.images" :key="item">
+    <div @click="paint" v-for="item in answerInfo.images" :key="item">
       <div style="width: 100%;" v-if="item">
         <img style="width: 50%;" :src="item" alt="">
       </div>
@@ -80,6 +80,9 @@ export default {
           audio.pause(); // 这个就是暂停
         }
       }
+    },
+    paint() {
+      this.$emit('emit-paint');
     }
   }
 };

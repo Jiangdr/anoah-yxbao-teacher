@@ -20,6 +20,8 @@ import dayjs from 'dayjs';
 
 import Axios from 'axios';
 import '../lib/mqttws31.js'
+// import '../lib/app_plug.js'
+import '../lib/html2canvas.js'
 import mqtt from '@/utils/LMQqtt.js'
 
 // 引入 ECharts 主模块
