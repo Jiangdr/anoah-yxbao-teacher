@@ -172,6 +172,12 @@ export default {
           }
         }
         this.back()
+      }).catch(() => {
+        let toast = this.$createToast({
+          txt: '提交失败请检查网络',
+          mask: true
+        })
+        toast.show()
       })
     },
     back () {

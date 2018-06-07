@@ -1,4 +1,6 @@
-import originalQuestion from '@/module/qti/originalQuestion.vue'
+// import originalQuestion from '@/module/qti/originalQuestion.vue'
+const originalQuestion = () => import(/* webpackChunkName: "qti" */'@/module/qti/originalQuestion.vue');
+
 export default
 [
   {

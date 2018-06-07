@@ -1,7 +1,11 @@
-import notice from '@/module/notice/components/noticeList.vue'
-import homeworkList from '@/module/notice/components/homeworkList.vue'
-import schoolList from '@/module/notice/components/schoolList.vue'
-import noticeDetail from '@/module/notice/components/noticeDetail.vue'
+// import notice from '@/module/notice/components/noticeList.vue'
+// import homeworkList from '@/module/notice/components/homeworkList.vue'
+// import schoolList from '@/module/notice/components/schoolList.vue'
+// import noticeDetail from '@/module/notice/components/noticeDetail.vue'
+const notice = () => import(/* webpackChunkName: "notice" */'@/module/notice/components/noticeList.vue');
+const homeworkList = () => import(/* webpackChunkName: "notice" */'@/module/notice/components/homeworkList.vue');
+const schoolList = () => import(/* webpackChunkName: "notice" */'@/module/notice/components/schoolList.vue');
+const noticeDetail = () => import(/* webpackChunkName: "notice" */'@/module/notice/components/noticeDetail.vue');
 
 export default [{
   path: '/notice',
