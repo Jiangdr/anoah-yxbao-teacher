@@ -17,6 +17,7 @@ import groupDetail from '@/module/answerDetail/components/question/groupDetail.v
 import groupDetailColumn from '@/module/answerDetail/components/question/groupDetailColumn.vue'
 // 批改本题页面
 import checkAnswerDetai from '@/module/answerDetail/checkAnswerDetai/checkAnswerDetai.vue'
+import CheckDetail from '../check/CheckDetail.vue'
 export default
 [
   {
@@ -43,5 +44,11 @@ export default
     meta: { requiresAuth: false, keepAlive: true },
     name: "checkAnswerDetai",
     component: checkAnswerDetai
+  },
+  {
+    path: '/checkAnswerDetai/check',
+    meta: { requiresAuth: false, keepAlive: false },
+    name: "CheckDetail",
+    component: CheckDetail
   }
 ]

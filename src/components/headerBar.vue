@@ -36,6 +36,7 @@ export default {
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
+  background: #26e3c0;
   .back-btn{
     display: inline-block;
     font-size: 15px;

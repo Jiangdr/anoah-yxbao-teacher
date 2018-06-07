@@ -110,12 +110,72 @@ export default {
       this.$router.go(-1);
     },
     goOnepage() {
-      this.$router.push({
-        name: "onePenPage",
-        params: {
-          studentAnswerDetailData: this.studentAnswerDetailData
-        }
+      let answer = this.studentAnswerDetailData,
+        {studentListArray} = this;
+      appPlug.studentWork([
+        JSON.stringify({
+          Info: {
+            "course_hour_publish_id": answer["course_hour_publish_id"],
+            "course_resource_id": answer["course_resource_id"],
+            "dcom_entity_id": answer["dcom_entity_id"],
+            "qti_question_id": answer["resource_id"],
+            "studentid": studentListArray[0].userid,
+            "teacher_id": "33609"
+          },
+          ImgInfo: [
+            // {
+            //   "position": -1,
+            //   "mixUrl": "",
+            //   "text": "你是中国人我的你是老师啊nisahdiah oasj da d;a asd asd ad a das das dsa da da das",
+            //   "baserUrl": ""
+            // },
+            // {
+            //   "position": 0,
+            //   "text": "",
+            //   "mixUrl": "http://u.dev.anoah.com/uploads/dcom/qti/ca6a8fd2-0f45-2cfd-b78d-6d3eb35e16d7.png",
+            //   "baserUrl": "http://u.dev.anoah.com/uploads/dcom/qti/116ef139-19c7-6143-50f0-f2d6940c5408.png"
+            // },
+            // {
+            //   "position": 1,
+            //   "text": "",
+            //   "mixUrl": "http://u.dev.anoah.com/uploads/dcom/qti/cff338ab-6bd7-1568-b611-10669ad78dfb.png",
+            //   "baserUrl": "http://e.dev.anoah.com/uploads/image/42/42051e22ece9c1249055c38400336143.jpg"
+            // },
+            // {
+            //   "position": 2,
+            //   "text": "",
+            //   "mixUrl": "http://u.dev.anoah.com/uploads/dcom/qti/f62ebbe5-91d0-a749-a9fc-bfc7937b4b72.png",
+            //   "baserUrl": "http://e.dev.anoah.com/uploads/image/87/87c52394464af4ba284f91b62b86447a.jpg"
+            // },
+            ...this.answerInfo.images.map((itm, idx) => {
+              return {
+                position: idx - 1,
+                mixUrl: "",
+                text: "",
+                baserUrl: itm
+              }
+            })
+          ]
+        }),
+        this.env,
+        10,
+        1
+      ], function (res) {
+        this.hint = res;
+        // console.log(res);
+      }, function (err) {
+        // console.log(err);
+        this.hint = err;
       });
+
+      //
+      //
+      // this.$router.push({
+      //   name: "CheckDetail",
+      //   params: {
+      //     studentAnswerDetailData: this.studentAnswerDetailData
+      //   }
+      // });
     },
     clickSwitchStudent() {
       this.switchStudentShow = !this.switchStudentShow;
@@ -190,6 +250,7 @@ export default {
       };
       api.getUserAnswerForMiniRs(data).then(
         response => {
+          console.log(response);
           self.studentAllInfo = response;
           var answerObj = response.answer[0].answer_detail;
           if (answerObj.images[0] && answerObj.images.length > 0) {
