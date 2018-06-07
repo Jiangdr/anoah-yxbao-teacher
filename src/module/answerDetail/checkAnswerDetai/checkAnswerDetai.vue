@@ -1,6 +1,6 @@
 <template>
   <div class="cube-page cube-view button-view">
-
+    <p>{{hint}}</p>
     <div v-if="!switchStudentShow">
       <header class="header">
         <h1 @click="clickSwitchStudent">{{studentOneDetail.real_name}}（{{studentOneDetail.num}}/{{studentListArray.length}}）<i class="fa fa-sort-down"></i></h1>
@@ -84,6 +84,7 @@ export default {
       listContainerStyle: {
         height: window.innerHeight - 50 + 'px'
       },
+      hint: 1,
       studentListArray: [],
       studentAllInfo: {},
       switchStudentShow: false,
@@ -111,7 +112,9 @@ export default {
     },
     emitPaint() {
       let answer = this.studentAnswerDetailData,
-        {studentListArray} = this;
+        {studentListArray, answerInfo} = this,
+        self = this;
+      self.hint++;
       appPlug.studentWork([
         JSON.stringify({
           Info: {
@@ -123,59 +126,32 @@ export default {
             "teacher_id": "33609"
           },
           ImgInfo: [
-            // {
-            //   "position": -1,
-            //   "mixUrl": "",
-            //   "text": "你是中国人我的你是老师啊nisahdiah oasj da d;a asd asd ad a das das dsa da da das",
-            //   "baserUrl": ""
-            // },
-            // {
-            //   "position": 0,
-            //   "text": "",
-            //   "mixUrl": "http://u.dev.anoah.com/uploads/dcom/qti/ca6a8fd2-0f45-2cfd-b78d-6d3eb35e16d7.png",
-            //   "baserUrl": "http://u.dev.anoah.com/uploads/dcom/qti/116ef139-19c7-6143-50f0-f2d6940c5408.png"
-            // },
-            // {
-            //   "position": 1,
-            //   "text": "",
-            //   "mixUrl": "http://u.dev.anoah.com/uploads/dcom/qti/cff338ab-6bd7-1568-b611-10669ad78dfb.png",
-            //   "baserUrl": "http://e.dev.anoah.com/uploads/image/42/42051e22ece9c1249055c38400336143.jpg"
-            // },
-            // {
-            //   "position": 2,
-            //   "text": "",
-            //   "mixUrl": "http://u.dev.anoah.com/uploads/dcom/qti/f62ebbe5-91d0-a749-a9fc-bfc7937b4b72.png",
-            //   "baserUrl": "http://e.dev.anoah.com/uploads/image/87/87c52394464af4ba284f91b62b86447a.jpg"
-            // },
-            ...this.answerInfo.images.map((itm, idx) => {
+            {
+              "position": -1,
+              "mixUrl": "",
+              "text": answerInfo.characters,
+              "baserUrl": ""
+            },
+            ...answerInfo.images.map((itm, idx) => {
               return {
-                position: idx - 1,
-                mixUrl: "",
-                text: "",
-                baserUrl: itm
+                "position": idx,
+                "text": "",
+                "mixUrl": answerInfo.images[0],
+                "baserUrl": itm
               }
             })
           ]
         }),
         this.env,
-        10,
-        1
+        33609,
+        0
       ], function (res) {
-        this.hint = res;
+        self.hint = res;
         // console.log(res);
       }, function (err) {
         // console.log(err);
-        this.hint = err;
+        self.hint = err;
       });
-
-      //
-      //
-      // this.$router.push({
-      //   name: "CheckDetail",
-      //   params: {
-      //     studentAnswerDetailData: this.studentAnswerDetailData
-      //   }
-      // });
     },
     clickSwitchStudent() {
       this.switchStudentShow = !this.switchStudentShow;
@@ -250,7 +226,6 @@ export default {
       };
       api.getUserAnswerForMiniRs(data).then(
         response => {
-          console.log(response);
           self.studentAllInfo = response;
           var answerObj = response.answer[0].answer_detail;
           if (answerObj.images[0] && answerObj.images.length > 0) {
