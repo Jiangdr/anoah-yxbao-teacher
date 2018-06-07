@@ -2,13 +2,10 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>试题详情</h1>
-      <i class="cubeic-back" @click="goBack"><i class="fa fa-angle-left"></i></i>
+      <i class="cubeic-back" @click="goBack"><i class="back-up-arrow"></i></i>
     </header>
     <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
-      <!-- <div style="padding: 5px 10px;height: 25px; line-height: 25px;">全部题目（{{setting.length}}）</div> -->
-      <!-- <div v-for="(item, index) in setting" :key="index" style="position: relative;"> -->
-        <Qti :setting="item"></Qti>
-      <!-- </div> -->
+      <Qti :setting="item" v-if="showItem"></Qti>
     </div>
 
   </div>
@@ -28,13 +25,16 @@ export default {
       },
       rids: this.$route.params.rids,
       hasChoosePagesNumArray: [],
-      item: {}
+      item: {},
+      showItem: false
     };
   },
   activated() {
     var params = this.$route.params;
+    this.showItem = true;
     params.oneExamExerciseInfo.hide_result = params.hide_result;
     this.item = params.oneExamExerciseInfo;
+    console.log(this.item.qid)
   },
   methods: {
     qtiFun() {
@@ -51,6 +51,7 @@ export default {
       }
     },
     goBack() {
+      this.showItem = false;
       this.$router.go(-1);
     },
     checkboxChange(item, event) {
@@ -67,6 +68,10 @@ export default {
           parseInt(this.hasChooseProblemsNum) - parseInt(item.qti_num);
       }
     }
+  },
+  beforeDestroy() {
+    this.showItem = false;
+    console.log(this.showItem)
   }
 };
 </script>

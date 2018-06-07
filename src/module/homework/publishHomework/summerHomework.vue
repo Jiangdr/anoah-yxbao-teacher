@@ -3,7 +3,7 @@
     <div v-show="!examExerciseShow" style="height:100%">
       <header class="header">
         <h1>暑假作业</h1>
-        <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
+        <i class="cubeic-back" @click="goPublishHomework"><i class="back-up-arrow"></i></i>
         <p class="select-all-p" @click="selectAll">{{hasChoosePagesNumArray.length==lists.length?'取消全选':'全选'}}</p>
       </header>
 
@@ -26,7 +26,7 @@
     <div v-show="examExerciseShow">
       <header class="header">
         <h1>试卷</h1>
-        <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i></i>
+        <i class="cubeic-back" @click="goSummerHomework"><i class="back-up-arrow"></i></i>
         <div class="collect" @click="sendFavorite" :class="isFavorite ? 'collect-active' : 'collect-default'"></div>
       </header>
       <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
@@ -95,8 +95,6 @@ export default {
         JSON.stringify(this.$store.state.homework.hasChoosePagesArray)
       );
     }
-    // this.qti_ids = this.$store.state.homework.chooseExamExerciseQtiIdsArray;
-
     this.page = 0;
     this.finished = false;
     this.pullRefresh = true;
@@ -115,10 +113,11 @@ export default {
       });
     },
     goOneQtiDetail(item) {
+      var data = JSON.parse(JSON.stringify(item));
       this.$router.push({
         name: "oneExamExercise",
         params: {
-          oneExamExerciseInfo: item
+          oneExamExerciseInfo: data
         }
       });
     },
@@ -467,13 +466,14 @@ export default {
       return isContain;
     },
     qtiFun() {
-      for (var i = 0; i < this.qti_ids.length; i++) {
+      for (var i = 0; i < item.qti_ids_obj.length; i++) {
         this.setting.push({
           domain: "e.dev.anoah.com",
-          qid: this.qti_ids[i].value,
-          checked: this.qti_ids[i].checked,
+          qid: item.qti_ids_obj[i].value,
+          checked: item.qti_ids_obj[i].checked,
           num: i + 1,
           caller: "PREVIEWOR",
+          hide_result: 1,
           resource_type: "qti_question",
           isSel: true
         });
