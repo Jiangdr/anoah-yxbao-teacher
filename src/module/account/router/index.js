@@ -1,9 +1,10 @@
-import Login from '@/module/account/components/login.vue'
-import ForgetPassword from '@/module/account/components/forgetPassword.vue'
-import SetNewPassword from '@/module/account/components/setNewPassword.vue'
-import ContactUs from '@/module/account/components/contactUs.vue'
-import FormList from '@/module/account/components/formList.vue'
-import SchoolSearch from '@/module/account/components/schoolSearch.vue'
+const Login = () => import(/* webpackChunkName: "account" */'@/module/account/components/login.vue')
+const ForgetPassword = () => import(/* webpackChunkName: "account" */'@/module/account/components/forgetPassword.vue')
+const SetNewPassword = () => import(/* webpackChunkName: "account" */'@/module/account/components/setNewPassword.vue')
+const ContactUs = () => import(/* webpackChunkName: "account" */'@/module/account/components/contactUs.vue')
+const FormList = () => import(/* webpackChunkName: "account" */'@/module/account/components/formList.vue')
+const SchoolSearch = () => import(/* webpackChunkName: "account" */'@/module/account/components/schoolSearch.vue')
+
 export default [
   {
     path: '/login',
