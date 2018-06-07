@@ -34,7 +34,10 @@
         </div>
       </div>
     </div>
-    <div class="loading" v-else>加载中...</div>
+    <div class="loading" v-else>
+      <i class="fa fa-spinner fa-spin"></i>
+      <span>加载中...</span>
+    </div>
   </div>
 </template>
 <script>
@@ -46,6 +49,7 @@ export default {
   name: 'StudentHomework',
   data() {
     return {
+      restore: false,
       loading: true,
       studentHomeworkInfo: null,
       completeChart: null,
@@ -63,11 +67,20 @@ export default {
       }
     }
   },
+  watch: {
+    $route(to, from) {
+      if (to.name === 'homeworkDetail') {
+        this.restore = true
+      }
+    }
+  },
   mounted() {
     this.getResource()
   },
   activated() {
-    this.getResource()
+    if (this.restore) {
+      this.getResource()
+    }
   },
   methods: {
     ...mapMutations({
@@ -318,6 +331,12 @@ export default {
         }
       }
     }
+  }
+  .loading{
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: #999;
   }
 }
 </style>

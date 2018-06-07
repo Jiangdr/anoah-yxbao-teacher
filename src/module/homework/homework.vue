@@ -3,7 +3,7 @@
 
     <header class="header">
       <i class="cubeic-back" @click="goHome" v-show="!isSearching">
-        <i class="fa fa-angle-left back-up-arrow"></i><span class="back-up-text"></span>
+        <i class="back-up-arrow"></i>
       </i>
       <h1 v-show="!isSearching">作业</h1>
       <div v-show="!isSearching" class="search-btn-div" @click="clickSearchBtn" :class="{'active': activeItem === 9}">
@@ -836,7 +836,7 @@ export default {
   box-sizing: border-box;
 }
 .publish-homework-btn {
-  font-size: 18px;
+  font-size: 16px;
   height: 60px;
   display: flex;
   align-items: center;

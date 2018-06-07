@@ -3,7 +3,7 @@
     <div v-show="!examExerciseShow" style="height:100%">
       <header class="header">
         <h1>暑假作业</h1>
-        <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
+        <i class="cubeic-back" @click="goPublishHomework"><i class="back-up-arrow"></i></i>
         <p class="select-all-p" @click="selectAll">{{hasChoosePagesNumArray.length==lists.length?'取消全选':'全选'}}</p>
       </header>
 
@@ -26,7 +26,7 @@
     <div v-show="examExerciseShow">
       <header class="header">
         <h1>试卷</h1>
-        <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i></i>
+        <i class="cubeic-back" @click="goSummerHomework"><i class="back-up-arrow"></i></i>
         <div class="collect" @click="sendFavorite" :class="isFavorite ? 'collect-active' : 'collect-default'"></div>
       </header>
       <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
@@ -35,7 +35,7 @@
           <div style="float: right;" @click="clickChooseAll">{{currentPageSelectNum==qti_ids.length?'取消全选':'全选'}}</div>
         </div>
         <div v-for="(item, index) in setting" :key="index" style="position: relative;">
-          <Qti :setting="item"></Qti>
+          <Qti :setting="item" @click.native ="goOneQtiDetail(item)"></Qti>
           <YxCheckBox style="position: absolute;right:10px;bottom:0px;width: 25px;height: 25px;" class="checkbox" :selected="item.checked" :ref="'cbs-'+index" @select="exerciseCheckboxChange(item, $event)"></YxCheckBox>
         </div>
       </div>
@@ -95,8 +95,6 @@ export default {
         JSON.stringify(this.$store.state.homework.hasChoosePagesArray)
       );
     }
-    // this.qti_ids = this.$store.state.homework.chooseExamExerciseQtiIdsArray;
-
     this.page = 0;
     this.finished = false;
     this.pullRefresh = true;
@@ -112,6 +110,15 @@ export default {
       this.$store.dispatch("isOldPackId", "1");
       this.$router.push({
         path: "/publishHomework"
+      });
+    },
+    goOneQtiDetail(item) {
+      var data = JSON.parse(JSON.stringify(item));
+      this.$router.push({
+        name: "oneExamExercise",
+        params: {
+          oneExamExerciseInfo: data
+        }
       });
     },
     goSummerHomework() {
@@ -459,13 +466,14 @@ export default {
       return isContain;
     },
     qtiFun() {
-      for (var i = 0; i < this.qti_ids.length; i++) {
+      for (var i = 0; i < item.qti_ids_obj.length; i++) {
         this.setting.push({
           domain: "e.dev.anoah.com",
-          qid: this.qti_ids[i].value,
-          checked: this.qti_ids[i].checked,
+          qid: item.qti_ids_obj[i].value,
+          checked: item.qti_ids_obj[i].checked,
           num: i + 1,
           caller: "PREVIEWOR",
+          hide_result: 1,
           resource_type: "qti_question",
           isSel: true
         });
@@ -487,7 +495,7 @@ export default {
           checked: item.qti_ids_obj[i].checked,
           num: i + 1,
           caller: "PREVIEWOR",
-          // hide_result: 1,
+          hide_result: 1,
           resource_type: "qti_question",
           isSel: true
         });

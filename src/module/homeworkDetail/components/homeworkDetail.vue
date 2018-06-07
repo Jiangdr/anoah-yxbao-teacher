@@ -183,14 +183,13 @@ export default {
         return Math.round(this.correct * 100) + "%";
       }
     }
-    // 作业完成人数
-    // finishCounter() {
-    //   return (
-    //     // 学生总人数-未完成人数
-    //     this.homeworkInfo.student_counter - this.homeworkInfo.unfinished_counter
-    //   );
-    //   // return 0
-    // }
+  },
+  watch: {
+    $route(to, from) {
+      if (to.name === 'Homework') {
+        this.activeBtn = 'homework'
+      }
+    }
   },
   methods: {
     ...mapActions({

@@ -41,12 +41,8 @@ export default {
   },
   methods: {
     linkTo(qus) {
-      console.log(qus)
       if (this.util.judgeQuestionType(qus)) {
-        let type = 2
-        qus.resource_name = ''
-        let params = JSON.stringify(qus)
-        this.$router.push({name: 'answerDetail', params: {type: 2, params: params}})
+        alert('开发中，不要慌!!!')
       } else {
         alert('不支持题型')
       }

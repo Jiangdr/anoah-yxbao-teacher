@@ -30,13 +30,24 @@
                 <span style="color:#8a8a8d;margin-right:5px;">攻克率:</span>{{Math.round(item.conquer_rate * 100)}}%
               </div>
             </div>
-            <div v-if="type === 1">{{item | questionName(item)}}</div>
+            <div class="icom" v-if="type === 1">
+              <div class="icom-info ellipsis">
+                <span>{{index + 1}}.</span>
+                <img :src="item.icom_info.icon_in_mx" alt="">
+                <span>{{item.title}}</span>
+              </div>
+              <div class="percent" :class="{'van-hairline--bottom': index !== qtiList.length - 1}">
+                <span style="color:#8a8a8d;margin-right:5px;">错误率:</span>{{Math.round(item.wrong_rate * 100)}}%
+                <span style="color:#8a8a8d;margin-right:5px;">攻克率:</span>{{Math.round(item.conquer_rate * 100)}}%
+                <span class="input" :class="{active: item.checked}" @click.stop="choose(item, index)"></span>
+              </div>
+            </div>
           </div>
           <div class="loading" v-show="currentPage < pageCount">
             <i class="fa fa-spinner fa-spin"></i>
             <span>加载中...</span>
           </div>
-          <div class="loading" v-show="currentPage >= pageCount">
+          <div class="loading" v-show="currentPage >= pageCount && qtiList.length > 10">
             没有更多数据了
           </div>
         </div>
@@ -74,7 +85,7 @@ export default {
       qtiList: [], // 存放qti数据容器
       totalPage: 0, // 总页数
       selCount: 0, // 选中的试题数
-      perPage: 9, // 每页加载的条数
+      perPage: 10, // 每页加载的条数
       currentPage: 1, // 当前的页数
       pageCount: null, // 总页数
       scrollReat: null, // 滚动页面的盒模型
@@ -111,7 +122,7 @@ export default {
             type: 0
           },
           {
-            name: '组件类',
+            name: '趣味题',
             type: 1
           }
         ],
@@ -185,6 +196,13 @@ export default {
     }
   },
   mounted() {
+    window.bus.$on('clearWrongNote', () => {
+      this.selCount = 0
+      this.resource_ids = []
+      this.qtiList.forEach(ele => {
+        ele['checked'] = false
+      })
+    })
     this.class_id = this.classes[0].class_id
     let params = {
       class_id: this.class_id,
@@ -208,7 +226,7 @@ export default {
       api.getList(params).then(succ => {
         this.totalPage = succ.total_count
         this.listLoading = false
-        this.pageCount = Math.ceil(succ.total_count / (this.perPage + 1))
+        this.pageCount = Math.ceil(succ.total_count / (this.perPage))
         succ.lists.forEach(ele => {
           if (this.resource_ids.includes(ele.resource_id)) {
             ele['checked'] = true
@@ -328,6 +346,13 @@ export default {
       this.filterShow = false
       next(false)
     } else {
+      if (to.name === 'Home') {
+        this.selCount = 0
+        this.resource_ids = []
+        this.qtiList.forEach(ele => {
+          ele['checked'] = false
+        })
+      }
       next()
     }
   },
@@ -402,6 +427,36 @@ export default {
           line-height: 50px;
           padding-left: 8px;
         }
+        .icom{
+          padding: 10px 13px;
+          .icom-info{
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            img{
+              width: 30px;
+              height: 30px;
+              vertical-align: middle;
+              text-overflow: ellipsis
+            }
+          }
+          .percent{
+            padding: 0;
+            .input{
+              width: 19px;
+              height: 19px;
+              display: inline-block;
+              background: url(../../../assets/images/public/checkunsel.png) no-repeat 0 0;
+              background-size: 100% 100%;
+              float: right;
+              margin-top: 15px;
+              &.active{
+                background: url(../../../assets/images/public/checksel.png) no-repeat 0 0;
+                background-size: 100% 100%;
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -451,8 +506,8 @@ export default {
     align-items: center;
     color: #999;
     .no-data-img{
-      width: 118px;
-      height: 123px;
+      width: 100px;
+      height: 130px;
       background: url(../../../assets/images/homeworkDetail/no-data.png) no-repeat 0 0;
       background-size: 100% 100%;
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="cube-page cube-view button-view">
+  <div class="cube-page cube-view button-view" id="create-paper">
     <header class="header">
       <h1>作业发布</h1>
       <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i></i>
@@ -7,7 +7,7 @@
 
     <div>
         <van-cell-group>
-          <van-field v-model="homeworkName" placeholder="请填写作业名称" label="作业名称：" icon="clear" @click-icon="homeworkName = ''" />
+          <van-field v-model="homeworkName" placeholder="请填写作业名称" label="作业名称:" icon="clear" @click-icon="homeworkName = ''" :error-message="$route.query.homeworkName && '*所有试题将自动组成一份试卷，趣味题独立发送'"/>
           <van-cell title="开始时间" is-link :value="publishDateFormat" @click="clickShowPupUpDatePickerFun('开始时间')"/>
           <van-cell title="截止时间" is-link :value="endDateFormat" @click="clickShowPupUpDatePickerFun('截止时间')"/>
         </van-cell-group>
@@ -121,7 +121,6 @@ export default {
           rids: [...this.$route.query.resource_ids],
           exam_resource_id: ''
         }]
-        console.log(resourceId)
       }
 
       var data = {
@@ -155,6 +154,7 @@ export default {
           }
           self.$store.dispatch("hasChoosePagesArray", []);
           self.$store.dispatch("isOldPackId", "0");
+          window.bus.$emit('clearWrongNote')
         });
       } else {
         self.$toast({
