@@ -12,13 +12,6 @@ export default {
           return a.class_id - b.class_id
         }
       })
-      classes.forEach((ele, index) => {
-        if (index === 0) {
-          ele.active = true
-        } else {
-          ele.active = false
-        }
-      });
       return classes
     }
   },

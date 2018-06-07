@@ -147,7 +147,6 @@ export default {
       noMore: false,
       showClassPopup: false,
       showTimePopup: false,
-      chooseTextBookObj: null,
       pullRefresh: false,
       columnsOfClass: [],
       countNum: 0,
@@ -172,6 +171,8 @@ export default {
     this.markStatus = 0;
     this.bookActiveID = "0";
     this.searchKeyword = "";
+    this.chooseTextBookObj = null;
+    this.getChoosedBook();
     this.onRefresh();
   },
   created: function() {
@@ -270,7 +271,6 @@ export default {
     this.weekday[4] = "周四";
     this.weekday[5] = "周五";
     this.weekday[6] = "周六";
-    this.getChoosedBook();
     this.getBooksByTeacher();
   },
   methods: {

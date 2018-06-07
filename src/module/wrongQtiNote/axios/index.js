@@ -19,7 +19,7 @@ let wrongQtiNote = new API(apis)
  * @returns
  */
 wrongQtiNote.getList = params => {
-  return wrongQtiNote.fetch(wrongQtiNote.apis.getList, param, 'post')
+  return wrongQtiNote.fetch(wrongQtiNote.apis.getList, params, 'post')
 }
 
 export default wrongQtiNote
