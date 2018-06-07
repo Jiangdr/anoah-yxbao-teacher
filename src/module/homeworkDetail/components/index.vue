@@ -20,7 +20,8 @@
         </homework-detail>
     </div>
     <div v-if="loading" class="place-holder">
-      加载中...
+      <i class="fa fa-spinner fa-spin"></i>
+      <span>加载中...</span>
     </div>
     <more v-if="morePopup" @toggle="toggleMorePopup" :info="homeworkInfo" @back="back" :favorite="homeworkInfo.favorite" @collect="collect" :list="resourceList"></more>
   </div>
@@ -37,6 +38,7 @@ export default {
   name: 'HomeContent',
   data() {
     return {
+      refresh: false,
       homeworkInfo: {}, // 作业信息
       resourceList: [], // 作业列表
       homeworkStatus: 0,
@@ -50,8 +52,23 @@ export default {
       env: 'runEnv/old'
     })
   },
-  activated() {
+  mounted() {
     this.getresource();
+  },
+  activated() {
+    if (this.refresh) {
+      this.getresource()
+    }
+  },
+  watch: {
+    $route(to, from) {
+      if (to.name === 'Homework' && from.name === 'homeworkDetail') {
+        this.refresh = true
+        this.tabType = 'detail'
+      } else {
+        this.refresh = true
+      }
+    }
   },
   methods: {
     ...mapMutations({
@@ -95,6 +112,7 @@ export default {
         this.saveHomeworkQuestionInfo(d)
       })
     },
+    // 收藏
     collect(num) {
       this.homeworkInfo.favorite = num
     }
@@ -146,6 +164,7 @@ export default {
     box-sizing: border-box;
   }
   .place-holder{
+    text-align: center;
     @extend .content
   }
 }

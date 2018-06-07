@@ -21,6 +21,7 @@ const summerHomework = () => import(/* webpackChunkName: "publishHomework" */ '.
 let homeworkRoutes = [{
   path: '/homework',
   meta: { requiresAuth: false, keepAlive: true },
+  name: 'Homework',
   component: homework
 }, {
   path: '/chooseTextbook',

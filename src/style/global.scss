@@ -89,6 +89,12 @@ div.van-actionsheet__cancel.van-hairline--top
   text-overflow: ellipsis;
 }
 
+#create-paper{
+  .van-field__icon{
+    top: 16% !important;
+  }
+}
+
 //字体颜色样式定义
 .cl-title {color: #1e1e1e;}
 .cl-font {color: #4e4e50;}
