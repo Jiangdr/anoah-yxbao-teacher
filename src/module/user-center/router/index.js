@@ -1,17 +1,18 @@
-import userCenter from '@/module/user-center/components/index'
-import userInfo from '@/module/user-center/components/personal'
-import myClass from '@/module/user-center/components/myClass'
-import feedback from '@/module/user-center/components/feedback'
-import OtherQuestion from '@/module/user-center/components/otherQuestion'
-import setting from '@/module/user-center/components/setting'
-import aboutUs from '@/module/user-center/components/aboutUs'
-import modifyName from '@/module/user-center/components/modifyName'
-import modifyPhone from '@/module/user-center/components/modifyPhone'
-import classInfo from '@/module/user-center/components/classInfo'
-import modifyPassword from '@/module/user-center/components/modifyPassword'
-import msgSetting from '@/module/user-center/components/msgSetting'
-import TeacherStudentList from '@/module/user-center/components/teacher&studentList'
-import BindPhone from '@/module/user-center/components/bindPhone'
+const userCenter = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/index')
+const userInfo = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/personal')
+const myClass = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/myClass')
+const feedback = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/feedback')
+const OtherQuestion = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/otherQuestion')
+const setting = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/setting')
+const aboutUs = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/aboutUs')
+const modifyName = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/modifyName')
+const modifyPhone = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/modifyPhone')
+const classInfo = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/classInfo')
+const modifyPassword = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/modifyPassword')
+const msgSetting = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/msgSetting')
+const TeacherStudentList = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/teacher&studentList')
+const BindPhone = () => import(/* webpackChunkName: "usercenter" */'@/module/user-center/components/bindPhone')
+
 export default [
   {
     path: '/user-center',

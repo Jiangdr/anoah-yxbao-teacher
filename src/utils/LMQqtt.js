@@ -23,7 +23,9 @@ const LMqtt = {
     console.log(response)
     if (response.errorCode !== 0) {
       console.log(response.errorMessage)
-      this.connect()
+      setTimeout(() => {
+        this.connect()
+      }, 3000);
     }
     console.log('连接断开');
   },

@@ -1,6 +1,6 @@
 <template>
-  <div class="cube-page cube-view button-view" style="background-color: #fff;height:100%">
-    <div v-show="!examExerciseShow">
+  <div class="cube-page cube-view button-view" style="background-color: #fff;">
+    <div v-show="!examExerciseShow" style="height:100%">
       <header class="header">
         <h1>暑假作业</h1>
         <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
@@ -83,6 +83,8 @@ export default {
   computed: {},
   activated: function() {
     this.lists.length = 0;
+    this.isFavorite = false;
+    this.isFavoriteRequest = false;
     this.currentItem = {};
     this.userInfo = this.$store.state.account.userInfo;
     this.chooseTextBookObj = this.$store.state.homework.chooseTextBookObj;
@@ -123,7 +125,10 @@ export default {
         for (let j = 0; j < array[i].qti_ids_obj.length; j++) {
           if (array[i].qti_ids_obj[j].checked) {
             num += 1;
-            if (this.currentItem && array[i].resource_id === this.currentItem.resource_id) {
+            if (
+              this.currentItem &&
+              array[i].resource_id === this.currentItem.resource_id
+            ) {
               this.currentPageSelectNum++;
             }
           }
@@ -354,14 +359,17 @@ export default {
         user_id: self.userInfo.userid,
         resource_id: self.currentItem.resource_id
       };
-
+      if (this.isFavoriteRequest) return;
+      this.isFavoriteRequest = true;
       api.favoriteUpdate(data).then(
         success => {
+          self.isFavoriteRequest = false;
           self.isFavorite = success.status !== 0;
           self.currentItem.is_favorite = success.status;
         },
         err => {
           console.log(err);
+          self.isFavoriteRequest = false;
           self.$toast("网络异常");
         }
       );

@@ -25,6 +25,9 @@ export default {
     },
     setStudentAnswerDetailData: (state, payload) => {
       state.studentAnswerDetailData = payload
+    },
+    setCorrectStatus: (state) => {
+      state.resource[state.params.index].status = 3
     }
   },
   actions: {
