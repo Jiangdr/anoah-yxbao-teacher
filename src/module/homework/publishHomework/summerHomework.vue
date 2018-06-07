@@ -3,7 +3,7 @@
     <div v-show="!examExerciseShow" style="height:100%">
       <header class="header">
         <h1>暑假作业</h1>
-        <i class="cubeic-back" @click="goPublishHomework"><i class="fa fa-angle-left back-up-arrow"></i> </i>
+        <i class="cubeic-back" @click="goPublishHomework"><i class="back-up-arrow"></i></i>
         <p class="select-all-p" @click="selectAll">{{hasChoosePagesNumArray.length==lists.length?'取消全选':'全选'}}</p>
       </header>
 
@@ -26,7 +26,7 @@
     <div v-show="examExerciseShow">
       <header class="header">
         <h1>试卷</h1>
-        <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i></i>
+        <i class="cubeic-back" @click="goSummerHomework"><i class="back-up-arrow"></i></i>
         <div class="collect" @click="sendFavorite" :class="isFavorite ? 'collect-active' : 'collect-default'"></div>
       </header>
       <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">

@@ -35,20 +35,22 @@
 }
 .cube-page .header h1 {
   font-size: 20px;
+  font-weight: normal;
 }
 .cube-page .header .cubeic-back {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 0 15px;
+  padding: 0 13px;
   color: #5b5b5d;
 }
 .cube-page .header .back-up-arrow {
-  font-size: 28px;
-  height: 44px;
-  float: left;
-  line-height: 44px;
-  margin-right: 5px;
+  display: inline-block;
+  width: 10px;
+  height: 17px;
+  background: url('../../assets/images/public/left.png') no-repeat 0 0;
+  background-size: 100% 100%;
+  vertical-align: text-bottom;
 }
 .cube-page .header .back-up-text {
   height: 44px;
