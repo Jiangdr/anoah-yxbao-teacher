@@ -4,29 +4,33 @@
       <div slot="title-name">{{className || classes[0].class_name}}</div>
       <div slot="right-area" @click="filterShow = true" style="color:#4a4a4a">筛选</div>
     </header-bar>
-    <div class="content">
+    <div v-show="listLoading" class="loading">
+      <i class="fa fa-spinner fa-spin"></i>
+      <span>加载中...</span>
+    </div>
+    <div v-show="!listLoading" class="content">
       <div class="qti-count" v-show="qtiList.length">
         <div>
           <span>全部题目</span>
           <span>( <span style="color:#1a1a1a">{{totalPage}}</span> )</span>
         </div>
-        <!-- <div class="all-select" :class="{active: allSelect === true}" @click="selectAll">全选</div> -->
       </div>
       <div class="qti-list" v-show="qtiList.length" @scroll="loadMore">
         <div id="scroller" ref="scroller">
-          <div class="qti-item" v-for="(item, index) in qtiList" :key="index">
-            <render-qti :info="item" :num="index + 1" hideResult="1" :qtiData="item.qti_data"></render-qti>
-            <div class="qti-type" :class="{'van-hairline--bottom': index !== qtiList.length - 1}">
+          <div class="qti-item" v-for="(item, index) in qtiList" :key="index" @click="linkTo(item)">
+            <render-qti :info="item" :num="index + 1" :qtiData="item.qti_data" v-if="type === 0"></render-qti>
+            <div class="qti-type" :class="{'van-hairline--bottom': index !== qtiList.length - 1}" v-if="type === 0">
               <div class="info">
                 <span class="qti-type-name">{{item.qtypeName}}</span>
-                <span>{{item.qti_data.difficulty | format}}</span>
-                <span class="input" :class="{active: item.checked}" @click="choose(item, index)"></span>
+                <span>{{item.diffName}}</span>
+                <span class="input" :class="{active: item.checked}" @click.stop="choose(item, index)"></span>
               </div>
               <div class="percent">
                 <span style="color:#8a8a8d;margin-right:5px;">错误率:</span>{{Math.round(item.wrong_rate * 100)}}%
                 <span style="color:#8a8a8d;margin-right:5px;">攻克率:</span>{{Math.round(item.conquer_rate * 100)}}%
               </div>
             </div>
+            <div v-if="type === 1">{{item | questionName(item)}}</div>
           </div>
           <div class="loading" v-show="currentPage < pageCount">
             <i class="fa fa-spinner fa-spin"></i>
@@ -42,7 +46,7 @@
         <div>学生们很棒，没有错题信息哟</div>
       </div>
     </div>
-    <div class="footer-bar van-hairline--top">
+    <div v-show="!listLoading" class="footer-bar van-hairline--top">
       <div>
         <span>已选中</span>
         <span style="color:#ff8d15">{{selCount}}</span>
@@ -50,8 +54,8 @@
       </div>
       <div class="create-btn" :class="{disabled: !selCount}" @click="create">布置</div>
     </div>
-    <transition name="van-fade">
-      <filter-limit class="filter-wrapper" v-if="filterShow" @closeFilter="filterShow = false" @afterFilter="afterFilter" :filterData="filterData"></filter-limit>
+    <transition name="van-fade" v-show="!listLoading">
+      <filter-limit class="filter-wrapper" v-if="filterShow" @closeFilter="filterShow = false" @afterFilter="afterFilter" :filterData="filterData" :active="active"></filter-limit>
     </transition>
   </div>
 </template>
@@ -66,15 +70,32 @@ export default {
   data() {
     return {
       filterShow: false, // 筛选页显示
-      className: null,
-      qtiList: [],
-      totalPage: 0,
-      selCount: 0,
-      perPage: 9,
-      currentPage: 1,
-      pageCount: null,
-      scrollReat: null,
-      loading: false
+      className: null, // 班级名称
+      qtiList: [], // 存放qti数据容器
+      totalPage: 0, // 总页数
+      selCount: 0, // 选中的试题数
+      perPage: 9, // 每页加载的条数
+      currentPage: 1, // 当前的页数
+      pageCount: null, // 总页数
+      scrollReat: null, // 滚动页面的盒模型
+      loading: false, // 是否在下拉加载中
+      listLoading: true, // 列表是否在加载中
+      // 筛选条件参数
+      active: {
+        '班级': 0,
+        '题目类型': 0,
+        '错误率': 0,
+        '攻克率': 0,
+        '时间': 0
+      },
+      // 获取列表参数
+      class_id: null,
+      type: 0,
+      conquer_rate_flag: '',
+      wrong_rate_flag: '',
+      start_time: '',
+      end_time: '',
+      resource_ids: [] // 所有已选择的资源容器
     }
   },
   computed: {
@@ -161,63 +182,39 @@ export default {
           }
         ]
       }
-    },
-    searchParams: {
-      get() {
-        return {
-          class_id: this.classes[0].class_id,
-          type: 0,
-          conquer_rate_flag: '',
-          wrong_rate_flag: '',
-          start_time: '',
-          end_time: '',
-          page: this.currentPage,
-          per_page: this.perPage
-        }
-      },
-      set(val) {
-        return val
-      }
     }
   },
   mounted() {
-    this.getList(this.searchParams)
-  },
-  filters: {
-    format(val) {
-      let mdiffstr = "";
-      switch (val) {
-        case 1:
-          mdiffstr = "容易";
-          break;
-        case 2:
-          mdiffstr = "较易";
-          break;
-        case 3:
-          mdiffstr = "一般";
-          break;
-        case 4:
-          mdiffstr = "较难";
-          break;
-        case 5:
-          mdiffstr = "困难";
-          break;
-        case 6:
-          mdiffstr = "特难";
-          break;
-      }
-      return mdiffstr
+    this.class_id = this.classes[0].class_id
+    let params = {
+      class_id: this.class_id,
+      type: this.type,
+      conquer_rate_flag: this.conquer_rate_flag,
+      wrong_rate_flag: this.wrong_rate_flag,
+      start_time: this.start_time,
+      end_time: this.end_time,
+      page: this.currentPage,
+      per_page: this.perPage
     }
+    this.getList(params)
   },
   methods: {
     // 获取试题数据
     getList(params) {
       this.loading = true
+      if (!this.qtiList.length) {
+        this.listLoading = true
+      }
       api.getList(params).then(succ => {
         this.totalPage = succ.total_count
+        this.listLoading = false
         this.pageCount = Math.ceil(succ.total_count / (this.perPage + 1))
         succ.lists.forEach(ele => {
-          ele['checked'] = false
+          if (this.resource_ids.includes(ele.resource_id)) {
+            ele['checked'] = true
+          } else {
+            ele['checked'] = false
+          }
         })
         this.qtiList.push(...succ.lists)
         this.$nextTick(() => {
@@ -233,29 +230,58 @@ export default {
       this.qtiList[index]['checked'] = !data.checked
       if (this.qtiList[index]['checked']) {
         this.selCount++
+        this.resource_ids.push(data.resource_id)
       } else {
         this.selCount--
+        for (let i = 0; i < this.resource_ids.length; i++) {
+          if (this.resource_ids[i] === data.resource_id) {
+            this.resource_ids.splice(i, 1)
+          }
+        }
       }
     },
     // 筛选完成
-    afterFilter(params) {
+    afterFilter(params, active) {
+      this.active = active
       this.filterShow = false
-      this.searchParams = params
       this.qtiList = []
       this.currentPage = 1
-      this.searchParams.class_id = params.class_id
-      this.searchParams.type = params.type
-      this.searchParams.conquer_rate_flag = params.conquer_rate_flag
-      this.searchParams.wrong_rate_flag = params.wrong_rate_flag
-      this.searchParams.start_time = params.start_time
-      this.searchParams.end_time = params.end_time
+      this.class_id = params.class_id
+      this.type = params.type
+      this.conquer_rate_flag = params.conquer_rate_flag
+      this.wrong_rate_flag = params.wrong_rate_flag
+      this.start_time = params.start_time
+      this.end_time = params.end_time
       this.className = params.class_name
       document.querySelector('.qti-list').scrollTop = 0
-      this.getList(this.searchParams)
+      this.getList({
+        class_id: this.class_id,
+        type: this.type,
+        conquer_rate_flag: this.conquer_rate_flag,
+        wrong_rate_flag: this.wrong_rate_flag,
+        start_time: this.start_time,
+        end_time: this.end_time,
+        page: this.currentPage,
+        per_page: this.perPage
+      })
     },
     // 布置作业
     create() {
-      alert('开发中，不急')
+      // alert('开发中，不急')
+      this.$router.push({
+        path: '/homeworkPublishSetting',
+        query: {
+          homeworkName: `错题重做_${this.formatTime(new Date())}`,
+          resource_ids: this.resource_ids
+        }
+      })
+    },
+    // 计算时间
+    formatTime(time) {
+      let y = time.getFullYear() + ''
+      let m = time.getMonth() + 1 > 9 ? time.getMonth() + 1 + '' : '0' + (time.getMonth() + 1)
+      let d = time.getDate() > 9 ? time.getDate() + '' : '0' + time.getDate()
+      return y + '-' + m + '-' + d
     },
     // 加载更多
     loadMore(e) {
@@ -268,7 +294,32 @@ export default {
           return false
         }
         this.currentPage++
-        this.getList(this.searchParams)
+        this.getList({
+          class_id: this.class_id,
+          type: this.type,
+          conquer_rate_flag: this.conquer_rate_flag,
+          wrong_rate_flag: this.wrong_rate_flag,
+          start_time: this.start_time,
+          end_time: this.end_time,
+          page: this.currentPage,
+          per_page: this.perPage
+        })
+      }
+    },
+    // 查看原题
+    linkTo(info) {
+      if (info.icom_id !== '4629') {
+        return false
+      } else {
+        info.resource_name = ''
+        this.$router.push({
+          path: `/originalQuestion`,
+          query: {
+            user_id: 0,
+            question_info: JSON.stringify(info),
+            title: '试题详情'
+          }
+        })
       }
     }
   },
@@ -329,7 +380,8 @@ export default {
             color: #fff;
             display: inline-block;
             text-align: center;
-            background: url(../../../assets/images/wrongQtiNote/type.png) no-repeat 0 0
+            background: url(../../../assets/images/wrongQtiNote/type.png) no-repeat 0 0;
+            background-size: cover;
           }
           .input{
             width: 19px;
@@ -406,8 +458,8 @@ export default {
     }
   }
   .loading{
-    height: 20px;
-    line-height: 20px;
+    height: 30px;
+    line-height: 30px;
     text-align: center;
     color: #999;
   }

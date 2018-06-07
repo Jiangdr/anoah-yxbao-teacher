@@ -39,7 +39,7 @@ export default {
   name: "homeworkPublishSetting",
   data() {
     return {
-      homeworkName: "暑假作业",
+      homeworkName: this.$route.query.homeworkName || "暑假作业",
       result: [],
       publishDate: new Date(),
       publishDateFormat: "",
@@ -92,6 +92,7 @@ export default {
       var self = this;
       var classIds = "";
       var array = self.result;
+      var resourceId = [];
       for (let i = 0; i < array.length; i++) {
         if (i + 1 === array.length) {
           classIds += array[i].class_id;
@@ -99,20 +100,28 @@ export default {
           classIds += array[i].class_id + ",";
         }
       }
+      if (!this.$route.query.resource_ids) {
+        var array2 = self.chooseSummerHomeworkArray;
+        for (let i = 0; i < array2.length; i++) {
+          resourceId.push({
+            title: array2[i].name,
+            selected_all: true,
+            rids: array2[i].qti_ids,
+            exam_resource_id: array2[i].resource_id
+          });
+        }
 
-      var resourceId = [];
-      var array2 = self.chooseSummerHomeworkArray;
-      for (let i = 0; i < array2.length; i++) {
-        resourceId.push({
-          title: array2[i].name,
-          selected_all: true,
-          rids: array2[i].qti_ids,
-          exam_resource_id: array2[i].resource_id
-        });
-      }
-
-      if (this.paramsData[0]) {
-        resourceId = this.paramsData;
+        if (this.paramsData[0]) {
+          resourceId = this.paramsData;
+        }
+      } else {
+        resourceId = [{
+          title: this.$route.query.homeworkName,
+          selected_all: false,
+          rids: [...this.$route.query.resource_ids],
+          exam_resource_id: ''
+        }]
+        console.log(resourceId)
       }
 
       var data = {

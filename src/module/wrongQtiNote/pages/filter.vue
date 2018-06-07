@@ -4,7 +4,7 @@
       <div class="filter-item" v-for="(val, key) in filterData" :key="key">
         <div class="name">{{key}}</div>
         <div class="item-wrapper">
-          <div class="item-list ellipsis" :class="{active: active[key] === index}" v-for="(item, index) in val" :key="index" @click="filterItem(key, index, item)">
+          <div class="item-list ellipsis" :class="{active: actives[key] === index}" v-for="(item, index) in val" :key="index" @click="filterItem(key, index, item)">
             <span>{{item.name || item.class_name}}</span>
           </div>
         </div>
@@ -19,15 +19,15 @@
 <script>
 export default {
   name: 'FilterLimit',
-  props: ['filterData'],
+  props: ['filterData', 'active'],
   data() {
     return {
-      active: {
-        '班级': 0,
-        '题目类型': 0,
-        '错误率': 0,
-        '攻克率': 0,
-        '时间': 0
+      actives: {
+        '班级': this.active['班级'],
+        '题目类型': this.active['题目类型'],
+        '错误率': this.active['错误率'],
+        '攻克率': this.active['攻克率'],
+        '时间': this.active['时间']
       }
     }
   },
@@ -36,17 +36,17 @@ export default {
   },
   methods: {
     filterItem(key, index, item) {
-      this.active[key] = index
+      this.actives[key] = index
     },
     sure() {
       let params = {}
       let timeType
-      params['class_id'] = this.filterData['班级'][this.active['班级']].class_id
-      params['class_name'] = this.filterData['班级'][this.active['班级']].class_name
-      params['type'] = this.filterData['题目类型'][this.active['题目类型']].type
-      params['conquer_rate_flag'] = this.filterData['错误率'][this.active['错误率']].type
-      params['wrong_rate_flag'] = this.filterData['攻克率'][this.active['攻克率']].type
-      timeType = this.filterData['时间'][this.active['时间']].type
+      params['class_id'] = this.filterData['班级'][this.actives['班级']].class_id
+      params['class_name'] = this.filterData['班级'][this.actives['班级']].class_name
+      params['type'] = this.filterData['题目类型'][this.actives['题目类型']].type
+      params['conquer_rate_flag'] = this.filterData['错误率'][this.actives['错误率']].type
+      params['wrong_rate_flag'] = this.filterData['攻克率'][this.actives['攻克率']].type
+      timeType = this.filterData['时间'][this.actives['时间']].type
       params['start_time'] = this.formatTime(new Date())
       if (timeType === 0) {
         params['start_time'] = ''
@@ -60,7 +60,7 @@ export default {
       } else {
         params['end_time'] = this.formatTime(new Date().getTime() - 3600 * 1000 * 24 * 30 * 6)
       }
-      this.$emit('afterFilter', params)
+      this.$emit('afterFilter', params, this.actives)
     },
     formatTime(time) {
       time = new Date(time)
