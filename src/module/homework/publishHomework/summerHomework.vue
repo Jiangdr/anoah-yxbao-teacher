@@ -95,8 +95,6 @@ export default {
         JSON.stringify(this.$store.state.homework.hasChoosePagesArray)
       );
     }
-    // this.qti_ids = this.$store.state.homework.chooseExamExerciseQtiIdsArray;
-
     this.page = 0;
     this.finished = false;
     this.pullRefresh = true;
@@ -115,10 +113,11 @@ export default {
       });
     },
     goOneQtiDetail(item) {
+      var data = JSON.parse(JSON.stringify(item));
       this.$router.push({
         name: "oneExamExercise",
         params: {
-          oneExamExerciseInfo: item
+          oneExamExerciseInfo: data
         }
       });
     },
@@ -467,13 +466,14 @@ export default {
       return isContain;
     },
     qtiFun() {
-      for (var i = 0; i < this.qti_ids.length; i++) {
+      for (var i = 0; i < item.qti_ids_obj.length; i++) {
         this.setting.push({
           domain: "e.dev.anoah.com",
-          qid: this.qti_ids[i].value,
-          checked: this.qti_ids[i].checked,
+          qid: item.qti_ids_obj[i].value,
+          checked: item.qti_ids_obj[i].checked,
           num: i + 1,
           caller: "PREVIEWOR",
+          hide_result: 1,
           resource_type: "qti_question",
           isSel: true
         });
