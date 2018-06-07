@@ -11,6 +11,7 @@
     package_name="QTI"
     type="jsicom"
     appclass="qti"
+    :dcom_entity="dcomentity"
   ></div>
   <div v-else>
     <Qti :setting="newSetting"></Qti>
@@ -26,6 +27,17 @@ export default {
     },
     info: {
       type: Object
+    },
+    num: {
+      type: Number,
+      default: -1
+    },
+    hideResult: {
+      type: String,
+      default: '0'
+    },
+    qtiData: {
+      default: ''
     }
   },
   computed: {
@@ -33,17 +45,18 @@ export default {
       return {
         caller: 'PREVIEWOR',
         course_resource_id: this.info.course_resource_id,
-        dcom_entity: '',
         dcom_entity_id: this.info.dcom_entity_id,
         domain: window.bus.$store.getters['runEnv/old'],
         in_class: 0,
-        num: -1,
+        num: this.num,
         publish_id: this.info.course_hour_publish_id,
         qid: this.info.source_pk_id,
         show_answer: 0,
         user_id: this.user_id,
         view_id: '',
-        resource_type: this.info.resource_type
+        dcom_entity: this.qtiData,
+        resource_type: this.info.resource_type,
+        hide_result: this.hideResult
       }
     },
     oldSetting() {
@@ -53,8 +66,12 @@ export default {
         'course_resource_id': this.info.course_resource_id,
         'caller': 'ICLASS',
         'dcom_entity_id': this.info.dcom_entity_id,
-        'titleflag': 1
+        'titleflag': 1,
+        'num': this.num
       }
+    },
+    dcomentity() {
+      return escape(JSON.stringify(this.qtiData))
     }
   },
   mounted () {
