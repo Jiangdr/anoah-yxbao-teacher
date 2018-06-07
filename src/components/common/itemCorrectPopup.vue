@@ -31,6 +31,7 @@
 
 <script>
 import API from '@/axios/_api'
+import { Toast } from 'vant'
 export default {
   name: 'itemCorrect',
   props: ['publishId', 'resourceId', 'questionId', 'entityId'],

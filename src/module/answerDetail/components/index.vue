@@ -24,10 +24,19 @@
   </div>
   <div class="subjective-button van-hairline--top" v-if="params && judgeQtiType(resource[currentIndex - 1])">
     <span @click="subjectiveQtiPigai(resource[currentIndex - 1])" v-if="resource[currentIndex - 1].status === 3 || resource[currentIndex - 1].status === 4 || resource[currentIndex - 1].read_only === 0">查看详情</span>
-    <span v-if="resource[currentIndex - 1].status === 1">一键批阅</span>
+    <span v-if="resource[currentIndex - 1].status === 1" @click="toggleCorrectPopup">一键批阅</span>
     <span v-if="resource[currentIndex - 1].status === 1" @click="subjectiveQtiPigai(resource[currentIndex - 1])">批改本题</span>
   </div>
   <student-list v-if="showStudentList" :title="studentListTitle" :studentList="studentList"></student-list>
+  <correct-item
+      v-if="itemCorrectPopup"
+      :publishId="resource[currentIndex - 1].course_hour_publish_id"
+      :resourceId="resource[currentIndex - 1].course_resource_id"
+      :questionId="resource[currentIndex - 1].qti_question_id"
+      :entityId="resource[currentIndex - 1].dcom_entity_id"
+      @toggle="toggleCorrectPopup"
+      @callback="correctCallback">
+    </correct-item>
 </div>
 </template>
 
@@ -46,6 +55,7 @@ import hanzitingxie from './question/hanzitingxie.vue'
 import Subjective from './question/Subjective.vue'
 import renderQti from '@/components/renderQti.vue'
 import studentList from '@/components/studentList'
+import correctItem from '@/components/common/itemCorrectPopup.vue'
 export default {
   name: 'tongji',
   data () {
@@ -55,7 +65,8 @@ export default {
       studentListTitle: '',
       studentList: [],
       qtiCount: 0,
-      mySwiper: null
+      mySwiper: null,
+      itemCorrectPopup: false
     }
   },
   activated() {
@@ -175,6 +186,12 @@ export default {
           title: info.real_name
         }
       })
+    },
+    toggleCorrectPopup() {
+      this.itemCorrectPopup = !this.itemCorrectPopup
+    },
+    correctCallback() {
+      this.$store.commit('answerDetail/setCorrectStatus')
     }
   },
   components: {
@@ -188,7 +205,8 @@ export default {
     hanzitingxie,
     Subjective,
     renderQti,
-    studentList
+    studentList,
+    correctItem
   }
 }
 </script>
