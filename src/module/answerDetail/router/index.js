@@ -1,4 +1,5 @@
 
+import CheckDetail from '../check/CheckDetail.vue'
 const answerDetail = () => import(/* webpackChunkName: "answerDetail" */'@/module/answerDetail/components/index.vue');
 const groupDetail = () => import(/* webpackChunkName: "answerDetail" */'@/module/answerDetail/components/question/groupDetail.vue');
 // 组件详情   口算训练
@@ -31,5 +32,11 @@ export default
     meta: { requiresAuth: false, keepAlive: true },
     name: "checkAnswerDetai",
     component: checkAnswerDetai
+  },
+  {
+    path: '/checkAnswerDetai/check',
+    meta: { requiresAuth: false, keepAlive: false },
+    name: "CheckDetail",
+    component: CheckDetail
   }
 ]

@@ -1,6 +1,5 @@
 <template>
   <div class="cube-page cube-view button-view">
-
     <div v-if="!switchStudentShow">
       <header class="header">
         <h1 @click="clickSwitchStudent">{{studentOneDetail.real_name}}（{{studentOneDetail.num}}/{{studentListArray.length}}）<i class="fa fa-sort-down"></i></h1>
@@ -17,7 +16,7 @@
             </van-col>
         </van-row>
       </div>
-      <studentAnswer v-if="activeBtn === 'studentAnswer'" :answerInfo="answerInfo"></studentAnswer>
+      <studentAnswer @emit-paint="emitPaint" v-if="activeBtn === 'studentAnswer'" :answerInfo="answerInfo"></studentAnswer>
       <studentMutualComments v-if="activeBtn === 'studentMutualComments'" :listObj="listObj"></studentMutualComments>
     </div>
 
@@ -43,7 +42,7 @@
       </div>
     </div>
 
-    <div class="publish-homework-btn-div bottomMargin" @click="goOnepage">
+    <div class="publish-homework-btn-div bottomMargin" @click="emitPaint({idx: -1})">
       <div class="publish-homework-btn">
         <img src="@/assets/images/answerDetail/onePen.png" alt="画笔">
       </div>
@@ -78,6 +77,7 @@ export default {
   },
   data() {
     return {
+      userid: '',
       listObj: {},
       activeBtn: "studentAnswer",
       answerInfo: {},
@@ -88,8 +88,7 @@ export default {
       studentAllInfo: {},
       switchStudentShow: false,
       studentOneDetail: {},
-      studentAnswerDetailData: this.$store.state.answerDetail
-        .studentAnswerDetailData
+      studentAnswerDetailData: this.$store.state.answerDetail.studentAnswerDetailData
     };
   },
   computed: {
@@ -105,18 +104,18 @@ export default {
     this.formatStudentList();
     this.getStudentAnswerList();
     this.getStudentMutualCommentsList();
+    this.userid = JSON.parse(localStorage.getItem('userinfo') || "{}").userid;
   },
   methods: {
     goHomework() {
       this.$router.go(-1);
     },
-    goOnepage() {
-      this.$router.push({
-        name: "onePenPage",
-        params: {
-          studentAnswerDetailData: this.studentAnswerDetailData
-        }
-      });
+    emitPaint({idx}) {
+      if (window.platform === 'android') {
+        this.paintInAndroid(idx);
+      } else {
+        this.paintInIos(idx);
+      }
     },
     clickSwitchStudent() {
       this.switchStudentShow = !this.switchStudentShow;
@@ -255,6 +254,101 @@ export default {
         params: {
           studentInfo: this.studentOneDetail
         }
+      });
+    },
+    paintInAndroid(idx) {
+      let answer = this.studentAnswerDetailData,
+        {studentListArray, answerInfo, answerInfo: {pics}, userid} = this,
+        self = this;
+
+      /* 安卓端生成可编辑图片 */
+      let imgJson = {
+        Info: {
+          course_hour_publish_id: answer['course_hour_publish_id'],
+          course_resource_id: answer['course_resource_id'],
+          dcom_entity_id: answer['dcom_entity_id'],
+          qti_question_id: answer['resource_id'],
+          studentid: studentListArray[0].userid,
+          teacher_id: userid
+        },
+        ImgInfo: [
+          {
+            position: -1,
+            mixUrl: (pics[-1] && pics[-1][0]) || "",
+            text: answerInfo.characters,
+            baserUrl: ""
+          },
+          ...answerInfo.images.map((itm, i) => {
+            let pic = pics[i] || [];
+            return {
+              "position": i,
+              "text": "",
+              "mixUrl": pic[0] || itm,
+              "baserUrl": itm
+            }
+          })
+        ]
+      };
+      appPlug.studentWork([
+        JSON.stringify(imgJson),
+        self.env,
+        userid,
+        idx + 1
+      ], () => {
+        this.getStudentAnswerList();
+      });
+    },
+    paintInIos(idx) {
+      console.log(idx);
+      let answer = this.studentAnswerDetailData,
+        {studentListArray, answerInfo, answerInfo: {pics}, userid} = this,
+        self = this;
+
+      let hOld = $('#markdetail .stu-ans-item-box .answer').height() || 0,
+        width = screen.availWidth;
+      let h1 = Math.ceil(hOld > width / 4 * 3 ? hOld : width / 4 * 3);
+      let html2canvastmp = $('<div>').css({
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: -2,
+        minHeight: h1 + 'px',
+        background: '#fff'
+      }).appendTo($('body')).append($('<div>').css({
+        fontSize: '1rem',
+        width: width + 'px',
+        height: '100%',
+        lineHeight: '1.2rem',
+        letterSpacing: '1px',
+        padding: '0.5rem'
+      }).text(answerInfo.characters));
+      html2canvas(html2canvastmp, {
+        onrendered(canvas) {
+          let picData = canvas.toDataURL();
+          html2canvastmp.remove();
+
+          self.$router.push({
+            name: 'CheckDetail',
+            params: {
+              images: [
+                {
+                  orgimg: (pics[-1] && pics[-1][0]) || "",
+                  img: picData
+                },
+                ...answerInfo.images.map((itm, i) => {
+                  let pic = pics[i] || [];
+                  return {
+                    orgimg: pic[0] || itm,
+                    img: itm
+                  }
+                })
+              ],
+              num: idx
+            }
+          })
+        },
+        width,
+        height: h1
       });
     }
   }

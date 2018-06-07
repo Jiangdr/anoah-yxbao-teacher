@@ -1,10 +1,10 @@
 <template>
   <div v-bind:style="listContainerStyle">
-    <div @click="paint" style="line-height: 28px;background-color: #fff;padding: 5px 10px;">
+    <div style="line-height: 28px;background-color: #fff;padding: 5px 10px;">
       {{answerInfo.characters}}
     </div>
 
-    <div @click="paint" v-for="item in answerInfo.images" :key="item">
+    <div v-for="(item, idx) in answerInfo.images" :key="item" @click="paint(idx)">
       <div style="width: 100%;" v-if="item">
         <img style="width: 50%;" :src="item" alt="">
       </div>
@@ -81,8 +81,8 @@ export default {
         }
       }
     },
-    paint() {
-      this.$emit('emit-paint');
+    paint(idx) {
+      this.$emit('emit-paint', {idx});
     }
   }
 };
