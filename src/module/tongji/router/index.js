@@ -1,4 +1,5 @@
-import tongji from '@/module/tongji/components/index'
+// import tongji from '@/module/tongji/components/index'
+const tongji = () => import(/* webpackChunkName: "tongji" */'@/module/tongji/components/index');
 
 export default [{
   // h:1作业 0课中
