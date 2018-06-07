@@ -17,7 +17,7 @@
             </van-col>
         </van-row>
       </div>
-      <studentAnswer v-if="activeBtn === 'studentAnswer'" :answerInfo="answerInfo"></studentAnswer>
+      <studentAnswer @emit-paint="emitPaint" v-if="activeBtn === 'studentAnswer'" :answerInfo="answerInfo"></studentAnswer>
       <studentMutualComments v-if="activeBtn === 'studentMutualComments'" :listObj="listObj"></studentMutualComments>
     </div>
 
@@ -56,7 +56,7 @@
       </div>
     </div>
 
-    <div class="publish-homework-btn-div" style="bottom: 220px;" @click="goOnepage">
+    <div class="publish-homework-btn-div" style="bottom: 220px;" @click="emitPaint">
       <div class="publish-homework-btn">
         <div>画笔</div>
       </div>
@@ -109,7 +109,7 @@ export default {
     goHomework() {
       this.$router.go(-1);
     },
-    goOnepage() {
+    emitPaint() {
       let answer = this.studentAnswerDetailData,
         {studentListArray} = this;
       appPlug.studentWork([
