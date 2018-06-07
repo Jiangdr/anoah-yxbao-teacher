@@ -52,7 +52,7 @@ export default {
     },
     loginOut () {
       this.showActionSheet = false
-      localStorage.clear();
+      // localStorage.clear();
       if (window.bus.mqtt.client && window.bus.mqtt.client.isConnected()) {
         window.bus.mqtt.client.disconnect()
       }
