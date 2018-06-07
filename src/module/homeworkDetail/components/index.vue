@@ -38,7 +38,7 @@ export default {
   name: 'HomeContent',
   data() {
     return {
-      refresh: false,
+      refresh: true,
       homeworkInfo: {}, // 作业信息
       resourceList: [], // 作业列表
       homeworkStatus: 0,
@@ -52,22 +52,18 @@ export default {
       env: 'runEnv/old'
     })
   },
-  mounted() {
-    this.getresource();
-  },
   activated() {
     if (this.refresh) {
       this.getresource()
     }
   },
-  watch: {
-    $route(to, from) {
-      if (to.name === 'Homework' && from.name === 'homeworkDetail') {
-        this.refresh = true
-        this.tabType = 'detail'
-      } else {
-        this.refresh = true
-      }
+  deactivated() {
+    // console.log(this.$route)
+    if (this.$route.name === 'homework') {
+      this.refresh = true
+      this.tabType = 'detail'
+    } else {
+      this.refresh = false
     }
   },
   methods: {

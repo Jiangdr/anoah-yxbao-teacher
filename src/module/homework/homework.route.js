@@ -23,7 +23,6 @@ let homeworkRoutes = [{
   path: '/homework',
   name: 'homework',
   meta: { requiresAuth: false, keepAlive: true },
-  name: 'Homework',
   component: homework
 }, {
   path: '/chooseTextbook',

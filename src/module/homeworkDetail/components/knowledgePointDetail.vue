@@ -23,13 +23,13 @@
           </div>
         </div>
         <div class="list-body">
-          <div class="list-row van-hairline--bottom" v-for="(item, index) in qtiList" :key="index">
+          <div class="list-row van-hairline--bottom" v-for="(item, index) in qtiList" :key="index" @click="linkTo(index)">
             <div class="list-cell left">{{index + 1}}</div>
             <div class="list-cell left question-content ellipsis">
-              <span class="type">[{{item.qtype_name}}]</span>
-              <span v-html="item.title"></span>
+              <span class="type">[{{item.qti_data.qtypeName}}]</span>
+              <span v-html="item.qti_data.prompt"></span>
             </div>
-            <div class="list-cell">{{Math.round(item.class_avg_rate * 100) + '%'}}</div>
+            <div class="list-cell">{{item.class_avg_rate >= 0 ? Math.round(item.class_avg_rate * 100) + '%' : 0 + '%'}}</div>
           </div>
         </div>
       </div>
@@ -39,6 +39,7 @@
 <script>
 import headerBar from '@/components/headerBar'
 import api from '@/module/homeworkDetail/axios/detail'
+import {mapMutations} from 'vuex'
 export default {
   name: 'KnowledgePointDetail',
   data() {
@@ -53,16 +54,30 @@ export default {
     this.getResource()
   },
   methods: {
+    ...mapMutations({
+      setAnswerParams: 'answerDetail/setParams',
+      setAnswerResource: 'answerDetail/setResource'
+    }),
     goBack() {
       this.$router.back(-1)
     },
     getResource() {
       api.getQtiListByKp({
-        publish_id: this.$route.params.publish_id,
+        publish_id: this.$route.params.publishId,
         kp_id: this.$route.params.kp_id
       }).then(succ => {
         this.qtiList = succ
       })
+    },
+    linkTo(index) {
+      this.setAnswerParams({
+        index: index,
+        title: `试题详情`,
+        type: 2,
+        user_id: 0
+      })
+      this.setAnswerResource([...this.qtiList])
+      this.$router.push({path: '/answerDetail'})
     }
   },
   components: {

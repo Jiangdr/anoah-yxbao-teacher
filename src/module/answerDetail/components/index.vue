@@ -2,7 +2,7 @@
 <div id="question-detail" style="height:100%">
   <header-bar @back="goBack">
     <div slot="title-name">{{params && params.title || '标题需要传入'}}({{currectIndex}}/{{qtiCount}})</div>
-    <div slot="right-area" v-if="params && params.type === 2 && judgeQtiType(resource[currentIndex - 1])">原题</div>
+    <div slot="right-area" v-if="params && params.type === 2 && judgeQtiType(resource[currentIndex - 1])" @click="linkTo">原题</div>
   </header-bar>
   <div class="swiper-container" :class="{scroll: params && judgeQtiType(resource[currentIndex - 1])}">
     <div class="swiper-wrapper" style="100%">
@@ -14,11 +14,11 @@
         <correct-table :params="item" v-if="item.qti_question_type_id == 4 || item.qti_question_type_id == 20 || item.qti_question_type_id == 38"></correct-table>
         <!-- <hanzitingxie :params="item" v-if="parseInt(item.icom_id) || item.qti_question_type_id == 17"></hanzitingxie> -->
         <!-- <Subjective :params="item" v-if="item.qti_question_type_id == 5"></Subjective> -->
-        <render-qti v-if="Object.keys(item).length" :info="item"></render-qti>
+        <render-qti v-if="Object.keys(item).length" :info="item" :qtiData="item.qti_data ? item.qti_data : ''"></render-qti>
       </div>
       <!-- 统计 -->
       <div class="swiper-slide" v-if="params.type === 2" v-for="(item, index) in renderResource" :key="index">
-        <render-qti v-if="Object.keys(item).length" :info="item" :user_id="params.user_id"></render-qti>
+        <render-qti v-if="Object.keys(item).length" :info="item" :user_id="params.user_id" :qtiData="item.qti_data ? item.qti_data : ''"></render-qti>
       </div>
     </div>
   </div>
@@ -145,7 +145,16 @@ export default {
       this.$router.back(-1)
     },
     linkTo() {
-      this.$router.push({path: '/originalQuestion/0'})
+      let questionInfo = this.renderResource[this.mySwiper.activeIndex]
+      questionInfo.resource_name = ''
+      this.$router.push({
+        path: `/originalQuestion`,
+        query: {
+          user_id: 0,
+          question_info: JSON.stringify(questionInfo),
+          title: '原题'
+        }
+      })
     },
     slideEnd() {
       Vue.set(this.renderResource, this.mySwiper.activeIndex, this.resource[this.mySwiper.activeIndex])
