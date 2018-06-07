@@ -280,12 +280,6 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.bottomMargin {
-  bottom: 200px;
-}
-.bottomMarginSecond {
-  bottom: 110px;
-}
 .activeTabClass {
   color: #2ec2a9;
 }
@@ -347,5 +341,11 @@ li {
 }
 .publish-homework-btn img {
   width: 100%;
+}
+.bottomMargin {
+  bottom: 200px;
+}
+.bottomMarginSecond {
+  bottom: 110px;
 }
 </style>
