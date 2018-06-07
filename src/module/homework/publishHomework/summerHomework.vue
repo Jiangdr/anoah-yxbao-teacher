@@ -26,7 +26,7 @@
     <div v-show="examExerciseShow">
       <header class="header">
         <h1>试卷</h1>
-        <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i> 返回</i>
+        <i class="cubeic-back" @click="goSummerHomework"><i class="fa fa-angle-left"></i></i>
         <div class="collect" @click="sendFavorite" :class="isFavorite ? 'collect-active' : 'collect-default'"></div>
       </header>
       <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
@@ -35,7 +35,7 @@
           <div style="float: right;" @click="clickChooseAll">{{currentPageSelectNum==qti_ids.length?'取消全选':'全选'}}</div>
         </div>
         <div v-for="(item, index) in setting" :key="index" style="position: relative;">
-          <Qti :setting="item"></Qti>
+          <Qti :setting="item" @click.native ="goOneQtiDetail(item)"></Qti>
           <YxCheckBox style="position: absolute;right:10px;bottom:0px;width: 25px;height: 25px;" class="checkbox" :selected="item.checked" :ref="'cbs-'+index" @select="exerciseCheckboxChange(item, $event)"></YxCheckBox>
         </div>
       </div>
@@ -112,6 +112,14 @@ export default {
       this.$store.dispatch("isOldPackId", "1");
       this.$router.push({
         path: "/publishHomework"
+      });
+    },
+    goOneQtiDetail(item) {
+      this.$router.push({
+        name: "oneExamExercise",
+        params: {
+          oneExamExerciseInfo: item
+        }
       });
     },
     goSummerHomework() {
@@ -487,7 +495,7 @@ export default {
           checked: item.qti_ids_obj[i].checked,
           num: i + 1,
           caller: "PREVIEWOR",
-          // hide_result: 1,
+          hide_result: 1,
           resource_type: "qti_question",
           isSel: true
         });

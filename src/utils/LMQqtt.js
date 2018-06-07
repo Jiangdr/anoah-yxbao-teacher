@@ -9,6 +9,9 @@ const LMqtt = {
     client_id: "c_"
   },
   onConnect () {
+    if (this.client) {
+      return false
+    }
     // client_id随机生成
     for (let i = 0; i < 13; i++) {
       let num = Math.floor(Math.random() * 9 + 1);
@@ -69,11 +72,11 @@ const LMqtt = {
       onFailure: function(e) {
         console.log('连接失败')
         console.log(e)
-        this.onConnect();
-        this.client.connect(options);
+        setTimeout(() => {
+          this.connect();
+        })
       }
     };
-    console.log(this);
     this.client.connect(options);
   }
 }
