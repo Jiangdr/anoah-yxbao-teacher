@@ -2,7 +2,7 @@
   <div class="cube-page cube-view button-view">
     <header class="header">
       <h1>试题详情</h1>
-      <i class="cubeic-back" @click="goBack"><i class="fa fa-angle-left"></i></i>
+      <i class="cubeic-back" @click="goBack"><i class="back-up-arrow"></i></i>
     </header>
     <div style="overflow-y:auto;overflow-x:hidden;" v-bind:style="listContainerStyle">
       <Qti :setting="item" v-if="showItem"></Qti>
